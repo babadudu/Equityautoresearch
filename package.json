@@ -1,0 +1,15 @@
+{
+  "name": "initial-max-autoresearch",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "initial-max": "tsx src/initial-max-runner.ts",
+    "score": "tsx src/initial-max-scorer.ts"
+  },
+  "devDependencies": {
+    "@types/node": "^24.10.1",
+    "tsx": "^4.19.0",
+    "typescript": "~5.9.3"
+  }
+}
