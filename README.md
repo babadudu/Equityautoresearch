@@ -209,6 +209,12 @@ results/
 
 ---
 
+## 授權
+
+本專案以 [MIT License](https://opensource.org/licenses/MIT) 開源釋出：可自由使用、修改、散布與商用，惟須保留版權與授權聲明。完整條文見專案根目錄的 [`LICENSE`](LICENSE)。
+
+---
+
 ## 一句話總結
 
 **Karpathy 讓 AI 在夜裡優化 LLM。Initial MAX 讓 AI 在夜裡替你寫投資報告。**
