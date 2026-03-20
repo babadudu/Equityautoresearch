@@ -1,6 +1,6 @@
 {
-  "generated": "2026-03-20T16:49:09.609Z",
-  "atom_count": 37,
+  "generated": "2026-03-20T18:29:28.845Z",
+  "atom_count": 70,
   "atoms": [
     {
       "id": "tsmc-organizational-culture-values",
@@ -989,15 +989,502 @@
       "path": "data/knowledge/atoms/leadership/tsm-morris-chang-founder-profile.md"
     },
     {
-      "id": "tsm-leadership-quotes",
+      "id": "cc-wei-quotes-ai-demand-capex-intel-competition-part-3",
       "archetype": "quotes",
-      "title": "TSMC Leadership Quotes — Morris Chang & C.C. Wei",
+      "title": "CC Wei Quotes: AI Demand Conviction, CapEx Confidence, and Intel Competition (2024–2026)",
       "companies": [
         "TSM"
       ],
       "people": [
-        "Morris Chang",
+        "CC Wei",
         "C.C. Wei"
+      ],
+      "industries": [
+        "semiconductor-foundry",
+        "ai-accelerator"
+      ],
+      "tags": [
+        "ai-accelerator",
+        "capex",
+        "competitive-dynamics",
+        "process-node",
+        "geopolitics"
+      ],
+      "temporality": "evergreen",
+      "created": "2026-03-20",
+      "updated": "2026-03-20",
+      "source_report": "data/companies/TSM/TSM_Initial_MAX.md",
+      "source_sections": [
+        "all"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/quotes/cc-wei-quotes-ai-demand-capex-intel-competition-part-3.md"
+    },
+    {
+      "id": "cc-wei-quotes-ai-demand-cowos-globalization-part-1",
+      "archetype": "quotes",
+      "title": "CC Wei on AI Demand, CoWoS Capacity, and TSMC's Indispensability",
+      "companies": [
+        "TSM"
+      ],
+      "people": [
+        "CC Wei",
+        "Wendell Huang"
+      ],
+      "industries": [
+        "semiconductor-foundry",
+        "ai-accelerator"
+      ],
+      "tags": [
+        "ai-accelerator",
+        "capacity",
+        "packaging",
+        "process-node",
+        "tam",
+        "revenue-mix"
+      ],
+      "temporality": "evergreen",
+      "created": "2026-03-20",
+      "updated": "2026-03-20",
+      "source_report": "data/companies/TSM/TSM_Initial_MAX.md",
+      "source_sections": [
+        "all"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/quotes/cc-wei-quotes-ai-demand-cowos-globalization-part-1.md"
+    },
+    {
+      "id": "cc-wei-quotes-ai-demand-cowos-globalization",
+      "archetype": "quotes",
+      "title": "C.C. Wei (魏哲家) — Selected Quotes on AI Demand, CoWoS Capacity, and Globalization",
+      "companies": [
+        "TSM"
+      ],
+      "people": [
+        "C.C. Wei"
+      ],
+      "industries": [
+        "semiconductor-foundry",
+        "ai-accelerator"
+      ],
+      "tags": [
+        "ai-accelerator",
+        "capacity",
+        "packaging",
+        "competitive-dynamics",
+        "culture",
+        "moat",
+        "supply-chain"
+      ],
+      "temporality": "evergreen",
+      "created": "2026-03-20",
+      "updated": "2026-03-20",
+      "source_report": "data/companies/TSM/TSM_Initial_MAX.md",
+      "source_sections": [
+        "all"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/quotes/cc-wei-quotes-ai-demand-cowos-globalization.md"
+    },
+    {
+      "id": "cc-wei-quotes-ai-demand-customer-validation-part-4",
+      "archetype": "quotes",
+      "title": "CC Wei Quotes: AI Demand Validation and Customer Engagement Visibility (Part 4)",
+      "companies": [
+        "TSM"
+      ],
+      "people": [
+        "CC Wei"
+      ],
+      "industries": [
+        "semiconductor-foundry",
+        "ai-accelerator",
+        "cloud-infrastructure"
+      ],
+      "tags": [
+        "ai-accelerator",
+        "tam",
+        "capex",
+        "competitive-dynamics"
+      ],
+      "temporality": "evergreen",
+      "created": "2026-03-20",
+      "updated": "2026-03-20",
+      "source_report": "data/companies/TSM/TSM_Initial_MAX.md",
+      "source_sections": [
+        "all"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/quotes/cc-wei-quotes-ai-demand-customer-validation-part-4.md"
+    },
+    {
+      "id": "cc-wei-quotes-competitor-customer-success-globalization-part-2-part-1",
+      "archetype": "quotes",
+      "title": "CC Wei on Competitors, Customer Success Philosophy, and Globalization Surprise",
+      "companies": [
+        "TSM"
+      ],
+      "people": [
+        "CC Wei"
+      ],
+      "industries": [
+        "semiconductor-foundry"
+      ],
+      "tags": [
+        "competitive-dynamics",
+        "five-forces",
+        "reshoring",
+        "geopolitics",
+        "supply-chain"
+      ],
+      "temporality": "evergreen",
+      "created": "2026-03-20",
+      "updated": "2026-03-20",
+      "source_report": "data/companies/TSM/TSM_Initial_MAX.md",
+      "source_sections": [
+        "all"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/quotes/cc-wei-quotes-competitor-customer-success-globalization-part-2-part-1.md"
+    },
+    {
+      "id": "cc-wei-quotes-competitor-customer-success-globalization-part-2",
+      "archetype": "quotes",
+      "title": "CC Wei Quotes — Intel Competitor-Customer Paradox, Customer Success Metric & Globalization",
+      "companies": [
+        "TSM"
+      ],
+      "people": [
+        "C.C. Wei",
+        "Wendell Huang"
+      ],
+      "industries": [
+        "semiconductor-foundry"
+      ],
+      "tags": [
+        "competitive-dynamics",
+        "business-model",
+        "moat",
+        "pricing",
+        "culture"
+      ],
+      "temporality": "semi-evergreen",
+      "created": "2026-03-20",
+      "updated": "2026-03-20",
+      "source_report": "data/companies/TSM/TSM_Initial_MAX.md",
+      "source_sections": [
+        "all"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/quotes/cc-wei-quotes-competitor-customer-success-globalization-part-2.md"
+    },
+    {
+      "id": "cc-wei-quotes-geopolitics-competition-globalization-part-4",
+      "archetype": "quotes",
+      "title": "CC Wei Quotes: Geopolitics, Competition, and Globalization Wonder (Part 4)",
+      "companies": [
+        "TSM"
+      ],
+      "people": [
+        "CC Wei"
+      ],
+      "industries": [
+        "semiconductor-foundry"
+      ],
+      "tags": [
+        "geopolitics",
+        "competitive-dynamics",
+        "reshoring",
+        "founding"
+      ],
+      "temporality": "evergreen",
+      "created": "2026-03-20",
+      "updated": "2026-03-20",
+      "source_report": "data/companies/TSM/TSM_Initial_MAX.md",
+      "source_sections": [
+        "all"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/quotes/cc-wei-quotes-geopolitics-competition-globalization-part-4.md"
+    },
+    {
+      "id": "cc-wei-quotes-intel-competition-investment-leadership-2024-2025-part-3-part-1",
+      "archetype": "quotes",
+      "title": "CC Wei on Capex Discipline, Hyperscaler Validation, and AI Conviction (2024–2026)",
+      "companies": [
+        "TSM"
+      ],
+      "people": [
+        "CC Wei"
+      ],
+      "industries": [
+        "semiconductor-foundry",
+        "ai-accelerator",
+        "cloud-infrastructure"
+      ],
+      "tags": [
+        "capex",
+        "valuation",
+        "competitive-dynamics",
+        "ai-accelerator",
+        "tam"
+      ],
+      "temporality": "evergreen",
+      "created": "2026-03-20",
+      "updated": "2026-03-20",
+      "source_report": "data/companies/TSM/TSM_Initial_MAX.md",
+      "source_sections": [
+        "all"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/quotes/cc-wei-quotes-intel-competition-investment-leadership-2024-2025-part-3-part-1.md"
+    },
+    {
+      "id": "cc-wei-quotes-intel-competition-investment-leadership-2024-2025-part-3",
+      "archetype": "quotes",
+      "title": "CC Wei on Intel, Competition, Dual Leadership, and AI Revenue Guidance (2024–2026)",
+      "companies": [
+        "TSM"
+      ],
+      "people": [
+        "CC Wei"
+      ],
+      "industries": [
+        "semiconductor-foundry"
+      ],
+      "tags": [
+        "competitive-dynamics",
+        "moat",
+        "culture",
+        "business-model",
+        "tam"
+      ],
+      "temporality": "semi-evergreen",
+      "created": "2026-03-20",
+      "updated": "2026-03-20",
+      "source_report": "data/companies/TSM/TSM_Initial_MAX.md",
+      "source_sections": [
+        "all"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/quotes/cc-wei-quotes-intel-competition-investment-leadership-2024-2025-part-3.md"
+    },
+    {
+      "id": "morris-chang-quotes-acquired-briefing-apple-ibm-nvidia-scale-2025-part-3",
+      "archetype": "quotes",
+      "title": "Morris Chang Acquired Briefing 2025: Apple Negotiations, IBM Rejection, NVIDIA Settlement, \\\"Never Stop at Two\\\"",
+      "companies": [
+        "TSM"
+      ],
+      "people": [
+        "Morris Chang"
+      ],
+      "industries": [
+        "semiconductor-foundry"
+      ],
+      "tags": [
+        "business-model",
+        "pricing",
+        "moat",
+        "competitive-dynamics",
+        "founding"
+      ],
+      "temporality": "evergreen",
+      "created": "2026-03-20",
+      "updated": "2026-03-20",
+      "source_report": "data/companies/TSM/TSM_Initial_MAX.md",
+      "source_sections": [
+        "all"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/quotes/morris-chang-quotes-acquired-briefing-apple-ibm-nvidia-scale-2025-part-3.md"
+    },
+    {
+      "id": "morris-chang-quotes-apple-ibm-partnerships-part-2",
+      "archetype": "quotes",
+      "title": "Morris Chang Quotes — Apple Partnership, IBM Rejection & Foundry Pricing Philosophy",
+      "companies": [
+        "TSM"
+      ],
+      "people": [
+        "Morris Chang"
+      ],
+      "industries": [
+        "semiconductor-foundry"
+      ],
+      "tags": [
+        "pricing",
+        "business-model",
+        "moat",
+        "culture"
+      ],
+      "temporality": "evergreen",
+      "created": "2026-03-20",
+      "updated": "2026-03-20",
+      "source_report": "data/companies/TSM/TSM_Initial_MAX.md",
+      "source_sections": [
+        "all"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/quotes/morris-chang-quotes-apple-ibm-partnerships-part-2.md"
+    },
+    {
+      "id": "morris-chang-quotes-competition-learning-curve-moat-part-1",
+      "archetype": "quotes",
+      "title": "Morris Chang on Learning Curve Moat, Competitive Barriers, and Taiwan's Structural Advantages",
+      "companies": [
+        "TSM"
+      ],
+      "people": [
+        "Morris Chang"
+      ],
+      "industries": [
+        "semiconductor-foundry"
+      ],
+      "tags": [
+        "moat",
+        "competitive-dynamics",
+        "founding",
+        "five-forces",
+        "reshoring",
+        "geopolitics"
+      ],
+      "temporality": "evergreen",
+      "created": "2026-03-20",
+      "updated": "2026-03-20",
+      "source_report": "data/companies/TSM/TSM_Initial_MAX.md",
+      "source_sections": [
+        "all"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/quotes/morris-chang-quotes-competition-learning-curve-moat-part-1.md"
+    },
+    {
+      "id": "morris-chang-quotes-computer-history-museum-ti-career-learning-curve-2007-part-3",
+      "archetype": "quotes",
+      "title": "Morris Chang Computer History Museum 2007: TI Career, Learning Curve Pricing Origins, Early Semiconductor History",
+      "companies": [
+        "TSM"
+      ],
+      "people": [
+        "Morris Chang"
+      ],
+      "industries": [
+        "semiconductor-foundry"
+      ],
+      "tags": [
+        "founding",
+        "business-model",
+        "pricing",
+        "competitive-dynamics",
+        "moat"
+      ],
+      "temporality": "evergreen",
+      "created": "2026-03-20",
+      "updated": "2026-03-20",
+      "source_report": "data/companies/TSM/TSM_Initial_MAX.md",
+      "source_sections": [
+        "all"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/quotes/morris-chang-quotes-computer-history-museum-ti-career-learning-curve-2007-part-3.md"
+    },
+    {
+      "id": "morris-chang-quotes-customers-pricing-asml-partnership-part-1",
+      "archetype": "quotes",
+      "title": "Morris Chang — Customer Philosophy, Pricing & ASML Partnership",
+      "companies": [
+        "TSM"
+      ],
+      "people": [
+        "Morris Chang"
+      ],
+      "industries": [
+        "semiconductor-foundry",
+        "semiconductor-equipment"
+      ],
+      "tags": [
+        "pricing",
+        "business-model",
+        "supply-chain",
+        "moat",
+        "culture"
+      ],
+      "temporality": "evergreen",
+      "created": "2026-03-20",
+      "updated": "2026-03-20",
+      "source_report": "data/companies/TSM/TSM_Initial_MAX.md",
+      "source_sections": [
+        "all"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/quotes/morris-chang-quotes-customers-pricing-asml-partnership-part-1.md"
+    },
+    {
+      "id": "morris-chang-quotes-early-career-transitions-part-3",
+      "archetype": "quotes",
+      "title": "Morris Chang Quotes: Early Career, TI Years, and Path to Founding TSMC",
+      "companies": [
+        "TSM"
+      ],
+      "people": [
+        "Morris Chang"
+      ],
+      "industries": [
+        "semiconductor-foundry"
+      ],
+      "tags": [
+        "founding",
+        "culture",
+        "moat"
+      ],
+      "temporality": "evergreen",
+      "created": "2026-03-20",
+      "updated": "2026-03-20",
+      "source_report": "data/companies/TSM/TSM_Initial_MAX.md",
+      "source_sections": [
+        "all"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/quotes/morris-chang-quotes-early-career-transitions-part-3.md"
+    },
+    {
+      "id": "morris-chang-quotes-founding-career-vision-part-2",
+      "archetype": "quotes",
+      "title": "Morris Chang Quotes — Early Career, Founding Vision & World-Class Ambition",
+      "companies": [
+        "TSM"
+      ],
+      "people": [
+        "Morris Chang"
+      ],
+      "industries": [
+        "semiconductor-foundry"
+      ],
+      "tags": [
+        "founding",
+        "business-model",
+        "culture"
+      ],
+      "temporality": "evergreen",
+      "created": "2026-03-20",
+      "updated": "2026-03-20",
+      "source_report": "data/companies/TSM/TSM_Initial_MAX.md",
+      "source_sections": [
+        "all"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/quotes/morris-chang-quotes-founding-career-vision-part-2.md"
+    },
+    {
+      "id": "morris-chang-quotes-founding-vision-foundry-model-part-1",
+      "archetype": "quotes",
+      "title": "Morris Chang — Founding Vision & Pure-Play Foundry Philosophy",
+      "companies": [
+        "TSM"
+      ],
+      "people": [
+        "Morris Chang"
       ],
       "industries": [
         "semiconductor-foundry"
@@ -1007,18 +1494,518 @@
         "business-model",
         "culture",
         "moat",
-        "geopolitics",
-        "trade-war"
+        "pricing"
       ],
       "temporality": "evergreen",
       "created": "2026-03-20",
       "updated": "2026-03-20",
       "source_report": "data/companies/TSM/TSM_Initial_MAX.md",
       "source_sections": [
-        "4.1"
+        "all"
       ],
       "quality": 4,
-      "path": "data/knowledge/atoms/quotes/tsm-leadership-quotes.md"
+      "path": "data/knowledge/atoms/quotes/morris-chang-quotes-founding-vision-foundry-model-part-1.md"
+    },
+    {
+      "id": "morris-chang-quotes-geopolitics-globalization-us-identity-part-1",
+      "archetype": "quotes",
+      "title": "Morris Chang — Geopolitics, Globalization & American Identity",
+      "companies": [
+        "TSM"
+      ],
+      "people": [
+        "Morris Chang"
+      ],
+      "industries": [
+        "semiconductor-foundry"
+      ],
+      "tags": [
+        "geopolitics",
+        "trade-war",
+        "reshoring",
+        "supply-chain"
+      ],
+      "temporality": "evergreen",
+      "created": "2026-03-20",
+      "updated": "2026-03-20",
+      "source_report": "data/companies/TSM/TSM_Initial_MAX.md",
+      "source_sections": [
+        "all"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/quotes/morris-chang-quotes-geopolitics-globalization-us-identity-part-1.md"
+    },
+    {
+      "id": "morris-chang-quotes-globalization-identity-integrity-part-3",
+      "archetype": "quotes",
+      "title": "Morris Chang Quotes: Globalization, Identity, Integrity Culture, and TSMC's Core Values",
+      "companies": [
+        "TSM"
+      ],
+      "people": [
+        "Morris Chang"
+      ],
+      "industries": [
+        "semiconductor-foundry"
+      ],
+      "tags": [
+        "geopolitics",
+        "governance",
+        "culture",
+        "founding",
+        "moat"
+      ],
+      "temporality": "evergreen",
+      "created": "2026-03-20",
+      "updated": "2026-03-20",
+      "source_report": "data/companies/TSM/TSM_Initial_MAX.md",
+      "source_sections": [
+        "all"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/quotes/morris-chang-quotes-globalization-identity-integrity-part-3.md"
+    },
+    {
+      "id": "morris-chang-quotes-integrity-governance-part-2",
+      "archetype": "quotes",
+      "title": "Morris Chang Quotes — Integrity, Governance & Executive Standards",
+      "companies": [
+        "TSM"
+      ],
+      "people": [
+        "Morris Chang"
+      ],
+      "industries": [
+        "semiconductor-foundry"
+      ],
+      "tags": [
+        "culture",
+        "governance",
+        "moat",
+        "founding"
+      ],
+      "temporality": "evergreen",
+      "created": "2026-03-20",
+      "updated": "2026-03-20",
+      "source_report": "data/companies/TSM/TSM_Initial_MAX.md",
+      "source_sections": [
+        "all"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/quotes/morris-chang-quotes-integrity-governance-part-2.md"
+    },
+    {
+      "id": "morris-chang-quotes-mit-speech-learning-talent-national-security-2023-part-3",
+      "archetype": "quotes",
+      "title": "Morris Chang MIT 2023 Speech: Learning Is Local, Taiwan Talent, and National Security",
+      "companies": [
+        "TSM"
+      ],
+      "people": [
+        "Morris Chang"
+      ],
+      "industries": [
+        "semiconductor-foundry"
+      ],
+      "tags": [
+        "culture",
+        "moat",
+        "competitive-dynamics",
+        "geopolitics",
+        "founding"
+      ],
+      "temporality": "evergreen",
+      "created": "2026-03-20",
+      "updated": "2026-03-20",
+      "source_report": "data/companies/TSM/TSM_Initial_MAX.md",
+      "source_sections": [
+        "all"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/quotes/morris-chang-quotes-mit-speech-learning-talent-national-security-2023-part-3.md"
+    },
+    {
+      "id": "morris-chang-quotes-nvidia-jensen-ceo-succession-part-2",
+      "archetype": "quotes",
+      "title": "Morris Chang Quotes — NVIDIA Relationship & Jensen Huang CEO Succession Offer",
+      "companies": [
+        "TSM",
+        "NVDA"
+      ],
+      "people": [
+        "Morris Chang",
+        "Jensen Huang"
+      ],
+      "industries": [
+        "semiconductor-foundry",
+        "ai-accelerator"
+      ],
+      "tags": [
+        "founding",
+        "culture",
+        "competitive-dynamics",
+        "business-model"
+      ],
+      "temporality": "evergreen",
+      "created": "2026-03-20",
+      "updated": "2026-03-20",
+      "source_report": "data/companies/TSM/TSM_Initial_MAX.md",
+      "source_sections": [
+        "all"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/quotes/morris-chang-quotes-nvidia-jensen-ceo-succession-part-2.md"
+    },
+    {
+      "id": "morris-chang-quotes-talent-culture-people-part-2",
+      "archetype": "quotes",
+      "title": "Morris Chang Quotes — Talent, Culture & People Management",
+      "companies": [
+        "TSM"
+      ],
+      "people": [
+        "Morris Chang"
+      ],
+      "industries": [
+        "semiconductor-foundry"
+      ],
+      "tags": [
+        "culture",
+        "founding",
+        "moat",
+        "business-model"
+      ],
+      "temporality": "evergreen",
+      "created": "2026-03-20",
+      "updated": "2026-03-20",
+      "source_report": "data/companies/TSM/TSM_Initial_MAX.md",
+      "source_sections": [
+        "all"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/quotes/morris-chang-quotes-talent-culture-people-part-2.md"
+    },
+    {
+      "id": "morris-chang-quotes-technology-rd-moores-law-part-1",
+      "archetype": "quotes",
+      "title": "Morris Chang — Technology Vision, Moore's Law & R&D Discipline",
+      "companies": [
+        "TSM"
+      ],
+      "people": [
+        "Morris Chang"
+      ],
+      "industries": [
+        "semiconductor-foundry"
+      ],
+      "tags": [
+        "process-node",
+        "capex",
+        "moat",
+        "founding",
+        "culture"
+      ],
+      "temporality": "evergreen",
+      "created": "2026-03-20",
+      "updated": "2026-03-20",
+      "source_report": "data/companies/TSM/TSM_Initial_MAX.md",
+      "source_sections": [
+        "all"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/quotes/morris-chang-quotes-technology-rd-moores-law-part-1.md"
+    },
+    {
+      "id": "morris-chang-quotes-us-revival-china-competition-futility-part-3",
+      "archetype": "quotes",
+      "title": "Morris Chang on US Semiconductor Revival & China Competition: Futility and Time Windows",
+      "companies": [
+        "TSM"
+      ],
+      "people": [
+        "Morris Chang"
+      ],
+      "industries": [
+        "semiconductor-foundry"
+      ],
+      "tags": [
+        "geopolitics",
+        "reshoring",
+        "trade-war",
+        "competitive-dynamics",
+        "moat",
+        "culture"
+      ],
+      "temporality": "evergreen",
+      "created": "2026-03-20",
+      "updated": "2026-03-20",
+      "source_report": "data/companies/TSM/TSM_Initial_MAX.md",
+      "source_sections": [
+        "all"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/quotes/morris-chang-quotes-us-revival-china-competition-futility-part-3.md"
+    },
+    {
+      "id": "tsm-esg-environmental-sustainability-data-2023-part-5",
+      "archetype": "quotes",
+      "title": "TSMC Environmental Sustainability Data — Energy, Water, Carbon (2023 Quantified)",
+      "companies": [
+        "TSM"
+      ],
+      "people": [],
+      "industries": [
+        "semiconductor-foundry"
+      ],
+      "tags": [
+        "energy",
+        "water",
+        "carbon",
+        "governance"
+      ],
+      "temporality": "semi-evergreen",
+      "created": "2026-03-20",
+      "updated": "2026-03-20",
+      "source_report": "data/companies/TSM/TSM_Initial_MAX.md",
+      "source_sections": [
+        "all"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/quotes/tsm-esg-environmental-sustainability-data-2023-part-5.md"
+    },
+    {
+      "id": "tsm-leadership-integrity-scoring-summary-part-5",
+      "archetype": "quotes",
+      "title": "TSMC Leadership Philosophy & Integrity — Research Scoring Summary (Morris Chang + CC Wei)",
+      "companies": [
+        "TSM"
+      ],
+      "people": [
+        "Morris Chang",
+        "CC Wei"
+      ],
+      "industries": [
+        "semiconductor-foundry"
+      ],
+      "tags": [
+        "culture",
+        "moat",
+        "founding",
+        "governance"
+      ],
+      "temporality": "evergreen",
+      "created": "2026-03-20",
+      "updated": "2026-03-20",
+      "source_report": "data/companies/TSM/TSM_Initial_MAX.md",
+      "source_sections": [
+        "all"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/quotes/tsm-leadership-integrity-scoring-summary-part-5.md"
+    },
+    {
+      "id": "tsm-silicon-shield-geopolitical-scoring-summary-part-5",
+      "archetype": "quotes",
+      "title": "TSMC Silicon Shield Analysis — Scoring Summary with P/E Discount Quantification",
+      "companies": [
+        "TSM"
+      ],
+      "people": [],
+      "industries": [
+        "semiconductor-foundry"
+      ],
+      "tags": [
+        "geopolitics",
+        "trade-war",
+        "sanctions",
+        "valuation",
+        "dcf"
+      ],
+      "temporality": "semi-evergreen",
+      "created": "2026-03-20",
+      "updated": "2026-03-20",
+      "source_report": "data/companies/TSM/TSM_Initial_MAX.md",
+      "source_sections": [
+        "all"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/quotes/tsm-silicon-shield-geopolitical-scoring-summary-part-5.md"
+    },
+    {
+      "id": "tsm-third-party-quotes-water-crisis-china-euv-geopolitical-risk-part-4",
+      "archetype": "quotes",
+      "title": "Third-Party Quotes on TSMC: Water Crisis, China EUV Progress, and Geopolitical Risk (Part 4)",
+      "companies": [
+        "TSM"
+      ],
+      "people": [
+        "Gene You",
+        "CSIS analysts"
+      ],
+      "industries": [
+        "semiconductor-foundry"
+      ],
+      "tags": [
+        "water",
+        "energy",
+        "geopolitics",
+        "competitive-dynamics",
+        "trade-war"
+      ],
+      "temporality": "semi-evergreen",
+      "created": "2026-03-20",
+      "updated": "2026-03-20",
+      "source_report": "data/companies/TSM/TSM_Initial_MAX.md",
+      "source_sections": [
+        "all"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/quotes/tsm-third-party-quotes-water-crisis-china-euv-geopolitical-risk-part-4.md"
+    },
+    {
+      "id": "wendell-huang-quotes-capex-philosophy-advanced-packaging",
+      "archetype": "quotes",
+      "title": "Wendell Huang on Capex Philosophy, Advanced Packaging Investment, and Supply Chain Scale",
+      "companies": [
+        "TSM"
+      ],
+      "people": [
+        "Wendell Huang"
+      ],
+      "industries": [
+        "semiconductor-foundry"
+      ],
+      "tags": [
+        "capex",
+        "supply-chain",
+        "capacity",
+        "packaging"
+      ],
+      "temporality": "semi-evergreen",
+      "created": "2026-03-20",
+      "updated": "2026-03-20",
+      "source_report": "data/companies/TSM/TSM_Initial_MAX.md",
+      "source_sections": [
+        "all"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/quotes/wendell-huang-quotes-capex-philosophy-advanced-packaging.md"
+    },
+    {
+      "id": "wendell-huang-quotes-margins-capex-philosophy-part-3",
+      "archetype": "quotes",
+      "title": "CFO Wendell Huang Quotes: Gross Margin Floor and CapEx-Growth Philosophy (2025)",
+      "companies": [
+        "TSM"
+      ],
+      "people": [
+        "Wendell Huang"
+      ],
+      "industries": [
+        "semiconductor-foundry"
+      ],
+      "tags": [
+        "margins",
+        "capex",
+        "valuation",
+        "revenue-mix"
+      ],
+      "temporality": "evergreen",
+      "created": "2026-03-20",
+      "updated": "2026-03-20",
+      "source_report": "data/companies/TSM/TSM_Initial_MAX.md",
+      "source_sections": [
+        "all"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/quotes/wendell-huang-quotes-margins-capex-philosophy-part-3.md"
+    },
+    {
+      "id": "wendell-huang-quotes-rd-advanced-nodes-n2",
+      "archetype": "quotes",
+      "title": "Wendell Huang on Advanced Node R&D Focus and N2 Profitability",
+      "companies": [
+        "TSM"
+      ],
+      "people": [
+        "Wendell Huang"
+      ],
+      "industries": [
+        "semiconductor-foundry"
+      ],
+      "tags": [
+        "process-node",
+        "margins",
+        "capex"
+      ],
+      "temporality": "semi-evergreen",
+      "created": "2026-03-20",
+      "updated": "2026-03-20",
+      "source_report": "data/companies/TSM/TSM_Initial_MAX.md",
+      "source_sections": [
+        "all"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/quotes/wendell-huang-quotes-rd-advanced-nodes-n2.md"
+    },
+    {
+      "id": "wendell-huang-quotes-us-fab-economics-margins-part-4",
+      "archetype": "quotes",
+      "title": "Wendell Huang Quotes: US Fab Cost Structure and N2 Profitability (Part 4)",
+      "companies": [
+        "TSM"
+      ],
+      "people": [
+        "Wendell Huang"
+      ],
+      "industries": [
+        "semiconductor-foundry"
+      ],
+      "tags": [
+        "capex",
+        "margins",
+        "reshoring",
+        "supply-chain"
+      ],
+      "temporality": "evergreen",
+      "created": "2026-03-20",
+      "updated": "2026-03-20",
+      "source_report": "data/companies/TSM/TSM_Initial_MAX.md",
+      "source_sections": [
+        "all"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/quotes/wendell-huang-quotes-us-fab-economics-margins-part-4.md"
+    },
+    {
+      "id": "wendell-huang-quotes-us-fab-economics-margins",
+      "archetype": "quotes",
+      "title": "Wendell Huang on U.S. Fab Economics, Pricing Philosophy, and Gross Margin Floor",
+      "companies": [
+        "TSM"
+      ],
+      "people": [
+        "Wendell Huang"
+      ],
+      "industries": [
+        "semiconductor-foundry"
+      ],
+      "tags": [
+        "pricing",
+        "margins",
+        "capex",
+        "moat",
+        "reshoring"
+      ],
+      "temporality": "evergreen",
+      "created": "2026-03-20",
+      "updated": "2026-03-20",
+      "source_report": "data/companies/TSM/TSM_Initial_MAX.md",
+      "source_sections": [
+        "all"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/quotes/wendell-huang-quotes-us-fab-economics-margins.md"
     },
     {
       "id": "tsmc-ai-demand-drivers-token-growth",
@@ -1264,7 +2251,40 @@
       "semiconductor-foundry-tam-growth-2000-2035",
       "tsm-cc-wei-ceo-profile",
       "tsm-morris-chang-founder-profile",
-      "tsm-leadership-quotes",
+      "cc-wei-quotes-ai-demand-capex-intel-competition-part-3",
+      "cc-wei-quotes-ai-demand-cowos-globalization-part-1",
+      "cc-wei-quotes-ai-demand-cowos-globalization",
+      "cc-wei-quotes-ai-demand-customer-validation-part-4",
+      "cc-wei-quotes-competitor-customer-success-globalization-part-2-part-1",
+      "cc-wei-quotes-competitor-customer-success-globalization-part-2",
+      "cc-wei-quotes-geopolitics-competition-globalization-part-4",
+      "cc-wei-quotes-intel-competition-investment-leadership-2024-2025-part-3-part-1",
+      "cc-wei-quotes-intel-competition-investment-leadership-2024-2025-part-3",
+      "morris-chang-quotes-acquired-briefing-apple-ibm-nvidia-scale-2025-part-3",
+      "morris-chang-quotes-apple-ibm-partnerships-part-2",
+      "morris-chang-quotes-competition-learning-curve-moat-part-1",
+      "morris-chang-quotes-computer-history-museum-ti-career-learning-curve-2007-part-3",
+      "morris-chang-quotes-customers-pricing-asml-partnership-part-1",
+      "morris-chang-quotes-early-career-transitions-part-3",
+      "morris-chang-quotes-founding-career-vision-part-2",
+      "morris-chang-quotes-founding-vision-foundry-model-part-1",
+      "morris-chang-quotes-geopolitics-globalization-us-identity-part-1",
+      "morris-chang-quotes-globalization-identity-integrity-part-3",
+      "morris-chang-quotes-integrity-governance-part-2",
+      "morris-chang-quotes-mit-speech-learning-talent-national-security-2023-part-3",
+      "morris-chang-quotes-nvidia-jensen-ceo-succession-part-2",
+      "morris-chang-quotes-talent-culture-people-part-2",
+      "morris-chang-quotes-technology-rd-moores-law-part-1",
+      "morris-chang-quotes-us-revival-china-competition-futility-part-3",
+      "tsm-esg-environmental-sustainability-data-2023-part-5",
+      "tsm-leadership-integrity-scoring-summary-part-5",
+      "tsm-silicon-shield-geopolitical-scoring-summary-part-5",
+      "tsm-third-party-quotes-water-crisis-china-euv-geopolitical-risk-part-4",
+      "wendell-huang-quotes-capex-philosophy-advanced-packaging",
+      "wendell-huang-quotes-margins-capex-philosophy-part-3",
+      "wendell-huang-quotes-rd-advanced-nodes-n2",
+      "wendell-huang-quotes-us-fab-economics-margins-part-4",
+      "wendell-huang-quotes-us-fab-economics-margins",
       "tsmc-ai-demand-drivers-token-growth",
       "tsmc-cowos-advanced-packaging-capacity-expansion",
       "tsmc-euv-adoption-curve",
@@ -1295,6 +2315,7 @@
     ],
     "NVDA": [
       "tsmc-geopolitical-pe-discount-analysis",
+      "morris-chang-quotes-nvidia-jensen-ceo-succession-part-2",
       "tsmc-ai-demand-drivers-token-growth",
       "tsmc-cowos-advanced-packaging-capacity-expansion"
     ],
@@ -1335,7 +2356,23 @@
       "tsmc-silicon-shield-theory-debate",
       "semiconductor-foundry-tam-growth-2000-2035",
       "tsm-morris-chang-founder-profile",
-      "tsm-leadership-quotes",
+      "morris-chang-quotes-acquired-briefing-apple-ibm-nvidia-scale-2025-part-3",
+      "morris-chang-quotes-apple-ibm-partnerships-part-2",
+      "morris-chang-quotes-competition-learning-curve-moat-part-1",
+      "morris-chang-quotes-computer-history-museum-ti-career-learning-curve-2007-part-3",
+      "morris-chang-quotes-customers-pricing-asml-partnership-part-1",
+      "morris-chang-quotes-early-career-transitions-part-3",
+      "morris-chang-quotes-founding-career-vision-part-2",
+      "morris-chang-quotes-founding-vision-foundry-model-part-1",
+      "morris-chang-quotes-geopolitics-globalization-us-identity-part-1",
+      "morris-chang-quotes-globalization-identity-integrity-part-3",
+      "morris-chang-quotes-integrity-governance-part-2",
+      "morris-chang-quotes-mit-speech-learning-talent-national-security-2023-part-3",
+      "morris-chang-quotes-nvidia-jensen-ceo-succession-part-2",
+      "morris-chang-quotes-talent-culture-people-part-2",
+      "morris-chang-quotes-technology-rd-moores-law-part-1",
+      "morris-chang-quotes-us-revival-china-competition-futility-part-3",
+      "tsm-leadership-integrity-scoring-summary-part-5",
       "tsmc-euv-adoption-curve",
       "tsmc-process-node-roadmap-1987-2027",
       "tsmc-transistor-density-scaling-s-curve"
@@ -1361,7 +2398,9 @@
       "tsmc-silicon-shield-theory-debate",
       "semiconductor-foundry-tam-growth-2000-2035",
       "tsm-cc-wei-ceo-profile",
-      "tsm-leadership-quotes"
+      "cc-wei-quotes-ai-demand-capex-intel-competition-part-3",
+      "cc-wei-quotes-ai-demand-cowos-globalization",
+      "cc-wei-quotes-competitor-customer-success-globalization-part-2"
     ],
     "Wendell Huang": [
       "tsmc-organizational-culture-values",
@@ -1377,6 +2416,13 @@
       "tsm-operating-efficiency-roic-roe-margins-2021-2025",
       "tsm-ten-year-financial-trajectory-2014-2025",
       "semiconductor-foundry-tam-growth-2000-2035",
+      "cc-wei-quotes-ai-demand-cowos-globalization-part-1",
+      "cc-wei-quotes-competitor-customer-success-globalization-part-2",
+      "wendell-huang-quotes-capex-philosophy-advanced-packaging",
+      "wendell-huang-quotes-margins-capex-philosophy-part-3",
+      "wendell-huang-quotes-rd-advanced-nodes-n2",
+      "wendell-huang-quotes-us-fab-economics-margins-part-4",
+      "wendell-huang-quotes-us-fab-economics-margins",
       "tsmc-ai-demand-drivers-token-growth",
       "tsmc-cowos-advanced-packaging-capacity-expansion",
       "tsmc-finfet-to-gaa-transition",
@@ -1386,10 +2432,12 @@
       "tsmc-organizational-culture-values"
     ],
     "Jensen Huang": [
-      "tsm-bull-case-ai-supercycle-moat-2025"
+      "tsm-bull-case-ai-supercycle-moat-2025",
+      "morris-chang-quotes-nvidia-jensen-ceo-succession-part-2"
     ],
     "Gene You": [
-      "tsmc-water-usage-drought-controversy"
+      "tsmc-water-usage-drought-controversy",
+      "tsm-third-party-quotes-water-crisis-china-euv-geopolitical-risk-part-4"
     ],
     "Yang Kuan-wei": [
       "tsmc-water-usage-drought-controversy"
@@ -1401,10 +2449,21 @@
       "tsm-operating-efficiency-roic-roe-margins-2021-2025"
     ],
     "CC Wei": [
+      "cc-wei-quotes-ai-demand-capex-intel-competition-part-3",
+      "cc-wei-quotes-ai-demand-cowos-globalization-part-1",
+      "cc-wei-quotes-ai-demand-customer-validation-part-4",
+      "cc-wei-quotes-competitor-customer-success-globalization-part-2-part-1",
+      "cc-wei-quotes-geopolitics-competition-globalization-part-4",
+      "cc-wei-quotes-intel-competition-investment-leadership-2024-2025-part-3-part-1",
+      "cc-wei-quotes-intel-competition-investment-leadership-2024-2025-part-3",
+      "tsm-leadership-integrity-scoring-summary-part-5",
       "tsmc-ai-demand-drivers-token-growth",
       "tsmc-cowos-advanced-packaging-capacity-expansion",
       "tsmc-finfet-to-gaa-transition",
       "tsmc-process-node-roadmap-1987-2027"
+    ],
+    "CSIS analysts": [
+      "tsm-third-party-quotes-water-crisis-china-euv-geopolitical-risk-part-4"
     ],
     "Carlos Diaz": [
       "tsmc-process-node-roadmap-1987-2027"
@@ -1442,7 +2501,40 @@
       "semiconductor-foundry-tam-growth-2000-2035",
       "tsm-cc-wei-ceo-profile",
       "tsm-morris-chang-founder-profile",
-      "tsm-leadership-quotes",
+      "cc-wei-quotes-ai-demand-capex-intel-competition-part-3",
+      "cc-wei-quotes-ai-demand-cowos-globalization-part-1",
+      "cc-wei-quotes-ai-demand-cowos-globalization",
+      "cc-wei-quotes-ai-demand-customer-validation-part-4",
+      "cc-wei-quotes-competitor-customer-success-globalization-part-2-part-1",
+      "cc-wei-quotes-competitor-customer-success-globalization-part-2",
+      "cc-wei-quotes-geopolitics-competition-globalization-part-4",
+      "cc-wei-quotes-intel-competition-investment-leadership-2024-2025-part-3-part-1",
+      "cc-wei-quotes-intel-competition-investment-leadership-2024-2025-part-3",
+      "morris-chang-quotes-acquired-briefing-apple-ibm-nvidia-scale-2025-part-3",
+      "morris-chang-quotes-apple-ibm-partnerships-part-2",
+      "morris-chang-quotes-competition-learning-curve-moat-part-1",
+      "morris-chang-quotes-computer-history-museum-ti-career-learning-curve-2007-part-3",
+      "morris-chang-quotes-customers-pricing-asml-partnership-part-1",
+      "morris-chang-quotes-early-career-transitions-part-3",
+      "morris-chang-quotes-founding-career-vision-part-2",
+      "morris-chang-quotes-founding-vision-foundry-model-part-1",
+      "morris-chang-quotes-geopolitics-globalization-us-identity-part-1",
+      "morris-chang-quotes-globalization-identity-integrity-part-3",
+      "morris-chang-quotes-integrity-governance-part-2",
+      "morris-chang-quotes-mit-speech-learning-talent-national-security-2023-part-3",
+      "morris-chang-quotes-nvidia-jensen-ceo-succession-part-2",
+      "morris-chang-quotes-talent-culture-people-part-2",
+      "morris-chang-quotes-technology-rd-moores-law-part-1",
+      "morris-chang-quotes-us-revival-china-competition-futility-part-3",
+      "tsm-esg-environmental-sustainability-data-2023-part-5",
+      "tsm-leadership-integrity-scoring-summary-part-5",
+      "tsm-silicon-shield-geopolitical-scoring-summary-part-5",
+      "tsm-third-party-quotes-water-crisis-china-euv-geopolitical-risk-part-4",
+      "wendell-huang-quotes-capex-philosophy-advanced-packaging",
+      "wendell-huang-quotes-margins-capex-philosophy-part-3",
+      "wendell-huang-quotes-rd-advanced-nodes-n2",
+      "wendell-huang-quotes-us-fab-economics-margins-part-4",
+      "wendell-huang-quotes-us-fab-economics-margins",
       "tsmc-ai-demand-drivers-token-growth",
       "tsmc-cowos-advanced-packaging-capacity-expansion",
       "tsmc-euv-adoption-curve",
@@ -1461,6 +2553,12 @@
       "tsmc-allied-framework-chip4-quad-industry-dependency",
       "tsmc-geopolitical-pe-discount-analysis",
       "semiconductor-foundry-tam-growth-2000-2035",
+      "cc-wei-quotes-ai-demand-capex-intel-competition-part-3",
+      "cc-wei-quotes-ai-demand-cowos-globalization-part-1",
+      "cc-wei-quotes-ai-demand-cowos-globalization",
+      "cc-wei-quotes-ai-demand-customer-validation-part-4",
+      "cc-wei-quotes-intel-competition-investment-leadership-2024-2025-part-3-part-1",
+      "morris-chang-quotes-nvidia-jensen-ceo-succession-part-2",
       "tsmc-ai-demand-drivers-token-growth",
       "tsmc-cowos-advanced-packaging-capacity-expansion",
       "tsmc-finfet-to-gaa-transition",
@@ -1474,6 +2572,8 @@
     "cloud-infrastructure": [
       "tsm-bear-case-geopolitical-structural-risks-2025",
       "tsm-bull-case-ai-supercycle-moat-2025",
+      "cc-wei-quotes-ai-demand-customer-validation-part-4",
+      "cc-wei-quotes-intel-competition-investment-leadership-2024-2025-part-3-part-1",
       "tsmc-ai-demand-drivers-token-growth",
       "tsmc-cowos-advanced-packaging-capacity-expansion"
     ],
@@ -1481,6 +2581,7 @@
       "tsm-five-forces-supplier-buyer-power",
       "tsmc-allied-framework-chip4-quad-industry-dependency",
       "tsmc-china-smic-euv-catchup-timeline",
+      "morris-chang-quotes-customers-pricing-asml-partnership-part-1",
       "tsmc-euv-adoption-curve"
     ],
     "consumer-electronics": [
@@ -1540,7 +2641,40 @@
       "tsm-morris-chang-founder-profile"
     ],
     "quotes": [
-      "tsm-leadership-quotes"
+      "cc-wei-quotes-ai-demand-capex-intel-competition-part-3",
+      "cc-wei-quotes-ai-demand-cowos-globalization-part-1",
+      "cc-wei-quotes-ai-demand-cowos-globalization",
+      "cc-wei-quotes-ai-demand-customer-validation-part-4",
+      "cc-wei-quotes-competitor-customer-success-globalization-part-2-part-1",
+      "cc-wei-quotes-competitor-customer-success-globalization-part-2",
+      "cc-wei-quotes-geopolitics-competition-globalization-part-4",
+      "cc-wei-quotes-intel-competition-investment-leadership-2024-2025-part-3-part-1",
+      "cc-wei-quotes-intel-competition-investment-leadership-2024-2025-part-3",
+      "morris-chang-quotes-acquired-briefing-apple-ibm-nvidia-scale-2025-part-3",
+      "morris-chang-quotes-apple-ibm-partnerships-part-2",
+      "morris-chang-quotes-competition-learning-curve-moat-part-1",
+      "morris-chang-quotes-computer-history-museum-ti-career-learning-curve-2007-part-3",
+      "morris-chang-quotes-customers-pricing-asml-partnership-part-1",
+      "morris-chang-quotes-early-career-transitions-part-3",
+      "morris-chang-quotes-founding-career-vision-part-2",
+      "morris-chang-quotes-founding-vision-foundry-model-part-1",
+      "morris-chang-quotes-geopolitics-globalization-us-identity-part-1",
+      "morris-chang-quotes-globalization-identity-integrity-part-3",
+      "morris-chang-quotes-integrity-governance-part-2",
+      "morris-chang-quotes-mit-speech-learning-talent-national-security-2023-part-3",
+      "morris-chang-quotes-nvidia-jensen-ceo-succession-part-2",
+      "morris-chang-quotes-talent-culture-people-part-2",
+      "morris-chang-quotes-technology-rd-moores-law-part-1",
+      "morris-chang-quotes-us-revival-china-competition-futility-part-3",
+      "tsm-esg-environmental-sustainability-data-2023-part-5",
+      "tsm-leadership-integrity-scoring-summary-part-5",
+      "tsm-silicon-shield-geopolitical-scoring-summary-part-5",
+      "tsm-third-party-quotes-water-crisis-china-euv-geopolitical-risk-part-4",
+      "wendell-huang-quotes-capex-philosophy-advanced-packaging",
+      "wendell-huang-quotes-margins-capex-philosophy-part-3",
+      "wendell-huang-quotes-rd-advanced-nodes-n2",
+      "wendell-huang-quotes-us-fab-economics-margins-part-4",
+      "wendell-huang-quotes-us-fab-economics-margins"
     ],
     "technology": [
       "tsmc-ai-demand-drivers-token-growth",
@@ -1557,14 +2691,42 @@
       "tsmc-pure-play-foundry-business-model",
       "tsm-cc-wei-ceo-profile",
       "tsm-morris-chang-founder-profile",
-      "tsm-leadership-quotes"
+      "cc-wei-quotes-ai-demand-cowos-globalization",
+      "cc-wei-quotes-competitor-customer-success-globalization-part-2",
+      "cc-wei-quotes-intel-competition-investment-leadership-2024-2025-part-3",
+      "morris-chang-quotes-apple-ibm-partnerships-part-2",
+      "morris-chang-quotes-customers-pricing-asml-partnership-part-1",
+      "morris-chang-quotes-early-career-transitions-part-3",
+      "morris-chang-quotes-founding-career-vision-part-2",
+      "morris-chang-quotes-founding-vision-foundry-model-part-1",
+      "morris-chang-quotes-globalization-identity-integrity-part-3",
+      "morris-chang-quotes-integrity-governance-part-2",
+      "morris-chang-quotes-mit-speech-learning-talent-national-security-2023-part-3",
+      "morris-chang-quotes-nvidia-jensen-ceo-succession-part-2",
+      "morris-chang-quotes-talent-culture-people-part-2",
+      "morris-chang-quotes-technology-rd-moores-law-part-1",
+      "morris-chang-quotes-us-revival-china-competition-futility-part-3",
+      "tsm-leadership-integrity-scoring-summary-part-5"
     ],
     "founding": [
       "tsmc-organizational-culture-values",
       "tsmc-pure-play-foundry-business-model",
       "semiconductor-foundry-tam-growth-2000-2035",
       "tsm-morris-chang-founder-profile",
-      "tsm-leadership-quotes"
+      "cc-wei-quotes-geopolitics-competition-globalization-part-4",
+      "morris-chang-quotes-acquired-briefing-apple-ibm-nvidia-scale-2025-part-3",
+      "morris-chang-quotes-competition-learning-curve-moat-part-1",
+      "morris-chang-quotes-computer-history-museum-ti-career-learning-curve-2007-part-3",
+      "morris-chang-quotes-early-career-transitions-part-3",
+      "morris-chang-quotes-founding-career-vision-part-2",
+      "morris-chang-quotes-founding-vision-foundry-model-part-1",
+      "morris-chang-quotes-globalization-identity-integrity-part-3",
+      "morris-chang-quotes-integrity-governance-part-2",
+      "morris-chang-quotes-mit-speech-learning-talent-national-security-2023-part-3",
+      "morris-chang-quotes-nvidia-jensen-ceo-succession-part-2",
+      "morris-chang-quotes-talent-culture-people-part-2",
+      "morris-chang-quotes-technology-rd-moores-law-part-1",
+      "tsm-leadership-integrity-scoring-summary-part-5"
     ],
     "business-model": [
       "tsmc-organizational-culture-values",
@@ -1573,7 +2735,16 @@
       "tsm-operating-efficiency-roic-roe-margins-2021-2025",
       "semiconductor-foundry-tam-growth-2000-2035",
       "tsm-morris-chang-founder-profile",
-      "tsm-leadership-quotes"
+      "cc-wei-quotes-competitor-customer-success-globalization-part-2",
+      "cc-wei-quotes-intel-competition-investment-leadership-2024-2025-part-3",
+      "morris-chang-quotes-acquired-briefing-apple-ibm-nvidia-scale-2025-part-3",
+      "morris-chang-quotes-apple-ibm-partnerships-part-2",
+      "morris-chang-quotes-computer-history-museum-ti-career-learning-curve-2007-part-3",
+      "morris-chang-quotes-customers-pricing-asml-partnership-part-1",
+      "morris-chang-quotes-founding-career-vision-part-2",
+      "morris-chang-quotes-founding-vision-foundry-model-part-1",
+      "morris-chang-quotes-nvidia-jensen-ceo-succession-part-2",
+      "morris-chang-quotes-talent-culture-people-part-2"
     ],
     "moat": [
       "tsmc-organizational-culture-values",
@@ -1584,12 +2755,36 @@
       "tsmc-silicon-shield-theory-debate",
       "tsm-cc-wei-ceo-profile",
       "tsm-morris-chang-founder-profile",
-      "tsm-leadership-quotes"
+      "cc-wei-quotes-ai-demand-cowos-globalization",
+      "cc-wei-quotes-competitor-customer-success-globalization-part-2",
+      "cc-wei-quotes-intel-competition-investment-leadership-2024-2025-part-3",
+      "morris-chang-quotes-acquired-briefing-apple-ibm-nvidia-scale-2025-part-3",
+      "morris-chang-quotes-apple-ibm-partnerships-part-2",
+      "morris-chang-quotes-competition-learning-curve-moat-part-1",
+      "morris-chang-quotes-computer-history-museum-ti-career-learning-curve-2007-part-3",
+      "morris-chang-quotes-customers-pricing-asml-partnership-part-1",
+      "morris-chang-quotes-early-career-transitions-part-3",
+      "morris-chang-quotes-founding-vision-foundry-model-part-1",
+      "morris-chang-quotes-globalization-identity-integrity-part-3",
+      "morris-chang-quotes-integrity-governance-part-2",
+      "morris-chang-quotes-mit-speech-learning-talent-national-security-2023-part-3",
+      "morris-chang-quotes-talent-culture-people-part-2",
+      "morris-chang-quotes-technology-rd-moores-law-part-1",
+      "morris-chang-quotes-us-revival-china-competition-futility-part-3",
+      "tsm-leadership-integrity-scoring-summary-part-5",
+      "wendell-huang-quotes-us-fab-economics-margins"
     ],
     "pricing": [
       "tsmc-pure-play-foundry-business-model",
       "tsmc-wafer-pricing-unit-economics-capex-discipline",
-      "tsm-five-forces-supplier-buyer-power"
+      "tsm-five-forces-supplier-buyer-power",
+      "cc-wei-quotes-competitor-customer-success-globalization-part-2",
+      "morris-chang-quotes-acquired-briefing-apple-ibm-nvidia-scale-2025-part-3",
+      "morris-chang-quotes-apple-ibm-partnerships-part-2",
+      "morris-chang-quotes-computer-history-museum-ti-career-learning-curve-2007-part-3",
+      "morris-chang-quotes-customers-pricing-asml-partnership-part-1",
+      "morris-chang-quotes-founding-vision-foundry-model-part-1",
+      "wendell-huang-quotes-us-fab-economics-margins"
     ],
     "revenue-mix": [
       "tsmc-revenue-platform-breakdown-hpc-ai-dominance",
@@ -1598,7 +2793,9 @@
       "tsm-geographic-revenue-breakdown-2018-2024",
       "tsm-operating-efficiency-roic-roe-margins-2021-2025",
       "tsm-platform-and-process-revenue-mix-2024",
-      "tsm-ten-year-financial-trajectory-2014-2025"
+      "tsm-ten-year-financial-trajectory-2014-2025",
+      "cc-wei-quotes-ai-demand-cowos-globalization-part-1",
+      "wendell-huang-quotes-margins-capex-philosophy-part-3"
     ],
     "market-share": [
       "tsmc-revenue-platform-breakdown-hpc-ai-dominance",
@@ -1617,6 +2814,10 @@
       "tsmc-revenue-platform-breakdown-hpc-ai-dominance",
       "tsm-foundry-market-concentration-2024",
       "semiconductor-foundry-tam-growth-2000-2035",
+      "cc-wei-quotes-ai-demand-cowos-globalization-part-1",
+      "cc-wei-quotes-ai-demand-customer-validation-part-4",
+      "cc-wei-quotes-intel-competition-investment-leadership-2024-2025-part-3-part-1",
+      "cc-wei-quotes-intel-competition-investment-leadership-2024-2025-part-3",
       "tsmc-ai-demand-drivers-token-growth",
       "tsmc-cowos-advanced-packaging-capacity-expansion"
     ],
@@ -1628,7 +2829,11 @@
       "tsm-dcf-valuation-2026e",
       "tsm-operating-efficiency-roic-roe-margins-2021-2025",
       "tsm-platform-and-process-revenue-mix-2024",
-      "tsm-ten-year-financial-trajectory-2014-2025"
+      "tsm-ten-year-financial-trajectory-2014-2025",
+      "wendell-huang-quotes-margins-capex-philosophy-part-3",
+      "wendell-huang-quotes-rd-advanced-nodes-n2",
+      "wendell-huang-quotes-us-fab-economics-margins-part-4",
+      "wendell-huang-quotes-us-fab-economics-margins"
     ],
     "capex": [
       "tsmc-wafer-pricing-unit-economics-capex-discipline",
@@ -1642,6 +2847,15 @@
       "tsm-operating-efficiency-roic-roe-margins-2021-2025",
       "tsm-platform-and-process-revenue-mix-2024",
       "tsm-ten-year-financial-trajectory-2014-2025",
+      "cc-wei-quotes-ai-demand-capex-intel-competition-part-3",
+      "cc-wei-quotes-ai-demand-customer-validation-part-4",
+      "cc-wei-quotes-intel-competition-investment-leadership-2024-2025-part-3-part-1",
+      "morris-chang-quotes-technology-rd-moores-law-part-1",
+      "wendell-huang-quotes-capex-philosophy-advanced-packaging",
+      "wendell-huang-quotes-margins-capex-philosophy-part-3",
+      "wendell-huang-quotes-rd-advanced-nodes-n2",
+      "wendell-huang-quotes-us-fab-economics-margins-part-4",
+      "wendell-huang-quotes-us-fab-economics-margins",
       "tsmc-ai-demand-drivers-token-growth",
       "tsmc-cowos-advanced-packaging-capacity-expansion",
       "tsmc-euv-adoption-curve"
@@ -1653,7 +2867,10 @@
       "tsm-dcf-valuation-2026e",
       "tsm-operating-efficiency-roic-roe-margins-2021-2025",
       "tsm-ten-year-financial-trajectory-2014-2025",
-      "tsmc-geopolitical-pe-discount-analysis"
+      "tsmc-geopolitical-pe-discount-analysis",
+      "cc-wei-quotes-intel-competition-investment-leadership-2024-2025-part-3-part-1",
+      "tsm-silicon-shield-geopolitical-scoring-summary-part-5",
+      "wendell-huang-quotes-margins-capex-philosophy-part-3"
     ],
     "geopolitics": [
       "tsm-bear-case-geopolitical-structural-risks-2025",
@@ -1666,7 +2883,16 @@
       "tsmc-silicon-shield-theory-debate",
       "tsmc-taiwan-strait-conflict-probability-scenarios",
       "tsm-cc-wei-ceo-profile",
-      "tsm-leadership-quotes"
+      "cc-wei-quotes-ai-demand-capex-intel-competition-part-3",
+      "cc-wei-quotes-competitor-customer-success-globalization-part-2-part-1",
+      "cc-wei-quotes-geopolitics-competition-globalization-part-4",
+      "morris-chang-quotes-competition-learning-curve-moat-part-1",
+      "morris-chang-quotes-geopolitics-globalization-us-identity-part-1",
+      "morris-chang-quotes-globalization-identity-integrity-part-3",
+      "morris-chang-quotes-mit-speech-learning-talent-national-security-2023-part-3",
+      "morris-chang-quotes-us-revival-china-competition-futility-part-3",
+      "tsm-silicon-shield-geopolitical-scoring-summary-part-5",
+      "tsm-third-party-quotes-water-crisis-china-euv-geopolitical-risk-part-4"
     ],
     "trade-war": [
       "tsm-bear-case-geopolitical-structural-risks-2025",
@@ -1677,7 +2903,10 @@
       "tsmc-geopolitical-pe-discount-analysis",
       "tsmc-silicon-shield-theory-debate",
       "tsmc-taiwan-strait-conflict-probability-scenarios",
-      "tsm-leadership-quotes"
+      "morris-chang-quotes-geopolitics-globalization-us-identity-part-1",
+      "morris-chang-quotes-us-revival-china-competition-futility-part-3",
+      "tsm-silicon-shield-geopolitical-scoring-summary-part-5",
+      "tsm-third-party-quotes-water-crisis-china-euv-geopolitical-risk-part-4"
     ],
     "competitive-dynamics": [
       "tsm-bear-case-geopolitical-structural-risks-2025",
@@ -1689,6 +2918,21 @@
       "tsm-intel-foundry-competitive-analysis",
       "tsm-samsung-foundry-yield-crisis-2025",
       "semiconductor-foundry-tam-growth-2000-2035",
+      "cc-wei-quotes-ai-demand-capex-intel-competition-part-3",
+      "cc-wei-quotes-ai-demand-cowos-globalization",
+      "cc-wei-quotes-ai-demand-customer-validation-part-4",
+      "cc-wei-quotes-competitor-customer-success-globalization-part-2-part-1",
+      "cc-wei-quotes-competitor-customer-success-globalization-part-2",
+      "cc-wei-quotes-geopolitics-competition-globalization-part-4",
+      "cc-wei-quotes-intel-competition-investment-leadership-2024-2025-part-3-part-1",
+      "cc-wei-quotes-intel-competition-investment-leadership-2024-2025-part-3",
+      "morris-chang-quotes-acquired-briefing-apple-ibm-nvidia-scale-2025-part-3",
+      "morris-chang-quotes-competition-learning-curve-moat-part-1",
+      "morris-chang-quotes-computer-history-museum-ti-career-learning-curve-2007-part-3",
+      "morris-chang-quotes-mit-speech-learning-talent-national-security-2023-part-3",
+      "morris-chang-quotes-nvidia-jensen-ceo-succession-part-2",
+      "morris-chang-quotes-us-revival-china-competition-futility-part-3",
+      "tsm-third-party-quotes-water-crisis-china-euv-geopolitical-risk-part-4",
       "tsmc-ai-demand-drivers-token-growth"
     ],
     "supply-chain": [
@@ -1700,6 +2944,12 @@
       "tsmc-china-smic-euv-catchup-timeline",
       "tsmc-silicon-shield-theory-debate",
       "tsmc-taiwan-strait-conflict-probability-scenarios",
+      "cc-wei-quotes-ai-demand-cowos-globalization",
+      "cc-wei-quotes-competitor-customer-success-globalization-part-2-part-1",
+      "morris-chang-quotes-customers-pricing-asml-partnership-part-1",
+      "morris-chang-quotes-geopolitics-globalization-us-identity-part-1",
+      "wendell-huang-quotes-capex-philosophy-advanced-packaging",
+      "wendell-huang-quotes-us-fab-economics-margins-part-4",
       "tsmc-cowos-advanced-packaging-capacity-expansion",
       "tsmc-euv-adoption-curve"
     ],
@@ -1708,20 +2958,25 @@
       "tsm-bull-bear-key-debates-scorecard-2025",
       "tsmc-carbon-emissions-sbti-climate-transition",
       "tsmc-energy-consumption-renewable-targets",
-      "tsmc-esg-ratings-environmental-performance"
+      "tsmc-esg-ratings-environmental-performance",
+      "tsm-esg-environmental-sustainability-data-2023-part-5"
     ],
     "water": [
       "tsm-bear-case-geopolitical-structural-risks-2025",
       "tsm-bull-bear-key-debates-scorecard-2025",
       "tsmc-esg-ratings-environmental-performance",
-      "tsmc-water-usage-drought-controversy"
+      "tsmc-water-usage-drought-controversy",
+      "tsm-esg-environmental-sustainability-data-2023-part-5",
+      "tsm-third-party-quotes-water-crisis-china-euv-geopolitical-risk-part-4"
     ],
     "energy": [
       "tsm-bear-case-geopolitical-structural-risks-2025",
       "tsm-bull-bear-key-debates-scorecard-2025",
       "tsmc-carbon-emissions-sbti-climate-transition",
       "tsmc-energy-consumption-renewable-targets",
-      "tsmc-esg-ratings-environmental-performance"
+      "tsmc-esg-ratings-environmental-performance",
+      "tsm-esg-environmental-sustainability-data-2023-part-5",
+      "tsm-third-party-quotes-water-crisis-china-euv-geopolitical-risk-part-4"
     ],
     "process-node": [
       "tsm-bull-case-ai-supercycle-moat-2025",
@@ -1730,6 +2985,10 @@
       "tsm-platform-and-process-revenue-mix-2024",
       "tsm-ten-year-financial-trajectory-2014-2025",
       "tsmc-china-smic-euv-catchup-timeline",
+      "cc-wei-quotes-ai-demand-capex-intel-competition-part-3",
+      "cc-wei-quotes-ai-demand-cowos-globalization-part-1",
+      "morris-chang-quotes-technology-rd-moores-law-part-1",
+      "wendell-huang-quotes-rd-advanced-nodes-n2",
       "tsmc-ai-demand-drivers-token-growth",
       "tsmc-euv-adoption-curve",
       "tsmc-finfet-to-gaa-transition",
@@ -1738,6 +2997,9 @@
     ],
     "packaging": [
       "tsm-bull-case-ai-supercycle-moat-2025",
+      "cc-wei-quotes-ai-demand-cowos-globalization-part-1",
+      "cc-wei-quotes-ai-demand-cowos-globalization",
+      "wendell-huang-quotes-capex-philosophy-advanced-packaging",
       "tsmc-cowos-advanced-packaging-capacity-expansion",
       "tsmc-finfet-to-gaa-transition"
     ],
@@ -1748,19 +3010,29 @@
       "tsm-intel-foundry-competitive-analysis",
       "tsm-regulatory-policy-environment-2025",
       "tsm-samsung-foundry-yield-crisis-2025",
-      "tsm-ten-year-financial-trajectory-2014-2025"
+      "tsm-ten-year-financial-trajectory-2014-2025",
+      "cc-wei-quotes-competitor-customer-success-globalization-part-2-part-1",
+      "morris-chang-quotes-competition-learning-curve-moat-part-1"
     ],
     "sanctions": [
       "tsm-regulatory-policy-environment-2025",
       "tsm-geographic-revenue-breakdown-2018-2024",
       "tsmc-china-smic-euv-catchup-timeline",
-      "tsmc-taiwan-strait-conflict-probability-scenarios"
+      "tsmc-taiwan-strait-conflict-probability-scenarios",
+      "tsm-silicon-shield-geopolitical-scoring-summary-part-5"
     ],
     "reshoring": [
       "tsm-regulatory-policy-environment-2025",
       "tsmc-allied-framework-chip4-quad-industry-dependency",
       "tsmc-silicon-shield-theory-debate",
-      "tsm-cc-wei-ceo-profile"
+      "tsm-cc-wei-ceo-profile",
+      "cc-wei-quotes-competitor-customer-success-globalization-part-2-part-1",
+      "cc-wei-quotes-geopolitics-competition-globalization-part-4",
+      "morris-chang-quotes-competition-learning-curve-moat-part-1",
+      "morris-chang-quotes-geopolitics-globalization-us-identity-part-1",
+      "morris-chang-quotes-us-revival-china-competition-futility-part-3",
+      "wendell-huang-quotes-us-fab-economics-margins-part-4",
+      "wendell-huang-quotes-us-fab-economics-margins"
     ],
     "semiconductor-foundry": [
       "tsmc-carbon-emissions-sbti-climate-transition",
@@ -1769,15 +3041,25 @@
       "tsmc-water-usage-drought-controversy"
     ],
     "governance": [
-      "tsmc-esg-ratings-environmental-performance"
+      "tsmc-esg-ratings-environmental-performance",
+      "morris-chang-quotes-globalization-identity-integrity-part-3",
+      "morris-chang-quotes-integrity-governance-part-2",
+      "tsm-esg-environmental-sustainability-data-2023-part-5",
+      "tsm-leadership-integrity-scoring-summary-part-5"
     ],
     "dcf": [
       "tsm-dcf-valuation-2026e",
-      "tsmc-geopolitical-pe-discount-analysis"
+      "tsmc-geopolitical-pe-discount-analysis",
+      "tsm-silicon-shield-geopolitical-scoring-summary-part-5"
     ],
     "ai-accelerator": [
       "tsm-dcf-valuation-2026e",
       "tsm-ten-year-financial-trajectory-2014-2025",
+      "cc-wei-quotes-ai-demand-capex-intel-competition-part-3",
+      "cc-wei-quotes-ai-demand-cowos-globalization-part-1",
+      "cc-wei-quotes-ai-demand-cowos-globalization",
+      "cc-wei-quotes-ai-demand-customer-validation-part-4",
+      "cc-wei-quotes-intel-competition-investment-leadership-2024-2025-part-3-part-1",
       "tsmc-ai-demand-drivers-token-growth",
       "tsmc-cowos-advanced-packaging-capacity-expansion",
       "tsmc-finfet-to-gaa-transition"
@@ -1793,6 +3075,9 @@
     "capacity": [
       "tsmc-allied-framework-chip4-quad-industry-dependency",
       "tsmc-taiwan-strait-conflict-probability-scenarios",
+      "cc-wei-quotes-ai-demand-cowos-globalization-part-1",
+      "cc-wei-quotes-ai-demand-cowos-globalization",
+      "wendell-huang-quotes-capex-philosophy-advanced-packaging",
       "tsmc-cowos-advanced-packaging-capacity-expansion"
     ],
     "gaa": [

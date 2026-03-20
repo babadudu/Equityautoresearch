@@ -100,22 +100,54 @@ function extractSections(lines: string[], anchors: string[]): string {
   return parts.join('\n\n---\n\n');
 }
 
-/** Extract all quoted text (> "..." patterns) from the full report. */
-function extractQuotes(content: string): string {
-  const quoteLines: string[] = [];
+/** Known executive names to match in quote attribution. */
+const KNOWN_PERSONS = [
+  'Morris Chang', 'C.C. Wei', 'Wendell Huang', 'Mark Liu',
+  'Jensen Huang', 'Lisa Su', 'Pat Gelsinger', 'Tim Cook',
+  '張忠謀', '魏哲家', '黃仁勳', '劉德音',
+];
+
+/** Extract quotes grouped by attributed person. Returns Map<person, quoteBlocks>. */
+function extractQuotesByPerson(content: string): Map<string, string[]> {
   const lines = content.split('\n');
+  const personQuotes = new Map<string, string[]>();
+
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i];
-    // Match lines containing direct quotes (in English or Chinese quotation marks)
-    if ((line.includes('「') && line.includes('」')) || (line.includes('"') && line.includes('"')) || />\s*"[^"]{20,}"/.test(line)) {
-      // Include context: 1 line before and after
-      const start = Math.max(0, i - 1);
-      const end = Math.min(lines.length, i + 2);
-      quoteLines.push(lines.slice(start, end).join('\n'));
-      quoteLines.push('');
+    // Match lines containing direct quotes
+    const hasQuote =
+      (line.includes('「') && line.includes('」')) ||
+      (line.includes('\u201c') && line.includes('\u201d')) ||
+      />\s*"[^"]{20,}"/.test(line);
+    if (!hasQuote) continue;
+
+    // Grab context window: 2 lines before + quote line + 1 line after
+    const start = Math.max(0, i - 2);
+    const end = Math.min(lines.length, i + 2);
+    const block = lines.slice(start, end).join('\n');
+    const blockLower = block.toLowerCase();
+
+    // Attribute to a person
+    let attributed = '_other';
+    for (const person of KNOWN_PERSONS) {
+      if (blockLower.includes(person.toLowerCase())) {
+        // Normalize CJK names to their English equivalent for grouping
+        const normalized = person === '張忠謀' ? 'Morris Chang'
+          : person === '魏哲家' ? 'C.C. Wei'
+          : person === '黃仁勳' ? 'Jensen Huang'
+          : person === '劉德音' ? 'Mark Liu'
+          : person;
+        attributed = normalized;
+        break;
+      }
     }
+
+    const existing = personQuotes.get(attributed) ?? [];
+    existing.push(block);
+    personQuotes.set(attributed, existing);
   }
-  return quoteLines.join('\n');
+
+  return personQuotes;
 }
 
 /** Build the extraction prompt for Claude. */
@@ -194,7 +226,7 @@ function writeAtom(atom: AtomOutput, ticker: string, sourceReport: string, sourc
 }
 
 /** Main extraction pipeline. */
-async function extractKnowledge(ticker: string, dryRun: boolean): Promise<void> {
+async function extractKnowledge(ticker: string, dryRun: boolean, quotesOnly = false): Promise<void> {
   const reportPath = path.join(PROJECT_ROOT, 'data', 'companies', ticker, `${ticker}_Initial_MAX.md`);
   if (!fs.existsSync(reportPath)) {
     console.error(`Report not found: ${reportPath}`);
@@ -208,8 +240,11 @@ async function extractKnowledge(ticker: string, dryRun: boolean): Promise<void> 
 
   let totalAtoms = 0;
 
-  // Process each section group
-  for (const mapping of SECTION_ARCHETYPE_MAP) {
+  // Process each section group (skip if --quotes-only)
+  if (quotesOnly) {
+    console.log('  [quotes-only] Skipping section extraction');
+  }
+  for (const mapping of quotesOnly ? [] : SECTION_ARCHETYPE_MAP) {
     const sectionContent = extractSections(lines, mapping.sections);
     if (!sectionContent.trim()) {
       console.log(`  [skip] No content for ${mapping.label} (sections: ${mapping.sections.join(', ')})`);
@@ -262,18 +297,56 @@ async function extractKnowledge(ticker: string, dryRun: boolean): Promise<void> 
     }
   }
 
-  // Special-case: extract quotes across entire report
-  console.log('\n  [extract] Quotes (full report scan)');
-  if (!dryRun) {
-    const quoteContent = extractQuotes(reportContent);
-    if (quoteContent.length > 100) {
-      const quotePrompt = buildExtractionPrompt(
-        quoteContent,
-        'quotes',
-        'Executive & founder quotes',
-        ticker,
-        taxonomy,
-      );
+  // Special-case: extract quotes per person (chunked to avoid timeout)
+  console.log('\n  [extract] Quotes (per-person chunked)');
+  const personQuotes = extractQuotesByPerson(reportContent);
+
+  // Remove stale combined quotes atom from leadership extraction if it exists
+  const staleQuotesPath = path.join(ATOMS_DIR, 'quotes', 'tsm-leadership-quotes.md');
+  if (fs.existsSync(staleQuotesPath)) {
+    fs.unlinkSync(staleQuotesPath);
+    console.log('    [cleanup] Removed tsm-leadership-quotes.md (replaced by per-person atoms)');
+  }
+
+  const MAX_QUOTE_CHARS = 20000; // Keep each LLM call under 20K content chars
+
+  for (const [person, blocks] of personQuotes) {
+    const MIN_QUOTES = person === '_other' ? 5 : 3;
+    if (blocks.length < MIN_QUOTES) {
+      console.log(`    [skip] ${person}: ${blocks.length} quotes (need ${MIN_QUOTES}+)`);
+      continue;
+    }
+
+    const personSlug = person === '_other'
+      ? `${ticker.toLowerCase()}-misc-quotes`
+      : person.toLowerCase().replace(/[^a-z]+/g, '-').replace(/-+$/, '') + '-quotes';
+    const label = person === '_other'
+      ? `Miscellaneous quotes from ${ticker} report`
+      : `Quotes by ${person}`;
+
+    // Split blocks into chunks that fit under MAX_QUOTE_CHARS
+    const chunks: string[][] = [[]];
+    let currentSize = 0;
+    for (const block of blocks) {
+      if (currentSize + block.length > MAX_QUOTE_CHARS && chunks[chunks.length - 1].length > 0) {
+        chunks.push([]);
+        currentSize = 0;
+      }
+      chunks[chunks.length - 1].push(block);
+      currentSize += block.length + 10; // +10 for separator
+    }
+
+    const totalChars = blocks.reduce((s, b) => s + b.length, 0);
+    console.log(`    [extract] ${person}: ${blocks.length} quotes, ${totalChars} chars → ${personSlug} (${chunks.length} chunk${chunks.length > 1 ? 's' : ''})`);
+
+    if (dryRun) continue;
+
+    for (let ci = 0; ci < chunks.length; ci++) {
+      const chunk = chunks[ci];
+      const quoteContent = chunk.join('\n\n---\n\n');
+      const chunkLabel = chunks.length > 1 ? `${label} (part ${ci + 1}/${chunks.length})` : label;
+
+      const quotePrompt = buildExtractionPrompt(quoteContent, 'quotes', chunkLabel, ticker, taxonomy);
 
       try {
         const response = await chat(
@@ -288,17 +361,19 @@ async function extractKnowledge(ticker: string, dryRun: boolean): Promise<void> 
           const atoms: AtomOutput[] = JSON.parse(jsonMatch[0]);
           for (const atom of atoms) {
             if (!atom.id || !atom.body) continue;
-            atom.archetype = 'quotes'; // Force correct archetype
+            atom.archetype = 'quotes';
+            // Append chunk suffix to avoid overwrites when multiple chunks
+            if (chunks.length > 1 && !atom.id.includes(`-part-${ci + 1}`)) {
+              atom.id = `${atom.id}-part-${ci + 1}`;
+            }
             const filePath = writeAtom(atom, ticker, sourceReport, ['all']);
             console.log(`    [wrote] ${atom.id} → ${path.relative(PROJECT_ROOT, filePath)}`);
             totalAtoms++;
           }
         }
       } catch (err: any) {
-        console.error(`    [error] Quote extraction failed: ${err.message}`);
+        console.error(`    [error] Quote extraction for ${person} chunk ${ci + 1} failed: ${err.message}`);
       }
-    } else {
-      console.log('    [skip] Insufficient quote content found');
     }
   }
 
@@ -332,6 +407,7 @@ if (process.argv[1]?.endsWith('knowledge-extractor.ts') || process.argv[1]?.ends
 
   const dryRun = args['dry-run'] === 'true';
   const migrate = args['migrate'] === 'true';
+  const quotesOnly = args['quotes-only'] === 'true';
 
   if (!migrate && !dryRun) {
     console.error('Specify --migrate to run extraction, or --dry-run to preview');
@@ -346,7 +422,7 @@ if (process.argv[1]?.endsWith('knowledge-extractor.ts') || process.argv[1]?.ends
   console.log(`Model:    ${MODELS.SCORING} (Sonnet)`);
   console.log();
 
-  extractKnowledge(ticker, dryRun).catch((err) => {
+  extractKnowledge(ticker, dryRun, quotesOnly).catch((err) => {
     console.error('Fatal:', err);
     process.exit(1);
   });
