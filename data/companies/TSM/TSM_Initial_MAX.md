@@ -164,7 +164,7 @@ Trump 政府曾威脅對晶片進口課徵關稅，TSMC 在此壓力下擴大美
 
 **五、台灣能源與環境法規**
 
-TSMC 佔台灣總用電約 7%，面臨用電成長與碳排的監管壓力。隨著先進製程能耗持續上升，TSMC 需在產能擴張與台灣電力供給之間取得平衡。
+TSMC 2023 年用電約 24.78 TWh，佔台灣總用電約 **8.9%**（[來源：Statista, 2024](https://www.statista.com/statistics/1312965/tsmc-energy-consumption-by-source/)），佔台灣工業用電約 41.3%（[來源：New Lines Institute, 2025](https://newlinesinstitute.org/geo-economics/taiwans-semiconductor-sustainability-and-global-implications/)）。Greenpeace 預測 2030 年 TSMC 用電將攀升至台灣用電的 **24%**（[來源：Greenpeace East Asia, 2023](https://www.greenpeace.org/eastasia/press/7930/semiconductor-industry-electricity-consumption-to-more-than-double-by-2030-study/)）。台灣進口 97% 的能源，面臨結構性供電壓力，台電 2022-2024 年累積虧損超過 NT$3,500 億（[來源：Global Taiwan Institute, 2026](https://globaltaiwan.org/2026/02/taiwans-bumpy-road-to-energy-resilience/)）。TSMC 已承諾 2040 年 RE100（100% 再生能源），2024 年再生能源佔比約 13-14%，簽約裝置容量 4.4 GW（[來源：TSMC 2024 Sustainability Report](https://esg.tsmc.com/en-US/file/public/2024-TSMC-Sustainability-Report-e.pdf)）。隨著先進製程能耗持續上升（N2/A16 每片晶圓能耗較 N5 增加 ~20-30%），TSMC 需在產能擴張與台灣電力供給之間取得平衡（詳見第七章環境永續分析）。
 
 **管理層地緣政治定力——貫穿所有政策面向**
 
