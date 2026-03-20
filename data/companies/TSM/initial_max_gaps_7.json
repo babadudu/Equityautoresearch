@@ -1,0 +1,86 @@
+{
+  "round": 7,
+  "score": 60,
+  "gaps": [
+    {
+      "dimension": "人",
+      "item": "訪談篇數+逐字稿",
+      "current": 8,
+      "target": "≥25篇並下載逐字稿",
+      "shortfall": 17,
+      "priority": 1
+    },
+    {
+      "dimension": "環境",
+      "item": "1.3 技術趨勢小節未在提供文本中出現：EUV 採用率曲線、FinFET→GAA 代際轉換時間軸、先進封裝（CoWoS/SoIC）需求轉變缺乏獨立成節論述，僅散落於 1.1 的數字提及（如『CoWoS 翻倍』）不構成技術趨勢分析",
+      "current": 0,
+      "target": "完整",
+      "shortfall": 5,
+      "priority": 2
+    },
+    {
+      "dimension": "環境",
+      "item": "1.4 地理分部七年趨勢表未在提供文本顯示，北美/亞太/歐洲絕對營收與成長率的年報頁碼/法說日期無法驗證，依從嚴規則不計分",
+      "current": 0,
+      "target": "完整",
+      "shortfall": 5,
+      "priority": 3
+    },
+    {
+      "dimension": "環境",
+      "item": "可見文本中未見製程微縮 S 曲線（密度 bit/mm² 年增率）或 AI 邊緣端滲透率等採用曲線，技術趨勢論述深度不足",
+      "current": 0,
+      "target": "完整",
+      "shortfall": 5,
+      "priority": 4
+    },
+    {
+      "dimension": "組織",
+      "item": "地理/業務分部收入(年報出處)",
+      "current": 4,
+      "target": "8分",
+      "shortfall": 4,
+      "priority": 5
+    },
+    {
+      "dimension": "生意",
+      "item": "財務歷史完整度",
+      "current": 7,
+      "target": "10分（≥10年表格）",
+      "shortfall": 3,
+      "priority": 6
+    },
+    {
+      "dimension": "生意",
+      "item": "商業模式深度(≥25個CEO直引言)",
+      "current": 7,
+      "target": "10分",
+      "shortfall": 3,
+      "priority": 7
+    },
+    {
+      "dimension": "生意",
+      "item": "五力分析完整度",
+      "current": 7,
+      "target": "10分",
+      "shortfall": 3,
+      "priority": 8
+    },
+    {
+      "dimension": "組織",
+      "item": "ROIC趨勢/Operating Leverage",
+      "current": 3,
+      "target": "6分",
+      "shortfall": 3,
+      "priority": 9
+    },
+    {
+      "dimension": "人",
+      "item": "CEO格局觀與商業哲學",
+      "current": 3,
+      "target": "5分",
+      "shortfall": 2,
+      "priority": 10
+    }
+  ]
+}

@@ -1,0 +1,53 @@
+{
+  "ticker": "TSM",
+  "company_name": "Taiwan Semiconductor Manufacturing Co.",
+  "currency": "USD",
+  "base_data": {
+    "current_price_ntd": 1050,
+    "current_price_usd": 195,
+    "shares_outstanding_billion": 25.93,
+    "revenue_ttm_usd_billion": 115,
+    "net_income_ttm_usd_billion": 54.3,
+    "gross_margin": 0.599,
+    "operating_margin": 0.508,
+    "net_margin": 0.451,
+    "fcf_ttm_usd_billion": 32,
+    "capex_ttm_usd_billion": 38,
+    "cash_usd_billion": 60,
+    "total_debt_usd_billion": 30,
+    "roic": 0.415,
+    "roe": 0.352,
+    "effective_tax_rate": 0.14,
+    "dividend_per_share_ntd": 18,
+    "data_as_of": "2025-12-31"
+  },
+  "scenarios": {
+    "bull": {
+      "revenue_growth_rates": [0.35, 0.25, 0.18, 0.15, 0.12],
+      "terminal_growth_rate": 0.04,
+      "gross_margin": 0.63,
+      "net_margin": 0.48,
+      "target_pe": 30,
+      "description": "AI demand exceeds expectations, N2 ramp smooth, overseas fab costs controlled"
+    },
+    "base": {
+      "revenue_growth_rates": [0.30, 0.20, 0.15, 0.12, 0.10],
+      "terminal_growth_rate": 0.035,
+      "gross_margin": 0.61,
+      "net_margin": 0.46,
+      "target_pe": 25,
+      "description": "AI growth moderates to 20%+, overseas fab dilutes margins 2-3pp"
+    },
+    "bear": {
+      "revenue_growth_rates": [0.20, 0.12, 0.10, 0.08, 0.06],
+      "terminal_growth_rate": 0.03,
+      "gross_margin": 0.58,
+      "net_margin": 0.43,
+      "target_pe": 20,
+      "description": "AI capex slowdown + geopolitical risk + US fab cost overruns"
+    }
+  },
+  "wacc": 0.09,
+  "projection_years": 5,
+  "notes": "2026E guidance: revenue +30% YoY, CapEx $52-56B. Q4 2025 GM 62.3%, Q1 2026 GM guide 63-65%. Long-term GM floor 53%+ per CFO Huang."
+}
