@@ -5,7 +5,10 @@
   "type": "module",
   "scripts": {
     "initial-max": "tsx src/initial-max-runner.ts",
-    "score": "tsx src/initial-max-scorer.ts"
+    "score": "tsx src/initial-max-scorer.ts",
+    "extract-knowledge": "tsx src/knowledge-extractor.ts",
+    "rebuild-index": "tsx src/knowledge-index.ts --rebuild",
+    "query-kb": "tsx src/knowledge-retrieval.ts"
   },
   "devDependencies": {
     "@types/node": "^24.10.1",

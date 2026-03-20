@@ -1,0 +1,92 @@
+{
+  "version": 1,
+  "archetypes": {
+    "company-profile": {
+      "description": "Business model DNA, organizational culture, founding story, competitive moat, pricing strategy",
+      "temporality": "evergreen",
+      "refresh_months": 24,
+      "required_fields": ["companies"],
+      "typical_size_words": [500, 2000]
+    },
+    "leadership": {
+      "description": "CEO/executive profiles, career history, management philosophy, track record",
+      "temporality": "evergreen",
+      "refresh_months": 12,
+      "required_fields": ["companies", "people"],
+      "typical_size_words": [500, 2000]
+    },
+    "quotes": {
+      "description": "Direct quotes from executives, analysts, or industry figures with attribution and context",
+      "temporality": "evergreen",
+      "refresh_months": 36,
+      "required_fields": ["people"],
+      "typical_size_words": [300, 1500]
+    },
+    "competitive-landscape": {
+      "description": "Market structure, five forces, competitor positioning, bull/bear debates, market share",
+      "temporality": "semi-evergreen",
+      "refresh_months": 6,
+      "required_fields": ["industries"],
+      "typical_size_words": [500, 3000]
+    },
+    "industry": {
+      "description": "TAM sizing, growth drivers, secular trends, value chain analysis",
+      "temporality": "semi-evergreen",
+      "refresh_months": 6,
+      "required_fields": ["industries"],
+      "typical_size_words": [500, 2000]
+    },
+    "financial-snapshot": {
+      "description": "Revenue/margin/FCF data, DCF models, valuation metrics, geographic breakdowns",
+      "temporality": "time-bound",
+      "refresh_months": 3,
+      "required_fields": ["companies"],
+      "typical_size_words": [300, 2000]
+    },
+    "geopolitical": {
+      "description": "Country risk, trade policy, sanctions, supply chain geopolitics, regulatory shifts",
+      "temporality": "semi-evergreen",
+      "refresh_months": 6,
+      "required_fields": [],
+      "typical_size_words": [500, 2000]
+    },
+    "esg": {
+      "description": "Environmental impact, carbon targets, water usage, governance, social responsibility",
+      "temporality": "semi-evergreen",
+      "refresh_months": 6,
+      "required_fields": ["companies"],
+      "typical_size_words": [300, 1500]
+    },
+    "supply-chain": {
+      "description": "Supplier relationships, manufacturing footprint, logistics, inventory strategy",
+      "temporality": "semi-evergreen",
+      "refresh_months": 6,
+      "required_fields": ["companies"],
+      "typical_size_words": [500, 2000]
+    },
+    "technology": {
+      "description": "Process nodes, R&D roadmaps, IP portfolio, technology transitions, patents",
+      "temporality": "semi-evergreen",
+      "refresh_months": 6,
+      "required_fields": [],
+      "typical_size_words": [500, 2500]
+    }
+  },
+  "tag_vocabulary": {
+    "industries": [
+      "semiconductor-foundry", "semiconductor-fabless", "semiconductor-equipment",
+      "ai-accelerator", "cloud-infrastructure", "consumer-electronics",
+      "automotive-semiconductor", "memory", "eda-tools"
+    ],
+    "themes": [
+      "founding", "business-model", "pricing", "culture", "moat",
+      "tam", "market-share", "five-forces", "competitive-dynamics",
+      "valuation", "dcf", "margins", "revenue-mix", "capex",
+      "process-node", "packaging", "euv", "gaa", "finfet",
+      "geopolitics", "trade-war", "sanctions", "reshoring",
+      "carbon", "water", "energy", "governance", "diversity",
+      "supply-chain", "capacity", "inventory", "logistics"
+    ],
+    "temporality": ["evergreen", "semi-evergreen", "time-bound"]
+  }
+}

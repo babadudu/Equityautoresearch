@@ -122,6 +122,23 @@ export const GAP_FILL_TOOLS: AnthropicTool[] = [
       required: ['path'],
     },
   },
+  {
+    name: 'query_knowledge_base',
+    description: '查詢知識庫（data/knowledge/atoms/）：依公司、人物、產業、archetype、tag 或全文搜尋可重用的知識原子。回傳排名結果含 id、snippet、quality。',
+    input_schema: {
+      type: 'object',
+      properties: {
+        query: { type: 'string', description: '全文搜尋關鍵詞（空格分隔）' },
+        company: { type: 'string', description: '公司 ticker（大寫）' },
+        person: { type: 'string', description: '人名（部分匹配）' },
+        archetype: { type: 'string', enum: ['company-profile', 'leadership', 'quotes', 'competitive-landscape', 'industry', 'financial-snapshot', 'geopolitical', 'esg', 'supply-chain', 'technology'], description: '知識類型' },
+        industry: { type: 'string', description: '產業標籤' },
+        tag: { type: 'string', description: '主題標籤' },
+        limit: { type: 'number', description: '回傳數量上限（預設 10）' },
+      },
+      required: [],
+    },
+  },
 ];
 
 /** Reduced tool set for polish rounds (read/write only, no research). */

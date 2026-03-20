@@ -233,6 +233,7 @@ export function searchDataForCompany(ticker: string): string {
     'content/meeting-minutes',
     'Knowledge/Extracted',
     'Knowledge/Translations',
+    'knowledge/atoms',
   ];
   const matches: { path: string; snippet: string }[] = [];
   const seen = new Set<string>();

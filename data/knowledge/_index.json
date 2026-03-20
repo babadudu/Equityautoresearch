@@ -1,0 +1,1825 @@
+{
+  "generated": "2026-03-20T16:49:09.609Z",
+  "atom_count": 37,
+  "atoms": [
+    {
+      "id": "tsmc-organizational-culture-values",
+      "archetype": "company-profile",
+      "title": "TSMC Organizational Culture: Core Values, Talent Strategy, and Incentive Architecture",
+      "companies": [
+        "TSM"
+      ],
+      "people": [
+        "Morris Chang",
+        "C.C. Wei",
+        "Wendell Huang",
+        "Mark Liu"
+      ],
+      "industries": [
+        "semiconductor-foundry"
+      ],
+      "tags": [
+        "culture",
+        "founding",
+        "business-model",
+        "moat"
+      ],
+      "temporality": "evergreen",
+      "created": "2026-03-20",
+      "updated": "2026-03-20",
+      "source_report": "data/companies/TSM/TSM_Initial_MAX.md",
+      "source_sections": [
+        "3.1"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/company-profile/tsmc-organizational-culture-values.md"
+    },
+    {
+      "id": "tsmc-pure-play-foundry-business-model",
+      "archetype": "company-profile",
+      "title": "TSMC Pure-Play Foundry: Business Model DNA and Pricing Philosophy",
+      "companies": [
+        "TSM"
+      ],
+      "people": [
+        "Morris Chang",
+        "C.C. Wei",
+        "Wendell Huang"
+      ],
+      "industries": [
+        "semiconductor-foundry"
+      ],
+      "tags": [
+        "business-model",
+        "founding",
+        "pricing",
+        "moat",
+        "culture"
+      ],
+      "temporality": "evergreen",
+      "created": "2026-03-20",
+      "updated": "2026-03-20",
+      "source_report": "data/companies/TSM/TSM_Initial_MAX.md",
+      "source_sections": [
+        "2.2",
+        "2.3"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/company-profile/tsmc-pure-play-foundry-business-model.md"
+    },
+    {
+      "id": "tsmc-revenue-platform-breakdown-hpc-ai-dominance",
+      "archetype": "company-profile",
+      "title": "TSMC Revenue Platform Breakdown: HPC/AI Dominance and Diversified End Markets",
+      "companies": [
+        "TSM"
+      ],
+      "people": [
+        "C.C. Wei",
+        "Wendell Huang"
+      ],
+      "industries": [
+        "semiconductor-foundry",
+        "ai-accelerator",
+        "automotive-semiconductor"
+      ],
+      "tags": [
+        "revenue-mix",
+        "business-model",
+        "market-share",
+        "tam"
+      ],
+      "temporality": "semi-evergreen",
+      "created": "2026-03-20",
+      "updated": "2026-03-20",
+      "source_report": "data/companies/TSM/TSM_Initial_MAX.md",
+      "source_sections": [
+        "2.2",
+        "2.3"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/company-profile/tsmc-revenue-platform-breakdown-hpc-ai-dominance.md"
+    },
+    {
+      "id": "tsmc-wafer-pricing-unit-economics-capex-discipline",
+      "archetype": "company-profile",
+      "title": "TSMC Wafer Pricing, Unit Economics, and CapEx Return Discipline",
+      "companies": [
+        "TSM"
+      ],
+      "people": [
+        "C.C. Wei",
+        "Wendell Huang",
+        "Morris Chang"
+      ],
+      "industries": [
+        "semiconductor-foundry"
+      ],
+      "tags": [
+        "pricing",
+        "margins",
+        "capex",
+        "valuation",
+        "revenue-mix"
+      ],
+      "temporality": "semi-evergreen",
+      "created": "2026-03-20",
+      "updated": "2026-03-20",
+      "source_report": "data/companies/TSM/TSM_Initial_MAX.md",
+      "source_sections": [
+        "2.2",
+        "2.3"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/company-profile/tsmc-wafer-pricing-unit-economics-capex-discipline.md"
+    },
+    {
+      "id": "tsm-bear-case-geopolitical-structural-risks-2025",
+      "archetype": "competitive-landscape",
+      "title": "TSMC Bear Case: Geopolitical Tail Risk, Overseas Dilution, and Long-Cycle Vulnerabilities",
+      "companies": [
+        "TSM"
+      ],
+      "people": [
+        "C.C. Wei",
+        "Wendell Huang"
+      ],
+      "industries": [
+        "semiconductor-foundry",
+        "ai-accelerator",
+        "cloud-infrastructure"
+      ],
+      "tags": [
+        "geopolitics",
+        "trade-war",
+        "competitive-dynamics",
+        "capex",
+        "margins",
+        "supply-chain",
+        "carbon",
+        "water",
+        "energy",
+        "market-share"
+      ],
+      "temporality": "semi-evergreen",
+      "created": "2026-03-20",
+      "updated": "2026-03-20",
+      "source_report": "data/companies/TSM/TSM_Initial_MAX.md",
+      "source_sections": [
+        "8.1",
+        "8.2",
+        "8.3"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/competitive-landscape/tsm-bear-case-geopolitical-structural-risks-2025.md"
+    },
+    {
+      "id": "tsm-bull-bear-key-debates-scorecard-2025",
+      "archetype": "competitive-landscape",
+      "title": "TSMC Bull vs. Bear: Seven Key Debate Points with Data Scorecard",
+      "companies": [
+        "TSM"
+      ],
+      "people": [
+        "C.C. Wei"
+      ],
+      "industries": [
+        "semiconductor-foundry",
+        "ai-accelerator"
+      ],
+      "tags": [
+        "competitive-dynamics",
+        "valuation",
+        "geopolitics",
+        "market-share",
+        "capex",
+        "margins",
+        "carbon",
+        "water",
+        "energy"
+      ],
+      "temporality": "semi-evergreen",
+      "created": "2026-03-20",
+      "updated": "2026-03-20",
+      "source_report": "data/companies/TSM/TSM_Initial_MAX.md",
+      "source_sections": [
+        "8.1",
+        "8.2",
+        "8.3"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/competitive-landscape/tsm-bull-bear-key-debates-scorecard-2025.md"
+    },
+    {
+      "id": "tsm-bull-case-ai-supercycle-moat-2025",
+      "archetype": "competitive-landscape",
+      "title": "TSMC Bull Case: AI Supercycle, Technology Moat, and Structural Margin Expansion",
+      "companies": [
+        "TSM"
+      ],
+      "people": [
+        "C.C. Wei",
+        "Jensen Huang"
+      ],
+      "industries": [
+        "semiconductor-foundry",
+        "ai-accelerator",
+        "cloud-infrastructure"
+      ],
+      "tags": [
+        "competitive-dynamics",
+        "market-share",
+        "moat",
+        "process-node",
+        "packaging",
+        "capex",
+        "margins",
+        "valuation"
+      ],
+      "temporality": "semi-evergreen",
+      "created": "2026-03-20",
+      "updated": "2026-03-20",
+      "source_report": "data/companies/TSM/TSM_Initial_MAX.md",
+      "source_sections": [
+        "8.1",
+        "8.2",
+        "8.3"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/competitive-landscape/tsm-bull-case-ai-supercycle-moat-2025.md"
+    },
+    {
+      "id": "tsm-five-forces-entry-substitutes-rivalry",
+      "archetype": "competitive-landscape",
+      "title": "TSMC 五力分析：新進入者威脅（極低）、替代品威脅（低）、同業競爭（結構性有利 TSMC）",
+      "companies": [
+        "TSM",
+        "INTC",
+        "SSNLF"
+      ],
+      "people": [
+        "Morris Chang",
+        "C.C. Wei",
+        "Wendell Huang"
+      ],
+      "industries": [
+        "semiconductor-foundry"
+      ],
+      "tags": [
+        "five-forces",
+        "competitive-dynamics",
+        "moat",
+        "process-node",
+        "market-share"
+      ],
+      "temporality": "semi-evergreen",
+      "created": "2026-03-20",
+      "updated": "2026-03-20",
+      "source_report": "data/companies/TSM/TSM_Initial_MAX.md",
+      "source_sections": [
+        "1.2",
+        "2.4"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/competitive-landscape/tsm-five-forces-entry-substitutes-rivalry.md"
+    },
+    {
+      "id": "tsm-five-forces-supplier-buyer-power",
+      "archetype": "competitive-landscape",
+      "title": "TSMC 五力分析：供應商議價能力（中等）與買方議價能力（低至中等）",
+      "companies": [
+        "TSM",
+        "ASML"
+      ],
+      "people": [
+        "Morris Chang",
+        "C.C. Wei",
+        "Wendell Huang"
+      ],
+      "industries": [
+        "semiconductor-foundry",
+        "semiconductor-equipment"
+      ],
+      "tags": [
+        "five-forces",
+        "competitive-dynamics",
+        "supply-chain",
+        "pricing",
+        "capex"
+      ],
+      "temporality": "semi-evergreen",
+      "created": "2026-03-20",
+      "updated": "2026-03-20",
+      "source_report": "data/companies/TSM/TSM_Initial_MAX.md",
+      "source_sections": [
+        "1.2",
+        "2.4"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/competitive-landscape/tsm-five-forces-supplier-buyer-power.md"
+    },
+    {
+      "id": "tsm-foundry-market-concentration-2024",
+      "archetype": "competitive-landscape",
+      "title": "TSMC 全球代工市佔率集中化趨勢（2015–2024）",
+      "companies": [
+        "TSM",
+        "SSNLF",
+        "INTC",
+        "GFS",
+        "UMC"
+      ],
+      "people": [],
+      "industries": [
+        "semiconductor-foundry"
+      ],
+      "tags": [
+        "market-share",
+        "competitive-dynamics",
+        "five-forces",
+        "tam"
+      ],
+      "temporality": "semi-evergreen",
+      "created": "2026-03-20",
+      "updated": "2026-03-20",
+      "source_report": "data/companies/TSM/TSM_Initial_MAX.md",
+      "source_sections": [
+        "1.2",
+        "2.4"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/competitive-landscape/tsm-foundry-market-concentration-2024.md"
+    },
+    {
+      "id": "tsm-intel-foundry-competitive-analysis",
+      "archetype": "competitive-landscape",
+      "title": "Intel Foundry Services 競爭力評估：18A 追趕路徑與時間線（2025–2027）",
+      "companies": [
+        "TSM",
+        "INTC"
+      ],
+      "people": [
+        "Morris Chang",
+        "C.C. Wei",
+        "Wendell Huang"
+      ],
+      "industries": [
+        "semiconductor-foundry"
+      ],
+      "tags": [
+        "competitive-dynamics",
+        "process-node",
+        "five-forces"
+      ],
+      "temporality": "semi-evergreen",
+      "created": "2026-03-20",
+      "updated": "2026-03-20",
+      "source_report": "data/companies/TSM/TSM_Initial_MAX.md",
+      "source_sections": [
+        "1.2",
+        "2.4"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/competitive-landscape/tsm-intel-foundry-competitive-analysis.md"
+    },
+    {
+      "id": "tsm-regulatory-policy-environment-2025",
+      "archetype": "competitive-landscape",
+      "title": "TSMC 監管與政策環境：CHIPS Act、出口管制、關稅與台灣能源（2022–2025）",
+      "companies": [
+        "TSM"
+      ],
+      "people": [
+        "Morris Chang",
+        "C.C. Wei",
+        "Wendell Huang"
+      ],
+      "industries": [
+        "semiconductor-foundry"
+      ],
+      "tags": [
+        "geopolitics",
+        "trade-war",
+        "sanctions",
+        "reshoring",
+        "supply-chain",
+        "five-forces"
+      ],
+      "temporality": "semi-evergreen",
+      "created": "2026-03-20",
+      "updated": "2026-03-20",
+      "source_report": "data/companies/TSM/TSM_Initial_MAX.md",
+      "source_sections": [
+        "1.2",
+        "2.4"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/competitive-landscape/tsm-regulatory-policy-environment-2025.md"
+    },
+    {
+      "id": "tsm-samsung-foundry-yield-crisis-2025",
+      "archetype": "competitive-landscape",
+      "title": "Samsung Foundry 良率困境與競爭力衰退分析（2024–2025）",
+      "companies": [
+        "TSM",
+        "SSNLF"
+      ],
+      "people": [
+        "C.C. Wei"
+      ],
+      "industries": [
+        "semiconductor-foundry"
+      ],
+      "tags": [
+        "competitive-dynamics",
+        "market-share",
+        "five-forces"
+      ],
+      "temporality": "semi-evergreen",
+      "created": "2026-03-20",
+      "updated": "2026-03-20",
+      "source_report": "data/companies/TSM/TSM_Initial_MAX.md",
+      "source_sections": [
+        "1.2",
+        "2.4"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/competitive-landscape/tsm-samsung-foundry-yield-crisis-2025.md"
+    },
+    {
+      "id": "tsmc-carbon-emissions-sbti-climate-transition",
+      "archetype": "esg",
+      "title": "TSMC Carbon Emissions, SBTi Commitment & Climate Transition Roadmap",
+      "companies": [
+        "TSM"
+      ],
+      "people": [],
+      "industries": [
+        "semiconductor-foundry"
+      ],
+      "tags": [
+        "carbon",
+        "energy",
+        "capex",
+        "semiconductor-foundry"
+      ],
+      "temporality": "semi-evergreen",
+      "created": "2026-03-20",
+      "updated": "2026-03-20",
+      "source_report": "data/companies/TSM/TSM_Initial_MAX.md",
+      "source_sections": [
+        "7.1",
+        "7.2",
+        "7.3"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/esg/tsmc-carbon-emissions-sbti-climate-transition.md"
+    },
+    {
+      "id": "tsmc-energy-consumption-renewable-targets",
+      "archetype": "esg",
+      "title": "TSMC Energy Consumption, Renewable Energy Targets & Taiwan Grid Dependency",
+      "companies": [
+        "TSM"
+      ],
+      "people": [],
+      "industries": [
+        "semiconductor-foundry"
+      ],
+      "tags": [
+        "energy",
+        "carbon",
+        "capex",
+        "semiconductor-foundry"
+      ],
+      "temporality": "semi-evergreen",
+      "created": "2026-03-20",
+      "updated": "2026-03-20",
+      "source_report": "data/companies/TSM/TSM_Initial_MAX.md",
+      "source_sections": [
+        "7.1",
+        "7.2",
+        "7.3"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/esg/tsmc-energy-consumption-renewable-targets.md"
+    },
+    {
+      "id": "tsmc-esg-ratings-environmental-performance",
+      "archetype": "esg",
+      "title": "TSMC ESG Ratings, Third-Party Assessments & Environmental Performance Metrics",
+      "companies": [
+        "TSM"
+      ],
+      "people": [],
+      "industries": [
+        "semiconductor-foundry"
+      ],
+      "tags": [
+        "governance",
+        "carbon",
+        "energy",
+        "water",
+        "semiconductor-foundry"
+      ],
+      "temporality": "semi-evergreen",
+      "created": "2026-03-20",
+      "updated": "2026-03-20",
+      "source_report": "data/companies/TSM/TSM_Initial_MAX.md",
+      "source_sections": [
+        "7.1",
+        "7.2",
+        "7.3"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/esg/tsmc-esg-ratings-environmental-performance.md"
+    },
+    {
+      "id": "tsmc-water-usage-drought-controversy",
+      "archetype": "esg",
+      "title": "TSMC Water Consumption, Recycling Systems & 2021 Taiwan Drought Controversy",
+      "companies": [
+        "TSM"
+      ],
+      "people": [
+        "Gene You",
+        "Yang Kuan-wei",
+        "Chang Mei-hsueh"
+      ],
+      "industries": [
+        "semiconductor-foundry"
+      ],
+      "tags": [
+        "water",
+        "supply-chain",
+        "semiconductor-foundry"
+      ],
+      "temporality": "semi-evergreen",
+      "created": "2026-03-20",
+      "updated": "2026-03-20",
+      "source_report": "data/companies/TSM/TSM_Initial_MAX.md",
+      "source_sections": [
+        "7.1",
+        "7.2",
+        "7.3"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/esg/tsmc-water-usage-drought-controversy.md"
+    },
+    {
+      "id": "tsm-dcf-valuation-2026e",
+      "archetype": "financial-snapshot",
+      "title": "TSMC DCF Valuation & Scenario Analysis (2026E, as of Q4 2025)",
+      "companies": [
+        "TSM"
+      ],
+      "people": [
+        "C.C. Wei",
+        "Wendell Huang"
+      ],
+      "industries": [
+        "semiconductor-foundry"
+      ],
+      "tags": [
+        "valuation",
+        "dcf",
+        "margins",
+        "revenue-mix",
+        "capex",
+        "ai-accelerator"
+      ],
+      "temporality": "time-bound",
+      "created": "2026-03-20",
+      "updated": "2026-03-20",
+      "source_report": "data/companies/TSM/TSM_Initial_MAX.md",
+      "source_sections": [
+        "2.5"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/financial-snapshot/tsm-dcf-valuation-2026e.md"
+    },
+    {
+      "id": "tsm-geographic-revenue-breakdown-2018-2024",
+      "archetype": "financial-snapshot",
+      "title": "TSMC Geographic Revenue Breakdown (2018–2024): North America Dominance and China Decline",
+      "companies": [
+        "TSM"
+      ],
+      "people": [],
+      "industries": [
+        "semiconductor-foundry",
+        "ai-accelerator"
+      ],
+      "tags": [
+        "revenue-mix",
+        "geopolitics",
+        "trade-war",
+        "sanctions",
+        "market-share"
+      ],
+      "temporality": "time-bound",
+      "created": "2026-03-20",
+      "updated": "2026-03-20",
+      "source_report": "data/companies/TSM/TSM_Initial_MAX.md",
+      "source_sections": [
+        "1.4"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/financial-snapshot/tsm-geographic-revenue-breakdown-2018-2024.md"
+    },
+    {
+      "id": "tsm-operating-efficiency-roic-roe-margins-2021-2025",
+      "archetype": "financial-snapshot",
+      "title": "TSM Operating Efficiency: ROIC, ROE, Margins & Operating Leverage (2021–2025)",
+      "companies": [
+        "TSM"
+      ],
+      "people": [
+        "Jeff Su",
+        "Wendell Huang",
+        "C.C. Wei",
+        "Morris Chang"
+      ],
+      "industries": [
+        "semiconductor-foundry"
+      ],
+      "tags": [
+        "margins",
+        "capex",
+        "valuation",
+        "revenue-mix",
+        "business-model",
+        "moat"
+      ],
+      "temporality": "time-bound",
+      "created": "2026-03-20",
+      "updated": "2026-03-20",
+      "source_report": "data/companies/TSM/TSM_Initial_MAX.md",
+      "source_sections": [
+        "3.2"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/financial-snapshot/tsm-operating-efficiency-roic-roe-margins-2021-2025.md"
+    },
+    {
+      "id": "tsm-platform-and-process-revenue-mix-2024",
+      "archetype": "financial-snapshot",
+      "title": "TSMC Revenue Mix by Platform and Process Node (2024)",
+      "companies": [
+        "TSM"
+      ],
+      "people": [],
+      "industries": [
+        "semiconductor-foundry",
+        "ai-accelerator",
+        "consumer-electronics",
+        "automotive-semiconductor"
+      ],
+      "tags": [
+        "revenue-mix",
+        "process-node",
+        "capex",
+        "margins",
+        "market-share"
+      ],
+      "temporality": "time-bound",
+      "created": "2026-03-20",
+      "updated": "2026-03-20",
+      "source_report": "data/companies/TSM/TSM_Initial_MAX.md",
+      "source_sections": [
+        "1.4"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/financial-snapshot/tsm-platform-and-process-revenue-mix-2024.md"
+    },
+    {
+      "id": "tsm-ten-year-financial-trajectory-2014-2025",
+      "archetype": "financial-snapshot",
+      "title": "TSMC 10-Year Financial Trajectory: Four Structural Turning Points (2014–2025)",
+      "companies": [
+        "TSM"
+      ],
+      "people": [
+        "Morris Chang",
+        "Wendell Huang",
+        "C.C. Wei"
+      ],
+      "industries": [
+        "semiconductor-foundry",
+        "ai-accelerator"
+      ],
+      "tags": [
+        "revenue-mix",
+        "margins",
+        "capex",
+        "valuation",
+        "process-node",
+        "euv",
+        "ai-accelerator",
+        "five-forces"
+      ],
+      "temporality": "time-bound",
+      "created": "2026-03-20",
+      "updated": "2026-03-20",
+      "source_report": "data/companies/TSM/TSM_Initial_MAX.md",
+      "source_sections": [
+        "2.1"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/financial-snapshot/tsm-ten-year-financial-trajectory-2014-2025.md"
+    },
+    {
+      "id": "tsmc-allied-framework-chip4-quad-industry-dependency",
+      "archetype": "geopolitical",
+      "title": "TSMC in the Allied Framework: Chip 4, Quad, AUKUS, and Global Industry Dependency",
+      "companies": [
+        "TSM"
+      ],
+      "people": [
+        "C.C. Wei"
+      ],
+      "industries": [
+        "semiconductor-foundry",
+        "semiconductor-equipment",
+        "ai-accelerator",
+        "automotive-semiconductor"
+      ],
+      "tags": [
+        "geopolitics",
+        "supply-chain",
+        "reshoring",
+        "trade-war",
+        "capacity"
+      ],
+      "temporality": "semi-evergreen",
+      "created": "2026-03-20",
+      "updated": "2026-03-20",
+      "source_report": "data/companies/TSM/TSM_Initial_MAX.md",
+      "source_sections": [
+        "6.1",
+        "6.2",
+        "6.3"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/geopolitical/tsmc-allied-framework-chip4-quad-industry-dependency.md"
+    },
+    {
+      "id": "tsmc-china-smic-euv-catchup-timeline",
+      "archetype": "geopolitical",
+      "title": "China's Semiconductor Catch-Up: SMIC Progress and EUV Breakthrough Assessment",
+      "companies": [
+        "TSM"
+      ],
+      "people": [
+        "Morris Chang",
+        "C.C. Wei"
+      ],
+      "industries": [
+        "semiconductor-foundry",
+        "semiconductor-equipment",
+        "eda-tools"
+      ],
+      "tags": [
+        "geopolitics",
+        "process-node",
+        "euv",
+        "trade-war",
+        "sanctions",
+        "supply-chain"
+      ],
+      "temporality": "semi-evergreen",
+      "created": "2026-03-20",
+      "updated": "2026-03-20",
+      "source_report": "data/companies/TSM/TSM_Initial_MAX.md",
+      "source_sections": [
+        "6.1",
+        "6.2",
+        "6.3"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/geopolitical/tsmc-china-smic-euv-catchup-timeline.md"
+    },
+    {
+      "id": "tsmc-geopolitical-pe-discount-analysis",
+      "archetype": "geopolitical",
+      "title": "TSMC Taiwan Discount: Geopolitical Risk Embedded in Valuation",
+      "companies": [
+        "TSM",
+        "NVDA",
+        "ASML",
+        "AMD",
+        "AVGO"
+      ],
+      "people": [],
+      "industries": [
+        "semiconductor-foundry",
+        "ai-accelerator"
+      ],
+      "tags": [
+        "geopolitics",
+        "valuation",
+        "dcf",
+        "trade-war"
+      ],
+      "temporality": "semi-evergreen",
+      "created": "2026-03-20",
+      "updated": "2026-03-20",
+      "source_report": "data/companies/TSM/TSM_Initial_MAX.md",
+      "source_sections": [
+        "6.1",
+        "6.2",
+        "6.3"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/geopolitical/tsmc-geopolitical-pe-discount-analysis.md"
+    },
+    {
+      "id": "tsmc-silicon-shield-theory-debate",
+      "archetype": "geopolitical",
+      "title": "TSMC Silicon Shield: Theory, Supporters, and Critics",
+      "companies": [
+        "TSM"
+      ],
+      "people": [
+        "Morris Chang",
+        "C.C. Wei"
+      ],
+      "industries": [
+        "semiconductor-foundry"
+      ],
+      "tags": [
+        "geopolitics",
+        "trade-war",
+        "reshoring",
+        "supply-chain",
+        "moat"
+      ],
+      "temporality": "semi-evergreen",
+      "created": "2026-03-20",
+      "updated": "2026-03-20",
+      "source_report": "data/companies/TSM/TSM_Initial_MAX.md",
+      "source_sections": [
+        "6.1",
+        "6.2",
+        "6.3"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/geopolitical/tsmc-silicon-shield-theory-debate.md"
+    },
+    {
+      "id": "tsmc-taiwan-strait-conflict-probability-scenarios",
+      "archetype": "geopolitical",
+      "title": "Taiwan Strait Conflict Probability and TSMC Financial Impact Scenarios",
+      "companies": [
+        "TSM"
+      ],
+      "people": [],
+      "industries": [
+        "semiconductor-foundry"
+      ],
+      "tags": [
+        "geopolitics",
+        "trade-war",
+        "supply-chain",
+        "capacity",
+        "sanctions"
+      ],
+      "temporality": "semi-evergreen",
+      "created": "2026-03-20",
+      "updated": "2026-03-20",
+      "source_report": "data/companies/TSM/TSM_Initial_MAX.md",
+      "source_sections": [
+        "6.1",
+        "6.2",
+        "6.3"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/geopolitical/tsmc-taiwan-strait-conflict-probability-scenarios.md"
+    },
+    {
+      "id": "semiconductor-foundry-tam-growth-2000-2035",
+      "archetype": "industry",
+      "title": "Semiconductor Foundry TAM & Growth Trends: 2000–2035",
+      "companies": [
+        "TSM"
+      ],
+      "people": [
+        "Morris Chang",
+        "C.C. Wei",
+        "Wendell Huang"
+      ],
+      "industries": [
+        "semiconductor-foundry",
+        "semiconductor-fabless",
+        "ai-accelerator"
+      ],
+      "tags": [
+        "tam",
+        "market-share",
+        "competitive-dynamics",
+        "business-model",
+        "founding"
+      ],
+      "temporality": "semi-evergreen",
+      "created": "2026-03-20",
+      "updated": "2026-03-20",
+      "source_report": "data/companies/TSM/TSM_Initial_MAX.md",
+      "source_sections": [
+        "1.1"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/industry/semiconductor-foundry-tam-growth-2000-2035.md"
+    },
+    {
+      "id": "tsm-cc-wei-ceo-profile",
+      "archetype": "leadership",
+      "title": "C.C. Wei（魏哲家）— TSMC Chairman & CEO",
+      "companies": [
+        "TSM"
+      ],
+      "people": [
+        "C.C. Wei"
+      ],
+      "industries": [
+        "semiconductor-foundry"
+      ],
+      "tags": [
+        "culture",
+        "moat",
+        "geopolitics",
+        "reshoring"
+      ],
+      "temporality": "evergreen",
+      "created": "2026-03-20",
+      "updated": "2026-03-20",
+      "source_report": "data/companies/TSM/TSM_Initial_MAX.md",
+      "source_sections": [
+        "4.1"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/leadership/tsm-cc-wei-ceo-profile.md"
+    },
+    {
+      "id": "tsm-morris-chang-founder-profile",
+      "archetype": "leadership",
+      "title": "Morris Chang — TSMC Founder & 'Father of the Semiconductor Foundry'",
+      "companies": [
+        "TSM"
+      ],
+      "people": [
+        "Morris Chang"
+      ],
+      "industries": [
+        "semiconductor-foundry"
+      ],
+      "tags": [
+        "founding",
+        "business-model",
+        "culture",
+        "moat"
+      ],
+      "temporality": "evergreen",
+      "created": "2026-03-20",
+      "updated": "2026-03-20",
+      "source_report": "data/companies/TSM/TSM_Initial_MAX.md",
+      "source_sections": [
+        "4.1"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/leadership/tsm-morris-chang-founder-profile.md"
+    },
+    {
+      "id": "tsm-leadership-quotes",
+      "archetype": "quotes",
+      "title": "TSMC Leadership Quotes — Morris Chang & C.C. Wei",
+      "companies": [
+        "TSM"
+      ],
+      "people": [
+        "Morris Chang",
+        "C.C. Wei"
+      ],
+      "industries": [
+        "semiconductor-foundry"
+      ],
+      "tags": [
+        "founding",
+        "business-model",
+        "culture",
+        "moat",
+        "geopolitics",
+        "trade-war"
+      ],
+      "temporality": "evergreen",
+      "created": "2026-03-20",
+      "updated": "2026-03-20",
+      "source_report": "data/companies/TSM/TSM_Initial_MAX.md",
+      "source_sections": [
+        "4.1"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/quotes/tsm-leadership-quotes.md"
+    },
+    {
+      "id": "tsmc-ai-demand-drivers-token-growth",
+      "archetype": "technology",
+      "title": "TSMC AI Demand Drivers: Token Exponential Growth and Hyperscaler Capex Surge",
+      "companies": [
+        "TSM",
+        "NVDA",
+        "AMD",
+        "GOOGL",
+        "AMZN",
+        "META",
+        "MSFT"
+      ],
+      "people": [
+        "CC Wei",
+        "Wendell Huang"
+      ],
+      "industries": [
+        "semiconductor-foundry",
+        "ai-accelerator",
+        "cloud-infrastructure"
+      ],
+      "tags": [
+        "ai-accelerator",
+        "tam",
+        "capex",
+        "market-share",
+        "process-node",
+        "competitive-dynamics"
+      ],
+      "temporality": "semi-evergreen",
+      "created": "2026-03-20",
+      "updated": "2026-03-20",
+      "source_report": "data/companies/TSM/TSM_Initial_MAX.md",
+      "source_sections": [
+        "1.3"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/technology/tsmc-ai-demand-drivers-token-growth.md"
+    },
+    {
+      "id": "tsmc-cowos-advanced-packaging-capacity-expansion",
+      "archetype": "technology",
+      "title": "TSMC CoWoS Advanced Packaging: Capacity S-Curve and AI Demand Dynamics",
+      "companies": [
+        "TSM",
+        "NVDA",
+        "AMD",
+        "GOOGL"
+      ],
+      "people": [
+        "CC Wei",
+        "Wendell Huang"
+      ],
+      "industries": [
+        "semiconductor-foundry",
+        "ai-accelerator",
+        "cloud-infrastructure"
+      ],
+      "tags": [
+        "packaging",
+        "capacity",
+        "ai-accelerator",
+        "supply-chain",
+        "capex",
+        "tam"
+      ],
+      "temporality": "semi-evergreen",
+      "created": "2026-03-20",
+      "updated": "2026-03-20",
+      "source_report": "data/companies/TSM/TSM_Initial_MAX.md",
+      "source_sections": [
+        "1.3"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/technology/tsmc-cowos-advanced-packaging-capacity-expansion.md"
+    },
+    {
+      "id": "tsmc-euv-adoption-curve",
+      "archetype": "technology",
+      "title": "TSMC EUV Lithography Adoption Curve: From N7+ to N2",
+      "companies": [
+        "TSM",
+        "ASML"
+      ],
+      "people": [
+        "Morris Chang"
+      ],
+      "industries": [
+        "semiconductor-foundry",
+        "semiconductor-equipment"
+      ],
+      "tags": [
+        "euv",
+        "process-node",
+        "supply-chain",
+        "gaa",
+        "finfet",
+        "capex"
+      ],
+      "temporality": "semi-evergreen",
+      "created": "2026-03-20",
+      "updated": "2026-03-20",
+      "source_report": "data/companies/TSM/TSM_Initial_MAX.md",
+      "source_sections": [
+        "1.3"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/technology/tsmc-euv-adoption-curve.md"
+    },
+    {
+      "id": "tsmc-finfet-to-gaa-transition",
+      "archetype": "technology",
+      "title": "TSMC FinFET to GAA Nanosheet Transition: Architecture Shift at N2",
+      "companies": [
+        "TSM"
+      ],
+      "people": [
+        "CC Wei",
+        "Wendell Huang"
+      ],
+      "industries": [
+        "semiconductor-foundry",
+        "ai-accelerator",
+        "semiconductor-fabless"
+      ],
+      "tags": [
+        "process-node",
+        "gaa",
+        "finfet",
+        "euv",
+        "packaging",
+        "ai-accelerator"
+      ],
+      "temporality": "semi-evergreen",
+      "created": "2026-03-20",
+      "updated": "2026-03-20",
+      "source_report": "data/companies/TSM/TSM_Initial_MAX.md",
+      "source_sections": [
+        "1.3"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/technology/tsmc-finfet-to-gaa-transition.md"
+    },
+    {
+      "id": "tsmc-process-node-roadmap-1987-2027",
+      "archetype": "technology",
+      "title": "TSMC Process Node Roadmap: 3μm to A14 (1987–2027E)",
+      "companies": [
+        "TSM"
+      ],
+      "people": [
+        "Morris Chang",
+        "CC Wei",
+        "Wendell Huang",
+        "Carlos Diaz"
+      ],
+      "industries": [
+        "semiconductor-foundry",
+        "ai-accelerator"
+      ],
+      "tags": [
+        "process-node",
+        "euv",
+        "gaa",
+        "finfet",
+        "moores-law",
+        "r&d",
+        "roadmap"
+      ],
+      "temporality": "semi-evergreen",
+      "created": "2026-03-20",
+      "updated": "2026-03-20",
+      "source_report": "data/companies/TSM/TSM_Initial_MAX.md",
+      "source_sections": [
+        "1.3"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/technology/tsmc-process-node-roadmap-1987-2027.md"
+    },
+    {
+      "id": "tsmc-transistor-density-scaling-s-curve",
+      "archetype": "technology",
+      "title": "TSMC Transistor Density Scaling: S-Curve Analysis from N16 to N2",
+      "companies": [
+        "TSM"
+      ],
+      "people": [
+        "Morris Chang"
+      ],
+      "industries": [
+        "semiconductor-foundry"
+      ],
+      "tags": [
+        "process-node",
+        "finfet",
+        "gaa",
+        "euv",
+        "moores-law",
+        "density-scaling"
+      ],
+      "temporality": "semi-evergreen",
+      "created": "2026-03-20",
+      "updated": "2026-03-20",
+      "source_report": "data/companies/TSM/TSM_Initial_MAX.md",
+      "source_sections": [
+        "1.3"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/technology/tsmc-transistor-density-scaling-s-curve.md"
+    }
+  ],
+  "by_company": {
+    "TSM": [
+      "tsmc-organizational-culture-values",
+      "tsmc-pure-play-foundry-business-model",
+      "tsmc-revenue-platform-breakdown-hpc-ai-dominance",
+      "tsmc-wafer-pricing-unit-economics-capex-discipline",
+      "tsm-bear-case-geopolitical-structural-risks-2025",
+      "tsm-bull-bear-key-debates-scorecard-2025",
+      "tsm-bull-case-ai-supercycle-moat-2025",
+      "tsm-five-forces-entry-substitutes-rivalry",
+      "tsm-five-forces-supplier-buyer-power",
+      "tsm-foundry-market-concentration-2024",
+      "tsm-intel-foundry-competitive-analysis",
+      "tsm-regulatory-policy-environment-2025",
+      "tsm-samsung-foundry-yield-crisis-2025",
+      "tsmc-carbon-emissions-sbti-climate-transition",
+      "tsmc-energy-consumption-renewable-targets",
+      "tsmc-esg-ratings-environmental-performance",
+      "tsmc-water-usage-drought-controversy",
+      "tsm-dcf-valuation-2026e",
+      "tsm-geographic-revenue-breakdown-2018-2024",
+      "tsm-operating-efficiency-roic-roe-margins-2021-2025",
+      "tsm-platform-and-process-revenue-mix-2024",
+      "tsm-ten-year-financial-trajectory-2014-2025",
+      "tsmc-allied-framework-chip4-quad-industry-dependency",
+      "tsmc-china-smic-euv-catchup-timeline",
+      "tsmc-geopolitical-pe-discount-analysis",
+      "tsmc-silicon-shield-theory-debate",
+      "tsmc-taiwan-strait-conflict-probability-scenarios",
+      "semiconductor-foundry-tam-growth-2000-2035",
+      "tsm-cc-wei-ceo-profile",
+      "tsm-morris-chang-founder-profile",
+      "tsm-leadership-quotes",
+      "tsmc-ai-demand-drivers-token-growth",
+      "tsmc-cowos-advanced-packaging-capacity-expansion",
+      "tsmc-euv-adoption-curve",
+      "tsmc-finfet-to-gaa-transition",
+      "tsmc-process-node-roadmap-1987-2027",
+      "tsmc-transistor-density-scaling-s-curve"
+    ],
+    "INTC": [
+      "tsm-five-forces-entry-substitutes-rivalry",
+      "tsm-foundry-market-concentration-2024",
+      "tsm-intel-foundry-competitive-analysis"
+    ],
+    "SSNLF": [
+      "tsm-five-forces-entry-substitutes-rivalry",
+      "tsm-foundry-market-concentration-2024",
+      "tsm-samsung-foundry-yield-crisis-2025"
+    ],
+    "ASML": [
+      "tsm-five-forces-supplier-buyer-power",
+      "tsmc-geopolitical-pe-discount-analysis",
+      "tsmc-euv-adoption-curve"
+    ],
+    "GFS": [
+      "tsm-foundry-market-concentration-2024"
+    ],
+    "UMC": [
+      "tsm-foundry-market-concentration-2024"
+    ],
+    "NVDA": [
+      "tsmc-geopolitical-pe-discount-analysis",
+      "tsmc-ai-demand-drivers-token-growth",
+      "tsmc-cowos-advanced-packaging-capacity-expansion"
+    ],
+    "AMD": [
+      "tsmc-geopolitical-pe-discount-analysis",
+      "tsmc-ai-demand-drivers-token-growth",
+      "tsmc-cowos-advanced-packaging-capacity-expansion"
+    ],
+    "AVGO": [
+      "tsmc-geopolitical-pe-discount-analysis"
+    ],
+    "GOOGL": [
+      "tsmc-ai-demand-drivers-token-growth",
+      "tsmc-cowos-advanced-packaging-capacity-expansion"
+    ],
+    "AMZN": [
+      "tsmc-ai-demand-drivers-token-growth"
+    ],
+    "META": [
+      "tsmc-ai-demand-drivers-token-growth"
+    ],
+    "MSFT": [
+      "tsmc-ai-demand-drivers-token-growth"
+    ]
+  },
+  "by_person": {
+    "Morris Chang": [
+      "tsmc-organizational-culture-values",
+      "tsmc-pure-play-foundry-business-model",
+      "tsmc-wafer-pricing-unit-economics-capex-discipline",
+      "tsm-five-forces-entry-substitutes-rivalry",
+      "tsm-five-forces-supplier-buyer-power",
+      "tsm-intel-foundry-competitive-analysis",
+      "tsm-regulatory-policy-environment-2025",
+      "tsm-operating-efficiency-roic-roe-margins-2021-2025",
+      "tsm-ten-year-financial-trajectory-2014-2025",
+      "tsmc-china-smic-euv-catchup-timeline",
+      "tsmc-silicon-shield-theory-debate",
+      "semiconductor-foundry-tam-growth-2000-2035",
+      "tsm-morris-chang-founder-profile",
+      "tsm-leadership-quotes",
+      "tsmc-euv-adoption-curve",
+      "tsmc-process-node-roadmap-1987-2027",
+      "tsmc-transistor-density-scaling-s-curve"
+    ],
+    "C.C. Wei": [
+      "tsmc-organizational-culture-values",
+      "tsmc-pure-play-foundry-business-model",
+      "tsmc-revenue-platform-breakdown-hpc-ai-dominance",
+      "tsmc-wafer-pricing-unit-economics-capex-discipline",
+      "tsm-bear-case-geopolitical-structural-risks-2025",
+      "tsm-bull-bear-key-debates-scorecard-2025",
+      "tsm-bull-case-ai-supercycle-moat-2025",
+      "tsm-five-forces-entry-substitutes-rivalry",
+      "tsm-five-forces-supplier-buyer-power",
+      "tsm-intel-foundry-competitive-analysis",
+      "tsm-regulatory-policy-environment-2025",
+      "tsm-samsung-foundry-yield-crisis-2025",
+      "tsm-dcf-valuation-2026e",
+      "tsm-operating-efficiency-roic-roe-margins-2021-2025",
+      "tsm-ten-year-financial-trajectory-2014-2025",
+      "tsmc-allied-framework-chip4-quad-industry-dependency",
+      "tsmc-china-smic-euv-catchup-timeline",
+      "tsmc-silicon-shield-theory-debate",
+      "semiconductor-foundry-tam-growth-2000-2035",
+      "tsm-cc-wei-ceo-profile",
+      "tsm-leadership-quotes"
+    ],
+    "Wendell Huang": [
+      "tsmc-organizational-culture-values",
+      "tsmc-pure-play-foundry-business-model",
+      "tsmc-revenue-platform-breakdown-hpc-ai-dominance",
+      "tsmc-wafer-pricing-unit-economics-capex-discipline",
+      "tsm-bear-case-geopolitical-structural-risks-2025",
+      "tsm-five-forces-entry-substitutes-rivalry",
+      "tsm-five-forces-supplier-buyer-power",
+      "tsm-intel-foundry-competitive-analysis",
+      "tsm-regulatory-policy-environment-2025",
+      "tsm-dcf-valuation-2026e",
+      "tsm-operating-efficiency-roic-roe-margins-2021-2025",
+      "tsm-ten-year-financial-trajectory-2014-2025",
+      "semiconductor-foundry-tam-growth-2000-2035",
+      "tsmc-ai-demand-drivers-token-growth",
+      "tsmc-cowos-advanced-packaging-capacity-expansion",
+      "tsmc-finfet-to-gaa-transition",
+      "tsmc-process-node-roadmap-1987-2027"
+    ],
+    "Mark Liu": [
+      "tsmc-organizational-culture-values"
+    ],
+    "Jensen Huang": [
+      "tsm-bull-case-ai-supercycle-moat-2025"
+    ],
+    "Gene You": [
+      "tsmc-water-usage-drought-controversy"
+    ],
+    "Yang Kuan-wei": [
+      "tsmc-water-usage-drought-controversy"
+    ],
+    "Chang Mei-hsueh": [
+      "tsmc-water-usage-drought-controversy"
+    ],
+    "Jeff Su": [
+      "tsm-operating-efficiency-roic-roe-margins-2021-2025"
+    ],
+    "CC Wei": [
+      "tsmc-ai-demand-drivers-token-growth",
+      "tsmc-cowos-advanced-packaging-capacity-expansion",
+      "tsmc-finfet-to-gaa-transition",
+      "tsmc-process-node-roadmap-1987-2027"
+    ],
+    "Carlos Diaz": [
+      "tsmc-process-node-roadmap-1987-2027"
+    ]
+  },
+  "by_industry": {
+    "semiconductor-foundry": [
+      "tsmc-organizational-culture-values",
+      "tsmc-pure-play-foundry-business-model",
+      "tsmc-revenue-platform-breakdown-hpc-ai-dominance",
+      "tsmc-wafer-pricing-unit-economics-capex-discipline",
+      "tsm-bear-case-geopolitical-structural-risks-2025",
+      "tsm-bull-bear-key-debates-scorecard-2025",
+      "tsm-bull-case-ai-supercycle-moat-2025",
+      "tsm-five-forces-entry-substitutes-rivalry",
+      "tsm-five-forces-supplier-buyer-power",
+      "tsm-foundry-market-concentration-2024",
+      "tsm-intel-foundry-competitive-analysis",
+      "tsm-regulatory-policy-environment-2025",
+      "tsm-samsung-foundry-yield-crisis-2025",
+      "tsmc-carbon-emissions-sbti-climate-transition",
+      "tsmc-energy-consumption-renewable-targets",
+      "tsmc-esg-ratings-environmental-performance",
+      "tsmc-water-usage-drought-controversy",
+      "tsm-dcf-valuation-2026e",
+      "tsm-geographic-revenue-breakdown-2018-2024",
+      "tsm-operating-efficiency-roic-roe-margins-2021-2025",
+      "tsm-platform-and-process-revenue-mix-2024",
+      "tsm-ten-year-financial-trajectory-2014-2025",
+      "tsmc-allied-framework-chip4-quad-industry-dependency",
+      "tsmc-china-smic-euv-catchup-timeline",
+      "tsmc-geopolitical-pe-discount-analysis",
+      "tsmc-silicon-shield-theory-debate",
+      "tsmc-taiwan-strait-conflict-probability-scenarios",
+      "semiconductor-foundry-tam-growth-2000-2035",
+      "tsm-cc-wei-ceo-profile",
+      "tsm-morris-chang-founder-profile",
+      "tsm-leadership-quotes",
+      "tsmc-ai-demand-drivers-token-growth",
+      "tsmc-cowos-advanced-packaging-capacity-expansion",
+      "tsmc-euv-adoption-curve",
+      "tsmc-finfet-to-gaa-transition",
+      "tsmc-process-node-roadmap-1987-2027",
+      "tsmc-transistor-density-scaling-s-curve"
+    ],
+    "ai-accelerator": [
+      "tsmc-revenue-platform-breakdown-hpc-ai-dominance",
+      "tsm-bear-case-geopolitical-structural-risks-2025",
+      "tsm-bull-bear-key-debates-scorecard-2025",
+      "tsm-bull-case-ai-supercycle-moat-2025",
+      "tsm-geographic-revenue-breakdown-2018-2024",
+      "tsm-platform-and-process-revenue-mix-2024",
+      "tsm-ten-year-financial-trajectory-2014-2025",
+      "tsmc-allied-framework-chip4-quad-industry-dependency",
+      "tsmc-geopolitical-pe-discount-analysis",
+      "semiconductor-foundry-tam-growth-2000-2035",
+      "tsmc-ai-demand-drivers-token-growth",
+      "tsmc-cowos-advanced-packaging-capacity-expansion",
+      "tsmc-finfet-to-gaa-transition",
+      "tsmc-process-node-roadmap-1987-2027"
+    ],
+    "automotive-semiconductor": [
+      "tsmc-revenue-platform-breakdown-hpc-ai-dominance",
+      "tsm-platform-and-process-revenue-mix-2024",
+      "tsmc-allied-framework-chip4-quad-industry-dependency"
+    ],
+    "cloud-infrastructure": [
+      "tsm-bear-case-geopolitical-structural-risks-2025",
+      "tsm-bull-case-ai-supercycle-moat-2025",
+      "tsmc-ai-demand-drivers-token-growth",
+      "tsmc-cowos-advanced-packaging-capacity-expansion"
+    ],
+    "semiconductor-equipment": [
+      "tsm-five-forces-supplier-buyer-power",
+      "tsmc-allied-framework-chip4-quad-industry-dependency",
+      "tsmc-china-smic-euv-catchup-timeline",
+      "tsmc-euv-adoption-curve"
+    ],
+    "consumer-electronics": [
+      "tsm-platform-and-process-revenue-mix-2024"
+    ],
+    "eda-tools": [
+      "tsmc-china-smic-euv-catchup-timeline"
+    ],
+    "semiconductor-fabless": [
+      "semiconductor-foundry-tam-growth-2000-2035",
+      "tsmc-finfet-to-gaa-transition"
+    ]
+  },
+  "by_archetype": {
+    "company-profile": [
+      "tsmc-organizational-culture-values",
+      "tsmc-pure-play-foundry-business-model",
+      "tsmc-revenue-platform-breakdown-hpc-ai-dominance",
+      "tsmc-wafer-pricing-unit-economics-capex-discipline"
+    ],
+    "competitive-landscape": [
+      "tsm-bear-case-geopolitical-structural-risks-2025",
+      "tsm-bull-bear-key-debates-scorecard-2025",
+      "tsm-bull-case-ai-supercycle-moat-2025",
+      "tsm-five-forces-entry-substitutes-rivalry",
+      "tsm-five-forces-supplier-buyer-power",
+      "tsm-foundry-market-concentration-2024",
+      "tsm-intel-foundry-competitive-analysis",
+      "tsm-regulatory-policy-environment-2025",
+      "tsm-samsung-foundry-yield-crisis-2025"
+    ],
+    "esg": [
+      "tsmc-carbon-emissions-sbti-climate-transition",
+      "tsmc-energy-consumption-renewable-targets",
+      "tsmc-esg-ratings-environmental-performance",
+      "tsmc-water-usage-drought-controversy"
+    ],
+    "financial-snapshot": [
+      "tsm-dcf-valuation-2026e",
+      "tsm-geographic-revenue-breakdown-2018-2024",
+      "tsm-operating-efficiency-roic-roe-margins-2021-2025",
+      "tsm-platform-and-process-revenue-mix-2024",
+      "tsm-ten-year-financial-trajectory-2014-2025"
+    ],
+    "geopolitical": [
+      "tsmc-allied-framework-chip4-quad-industry-dependency",
+      "tsmc-china-smic-euv-catchup-timeline",
+      "tsmc-geopolitical-pe-discount-analysis",
+      "tsmc-silicon-shield-theory-debate",
+      "tsmc-taiwan-strait-conflict-probability-scenarios"
+    ],
+    "industry": [
+      "semiconductor-foundry-tam-growth-2000-2035"
+    ],
+    "leadership": [
+      "tsm-cc-wei-ceo-profile",
+      "tsm-morris-chang-founder-profile"
+    ],
+    "quotes": [
+      "tsm-leadership-quotes"
+    ],
+    "technology": [
+      "tsmc-ai-demand-drivers-token-growth",
+      "tsmc-cowos-advanced-packaging-capacity-expansion",
+      "tsmc-euv-adoption-curve",
+      "tsmc-finfet-to-gaa-transition",
+      "tsmc-process-node-roadmap-1987-2027",
+      "tsmc-transistor-density-scaling-s-curve"
+    ]
+  },
+  "by_tag": {
+    "culture": [
+      "tsmc-organizational-culture-values",
+      "tsmc-pure-play-foundry-business-model",
+      "tsm-cc-wei-ceo-profile",
+      "tsm-morris-chang-founder-profile",
+      "tsm-leadership-quotes"
+    ],
+    "founding": [
+      "tsmc-organizational-culture-values",
+      "tsmc-pure-play-foundry-business-model",
+      "semiconductor-foundry-tam-growth-2000-2035",
+      "tsm-morris-chang-founder-profile",
+      "tsm-leadership-quotes"
+    ],
+    "business-model": [
+      "tsmc-organizational-culture-values",
+      "tsmc-pure-play-foundry-business-model",
+      "tsmc-revenue-platform-breakdown-hpc-ai-dominance",
+      "tsm-operating-efficiency-roic-roe-margins-2021-2025",
+      "semiconductor-foundry-tam-growth-2000-2035",
+      "tsm-morris-chang-founder-profile",
+      "tsm-leadership-quotes"
+    ],
+    "moat": [
+      "tsmc-organizational-culture-values",
+      "tsmc-pure-play-foundry-business-model",
+      "tsm-bull-case-ai-supercycle-moat-2025",
+      "tsm-five-forces-entry-substitutes-rivalry",
+      "tsm-operating-efficiency-roic-roe-margins-2021-2025",
+      "tsmc-silicon-shield-theory-debate",
+      "tsm-cc-wei-ceo-profile",
+      "tsm-morris-chang-founder-profile",
+      "tsm-leadership-quotes"
+    ],
+    "pricing": [
+      "tsmc-pure-play-foundry-business-model",
+      "tsmc-wafer-pricing-unit-economics-capex-discipline",
+      "tsm-five-forces-supplier-buyer-power"
+    ],
+    "revenue-mix": [
+      "tsmc-revenue-platform-breakdown-hpc-ai-dominance",
+      "tsmc-wafer-pricing-unit-economics-capex-discipline",
+      "tsm-dcf-valuation-2026e",
+      "tsm-geographic-revenue-breakdown-2018-2024",
+      "tsm-operating-efficiency-roic-roe-margins-2021-2025",
+      "tsm-platform-and-process-revenue-mix-2024",
+      "tsm-ten-year-financial-trajectory-2014-2025"
+    ],
+    "market-share": [
+      "tsmc-revenue-platform-breakdown-hpc-ai-dominance",
+      "tsm-bear-case-geopolitical-structural-risks-2025",
+      "tsm-bull-bear-key-debates-scorecard-2025",
+      "tsm-bull-case-ai-supercycle-moat-2025",
+      "tsm-five-forces-entry-substitutes-rivalry",
+      "tsm-foundry-market-concentration-2024",
+      "tsm-samsung-foundry-yield-crisis-2025",
+      "tsm-geographic-revenue-breakdown-2018-2024",
+      "tsm-platform-and-process-revenue-mix-2024",
+      "semiconductor-foundry-tam-growth-2000-2035",
+      "tsmc-ai-demand-drivers-token-growth"
+    ],
+    "tam": [
+      "tsmc-revenue-platform-breakdown-hpc-ai-dominance",
+      "tsm-foundry-market-concentration-2024",
+      "semiconductor-foundry-tam-growth-2000-2035",
+      "tsmc-ai-demand-drivers-token-growth",
+      "tsmc-cowos-advanced-packaging-capacity-expansion"
+    ],
+    "margins": [
+      "tsmc-wafer-pricing-unit-economics-capex-discipline",
+      "tsm-bear-case-geopolitical-structural-risks-2025",
+      "tsm-bull-bear-key-debates-scorecard-2025",
+      "tsm-bull-case-ai-supercycle-moat-2025",
+      "tsm-dcf-valuation-2026e",
+      "tsm-operating-efficiency-roic-roe-margins-2021-2025",
+      "tsm-platform-and-process-revenue-mix-2024",
+      "tsm-ten-year-financial-trajectory-2014-2025"
+    ],
+    "capex": [
+      "tsmc-wafer-pricing-unit-economics-capex-discipline",
+      "tsm-bear-case-geopolitical-structural-risks-2025",
+      "tsm-bull-bear-key-debates-scorecard-2025",
+      "tsm-bull-case-ai-supercycle-moat-2025",
+      "tsm-five-forces-supplier-buyer-power",
+      "tsmc-carbon-emissions-sbti-climate-transition",
+      "tsmc-energy-consumption-renewable-targets",
+      "tsm-dcf-valuation-2026e",
+      "tsm-operating-efficiency-roic-roe-margins-2021-2025",
+      "tsm-platform-and-process-revenue-mix-2024",
+      "tsm-ten-year-financial-trajectory-2014-2025",
+      "tsmc-ai-demand-drivers-token-growth",
+      "tsmc-cowos-advanced-packaging-capacity-expansion",
+      "tsmc-euv-adoption-curve"
+    ],
+    "valuation": [
+      "tsmc-wafer-pricing-unit-economics-capex-discipline",
+      "tsm-bull-bear-key-debates-scorecard-2025",
+      "tsm-bull-case-ai-supercycle-moat-2025",
+      "tsm-dcf-valuation-2026e",
+      "tsm-operating-efficiency-roic-roe-margins-2021-2025",
+      "tsm-ten-year-financial-trajectory-2014-2025",
+      "tsmc-geopolitical-pe-discount-analysis"
+    ],
+    "geopolitics": [
+      "tsm-bear-case-geopolitical-structural-risks-2025",
+      "tsm-bull-bear-key-debates-scorecard-2025",
+      "tsm-regulatory-policy-environment-2025",
+      "tsm-geographic-revenue-breakdown-2018-2024",
+      "tsmc-allied-framework-chip4-quad-industry-dependency",
+      "tsmc-china-smic-euv-catchup-timeline",
+      "tsmc-geopolitical-pe-discount-analysis",
+      "tsmc-silicon-shield-theory-debate",
+      "tsmc-taiwan-strait-conflict-probability-scenarios",
+      "tsm-cc-wei-ceo-profile",
+      "tsm-leadership-quotes"
+    ],
+    "trade-war": [
+      "tsm-bear-case-geopolitical-structural-risks-2025",
+      "tsm-regulatory-policy-environment-2025",
+      "tsm-geographic-revenue-breakdown-2018-2024",
+      "tsmc-allied-framework-chip4-quad-industry-dependency",
+      "tsmc-china-smic-euv-catchup-timeline",
+      "tsmc-geopolitical-pe-discount-analysis",
+      "tsmc-silicon-shield-theory-debate",
+      "tsmc-taiwan-strait-conflict-probability-scenarios",
+      "tsm-leadership-quotes"
+    ],
+    "competitive-dynamics": [
+      "tsm-bear-case-geopolitical-structural-risks-2025",
+      "tsm-bull-bear-key-debates-scorecard-2025",
+      "tsm-bull-case-ai-supercycle-moat-2025",
+      "tsm-five-forces-entry-substitutes-rivalry",
+      "tsm-five-forces-supplier-buyer-power",
+      "tsm-foundry-market-concentration-2024",
+      "tsm-intel-foundry-competitive-analysis",
+      "tsm-samsung-foundry-yield-crisis-2025",
+      "semiconductor-foundry-tam-growth-2000-2035",
+      "tsmc-ai-demand-drivers-token-growth"
+    ],
+    "supply-chain": [
+      "tsm-bear-case-geopolitical-structural-risks-2025",
+      "tsm-five-forces-supplier-buyer-power",
+      "tsm-regulatory-policy-environment-2025",
+      "tsmc-water-usage-drought-controversy",
+      "tsmc-allied-framework-chip4-quad-industry-dependency",
+      "tsmc-china-smic-euv-catchup-timeline",
+      "tsmc-silicon-shield-theory-debate",
+      "tsmc-taiwan-strait-conflict-probability-scenarios",
+      "tsmc-cowos-advanced-packaging-capacity-expansion",
+      "tsmc-euv-adoption-curve"
+    ],
+    "carbon": [
+      "tsm-bear-case-geopolitical-structural-risks-2025",
+      "tsm-bull-bear-key-debates-scorecard-2025",
+      "tsmc-carbon-emissions-sbti-climate-transition",
+      "tsmc-energy-consumption-renewable-targets",
+      "tsmc-esg-ratings-environmental-performance"
+    ],
+    "water": [
+      "tsm-bear-case-geopolitical-structural-risks-2025",
+      "tsm-bull-bear-key-debates-scorecard-2025",
+      "tsmc-esg-ratings-environmental-performance",
+      "tsmc-water-usage-drought-controversy"
+    ],
+    "energy": [
+      "tsm-bear-case-geopolitical-structural-risks-2025",
+      "tsm-bull-bear-key-debates-scorecard-2025",
+      "tsmc-carbon-emissions-sbti-climate-transition",
+      "tsmc-energy-consumption-renewable-targets",
+      "tsmc-esg-ratings-environmental-performance"
+    ],
+    "process-node": [
+      "tsm-bull-case-ai-supercycle-moat-2025",
+      "tsm-five-forces-entry-substitutes-rivalry",
+      "tsm-intel-foundry-competitive-analysis",
+      "tsm-platform-and-process-revenue-mix-2024",
+      "tsm-ten-year-financial-trajectory-2014-2025",
+      "tsmc-china-smic-euv-catchup-timeline",
+      "tsmc-ai-demand-drivers-token-growth",
+      "tsmc-euv-adoption-curve",
+      "tsmc-finfet-to-gaa-transition",
+      "tsmc-process-node-roadmap-1987-2027",
+      "tsmc-transistor-density-scaling-s-curve"
+    ],
+    "packaging": [
+      "tsm-bull-case-ai-supercycle-moat-2025",
+      "tsmc-cowos-advanced-packaging-capacity-expansion",
+      "tsmc-finfet-to-gaa-transition"
+    ],
+    "five-forces": [
+      "tsm-five-forces-entry-substitutes-rivalry",
+      "tsm-five-forces-supplier-buyer-power",
+      "tsm-foundry-market-concentration-2024",
+      "tsm-intel-foundry-competitive-analysis",
+      "tsm-regulatory-policy-environment-2025",
+      "tsm-samsung-foundry-yield-crisis-2025",
+      "tsm-ten-year-financial-trajectory-2014-2025"
+    ],
+    "sanctions": [
+      "tsm-regulatory-policy-environment-2025",
+      "tsm-geographic-revenue-breakdown-2018-2024",
+      "tsmc-china-smic-euv-catchup-timeline",
+      "tsmc-taiwan-strait-conflict-probability-scenarios"
+    ],
+    "reshoring": [
+      "tsm-regulatory-policy-environment-2025",
+      "tsmc-allied-framework-chip4-quad-industry-dependency",
+      "tsmc-silicon-shield-theory-debate",
+      "tsm-cc-wei-ceo-profile"
+    ],
+    "semiconductor-foundry": [
+      "tsmc-carbon-emissions-sbti-climate-transition",
+      "tsmc-energy-consumption-renewable-targets",
+      "tsmc-esg-ratings-environmental-performance",
+      "tsmc-water-usage-drought-controversy"
+    ],
+    "governance": [
+      "tsmc-esg-ratings-environmental-performance"
+    ],
+    "dcf": [
+      "tsm-dcf-valuation-2026e",
+      "tsmc-geopolitical-pe-discount-analysis"
+    ],
+    "ai-accelerator": [
+      "tsm-dcf-valuation-2026e",
+      "tsm-ten-year-financial-trajectory-2014-2025",
+      "tsmc-ai-demand-drivers-token-growth",
+      "tsmc-cowos-advanced-packaging-capacity-expansion",
+      "tsmc-finfet-to-gaa-transition"
+    ],
+    "euv": [
+      "tsm-ten-year-financial-trajectory-2014-2025",
+      "tsmc-china-smic-euv-catchup-timeline",
+      "tsmc-euv-adoption-curve",
+      "tsmc-finfet-to-gaa-transition",
+      "tsmc-process-node-roadmap-1987-2027",
+      "tsmc-transistor-density-scaling-s-curve"
+    ],
+    "capacity": [
+      "tsmc-allied-framework-chip4-quad-industry-dependency",
+      "tsmc-taiwan-strait-conflict-probability-scenarios",
+      "tsmc-cowos-advanced-packaging-capacity-expansion"
+    ],
+    "gaa": [
+      "tsmc-euv-adoption-curve",
+      "tsmc-finfet-to-gaa-transition",
+      "tsmc-process-node-roadmap-1987-2027",
+      "tsmc-transistor-density-scaling-s-curve"
+    ],
+    "finfet": [
+      "tsmc-euv-adoption-curve",
+      "tsmc-finfet-to-gaa-transition",
+      "tsmc-process-node-roadmap-1987-2027",
+      "tsmc-transistor-density-scaling-s-curve"
+    ],
+    "moores-law": [
+      "tsmc-process-node-roadmap-1987-2027",
+      "tsmc-transistor-density-scaling-s-curve"
+    ],
+    "r&d": [
+      "tsmc-process-node-roadmap-1987-2027"
+    ],
+    "roadmap": [
+      "tsmc-process-node-roadmap-1987-2027"
+    ],
+    "density-scaling": [
+      "tsmc-transistor-density-scaling-s-curve"
+    ]
+  },
+  "stale": []
+}

@@ -1,0 +1,355 @@
+#!/usr/bin/env node
+/**
+ * Knowledge Extractor — LLM-assisted decomposition of research reports into knowledge atoms.
+ *
+ * Reads a company's main report, splits by section anchors, calls Claude Sonnet
+ * to extract reusable knowledge atoms, and writes them as markdown files
+ * with YAML frontmatter.
+ *
+ * Usage:
+ *   npx tsx src/knowledge-extractor.ts --ticker TSM --migrate
+ *   npx tsx src/knowledge-extractor.ts --ticker TSM --dry-run
+ */
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import { chat } from './llm.js';
+import { MODELS } from './config.js';
+// Note: We use findFullSectionRange() locally instead of findSectionRange() from markdown-utils,
+// because the latter stops at sub-headings (###) within a section.
+import { rebuildIndex } from './knowledge-index.js';
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const PROJECT_ROOT = path.resolve(__dirname, '..');
+const ATOMS_DIR = path.join(PROJECT_ROOT, 'data', 'knowledge', 'atoms');
+const TAXONOMY_PATH = path.join(PROJECT_ROOT, 'data', 'knowledge', '_taxonomy.json');
+
+interface AtomOutput {
+  id: string;
+  archetype: string;
+  title: string;
+  companies: string[];
+  people: string[];
+  industries: string[];
+  tags: string[];
+  temporality: string;
+  body: string;
+}
+
+/** Section-to-archetype mapping for Initial MAX reports. */
+const SECTION_ARCHETYPE_MAP: { sections: string[]; archetype: string; label: string }[] = [
+  { sections: ['1.1'], archetype: 'industry', label: 'TAM & industry growth' },
+  { sections: ['1.2', '2.4'], archetype: 'competitive-landscape', label: 'Market structure & five forces' },
+  { sections: ['1.3'], archetype: 'technology', label: 'Technology & demand trends' },
+  { sections: ['1.4'], archetype: 'financial-snapshot', label: 'Geographic revenue' },
+  { sections: ['2.1'], archetype: 'financial-snapshot', label: '10-year financials' },
+  { sections: ['2.2', '2.3'], archetype: 'company-profile', label: 'Business model DNA' },
+  { sections: ['2.5'], archetype: 'financial-snapshot', label: 'DCF valuation' },
+  { sections: ['3.1'], archetype: 'company-profile', label: 'Organizational culture' },
+  { sections: ['3.2'], archetype: 'financial-snapshot', label: 'Operating efficiency' },
+  { sections: ['4.1'], archetype: 'leadership', label: 'CEO/founder profiles' },
+  { sections: ['6.1', '6.2', '6.3'], archetype: 'geopolitical', label: 'Geopolitical analysis' },
+  { sections: ['7.1', '7.2', '7.3'], archetype: 'esg', label: 'ESG & sustainability' },
+  { sections: ['8.1', '8.2', '8.3'], archetype: 'competitive-landscape', label: 'Bull/bear debate' },
+];
+
+/**
+ * Find section range including sub-headings (###).
+ * Unlike findSectionRange() which stops at any heading, this stops only at
+ * same-level or higher-level headings (## stops at next ##, not ###).
+ */
+function findFullSectionRange(lines: string[], sectionAnchor: string): [number, number] | null {
+  const anchorNum = sectionAnchor.trim();
+  let sectionStart = -1;
+  let sectionLevel = 0;
+  for (let i = 0; i < lines.length; i++) {
+    const m = lines[i].match(/^(#{2,3})\s+(\d+\.\d+)/);
+    if (m && m[2] === anchorNum) {
+      sectionStart = i;
+      sectionLevel = m[1].length;
+      break;
+    }
+    if (!m && /^(#{2,3})\s+/.test(lines[i]) && lines[i].includes(anchorNum)) {
+      const hm = lines[i].match(/^(#+)/);
+      sectionStart = i;
+      sectionLevel = hm ? hm[1].length : 2;
+      break;
+    }
+  }
+  if (sectionStart === -1) return null;
+  let sectionEnd = lines.length;
+  for (let j = sectionStart + 1; j < lines.length; j++) {
+    const hm = lines[j].match(/^(#{1,3})\s+/);
+    if (hm && hm[1].length <= sectionLevel) {
+      sectionEnd = j;
+      break;
+    }
+  }
+  return [sectionStart, sectionEnd];
+}
+
+/** Extract section content by anchor from the report lines. */
+function extractSections(lines: string[], anchors: string[]): string {
+  const parts: string[] = [];
+  for (const anchor of anchors) {
+    const range = findFullSectionRange(lines, anchor);
+    if (range) {
+      parts.push(lines.slice(range[0], range[1]).join('\n'));
+    }
+  }
+  return parts.join('\n\n---\n\n');
+}
+
+/** Extract all quoted text (> "..." patterns) from the full report. */
+function extractQuotes(content: string): string {
+  const quoteLines: string[] = [];
+  const lines = content.split('\n');
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i];
+    // Match lines containing direct quotes (in English or Chinese quotation marks)
+    if ((line.includes('「') && line.includes('」')) || (line.includes('"') && line.includes('"')) || />\s*"[^"]{20,}"/.test(line)) {
+      // Include context: 1 line before and after
+      const start = Math.max(0, i - 1);
+      const end = Math.min(lines.length, i + 2);
+      quoteLines.push(lines.slice(start, end).join('\n'));
+      quoteLines.push('');
+    }
+  }
+  return quoteLines.join('\n');
+}
+
+/** Build the extraction prompt for Claude. */
+function buildExtractionPrompt(
+  sectionContent: string,
+  archetype: string,
+  label: string,
+  ticker: string,
+  taxonomyJson: string,
+): string {
+  return `You are a knowledge extraction system. Extract reusable "knowledge atoms" from the following research report section(s).
+
+## Rules
+1. Each atom must be **self-contained** — readable without the original report
+2. Preserve inline source URLs verbatim
+3. Preserve exact numerical data, quotes, and attributions
+4. Each atom should be 500-3000 words
+5. The atom ID should be a lowercase kebab-case slug (e.g., "tsmc-business-model-dna")
+6. For quotes atoms: group by person, deduplicate, include context for each quote
+
+## Target archetype: ${archetype}
+## Section label: ${label}
+## Company: ${ticker}
+
+## Taxonomy (for reference):
+${taxonomyJson}
+
+## Section content:
+${sectionContent.slice(0, 80000)}
+
+## Output format
+Return a JSON array of atom objects. Each atom has:
+- id: string (kebab-case slug)
+- archetype: string (from taxonomy)
+- title: string (human-readable)
+- companies: string[] (ticker symbols)
+- people: string[] (full names)
+- industries: string[] (from taxonomy tag vocabulary)
+- tags: string[] (from taxonomy tag vocabulary, plus custom if needed)
+- temporality: "evergreen" | "semi-evergreen" | "time-bound"
+- body: string (the full markdown content of the atom, 500-3000 words, with inline source URLs preserved)
+
+Return ONLY the JSON array, no other text. Example:
+[{"id":"tsmc-founding-story","archetype":"company-profile","title":"TSMC Founding Story","companies":["TSM"],"people":["Morris Chang"],"industries":["semiconductor-foundry"],"tags":["founding","business-model"],"temporality":"evergreen","body":"..."}]`;
+}
+
+/** Write a single atom to disk. */
+function writeAtom(atom: AtomOutput, ticker: string, sourceReport: string, sourceSections: string[]): string {
+  const dir = path.join(ATOMS_DIR, atom.archetype);
+  if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+
+  const filePath = path.join(dir, `${atom.id}.md`);
+  const today = new Date().toISOString().slice(0, 10);
+
+  const frontmatter = [
+    '---',
+    `id: "${atom.id}"`,
+    `archetype: "${atom.archetype}"`,
+    `title: "${atom.title.replace(/"/g, '\\"')}"`,
+    `companies: ${JSON.stringify(atom.companies)}`,
+    `people: ${JSON.stringify(atom.people)}`,
+    `industries: ${JSON.stringify(atom.industries)}`,
+    `tags: ${JSON.stringify(atom.tags)}`,
+    `temporality: "${atom.temporality}"`,
+    `created: "${today}"`,
+    `updated: "${today}"`,
+    `source_report: "${sourceReport}"`,
+    `source_sections: ${JSON.stringify(sourceSections)}`,
+    `quality: 4`,
+    '---',
+    '',
+  ].join('\n');
+
+  fs.writeFileSync(filePath, frontmatter + atom.body);
+  return filePath;
+}
+
+/** Main extraction pipeline. */
+async function extractKnowledge(ticker: string, dryRun: boolean): Promise<void> {
+  const reportPath = path.join(PROJECT_ROOT, 'data', 'companies', ticker, `${ticker}_Initial_MAX.md`);
+  if (!fs.existsSync(reportPath)) {
+    console.error(`Report not found: ${reportPath}`);
+    process.exit(1);
+  }
+
+  const reportContent = fs.readFileSync(reportPath, 'utf-8');
+  const lines = reportContent.split('\n');
+  const taxonomy = fs.readFileSync(TAXONOMY_PATH, 'utf-8');
+  const sourceReport = `data/companies/${ticker}/${ticker}_Initial_MAX.md`;
+
+  let totalAtoms = 0;
+
+  // Process each section group
+  for (const mapping of SECTION_ARCHETYPE_MAP) {
+    const sectionContent = extractSections(lines, mapping.sections);
+    if (!sectionContent.trim()) {
+      console.log(`  [skip] No content for ${mapping.label} (sections: ${mapping.sections.join(', ')})`);
+      continue;
+    }
+
+    console.log(`\n  [extract] ${mapping.label} → ${mapping.archetype} (${sectionContent.length} chars)`);
+
+    if (dryRun) {
+      console.log(`    [dry-run] Would extract from sections ${mapping.sections.join(', ')}`);
+      continue;
+    }
+
+    const prompt = buildExtractionPrompt(sectionContent, mapping.archetype, mapping.label, ticker, taxonomy);
+
+    try {
+      const response = await chat(
+        'You are a precise knowledge extraction system. Return only valid JSON arrays.',
+        [{ role: 'user', content: prompt }],
+        { model: MODELS.SCORING, maxTokens: 16384 },
+      );
+
+      const text = response.content ?? '';
+      // Extract JSON array from response (may be wrapped in markdown code block)
+      const jsonMatch = text.match(/\[[\s\S]*\]/);
+      if (!jsonMatch) {
+        console.error(`    [error] No JSON array in response for ${mapping.label}`);
+        continue;
+      }
+
+      let atoms: AtomOutput[];
+      try {
+        atoms = JSON.parse(jsonMatch[0]);
+      } catch (parseErr) {
+        console.error(`    [error] JSON parse failed for ${mapping.label}: ${(parseErr as Error).message}`);
+        continue;
+      }
+
+      for (const atom of atoms) {
+        if (!atom.id || !atom.body) {
+          console.log(`    [skip] Invalid atom (missing id or body)`);
+          continue;
+        }
+        const filePath = writeAtom(atom, ticker, sourceReport, mapping.sections);
+        console.log(`    [wrote] ${atom.id} → ${path.relative(PROJECT_ROOT, filePath)}`);
+        totalAtoms++;
+      }
+    } catch (err: any) {
+      console.error(`    [error] LLM call failed for ${mapping.label}: ${err.message}`);
+    }
+  }
+
+  // Special-case: extract quotes across entire report
+  console.log('\n  [extract] Quotes (full report scan)');
+  if (!dryRun) {
+    const quoteContent = extractQuotes(reportContent);
+    if (quoteContent.length > 100) {
+      const quotePrompt = buildExtractionPrompt(
+        quoteContent,
+        'quotes',
+        'Executive & founder quotes',
+        ticker,
+        taxonomy,
+      );
+
+      try {
+        const response = await chat(
+          'You are a precise knowledge extraction system. Return only valid JSON arrays.',
+          [{ role: 'user', content: quotePrompt }],
+          { model: MODELS.SCORING, maxTokens: 16384 },
+        );
+
+        const text = response.content ?? '';
+        const jsonMatch = text.match(/\[[\s\S]*\]/);
+        if (jsonMatch) {
+          const atoms: AtomOutput[] = JSON.parse(jsonMatch[0]);
+          for (const atom of atoms) {
+            if (!atom.id || !atom.body) continue;
+            atom.archetype = 'quotes'; // Force correct archetype
+            const filePath = writeAtom(atom, ticker, sourceReport, ['all']);
+            console.log(`    [wrote] ${atom.id} → ${path.relative(PROJECT_ROOT, filePath)}`);
+            totalAtoms++;
+          }
+        }
+      } catch (err: any) {
+        console.error(`    [error] Quote extraction failed: ${err.message}`);
+      }
+    } else {
+      console.log('    [skip] Insufficient quote content found');
+    }
+  }
+
+  // Rebuild index
+  if (!dryRun && totalAtoms > 0) {
+    console.log('\n  Rebuilding index...');
+    const index = rebuildIndex();
+    console.log(`  Index: ${index.atom_count} atoms, ${Object.keys(index.by_archetype).length} archetypes`);
+  }
+
+  console.log(`\n  Extraction complete: ${totalAtoms} atoms created`);
+}
+
+// CLI entry
+if (process.argv[1]?.endsWith('knowledge-extractor.ts') || process.argv[1]?.endsWith('knowledge-extractor.js')) {
+  const args: Record<string, string> = {};
+  for (let i = 2; i < process.argv.length; i++) {
+    const arg = process.argv[i];
+    if (arg.startsWith('--')) {
+      const key = arg.slice(2);
+      const val = process.argv[i + 1] && !process.argv[i + 1].startsWith('--') ? process.argv[++i] : 'true';
+      args[key] = val;
+    }
+  }
+
+  const ticker = (args.ticker ?? '').toUpperCase();
+  if (!ticker) {
+    console.error('Usage: npx tsx src/knowledge-extractor.ts --ticker TSM --migrate [--dry-run]');
+    process.exit(1);
+  }
+
+  const dryRun = args['dry-run'] === 'true';
+  const migrate = args['migrate'] === 'true';
+
+  if (!migrate && !dryRun) {
+    console.error('Specify --migrate to run extraction, or --dry-run to preview');
+    process.exit(1);
+  }
+
+  console.log(`╔══════════════════════════════════════╗`);
+  console.log(`║     Knowledge Extractor              ║`);
+  console.log(`╚══════════════════════════════════════╝`);
+  console.log(`Ticker:   ${ticker}`);
+  console.log(`Dry run:  ${dryRun}`);
+  console.log(`Model:    ${MODELS.SCORING} (Sonnet)`);
+  console.log();
+
+  extractKnowledge(ticker, dryRun).catch((err) => {
+    console.error('Fatal:', err);
+    process.exit(1);
+  });
+}
+
+export { extractKnowledge };

@@ -26,6 +26,8 @@ import { chat, runClaudeAgent, type ToolUse, type AnthropicTool, type ChatResult
 import { MODELS, DEFAULT_MAX_COST_USD, estimateCostUsd } from './config.js';
 import { scoreCompanyResearch, scoreExtendedResearch, type InitialMaxScore, type InitialMaxGaps, type ExtendedScore } from './initial-max-scorer.js';
 import { webSearch, fetchUrl, callNinjaApi, queryCompaniesDb, searchDataForCompany, readProjectFile } from './api-tools.js';
+import { queryKnowledgeBaseJson } from './knowledge-retrieval.js';
+import { extractKnowledge } from './knowledge-extractor.js';
 import {
   writeResearchSection, buildMainFileFullAttachment, readResearchFile, listCompanyFiles,
   INITIAL_MAX_MAIN_IN_USER_CHARS, READ_RESEARCH_FILE_MAX_CHARS,
@@ -390,6 +392,18 @@ ${userContent}`;
           console.log(`  [read_project] ${String(args.path ?? '').slice(0, 60)}...`);
           result = readProjectFile(String(args.path ?? ''));
           break;
+        case 'query_knowledge_base':
+          console.log(`  [knowledge] query=${String(args.query ?? '')} company=${String(args.company ?? '')}`);
+          result = queryKnowledgeBaseJson({
+            query: args.query ? String(args.query) : undefined,
+            company: args.company ? String(args.company) : undefined,
+            person: args.person ? String(args.person) : undefined,
+            archetype: args.archetype ? String(args.archetype) : undefined,
+            industry: args.industry ? String(args.industry) : undefined,
+            tag: args.tag ? String(args.tag) : undefined,
+            limit: args.limit ? Number(args.limit) : undefined,
+          });
+          break;
         default:
           result = JSON.stringify({ error: `Unknown tool: ${tc.name}` });
       }
@@ -424,6 +438,7 @@ async function main() {
   const scoreOnly = args['score-only'] === 'true';
   const skipPolish = args['skip-polish'] === 'true';
   const extended = args['extended'] === 'true';
+  const extractKnowledgeFlag = args['extract-knowledge'] === 'true';
   const model = args.model ?? DEFAULT_MODEL;
   const scoringModel = args['scoring-model'] ?? MODELS.SCORING;
   const investorNote = args.why ?? args.note ?? '';
@@ -769,6 +784,17 @@ Write section 8.2 now. Output ONLY the Markdown for that section (including the 
     console.log('\n（略過延伸分析：無研究輪執行）');
   } else if (!extended) {
     console.log('\n（未啟用延伸分析，使用 --extended 啟用）');
+  }
+
+  // Knowledge extraction (post-pipeline)
+  if (extractKnowledgeFlag && fs.existsSync(mainFilePath)) {
+    console.log('\n═══ Knowledge Extraction ═══');
+    try {
+      await extractKnowledge(ticker, false);
+      gitCommit(`initial-max knowledge: extract atoms for ${ticker}`);
+    } catch (err: any) {
+      console.error(`Knowledge extraction failed: ${err.message.slice(0, 100)}`);
+    }
   }
 
   // Final summary
