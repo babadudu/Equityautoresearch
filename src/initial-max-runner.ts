@@ -504,10 +504,12 @@ async function main() {
     return;
   }
 
-  if (baselineScore.passThreshold) {
+  if (baselineScore.passThreshold && !extended) {
     console.log(`\n✓ Already at ${baselineScore.total}/100 — threshold met. No further research needed.`);
     cleanupTickerScoreAndGapsFiles(ticker);
     return;
+  } else if (baselineScore.passThreshold && extended) {
+    console.log(`\n✓ Core score ${baselineScore.total}/100 — threshold met. Skipping core rounds, proceeding to extended analysis.`);
   }
 
   // Main loop
@@ -515,7 +517,7 @@ async function main() {
   let prevScore = baselineScore.total;
   let plateauCount = 0;
 
-  for (let round = 1; round <= maxRounds; round++) {
+  for (let round = 1; round <= maxRounds && !baselineScore.passThreshold; round++) {
     console.log(`\n═══ Round ${round}/${maxRounds} (current: ${prevScore}/100) ═══`);
     const roundStart = Date.now();
 
@@ -717,7 +719,7 @@ Write section 8.2 now. Output ONLY the Markdown for that section (including the 
   }
 
   // ── Extended pass (geopolitical, sustainability, contrarian) ──
-  if (extended && fs.existsSync(mainFilePath) && ranAtLeastOneResearchRound) {
+  if (extended && fs.existsSync(mainFilePath)) {
     console.log('\n═══ Extended Analysis Pass（地緣政治 / 環境永續 / 正反論辯）═══');
     const extMaxRounds = 5;
     for (let extRound = 1; extRound <= extMaxRounds; extRound++) {
@@ -786,8 +788,6 @@ Write section 8.2 now. Output ONLY the Markdown for that section (including the 
     const finalExtScore = await scoreExtendedResearch(ticker, 999, scoringModel);
     console.log(`\nFinal extended score: ${finalExtScore.extendedTotal}/45`);
     const commitHash = gitCommit(`initial-max extended-final: score ${finalExtScore.extendedTotal}/45`);
-  } else if (extended && !ranAtLeastOneResearchRound) {
-    console.log('\n（略過延伸分析：無研究輪執行）');
   } else if (!extended) {
     console.log('\n（未啟用延伸分析，使用 --extended 啟用）');
   }
