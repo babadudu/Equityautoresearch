@@ -8,7 +8,8 @@
     "score": "tsx src/initial-max-scorer.ts",
     "extract-knowledge": "tsx src/knowledge-extractor.ts",
     "rebuild-index": "tsx src/knowledge-index.ts --rebuild",
-    "query-kb": "tsx src/knowledge-retrieval.ts"
+    "query-kb": "tsx src/knowledge-retrieval.ts",
+    "compare": "tsx src/expert-comparison.ts"
   },
   "devDependencies": {
     "@types/node": "^24.10.1",

@@ -40,6 +40,8 @@ read_research_file(ticker, filename)
 | 組織→地理分部 | 1次 | `"{TICKER} segment revenue geographic 10-K 20-F {YEAR}"` 或 ninja_api(sec, filing: 10-K) |
 | 環境→市場分析 | 1次 | `"{TICKER} total addressable market industry report 2025"` |
 | 人/法說逐字稿 | 優先 ninja_api | `ninja_api(action: earningstranscript, ticker, year, quarter)`；若 Premium 不可用再 fetch_url |
+| 人→繼任風險 | 1次 | `"{TICKER} CEO succession plan SVP leadership"` — CEO 年齡、次世代領導人、板凳深度 |
+| 生意→多指標估值 | 0次搜尋 | 從既有財報計算 EV/EBITDA、P/FCF（用已取得的 revenue/EBITDA/FCF），無需額外搜尋 |
 
 ## 輸出格式
 
