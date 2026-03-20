@@ -273,7 +273,7 @@ export async function runClaudeAgent(
     const result = execFileSync('claude', cliArgs, {
       input: fullPrompt,
       encoding: 'utf-8',
-      timeout: 600_000,
+      timeout: 1_200_000, // 20 min for research tasks
       maxBuffer: 100 * 1024 * 1024,
       cwd: process.cwd(),
     });
