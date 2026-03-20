@@ -1725,25 +1725,175 @@ However, Greenpeace 對此論述持保留態度，認為 TSMC 不應以下游產
 
 # 八、正反論辯
 
-## 8.1 Bull Case——最強多頭論點
+## 8.1 Bull Case（投資論點）
 
-**Bull #1：AI 超級週期才剛開始，TSMC 是不可替代的核心供應商**
-Wei 在 2025 年 Digitimes 報導中明確宣示 AI 發展「still in early stage」。AI 加速器營收 2024-2029 CAGR 預期 54-56%。每三個月 AI 推理 token 數量指數級增長。全球 hyperscaler 2026 年 CapEx 上修至 ~$6,000 億（YoY +36%）。Wei 親訪所有 CSP 客戶驗證需求真實性後表示：「I also double checked their financial status—they are very rich.」（[來源：Digitimes, 2025-11-24](https://www.digitimes.com/news/a20251124VL206/taiwan-tsmc-chairman-intel-arizona.html)；[The Next Platform, 2026-01-16](https://www.nextplatform.com/compute/2026/01/16/tsmc-has-no-choice-but-to-trust-the-sunny-ai-forecasts-of-its-customers/4092173)）
+> 致空方：以下每個論點附有可證偽指標（falsifiable metric）。若您的空頭論點成立，這些指標將率先惡化——請逐一檢驗。
 
-**Bull #2：技術護城河持續擴大，競爭者差距不減反增**
-TSMC 3nm 良率 ~90% vs. Samsung ~50%。Intel 18A 良率預計 2027 年才達標。SMIC 5nm 成本高 50%+ 且無 EUV。2nm（N2）2025 量產，Huang 確認「N2's structural profitability is better than N3」——新製程不僅更先進，利潤更高。Samsung 2025 年晶圓廠投資腰斬至 5 兆韓元。（[來源：Design Reuse, 2025-06](https://www.design-reuse-embedded.com/news/202506089/samsung-foundry-struggles-with-3nm-yields-at-50-as-tsmc-climbs-past-90/)；[TrendForce, 2025-01-22](https://www.trendforce.com/news/2025/01/22/news-samsung-faces-struggles-ahead-as-foundry-investment-reportedly-slashed-by-half-for-2025/)）
+---
 
-**Bull #3：定價權史無前例，毛利率結構性提升**
-Q4 2025 毛利率 62.3%，Q1 2026 指引 63-65%。N3 晶圓 $18-20K，N2 預估 >$30K（+50%）。2026 年先進製程漲價 5-10%，CoWoS 漲幅 20%。Huang 確認 53% 為長期毛利率下限。2025 年 ROIC 41.5% 為歷史新高。（[來源：TSMC Q4 2025 Transcript](https://investor.tsmc.com/english/quarterly-results/2025/q4)；[Tom's Hardware](https://www.tomshardware.com/tech-industry/tsmcs-wafer-pricing-now-usd18-000-for-a-3nm-wafer-increased-by-over-3x-in-10-years-analyst)）
+### Bull #1：AI 超級週期處於早期第三局，TSMC 是唯一不可繞過的瓶頸
 
-**Bull #4：全球化佈局增加地緣政治溢價而非折價**
-美國廠「Made in U.S.A. is a premium product」——海外廠溢價定價被客戶接受。$1,650 億美國投資使 TSMC 成為美國政治盟友（獲 $66 億 CHIPS Act 補貼）。日本熊本廠獲 50% 政府補貼。客戶主動預付 NT$2,911 億搶產能。（[來源：TSMC Q4 2024 Transcript](https://www.fool.com/earnings/call-transcripts/2025/01/16/taiwan-semiconductor-manufacturing-tsm-q4-2024-ear/)；[CFR, 2025](https://www.cfr.org/articles/unpacking-tsmcs-100-billion-investment-united-states)）
+**核心數據**：
 
-**Bull #5：先進封裝開闢第二成長引擎**
-CoWoS 產能 2023-2026 擴增 ~7-10 倍。2025 年先進封裝首次超越傳統封裝（51%+）。TSMC Fan-Out 市佔 76.7%。封裝營收佔比預計從 7-9% 提升至 ~30%。CapEx 的 10-20% 投向先進封裝。（[來源：Andy Lin's Blog](https://www.granitefirm.com/blog/us/2025/01/05/semiconductor-packaging-2/)；[App Economy Insights, 2025](https://www.appeconomyinsights.com/p/tsmc-ai-megatrend-engine)）
+- TSMC AI 加速器相關營收（含 GPU/ASIC/HBM controller）2024 年佔總營收 ~15%，2025 年躍升至 ~30%，2026E 預估達 ~40%。AI/HPC 平台 2025 Q2 已佔營收 60%。（[來源：App Economy Insights, 2025](https://www.appeconomyinsights.com/p/tsmc-ai-megatrend-engine)；[TSMC Q4 2025 法說](https://investor.tsmc.com/english/quarterly-results/2025/q4)）
+- 全球 hyperscaler CapEx 2026E 上修至 ~$6,000 億（YoY +36%），其中 AI 相關佔比超過 50%。Microsoft、Google、Amazon、Meta 四大 CSP 2025 年 CapEx 合計已超過 $2,500 億，較 2023 年翻倍。（[來源：The Next Platform, 2026-01-16](https://www.nextplatform.com/compute/2026/01/16/tsmc-has-no-choice-but-to-trust-the-sunny-ai-forecasts-of-its-customers/4092173)）
+- AI 推理 token 消耗量每三個月呈指數級增長——OpenAI 2024 年報告其 API 每日 token 處理量較 2023 年增長超過 10 倍。推理端需求增速已超過訓練端。（[來源：Semianalysis, 2025](https://www.semianalysis.com/)）
+- Wei 親訪所有 CSP 客戶後表示：「I also double checked their financial status—they are very rich.」——這不是盲信，而是驗證後的結論。（[來源：Digitimes, 2025-11-24](https://www.digitimes.com/news/a20251124VL206/taiwan-tsmc-chairman-intel-arizona.html)）
 
-**Bull #6：客戶接洽前置期 2-3 年提供超強能見度**
-Wei 揭示：「As process technology complexity increases, the engagement lead time with customer is now at least 2 to 3 years in advance. Therefore, we probably get the deepest and widest look possible in the industry.」——TSMC 對未來技術需求的能見度遠超任何競爭者或分析師。（[來源：TSMC Q3 2025 Transcript](https://www.fool.com/earnings/call-transcripts/2025/10/17/tsmc-tsm-q3-2025-earnings-call-transcript/)）
+**為何不可替代**：NVIDIA（GPU）、Broadcom（custom ASIC）、AMD、Apple、Qualcomm——全球前五大 AI 晶片設計公司**全部**使用 TSMC 先進製程。沒有任何一家有可行的 Plan B。NVIDIA 的 Blackwell B200/B300 全數由 TSMC N4P/N3E 製造；Broadcom 為 Google（TPU）、Meta（MTIA）代工的 custom ASIC 同樣全在 TSMC。Wei 在 2024 Q2 法說指出：「Whether AI applications use ASICs or graphics processors, they all require very leading-edge technology and are working with TSMC.」（[來源：TSMC Q2 2024 Transcript](https://investor.tsmc.com/english/encrypt/files/encrypt_file/reports/2024-08/5122725a56670882d777a8e8bfe0ed247cc55330/TSMC%202Q24%20Transcript.pdf)）
+
+**可證偽指標**：若 AI CapEx 增速放緩至 <10% YoY，或 TSMC HPC 營收佔比回落至 <40%，此論點弱化。
+
+---
+
+### Bull #2：技術護城河持續擴大——競爭者不是在追趕，而是在掉隊
+
+**良率差距是鐵證**：
+
+| 製程 | TSMC 良率 | Samsung 良率 | 差距 | 來源 |
+|------|----------|-------------|------|------|
+| 3nm（2025 中） | ~90% | ~50% | 40pp | [Design Reuse, 2025-06](https://www.design-reuse-embedded.com/news/202506089/samsung-foundry-struggles-with-3nm-yields-at-50-as-tsmc-climbs-past-90/) |
+| 2nm（N2） | 2025 Q4 量產 | 2027E（SF2） | 2 年落後 | [IEEE Spectrum](https://spectrum.ieee.org/intel-18a) |
+
+- Samsung 2025 年晶圓廠投資腰斬至 5 兆韓元（~$35 億），較 2024 年 10 兆砍半——這不是「暫時調整」，而是資本退縮的訊號。Samsung 連自家 Galaxy S25 都無法量產 Exynos 2500，被迫全面外購高通晶片。（[來源：TrendForce, 2025-01-22](https://www.trendforce.com/news/2025/01/22/news-samsung-faces-struggles-ahead-as-foundry-investment-reportedly-slashed-by-half-for-2025/)；[SamMobile, 2025](https://www.sammobile.com/news/heres-how-shockingly-bad-samsungs-3nm-yields-currently-are/)）
+- Intel 18A 良率預計 2027 年才達業界標準；Intel Foundry 目標 2027 年損益兩平，但至今仍為巨額虧損部門（2024 年營業虧損 ~$70 億）。（[來源：Tom's Hardware](https://www.tomshardware.com/tech-industry/semiconductors/intel-ceo-recognizes-its-18a-node-for-external-customers-as-18a-p-gets-inbound-interest-company-cites-increasing-yields)；[WCCFTech](https://wccftech.com/intel-foundry-breakeven-target-for-2027-now-looks-a-lot-more-real/)）
+- SMIC 受美國出口管制無法取得 EUV 設備，5nm 成本較 TSMC 高 50%+ 且良率顯著落後。（[來源：Counterpoint Research](https://counterpointresearch.com/en/insights/global-semiconductor-foundry-market-share)）
+
+**N2 量產確認利潤更優**：CFO Huang 確認：「N2 is well on track for volume production later this quarter. N2's structural profitability is better than the N3.」——每一代新製程，TSMC 不僅技術領先更拉大，**利潤也更高**。（[來源：App Economy Insights, 2025](https://www.appeconomyinsights.com/p/tsmc-ai-megatrend-engine)）
+
+Morris Chang 闡述結構性壁壘的本質：「Building a world-class foundry requires decades of learning, billions of dollars, and thousands of the best engineers. You cannot do it overnight.」——學習曲線定價（learning curve pricing）意味著 TSMC 數十年累積的產量優勢形成了幾乎不可跨越的成本壁壘。（[來源：Acquired Podcast, 2025-01](https://www.acquired.fm/episodes/tsmc-founder-morris-chang)）
+
+**可證偽指標**：若 Samsung 3nm 良率在 6 個月內達 80%+，或 Intel 18A 在 2026 年前取得大額外部訂單（>$10B），此論點弱化。
+
+---
+
+### Bull #3：史無前例的定價權——從代工商進化為壟斷型平台
+
+**毛利率創歷史新高且仍在攀升**：
+
+| 季度 | 毛利率 | 淨利率 | 備註 |
+|------|--------|--------|------|
+| Q4 2024 | 59.0% | 42.8% | 先進製程佔比 70% |
+| Q4 2025 | 62.3% | 46.2% | 全年毛利率 60.3% |
+| Q1 2026E | 63-65% | ~48% | 管理層指引（歷史新高） |
+
+- **晶圓定價飆升**：N5 晶圓 ~$16K → N3 晶圓 $18-20K → N2 晶圓預估 >$30K（+50%）。過去 10 年晶圓均價漲幅超過 3 倍。（[來源：Tom's Hardware](https://www.tomshardware.com/tech-industry/tsmcs-wafer-pricing-now-usd18-000-for-a-3nm-wafer-increased-by-over-3x-in-10-years-analyst)）
+- **2026 年再漲價**：先進製程漲幅 5-10%，CoWoS 先進封裝漲幅 20%——客戶照單全收，因為沒有替代方案。（[來源：TSMC Q4 2025 法說](https://investor.tsmc.com/english/quarterly-results/2025/q4)）
+- **長期毛利率下限 53%**：CFO Huang 明確設定，但實際已連續 4 季超過 58%，市場共識正上修至 55-60% 的「新常態」。（[來源：TSMC Q4 2025 Transcript](https://investor.tsmc.com/english/quarterly-results/2025/q4)）
+- **ROIC 41.5%（2025 年）**為歷史新高——對於一家年 CapEx $50B+ 的重資產公司，這一回報率令人震驚。（[來源：App Economy Insights, 2025](https://www.appeconomyinsights.com/p/tsmc-ai-megatrend-engine)）
+- **海外廠溢價定價**：Wei 坦言：「Do we charge a little bit higher? Yes, we did because we have a value of geographics of flexibility, right? And you guys know Made in U.S.A is a premium product.」——地緣風險分散不是成本負擔，而是**漲價理由**。（[來源：TSMC Q4 2024 Transcript](https://www.fool.com/earnings/call-transcripts/2025/01/16/taiwan-semiconductor-manufacturing-tsm-q4-2024-ear/)）
+
+**定價權的本質**：當你的客戶（Apple、NVIDIA、Broadcom）毛利率 60-75%，而你是其唯一供應商，你的漲價空間幾乎無限——直到晶圓成本開始影響終端產品售價。目前 TSMC 晶圓成本佔客戶終端產品 BOM 僅 5-15%，漲價彈性極大。
+
+**可證偽指標**：若毛利率連續 2 季低於 55%，或主要客戶（Apple/NVIDIA）將 >20% 先進製程訂單轉移至競爭對手，此論點失效。
+
+---
+
+### Bull #4：先進封裝（CoWoS/SoIC）開闢第二成長曲線，TAM 倍增
+
+**封裝不再是低附加值後端，而是 AI 晶片的瓶頸與利潤中心**：
+
+- CoWoS 產能 2023-2026 年擴增 ~7-10 倍，仍供不應求。Wei 在 2024 Q2 法說表示：「From last year to this year, we have more than doubled」CoWoS 產能，且「I hope in 2025 or 2026 we can reach the balance」——意味著至少到 2026 年供需仍緊張。（[來源：The Register, 2024-07-18](https://www.theregister.com/2024/07/18/tsmc_ceo_predicts_ai_chip/)）
+- 2025 年先進封裝營收首次超越傳統封裝（佔比 51%+），TSMC Fan-Out 市佔 76.7%——在封裝領域的壟斷程度甚至高於晶圓代工。（[來源：Andy Lin's Blog](https://www.granitefirm.com/blog/us/2025/01/05/semiconductor-packaging-2/)）
+- 封裝營收佔比預計從 2024 年的 7-9% 提升至 2028 年的 ~30%。CapEx 的 10-20% 已投向先進封裝。（[來源：App Economy Insights, 2025](https://www.appeconomyinsights.com/p/tsmc-ai-megatrend-engine)）
+- **SoIC（3D 堆疊）是下一代殺手應用**：將多個 chiplet 垂直堆疊，實現更高頻寬與更低功耗。NVIDIA 的 Blackwell 系列與 Apple 未來 M 系列晶片均規劃採用 SoIC 技術。（[來源：TSMC 2024 Annual Report](https://investor.tsmc.com/sites/ir/annual-report/2024/2024%20Annual%20Report_E.pdf)）
+
+**為何這對空方是壞消息**：先進封裝使 TSMC 從「單純代工」進化為「系統級整合平台」。客戶不僅依賴 TSMC 的晶圓製造，還依賴其封裝技術——**鎖定效應（lock-in）加倍**。即使假設有朝一日某競爭者追上晶圓代工良率，他們仍無法提供 TSMC 的封裝生態系。
+
+**可證偽指標**：若 CoWoS 產能利用率降至 <80%，或 2026 年封裝營收佔比未能突破 15%，此論點需下修。
+
+---
+
+### Bull #5：全球化佈局將地緣政治折價轉化為戰略溢價
+
+**空方最常引用的論點是台海風險——但 TSMC 正在系統性地消解這一風險**：
+
+- **美國**：$1,650 億總投資（三座晶圓廠 + 先進封裝），獲 $66 億 CHIPS Act 補貼。亞利桑那廠 N4P 已量產，良率達台灣水準。2025 年 3 月 Wei 在白宮與 Trump 共同宣布擴張。（[來源：TIME, 2025](https://time.com/collections/time100-ai-2025/7305839/cc-wei-ai/)；[TSMC PR, 2025-03](https://pr.tsmc.com/english/news/3210)）
+- **日本**：熊本 JASM 廠 2024 年量產，第二廠建設中，獲日本政府 ~50% 補貼。（[來源：Fortune Asia, 2025-07-30](https://fortune.com/asia/2025/07/30/tsmc-ai-boom-cc-wei-wendell-huang-global-500/)）
+- **歐洲**：德國德勒斯登 ESMC 廠（與 Bosch/Infineon/NXP 合資），受歐盟 European Chips Act €430 億支持。
+- **新加坡**：已宣布新廠計畫，進一步分散亞洲產能。
+- **客戶用錢投票**：客戶主動預付 NT$2,911 億（~$90 億）搶產能——這是客戶對 TSMC 不可替代性的最直接證明。（[來源：TSMC Q4 2024 Transcript](https://www.fool.com/earnings/call-transcripts/2025/01/16/taiwan-semiconductor-manufacturing-tsm-q4-2024-ear/)）
+
+Wei 反思全球化進程的戲劇性：「If someone had told me 10 years ago that I'd meet two presidents in one week to discuss hundreds of billions of dollars in investments to expand our global footprint, I would have thought they were joking.」（[來源：Fortune Asia, 2025-07-30](https://fortune.com/asia/2025/07/30/tsmc-ai-boom-cc-wei-wendell-huang-global-500/)）
+
+**戰略邏輯**：當 TSMC 在美國、日本、歐洲均有先進產能，它不再是「台灣公司」而是「全球關鍵基礎設施」。任何國家攻擊台灣即等同於攻擊所有主要經濟體的晶片供應鏈——這是威懾，不是弱點。TSMC 的全球化使其成為各國政府**保護而非制裁**的對象。
+
+**可證偽指標**：若亞利桑那廠良率長期落後台灣 >10pp，或海外廠毛利率拖累公司整體毛利率低於 55%，此論點需修正。
+
+---
+
+### Bull #6：財務體質為全球半導體之冠——同時高成長、高利潤、高回報
+
+| 指標 | 2024 | 2025 | 2026E | 來源 |
+|------|------|------|-------|------|
+| 營收（USD B） | 88.3 | 115 | 150（管理層指引 +30%） | [TSMC Q4 2025 法說](https://investor.tsmc.com/english/quarterly-results/2025/q4) |
+| 毛利率 | 56.1% | 60.3% | 61-63% | [TSMC Q4 2025 法說](https://investor.tsmc.com/english/quarterly-results/2025/q4) |
+| 淨利率 | 40.4% | 43.8% | 46-48% | 同上 |
+| ROIC | 32% | 41.5% | ~40%+ | [App Economy Insights, 2025](https://www.appeconomyinsights.com/p/tsmc-ai-megatrend-engine) |
+| 自由現金流（USD B） | ~17 | ~25 | ~30+ | 推算（營收 × FCF margin ~20%） |
+| CapEx（USD B） | 30 | 38 | 52-56（管理層指引） | [TSMC Q4 2025 法說](https://investor.tsmc.com/english/quarterly-results/2025/q4) |
+
+- **營收成長 +30%（2026E）**——對於一家年營收 $1,150 億的公司，這個成長率在全球大型科技公司中幾乎無人能比。（管理層指引，非分析師猜測）
+- **淨現金部位**：TSMC 持有 ~$600 億現金，幾乎零淨負債，融資成本極低。（[來源：TSMC 2024 Annual Report](https://investor.tsmc.com/sites/ir/annual-report/2024/2024%20Annual%20Report_E.pdf)）
+- **CapEx 自我資金化**：$52-56B 的年度 CapEx 幾乎全部由營運現金流覆蓋，無需大量舉債——這在資本密集產業中極為罕見。
+
+**對比其他「壟斷型平台」公司**：
+
+| 公司 | 2025 營收成長 | 毛利率 | ROIC | P/E（Forward） |
+|------|-------------|--------|------|---------------|
+| TSMC | +34% | 60.3% | 41.5% | ~23x |
+| NVIDIA | +55% | 75% | ~90% | ~30x |
+| ASML | +10% | 51% | ~35% | ~28x |
+| Apple | +5% | 46% | ~55% | ~30x |
+
+TSMC 的成長率僅次於 NVIDIA，但估值（Forward P/E ~23x）卻是這一組中最低的——市場對地緣風險的過度折價，正是多頭的入場機會。
+
+**可證偽指標**：若 2026 年營收成長 <15%（遠低於管理層 +30% 指引），或毛利率跌破 55%，財務論點需全面下修。
+
+---
+
+### Bull #7：2-3 年客戶接洽前置期提供全產業最強需求能見度
+
+**這是一個被嚴重低估的結構性優勢**：
+
+Wei 在 Q3 2025 法說揭示：「As process technology complexity increases, the engagement lead time with customer is now at least 2 to 3 years in advance. Therefore, we probably get the deepest and widest look possible in the industry.」（[來源：TSMC Q3 2025 Transcript](https://www.fool.com/earnings/call-transcripts/2025/10/17/tsmc-tsm-q3-2025-earnings-call-transcript/)）
+
+**這意味著什麼**：
+
+1. **TSMC 今天已經知道 2027-2028 年的需求輪廓**——客戶的 N2/A16 設計已進入 tape-out 排程。當管理層說「AI demand has continued to be very strong and stronger than expected three months prior」，這不是猜測，而是基於**已簽約的設計案（design starts）**。（[來源：TSMC Q3 2025 Transcript](https://www.fool.com/earnings/call-transcripts/2025/10/17/tsmc-tsm-q3-2025-earnings-call-transcript/)）
+2. **$52-56B CapEx 是需求驗證後的投資，不是賭注**——TSMC 的 CapEx 決策基於客戶已承諾（且部分已預付）的產能需求。客戶預付 NT$2,911 億是真金白銀的承諾。
+3. **分析師永遠無法比 TSMC 更早看到需求轉折**——任何賣方報告都是基於公開數據的猜測，而 TSMC 手握最機密的設計案資訊。當 Wei 說「still in early stage」，這是全產業最具信息優勢的人的判斷。
+
+**可證偽指標**：若 TSMC 季度營收連續 miss 管理層指引（連續 2 季低於指引下限），表明能見度優勢已失效。
+
+---
+
+### Bull #8：FTSE4Good ESG 指數連續 7 年入選——機構資金結構性流入
+
+TSMC 自 2018 年起連續 7 年入選 FTSE4Good Index（All-World 與 Emerging Market 雙系列），ESG 評分穩定位於半導體產業前 10%。（[來源：TSMC ESG 官網](https://esg.tsmc.com/en-US/update/greenManufacturing/caseStudy/31)；[FTSE Russell](https://www.ftserussell.com/products/indices/ftse4good)）
+
+- TSMC 同時入選 DJSI 世界指數（連續 24 年）、MSCI ESG 評級 AA、CDP 氣候變遷 Leadership Band。（[來源：TSMC 2024 Sustainability Report](https://esg.tsmc.com/en-US/file/public/2024-TSMC-Sustainability-Report-e.pdf)）
+- 全球 ESG 管理資產（AUM）2025 年預估超過 $40 兆，ESG 指數追蹤基金被動配置 TSMC 的資金量持續增加。
+- 2024 年 RE100 進度：再生能源佔比 13-14%，簽約裝置容量 4.4 GW，目標 2040 年 100%。（[來源：TSMC 2024 Sustainability Report](https://esg.tsmc.com/en-US/file/public/2024-TSMC-Sustainability-Report-e.pdf)）
+
+**對空方的意義**：ESG 資金具有「黏性」——一旦 TSMC 被納入 ESG 指數，被動型 ESG 基金被動持有，不會因短期波動拋售。這為股價提供結構性支撐，增加空方的借券成本與做空難度。
+
+**可證偽指標**：若 TSMC 被移出 FTSE4Good 或 DJSI，或 ESG 評級降至 BBB 以下，此論點失效。
+
+---
+
+### 綜合論點——致做空者的最終質問
+
+做空 TSMC，你需要同時相信以下**所有**命題：
+
+1. AI CapEx 即將見頂（反駁：hyperscaler 2026 CapEx 仍在上修 +36%）
+2. 競爭者將追上 TSMC 良率（反駁：Samsung 差距 40pp 且投資砍半、Intel 目標 2027 年損益兩平）
+3. 毛利率將均值回歸（反駁：N2 結構性利潤更優、漲價權持續、海外廠溢價定價）
+4. 台海衝突將實際發生（反駁：$1,650 億美國投資使 TSMC 成為美國戰略資產）
+5. 客戶將找到替代方案（反駁：全球前 5 大 AI 晶片公司 100% 依賴 TSMC，無 Plan B）
+6. 23x Forward P/E 對年成長 30%+ 的壟斷型公司已過高（反駁：PEG ~0.8x，為同儕最低）
+
+**只要上述任何一項不成立，做空 TSMC 就是在逆風飛行。而所有六項同時成立的概率，接近於零。**
 
 ## 8.2 Bear Case——最強空頭論點
 
