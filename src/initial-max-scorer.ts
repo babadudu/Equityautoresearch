@@ -11,6 +11,7 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { chat } from './llm.js';
+import { MODELS } from './config.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const PROJECT_ROOT = path.resolve(__dirname, '..');
@@ -56,6 +57,16 @@ export interface InitialMaxGaps {
   score: number;
   gaps: GapItem[];
 }
+
+export interface ExtendedScore {
+  core: InitialMaxScore;
+  geopolitical?: DimensionScore;
+  sustainability?: DimensionScore;
+  contrarian?: DimensionScore;
+  extendedTotal: number;
+}
+
+const EXTENDED_SECTIONS = ['6.1', '6.2', '6.3', '7.1', '7.2', '7.3', '8.1', '8.2', '8.3'];
 
 // ── File reading helpers ──
 
@@ -347,7 +358,7 @@ const SCORER_SYSTEM_PROMPT = `你是一位專業的投資研究品質評審。�
 async function llmScore(
   ticker: string,
   reportContent: string,
-  model = 'google/gemini-3.1-pro-preview',
+  model: string = MODELS.SCORING,
 ): Promise<InitialMaxScore | null> {
   const userMessage = `請評分以下 ${ticker} 的研究報告：
 
@@ -355,10 +366,8 @@ ${reportContent.slice(0, 80000)}`;
 
   try {
     const response = await chat(
-      [
-        { role: 'system', content: SCORER_SYSTEM_PROMPT },
-        { role: 'user', content: userMessage },
-      ],
+      SCORER_SYSTEM_PROMPT,
+      [{ role: 'user', content: userMessage }],
       { model, maxTokens: 4096 },
     );
 
@@ -474,7 +483,7 @@ function buildGapsJson(score: InitialMaxScore, round: number): InitialMaxGaps {
 export async function scoreCompanyResearch(
   ticker: string,
   round = 0,
-  model = 'google/gemini-3.1-pro-preview',
+  model: string = MODELS.SCORING,
 ): Promise<{ score: InitialMaxScore; gaps: InitialMaxGaps }> {
   const reportContent = readResearchFiles(ticker);
   const dir = getCompanyDir(ticker);
@@ -532,6 +541,142 @@ export async function scoreCompanyResearch(
   return { score, gaps };
 }
 
+// ── Extended scoring (geopolitical, sustainability, contrarian) ──
+
+const EXTENDED_SCORER_PROMPT = `你是一位專業的研究品質評審。請對以下公司研究報告的**延伸分析**（地緣政治、環境永續、正反論辯）進行評分。
+
+## 評分框架（45分）
+
+### 六、地緣政治分析 (15分)
+- 6.1 地緣政治地位與影響（公司對所在國/地區的戰略重要性）：0-5分
+- 6.2 國際關係與供應鏈風險（盟友關係、供應鏈依賴、脫鉤風險）：0-5分
+- 6.3 政策/制裁/貿易風險（CHIPS Act、出口管制、關稅等）：0-5分
+
+### 七、環境永續分析 (15分)
+- 7.1 能源與資源消耗（電力、水、土地等數據+出處）：0-5分
+- 7.2 環境爭議與ESG（爭議事件、ESG評級、環保團體立場）：0-5分
+- 7.3 氣候風險與轉型（碳排路徑、再生能源承諾、轉型成本）：0-5分
+
+### 八、正反論辯 (15分)
+- 8.1 Bull Case（投資多頭論點，有數據支撐）：0-5分
+- 8.2 Bear Case（投資空頭論點，有數據支撐）：0-5分
+- 8.3 關鍵爭議與數據對比（雙方論點並列，數據互相對照）：0-5分
+
+## 評分規則
+- **無出處不計分**：所有數字必須有可驗證來源
+- **平衡性**：正反論辯必須兩方論點強度對等，非刻意偏頗
+- **時效性**：數據應盡量使用近 2 年內的資料，除非描述歷史趨勢
+- **深度**：每個子節至少 2 段論述+數據，非僅條列
+
+## 輸出格式
+純 JSON（不加 code fence）：
+{
+  "geopolitical": {"score": 數字, "max": 15, "criteria": {"地緣地位": 數字, "國際關係": 數字, "政策風險": 數字}, "gaps": ["缺口"]},
+  "sustainability": {"score": 數字, "max": 15, "criteria": {"能源消耗": 數字, "環境爭議": 數字, "氣候轉型": 數字}, "gaps": ["缺口"]},
+  "contrarian": {"score": 數字, "max": 15, "criteria": {"Bull Case": 數字, "Bear Case": 數字, "數據對比": 數字}, "gaps": ["缺口"]},
+  "extendedTotal": 數字
+}`;
+
+async function llmExtendedScore(
+  ticker: string,
+  reportContent: string,
+  model: string = MODELS.SCORING,
+): Promise<ExtendedScore | null> {
+  const dummyCore: InitialMaxScore = {
+    環境: { score: 0, max: 20, gaps: [] }, 生意: { score: 0, max: 35, gaps: [] },
+    組織: { score: 0, max: 20, gaps: [] }, 人: { score: 0, max: 25, gaps: [] },
+    total: 0, passThreshold: false, round: 0,
+  };
+
+  try {
+    const response = await chat(
+      EXTENDED_SCORER_PROMPT,
+      [{ role: 'user', content: `請評分以下 ${ticker} 的延伸分析：\n\n${reportContent.slice(0, 80000)}` }],
+      { model, maxTokens: 4096 },
+    );
+    if (!response.content) return null;
+
+    let jsonStr = response.content.trim();
+    const fenceMatch = jsonStr.match(/```(?:json)?\s*\n?([\s\S]*?)```/);
+    if (fenceMatch) jsonStr = fenceMatch[1].trim();
+    const start = jsonStr.indexOf('{');
+    if (start === -1) return null;
+    let depth = 0, end = -1;
+    for (let i = start; i < jsonStr.length; i++) {
+      if (jsonStr[i] === '{') depth++;
+      else if (jsonStr[i] === '}') { depth--; if (depth === 0) { end = i; break; } }
+    }
+    if (end === -1) return null;
+
+    const parsed = JSON.parse(jsonStr.slice(start, end + 1));
+    return {
+      core: dummyCore,
+      geopolitical: { score: parsed.geopolitical?.score ?? 0, max: 15, criteria: parsed.geopolitical?.criteria, gaps: parsed.geopolitical?.gaps ?? [] },
+      sustainability: { score: parsed.sustainability?.score ?? 0, max: 15, criteria: parsed.sustainability?.criteria, gaps: parsed.sustainability?.gaps ?? [] },
+      contrarian: { score: parsed.contrarian?.score ?? 0, max: 15, criteria: parsed.contrarian?.criteria, gaps: parsed.contrarian?.gaps ?? [] },
+      extendedTotal: parsed.extendedTotal ?? ((parsed.geopolitical?.score ?? 0) + (parsed.sustainability?.score ?? 0) + (parsed.contrarian?.score ?? 0)),
+    };
+  } catch (err: any) {
+    console.error('Extended LLM scorer error:', err.message);
+    return null;
+  }
+}
+
+function heuristicExtendedScore(mainContent: string): { geopolitical: number; sustainability: number; contrarian: number } {
+  let geo = 0;
+  if (/geopolit|地緣|silicon shield|矽盾/i.test(mainContent)) geo += 2;
+  if (/sanction|制裁|tariff|關稅|export control|出口管制/i.test(mainContent)) geo += 2;
+  if (/supply chain|供應鏈|CHIPS Act|chip act|晶片法/i.test(mainContent)) geo += 1;
+
+  let sus = 0;
+  if (/electricity|電力|water.*usage|用水|能源消耗/i.test(mainContent)) sus += 2;
+  if (/ESG|carbon|碳排|emission|排放/i.test(mainContent)) sus += 2;
+  if (/renewable|再生能源|sustainability|永續|climate/i.test(mainContent)) sus += 1;
+
+  let con = 0;
+  if (/bull case|多頭|投資論點/i.test(mainContent)) con += 2;
+  if (/bear case|空頭|反面論點/i.test(mainContent)) con += 2;
+  if (/爭議|debate|兩方|both sides|pro.*con/i.test(mainContent)) con += 1;
+
+  return { geopolitical: Math.min(geo, 15), sustainability: Math.min(sus, 15), contrarian: Math.min(con, 15) };
+}
+
+export async function scoreExtendedResearch(
+  ticker: string,
+  round = 0,
+  model: string = MODELS.SCORING,
+): Promise<ExtendedScore> {
+  const dir = getCompanyDir(ticker);
+  const mainFile = path.join(dir, `${ticker}_Initial_MAX.md`);
+  const mainContent = fs.existsSync(mainFile) ? fs.readFileSync(mainFile, 'utf-8') : '';
+
+  if (mainContent.length < 100) {
+    const emptyDim: DimensionScore = { score: 0, max: 15, gaps: ['無延伸分析內容'] };
+    return {
+      core: { 環境: { score: 0, max: 20, gaps: [] }, 生意: { score: 0, max: 35, gaps: [] }, 組織: { score: 0, max: 20, gaps: [] }, 人: { score: 0, max: 25, gaps: [] }, total: 0, passThreshold: false, round },
+      geopolitical: emptyDim, sustainability: emptyDim, contrarian: emptyDim, extendedTotal: 0,
+    };
+  }
+
+  console.log(`[scorer] Running extended LLM scorer (${model}) for ${ticker}...`);
+  const llmResult = await llmExtendedScore(ticker, mainContent, model);
+
+  if (llmResult) {
+    console.log(`[scorer] Extended score: ${llmResult.extendedTotal}/45 (geo:${llmResult.geopolitical?.score} sus:${llmResult.sustainability?.score} con:${llmResult.contrarian?.score})`);
+    return llmResult;
+  }
+
+  console.log('[scorer] Extended LLM failed, using heuristic fallback');
+  const h = heuristicExtendedScore(mainContent);
+  return {
+    core: { 環境: { score: 0, max: 20, gaps: [] }, 生意: { score: 0, max: 35, gaps: [] }, 組織: { score: 0, max: 20, gaps: [] }, 人: { score: 0, max: 25, gaps: [] }, total: 0, passThreshold: false, round },
+    geopolitical: { score: h.geopolitical, max: 15, gaps: h.geopolitical < 10 ? ['需補充地緣政治分析'] : [] },
+    sustainability: { score: h.sustainability, max: 15, gaps: h.sustainability < 10 ? ['需補充環境永續分析'] : [] },
+    contrarian: { score: h.contrarian, max: 15, gaps: h.contrarian < 10 ? ['需補充正反論辯'] : [] },
+    extendedTotal: h.geopolitical + h.sustainability + h.contrarian,
+  };
+}
+
 // ── CLI entry point ──
 
 async function main() {
@@ -551,7 +696,7 @@ async function main() {
     process.exit(1);
   }
 
-  const model = args.model ?? 'google/gemini-3.1-pro-preview';
+  const model = args.model ?? MODELS.SCORING;
   const round = parseInt(args.round ?? '0', 10);
 
   const { score } = await scoreCompanyResearch(ticker.toUpperCase(), round, model);

@@ -21,12 +21,14 @@ import fs from 'fs';
 import path from 'path';
 import { execSync } from 'child_process';
 import { fileURLToPath } from 'url';
-import { chat, type Message, type ToolDef, type ToolCall } from './llm.js';
-import { scoreCompanyResearch, type InitialMaxScore, type InitialMaxGaps } from './initial-max-scorer.js';
+import Anthropic from '@anthropic-ai/sdk';
+import { chat, type ToolUse, type AnthropicTool, type ChatResult } from './llm.js';
+import { MODELS, DEFAULT_MAX_COST_USD, estimateCostUsd } from './config.js';
+import { scoreCompanyResearch, scoreExtendedResearch, type InitialMaxScore, type InitialMaxGaps, type ExtendedScore } from './initial-max-scorer.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const PROJECT_ROOT = path.resolve(__dirname, '..');
-const DEFAULT_MODEL = 'google/gemini-3.1-pro-preview';
+const DEFAULT_MODEL = MODELS.RESEARCH;
 const DEFAULT_MAX_ROUNDS = 20;
 const PASS_THRESHOLD = 95;
 /** 每輪 gap-fill user 訊息附加主檔全文之上限（極長檔仍可能截斷，見訊息內說明） */
@@ -43,6 +45,53 @@ const POLISH_PHASE_SYSTEM = `# Initial MAX 主檔整理輪
 **目標**：（1）**順稿**：敘事連貫、段落銜接自然；（2）**格式**：# / ## / ### 層級一致，表格合法可讀，列表統一；（3）**去重**：刪除重複段落、重複表格或重複論點；（4）**保留事實**：數字、出處、管理層引言與**既有超連結**原則上保留；可修錯字、標點、明顯語病，**不可捏造新事實或新數字**。**連結**：勿刪除正文中的來源 URL；若某處僅文字「來源：年報」而同段或鄰近已有 URL，可改為 Markdown 連結格式（不新增新 URL）。
 
 **寫入策略**：優先對各小節使用 \`replace_section\`——輸出**整節**順過稿（**含該節標題行**），等於**整節重寫／修正**，而非只在節尾堆字。僅在確有必要時用 \`insert_into_section\`。**禁止 append**。若開頭大段（如 IRR、結論）無法用數字錨點替換、且你已完整掌握全文，可謹慎使用 \`overwrite\` 一次寫回整檔（須零遺漏）。`;
+
+const EXTENDED_PHASE_SYSTEM = `# Initial MAX 延伸分析：地緣政治 / 環境永續 / 正反論辯
+
+你是一位頂尖的跨領域分析師，專長涵蓋地緣政治、環境科學與投資分析。你的任務是對一家公司進行**延伸分析**，補充核心投研報告。
+
+## 你的角色
+
+- 你**不是**在做傳統財務分析（那已完成），而是在補充**政治、環境、正反辯論**三個維度
+- 你會收到當前主檔全文（已有四維框架研究）和延伸維度缺口清單
+- 你的產出必須**客觀、不偏頗、有數據支撐**——雙方不滿意代表成功
+
+## 不偏頗方法論（CRITICAL）
+
+1. **學術風格**：每個論點用 "According to [source], X. However, [source] argues Y" 格式
+2. **數據對照**：每個主張必須附可驗證的數據+出處URL
+3. **不下結論**：報告陳述事實與各方立場，不做「我們認為」的判斷
+4. **時效性**：優先使用 2024-2026 年的數據，歷史數據用於趨勢分析
+5. **多元來源**：每個論點至少引用 2 個不同立場的來源
+
+## 延伸維度結構
+
+### 六、地緣政治分析
+- 6.1 地緣政治地位與影響：公司對所在國/地區的戰略重要性（如矽盾理論）
+- 6.2 國際關係與供應鏈風險：盟友關係、供應鏈集中度、脫鉤風險
+- 6.3 政策/制裁/貿易風險：具體政策（CHIPS Act、出口管制、關稅等）
+
+### 七、環境永續分析
+- 7.1 能源與資源消耗：電力、水、土地用量（具體數字+佔比+出處）
+- 7.2 環境爭議與ESG：爭議事件、環保團體立場、ESG評級
+- 7.3 氣候風險與轉型：碳排路徑、RE100承諾、轉型成本估算
+
+### 八、正反論辯
+- 8.1 Bull Case：最強多頭論點（至少 5 個，各有數據支撐）
+- 8.2 Bear Case：最強空頭論點（至少 5 個，各有數據支撐）
+- 8.3 關鍵爭議與數據對比：雙方核心分歧的並列對照表
+
+## 搜尋預算
+
+每輪最多 8 次 web_search。建議分配：
+- 地緣政治：2-3 次（"{TICKER} geopolitical risk", "{COUNTRY} strategic importance")
+- 環境永續：2-3 次（"{TICKER} electricity water ESG", "{TICKER} carbon emissions")
+- 正反論辯：2 次（"{TICKER} bull case bear case analysis 2025")
+
+## 輸出格式
+
+工具完成後輸出 JSON：
+{"description": "added geopolitical silicon shield analysis, environmental electricity data...", "files_written": ["{TICKER}_Initial_MAX.md"], "dimensions_addressed": ["geopolitical", "sustainability", "contrarian"]}`;
 
 // ── CLI args ──
 
@@ -552,184 +601,151 @@ function readProjectFile(relativePath: string): string {
 
 // ── Gap-fill mini agent ──
 
-const GAP_FILL_TOOLS: ToolDef[] = [
+const GAP_FILL_TOOLS: AnthropicTool[] = [
   {
-    type: 'function',
-    function: {
-      name: 'web_search',
-      description: '搜尋網頁。最多 5 次/輪。',
-      parameters: {
-        type: 'object',
-        properties: {
-          query: { type: 'string', description: '搜尋關鍵詞' },
-          count: { type: 'number', description: '結果數量（預設 5，最多 10）' },
-        },
-        required: ['query'],
+    name: 'web_search',
+    description: '搜尋網頁。最多 5 次/輪。',
+    input_schema: {
+      type: 'object',
+      properties: {
+        query: { type: 'string', description: '搜尋關鍵詞' },
+        count: { type: 'number', description: '結果數量（預設 5，最多 10）' },
       },
+      required: ['query'],
     },
   },
   {
-    type: 'function',
-    function: {
-      name: 'fetch_url',
-      description: '抓取 URL 完整內容（適合下載逐字稿、年報頁面）。',
-      parameters: {
-        type: 'object',
-        properties: {
-          url: { type: 'string', description: '要抓取的 URL' },
-        },
-        required: ['url'],
+    name: 'fetch_url',
+    description: '抓取 URL 完整內容（適合下載逐字稿、年報頁面）。',
+    input_schema: {
+      type: 'object',
+      properties: {
+        url: { type: 'string', description: '要抓取的 URL' },
       },
+      required: ['url'],
     },
   },
   {
-    type: 'function',
-    function: {
-      name: 'write_research_section',
-      description:
-        '寫入公司研究檔案。**主檔**：優先 **replace_section**＝整節**重寫／修正**（可刪冗、改寫句子、重排段落、合併重複），內文須含該小節標題；**不是**只能插入——若舊節需大改，直接 replace 整節。必要時才用 insert_into_section 接在節尾。禁止 append 堆文末。',
-      parameters: {
-        type: 'object',
-        properties: {
-          ticker: { type: 'string', description: '公司 ticker（大寫）' },
-          filename: { type: 'string', description: '主檔為 {TICKER}_Initial_MAX.md；或 transcripts/xxx.md' },
-          content: { type: 'string', description: '要寫入的 Markdown。replace_section 時為整節順過後內文（含小節標題），具可讀性、段落連貫。' },
-          mode: { type: 'string', enum: ['append', 'overwrite', 'insert_into_section', 'replace_section'], description: '主檔：replace_section=整節替換並順稿；insert_into_section=插在節尾。transcripts=append。整份重寫=overwrite' },
-          section_anchor: { type: 'string', description: 'mode 為 insert_into_section 或 replace_section 時必填：1.1, 1.2, 2.1, 2.2, 2.3, 2.4, 2.5, 3.1, 3.2, 3.3, 4.1' },
-        },
-        required: ['ticker', 'filename', 'content'],
+    name: 'write_research_section',
+    description:
+      '寫入公司研究檔案。**主檔**：優先 **replace_section**＝整節**重寫／修正**（可刪冗、改寫句子、重排段落、合併重複），內文須含該小節標題；**不是**只能插入——若舊節需大改，直接 replace 整節。必要時才用 insert_into_section 接在節尾。禁止 append 堆文末。',
+    input_schema: {
+      type: 'object',
+      properties: {
+        ticker: { type: 'string', description: '公司 ticker（大寫）' },
+        filename: { type: 'string', description: '主檔為 {TICKER}_Initial_MAX.md；或 transcripts/xxx.md' },
+        content: { type: 'string', description: '要寫入的 Markdown。replace_section 時為整節順過後內文（含小節標題），具可讀性、段落連貫。' },
+        mode: { type: 'string', enum: ['append', 'overwrite', 'insert_into_section', 'replace_section'], description: '主檔：replace_section=整節替換並順稿；insert_into_section=插在節尾。transcripts=append。整份重寫=overwrite' },
+        section_anchor: { type: 'string', description: 'mode 為 insert_into_section 或 replace_section 時必填：1.1, 1.2, 2.1, 2.2, 2.3, 2.4, 2.5, 3.1, 3.2, 3.3, 4.1, 4.2, 6.1, 6.2, 6.3, 7.1, 7.2, 7.3, 8.1, 8.2, 8.3' },
       },
+      required: ['ticker', 'filename', 'content'],
     },
   },
   {
-    type: 'function',
-    function: {
-      name: 'read_research_file',
-      description: `讀取現有研究檔案內容（最多約 ${READ_RESEARCH_FILE_MAX_CHARS.toLocaleString()} 字元；超長會標 truncated）。每輪 user 訊息通常已附主檔全文，僅在需重新對照或截斷補讀時呼叫。`,
-      parameters: {
-        type: 'object',
-        properties: {
-          ticker: { type: 'string' },
-          filename: { type: 'string', description: '檔案名稱' },
-        },
-        required: ['ticker', 'filename'],
+    name: 'read_research_file',
+    description: `讀取現有研究檔案內容（最多約 ${READ_RESEARCH_FILE_MAX_CHARS.toLocaleString()} 字元；超長會標 truncated）。每輪 user 訊息通常已附主檔全文，僅在需重新對照或截斷補讀時呼叫。`,
+    input_schema: {
+      type: 'object',
+      properties: {
+        ticker: { type: 'string' },
+        filename: { type: 'string', description: '檔案名稱' },
       },
+      required: ['ticker', 'filename'],
     },
   },
   {
-    type: 'function',
-    function: {
-      name: 'list_company_files',
-      description: '列出該公司在 data/companies/{TICKER}/ 下已有檔案與 transcripts 清單，判斷缺什麼再補充。',
-      parameters: {
-        type: 'object',
-        properties: {
-          ticker: { type: 'string', description: '公司 ticker（大寫）' },
-        },
-        required: ['ticker'],
+    name: 'list_company_files',
+    description: '列出該公司在 data/companies/{TICKER}/ 下已有檔案與 transcripts 清單，判斷缺什麼再補充。',
+    input_schema: {
+      type: 'object',
+      properties: {
+        ticker: { type: 'string', description: '公司 ticker（大寫）' },
       },
+      required: ['ticker'],
     },
   },
   {
-    type: 'function',
-    function: {
-      name: 'query_companies_db',
-      description: '查詢 data/database/companies_database.json 中該 ticker 的條目（公司名、CEO、產業、財務摘要等）。',
-      parameters: {
-        type: 'object',
-        properties: {
-          ticker: { type: 'string', description: '公司 ticker（大寫）' },
-        },
-        required: ['ticker'],
+    name: 'query_companies_db',
+    description: '查詢 data/database/companies_database.json 中該 ticker 的條目（公司名、CEO、產業、財務摘要等）。',
+    input_schema: {
+      type: 'object',
+      properties: {
+        ticker: { type: 'string', description: '公司 ticker（大寫）' },
       },
+      required: ['ticker'],
     },
   },
   {
-    type: 'function',
-    function: {
-      name: 'ninja_api',
-      description: '呼叫 API Ninjas：財報(earnings/earnings_historical)、法說逐字稿(earningstranscript)、股價(stockprice)、SEC(sec)。需 NINJA_API_KEY。',
-      parameters: {
-        type: 'object',
-        properties: {
-          action: { type: 'string', enum: ['stockprice', 'earnings', 'earnings_historical', 'earningstranscript', 'sec'], description: 'earnings=單年季, earnings_historical=多年財報, earningstranscript=法說逐字稿' },
-          ticker: { type: 'string' },
-          year: { type: 'number', description: 'earnings/earningstranscript 用' },
-          quarter: { type: 'number', description: 'earnings/earningstranscript 用' },
-          period_fy: { type: 'boolean', description: 'earnings 時 true=全年' },
-          start_year: { type: 'number', description: 'earnings_historical 起始年' },
-          end_year: { type: 'number', description: 'earnings_historical 結束年' },
-          filing: { type: 'string', description: 'sec 用，如 10-K, 10-Q' },
-          limit: { type: 'number', description: 'sec 筆數' },
-        },
-        required: ['action', 'ticker'],
+    name: 'ninja_api',
+    description: '呼叫 API Ninjas：財報(earnings/earnings_historical)、法說逐字稿(earningstranscript)、股價(stockprice)、SEC(sec)。需 NINJA_API_KEY。',
+    input_schema: {
+      type: 'object',
+      properties: {
+        action: { type: 'string', enum: ['stockprice', 'earnings', 'earnings_historical', 'earningstranscript', 'sec'], description: 'earnings=單年季, earnings_historical=多年財報, earningstranscript=法說逐字稿' },
+        ticker: { type: 'string' },
+        year: { type: 'number', description: 'earnings/earningstranscript 用' },
+        quarter: { type: 'number', description: 'earnings/earningstranscript 用' },
+        period_fy: { type: 'boolean', description: 'earnings 時 true=全年' },
+        start_year: { type: 'number', description: 'earnings_historical 起始年' },
+        end_year: { type: 'number', description: 'earnings_historical 結束年' },
+        filing: { type: 'string', description: 'sec 用，如 10-K, 10-Q' },
+        limit: { type: 'number', description: 'sec 筆數' },
       },
+      required: ['action', 'ticker'],
     },
   },
   {
-    type: 'function',
-    function: {
-      name: 'search_data_for_company',
-      description: '在 data/ 下搜尋與該公司相關的內容：what-happened 訪談、meeting-minutes、Knowledge 等，依 ticker/公司名/CEO 匹配。回傳匹配的 path 與 snippet，再用 read_project_file 讀取。',
-      parameters: {
-        type: 'object',
-        properties: {
-          ticker: { type: 'string', description: '公司 ticker（大寫）' },
-        },
-        required: ['ticker'],
+    name: 'search_data_for_company',
+    description: '在 data/ 下搜尋與該公司相關的內容：what-happened 訪談、meeting-minutes、Knowledge 等，依 ticker/公司名/CEO 匹配。回傳匹配的 path 與 snippet，再用 read_project_file 讀取。',
+    input_schema: {
+      type: 'object',
+      properties: {
+        ticker: { type: 'string', description: '公司 ticker（大寫）' },
       },
+      required: ['ticker'],
     },
   },
   {
-    type: 'function',
-    function: {
-      name: 'read_project_file',
-      description: '讀取 data/ 下任意檔案。path 為相對專案根目錄，例如 data/content/what-happened/20260215_AminVahdat_Google.md。僅支援 .md/.txt/.json。',
-      parameters: {
-        type: 'object',
-        properties: {
-          path: { type: 'string', description: '相對專案根目錄之路徑，須以 data/ 開頭' },
-        },
-        required: ['path'],
+    name: 'read_project_file',
+    description: '讀取 data/ 下任意檔案。path 為相對專案根目錄，例如 data/content/what-happened/20260215_AminVahdat_Google.md。僅支援 .md/.txt/.json。',
+    input_schema: {
+      type: 'object',
+      properties: {
+        path: { type: 'string', description: '相對專案根目錄之路徑，須以 data/ 開頭' },
       },
+      required: ['path'],
     },
   },
 ];
 
 /** 整理輪：僅讀寫主檔，禁止任何新資料蒐集 */
-const POLISH_TOOLS: ToolDef[] = [
+const POLISH_TOOLS: AnthropicTool[] = [
   {
-    type: 'function',
-    function: {
-      name: 'write_research_section',
-      description:
-        '【整理輪】寫入 Initial MAX 主檔（檔名形如 NVDA_Initial_MAX.md）。優先 replace_section：整節**重寫**為順稿（刪重、改寫、重排），content 須含該節 Markdown 標題。必要時 overwrite 整檔（須已掌握全文、零遺漏）。禁止 append。',
-      parameters: {
-        type: 'object',
-        properties: {
-          ticker: { type: 'string', description: '公司 ticker（大寫）' },
-          filename: { type: 'string', description: '主檔檔名：{TICKER}_Initial_MAX.md' },
-          content: { type: 'string', description: 'replace_section 時為整節完整 Markdown（含標題）；overwrite 時為整檔全文' },
-          mode: { type: 'string', enum: ['overwrite', 'insert_into_section', 'replace_section'], description: '整理輪：replace_section 為主；必要時 overwrite 整檔' },
-          section_anchor: { type: 'string', description: 'replace_section / insert_into_section 時必填：1.1, 2.3 等' },
-        },
-        required: ['ticker', 'filename', 'content', 'mode'],
+    name: 'write_research_section',
+    description:
+      '【整理輪】寫入 Initial MAX 主檔（檔名形如 NVDA_Initial_MAX.md）。優先 replace_section：整節**重寫**為順稿（刪重、改寫、重排），content 須含該節 Markdown 標題。必要時 overwrite 整檔（須已掌握全文、零遺漏）。禁止 append。',
+    input_schema: {
+      type: 'object',
+      properties: {
+        ticker: { type: 'string', description: '公司 ticker（大寫）' },
+        filename: { type: 'string', description: '主檔檔名：{TICKER}_Initial_MAX.md' },
+        content: { type: 'string', description: 'replace_section 時為整節完整 Markdown（含標題）；overwrite 時為整檔全文' },
+        mode: { type: 'string', enum: ['overwrite', 'insert_into_section', 'replace_section'], description: '整理輪：replace_section 為主；必要時 overwrite 整檔' },
+        section_anchor: { type: 'string', description: 'replace_section / insert_into_section 時必填：1.1, 2.3 等' },
       },
+      required: ['ticker', 'filename', 'content', 'mode'],
     },
   },
   {
-    type: 'function',
-    function: {
-      name: 'read_research_file',
-      description: `【整理輪】讀取主檔以補齊 user 訊息截斷（最多約 ${READ_RESEARCH_FILE_MAX_CHARS.toLocaleString()} 字元）。`,
-      parameters: {
-        type: 'object',
-        properties: {
-          ticker: { type: 'string' },
-          filename: { type: 'string', description: '檔案名稱' },
-        },
-        required: ['ticker', 'filename'],
+    name: 'read_research_file',
+    description: `【整理輪】讀取主檔以補齊 user 訊息截斷（最多約 ${READ_RESEARCH_FILE_MAX_CHARS.toLocaleString()} 字元）。`,
+    input_schema: {
+      type: 'object',
+      properties: {
+        ticker: { type: 'string' },
+        filename: { type: 'string', description: '檔案名稱' },
       },
+      required: ['ticker', 'filename'],
     },
   },
 ];
@@ -743,6 +759,7 @@ async function runGapFillAgent(
   model: string,
   investorNote?: string,
   phase: 'gap_fill' | 'polish' = 'gap_fill',
+  costTracker?: { totalCostUsd: number },
 ): Promise<string> {
   const today = new Date().toISOString().slice(0, 10);
   const mainFile = `${ticker}_Initial_MAX.md`;
@@ -808,67 +825,74 @@ ${topGaps}
     systemContent = `${programTrimmed}\n\n---\n\n## 研究 SKILL 指引\n\n${skillTrimmed}`;
   }
 
-  const messages: Message[] = [
-    { role: 'system', content: systemContent },
+  const messages: Anthropic.MessageParam[] = [
     { role: 'user', content: userContent },
   ];
 
   let searchCalls = 0;
-  const MAX_SEARCH = 5;
+  const MAX_SEARCH = phase === 'gap_fill' ? 8 : 0;
   const MAX_TOOL_ROUNDS = 20;
   let finalResponse = '';
 
   for (let toolRound = 0; toolRound < MAX_TOOL_ROUNDS; toolRound++) {
-    const response = await chat(messages, { model, tools, maxTokens: 16384 });
+    const response = await chat(systemContent, messages, { model, tools, maxTokens: 16384 });
+
+    if (costTracker) costTracker.totalCostUsd += response.usage.costUsd;
 
     if (response.content) finalResponse = response.content;
-    if (response.toolCalls.length === 0) break;
+    if (response.toolUses.length === 0) break;
 
-    messages.push({
-      role: 'assistant',
-      content: response.content ?? '',
-      tool_calls: response.toolCalls,
-    });
+    // Push assistant message with content blocks (text + tool_use)
+    const assistantContent: Anthropic.ContentBlockParam[] = [];
+    if (response.content) {
+      assistantContent.push({ type: 'text', text: response.content });
+    }
+    for (const tu of response.toolUses) {
+      assistantContent.push({ type: 'tool_use', id: tu.id, name: tu.name, input: tu.input });
+    }
+    messages.push({ role: 'assistant', content: assistantContent });
 
-    for (const tc of response.toolCalls) {
-      let args: Record<string, any> = {};
-      try { args = JSON.parse(tc.function.arguments); } catch {}
+    // Process all tool calls and batch results into one user message
+    const toolResults: Anthropic.ToolResultBlockParam[] = [];
+
+    for (const tc of response.toolUses) {
+      const args = tc.input;
       let result: string;
 
-      switch (tc.function.name) {
+      switch (tc.name) {
         case 'web_search':
           if (searchCalls >= MAX_SEARCH) {
-            result = JSON.stringify({ error: '搜尋預算耗盡（最多5次）' });
+            result = JSON.stringify({ error: `搜尋預算耗盡（最多${MAX_SEARCH}次）` });
           } else {
             searchCalls++;
-            console.log(`  [search ${searchCalls}/${MAX_SEARCH}] ${args.query?.slice(0, 60)}...`);
-            result = await webSearch(args.query ?? '', args.count ?? 5);
+            console.log(`  [search ${searchCalls}/${MAX_SEARCH}] ${String(args.query ?? '').slice(0, 60)}...`);
+            result = await webSearch(String(args.query ?? ''), Number(args.count ?? 5));
           }
           break;
         case 'fetch_url':
-          console.log(`  [fetch] ${args.url?.slice(0, 80)}...`);
-          result = await fetchUrl(args.url ?? '');
+          console.log(`  [fetch] ${String(args.url ?? '').slice(0, 80)}...`);
+          result = await fetchUrl(String(args.url ?? ''));
           break;
         case 'write_research_section':
-          console.log(`  [write] ${args.ticker}/${args.filename} (${(args.content ?? '').length} chars)${args.mode === 'replace_section' || args.mode === 'insert_into_section' ? ` → ${args.mode} ${args.section_anchor}` : ''}`);
+          console.log(`  [write] ${args.ticker}/${args.filename} (${String(args.content ?? '').length} chars)${args.mode === 'replace_section' || args.mode === 'insert_into_section' ? ` → ${args.mode} ${args.section_anchor}` : ''}`);
           result = writeResearchSection(
-            args.ticker ?? ticker,
-            args.filename ?? '',
-            args.content ?? '',
+            String(args.ticker ?? ticker),
+            String(args.filename ?? ''),
+            String(args.content ?? ''),
             (args.mode as 'append' | 'overwrite' | 'insert_into_section' | 'replace_section') ?? 'append',
-            args.section_anchor
+            args.section_anchor ? String(args.section_anchor) : undefined
           );
           break;
         case 'read_research_file':
-          result = readResearchFile(args.ticker ?? ticker, args.filename ?? '');
+          result = readResearchFile(String(args.ticker ?? ticker), String(args.filename ?? ''));
           break;
         case 'list_company_files':
           console.log(`  [list] ${args.ticker ?? ticker}`);
-          result = listCompanyFiles(args.ticker ?? ticker);
+          result = listCompanyFiles(String(args.ticker ?? ticker));
           break;
         case 'query_companies_db':
           console.log(`  [db] ${args.ticker ?? ticker}`);
-          result = queryCompaniesDb(args.ticker ?? ticker);
+          result = queryCompaniesDb(String(args.ticker ?? ticker));
           break;
         case 'ninja_api':
           console.log(`  [ninja] ${args.action} ${args.ticker ?? ''}`);
@@ -876,24 +900,27 @@ ${topGaps}
           break;
         case 'search_data_for_company':
           console.log(`  [search_data] ${args.ticker ?? ticker}`);
-          result = searchDataForCompany(args.ticker ?? ticker);
+          result = searchDataForCompany(String(args.ticker ?? ticker));
           break;
         case 'read_project_file':
-          console.log(`  [read_project] ${args.path?.slice(0, 60)}...`);
-          result = readProjectFile(args.path ?? '');
+          console.log(`  [read_project] ${String(args.path ?? '').slice(0, 60)}...`);
+          result = readProjectFile(String(args.path ?? ''));
           break;
         default:
-          result = JSON.stringify({ error: `Unknown tool: ${tc.function.name}` });
+          result = JSON.stringify({ error: `Unknown tool: ${tc.name}` });
       }
 
       const maxToolChars =
-        tc.function.name === 'read_research_file' ? READ_RESEARCH_FILE_MAX_CHARS + 4096 : 12000;
+        tc.name === 'read_research_file' ? READ_RESEARCH_FILE_MAX_CHARS + 4096 : 12000;
       const contentToPush =
         result.length > maxToolChars
           ? result.slice(0, maxToolChars) + '\n\n...(內容已截斷，僅顯示前 ' + maxToolChars + ' 字元)'
           : result;
-      messages.push({ role: 'tool', content: contentToPush, tool_call_id: tc.id });
+      toolResults.push({ type: 'tool_result', tool_use_id: tc.id, content: contentToPush });
     }
+
+    // Batch all tool results into one user message
+    messages.push({ role: 'user', content: toolResults });
   }
 
   return finalResponse || '(no response)';
@@ -912,9 +939,13 @@ async function main() {
   const maxRounds = parseInt(args['max-rounds'] ?? String(DEFAULT_MAX_ROUNDS), 10);
   const scoreOnly = args['score-only'] === 'true';
   const skipPolish = args['skip-polish'] === 'true';
+  const extended = args['extended'] === 'true';
   const model = args.model ?? DEFAULT_MODEL;
+  const scoringModel = args['scoring-model'] ?? MODELS.SCORING;
   const investorNote = args.why ?? args.note ?? '';
   const tag = args.tag ?? new Date().toISOString().slice(5, 10).replace('-', '');
+  const maxCost = parseFloat(args['max-cost'] ?? String(DEFAULT_MAX_COST_USD));
+  const costTracker = { totalCostUsd: 0 };
 
   console.log('╔══════════════════════════════════════╗');
   console.log('║       Initial MAX Runner             ║');
@@ -923,6 +954,8 @@ async function main() {
   console.log(`Max rounds: ${maxRounds}`);
   console.log(`Model:      ${model}`);
   console.log(`Score only: ${scoreOnly}`);
+  console.log(`Extended:   ${extended}`);
+  console.log(`Max cost:   $${maxCost}`);
   if (investorNote) {
     console.log(`Why:        ${investorNote}`);
   }
@@ -949,7 +982,7 @@ async function main() {
 
   // Baseline score
   console.log('\n═══ Baseline Scoring ═══');
-  const { score: baselineScore, gaps: baselineGaps } = await scoreCompanyResearch(ticker, 0, model);
+  const { score: baselineScore, gaps: baselineGaps } = await scoreCompanyResearch(ticker, 0, scoringModel);
   const baselineResult: RoundResult = {
     round: 0,
     commit: gitShortHash(),
@@ -989,8 +1022,8 @@ async function main() {
         gaps = JSON.parse(fs.readFileSync(gapsPath, 'utf-8'));
       }
 
-      console.log('Running gap-fill agent...');
-      const agentResponse = await runGapFillAgent(ticker, gaps, skillContent, programPrompt, round, model, investorNote);
+      console.log(`Running gap-fill agent... (cost so far: $${costTracker.totalCostUsd.toFixed(2)})`);
+      const agentResponse = await runGapFillAgent(ticker, gaps, skillContent, programPrompt, round, model, investorNote, 'gap_fill', costTracker);
 
       // Parse agent summary
       let description = `round ${round} gap-fill`;
@@ -1005,7 +1038,7 @@ async function main() {
 
       // Score new state
       console.log('Scoring...');
-      const { score: newScore } = await scoreCompanyResearch(ticker, round, model);
+      const { score: newScore } = await scoreCompanyResearch(ticker, round, scoringModel);
       const delta = newScore.total - prevScore;
       console.log(`Score: ${newScore.total}/100 (${delta >= 0 ? '+' : ''}${delta} from ${prevScore})`);
 
@@ -1040,6 +1073,10 @@ async function main() {
         console.log(`\n⚠ PLATEAU DETECTED: 2 consecutive rounds with no improvement. Stopping.`);
         break;
       }
+      if (costTracker.totalCostUsd >= maxCost) {
+        console.log(`\n⚠ COST BUDGET REACHED: $${costTracker.totalCostUsd.toFixed(2)} >= $${maxCost}. Stopping.`);
+        break;
+      }
 
       const elapsed = ((Date.now() - roundStart) / 1000).toFixed(1);
       console.log(`Round ${round} done in ${elapsed}s`);
@@ -1069,9 +1106,10 @@ async function main() {
         skillContent,
         programPrompt,
         polishRoundId,
-        model,
+        MODELS.SCORING,
         investorNote,
         'polish',
+        costTracker,
       );
       let polishDesc = 'polish pass';
       try {
@@ -1080,7 +1118,7 @@ async function main() {
       } catch {}
       console.log(`Polish summary: ${polishDesc}`);
       console.log('Scoring after polish...');
-      const { score: afterPolish } = await scoreCompanyResearch(ticker, polishRoundId, model);
+      const { score: afterPolish } = await scoreCompanyResearch(ticker, polishRoundId, scoringModel);
       console.log(`Score after polish: ${afterPolish.total}/100`);
       const commitHash = gitCommit(`initial-max polish: ${polishDesc.slice(0, 55)} — score ${afterPolish.total}/100`);
       history.push({
@@ -1112,6 +1150,77 @@ async function main() {
     console.log('\n（略過整理輪：主檔不存在）');
   }
 
+  // ── Extended pass (geopolitical, sustainability, contrarian) ──
+  if (extended && fs.existsSync(mainFilePath) && ranAtLeastOneResearchRound) {
+    console.log('\n═══ Extended Analysis Pass（地緣政治 / 環境永續 / 正反論辯）═══');
+    const extMaxRounds = 5;
+    for (let extRound = 1; extRound <= extMaxRounds; extRound++) {
+      if (costTracker.totalCostUsd >= maxCost) {
+        console.log(`⚠ COST BUDGET REACHED during extended pass: $${costTracker.totalCostUsd.toFixed(2)}`);
+        break;
+      }
+      try {
+        console.log(`\nExtended round ${extRound}/${extMaxRounds} (cost: $${costTracker.totalCostUsd.toFixed(2)})`);
+        const extScore = await scoreExtendedResearch(ticker, 100 + extRound, scoringModel);
+        console.log(`Extended score: ${extScore.extendedTotal}/45 (geo:${extScore.geopolitical?.score ?? 0} sus:${extScore.sustainability?.score ?? 0} con:${extScore.contrarian?.score ?? 0})`);
+
+        if (extScore.extendedTotal >= 35) {
+          console.log('✓ Extended dimensions sufficient.');
+          break;
+        }
+
+        // Build gaps for extended dimensions
+        const extGaps: InitialMaxGaps = {
+          round: 100 + extRound,
+          score: extScore.extendedTotal,
+          gaps: [
+            ...(extScore.geopolitical && extScore.geopolitical.score < 12 ? extScore.geopolitical.gaps.map(g => ({ dimension: '地緣政治', item: g, current: extScore.geopolitical!.score, target: '15', shortfall: 15 - extScore.geopolitical!.score, priority: 1 })) : []),
+            ...(extScore.sustainability && extScore.sustainability.score < 12 ? extScore.sustainability.gaps.map(g => ({ dimension: '環境永續', item: g, current: extScore.sustainability!.score, target: '15', shortfall: 15 - extScore.sustainability!.score, priority: 2 })) : []),
+            ...(extScore.contrarian && extScore.contrarian.score < 12 ? extScore.contrarian.gaps.map(g => ({ dimension: '正反論辯', item: g, current: extScore.contrarian!.score, target: '15', shortfall: 15 - extScore.contrarian!.score, priority: 3 })) : []),
+          ],
+        };
+        if (extGaps.gaps.length === 0) {
+          extGaps.gaps.push({ dimension: '延伸分析', item: '補充地緣政治/環境永續/正反論辯分析', current: extScore.extendedTotal, target: '35+', shortfall: 35 - extScore.extendedTotal, priority: 1 });
+        }
+
+        const extResp = await runGapFillAgent(
+          ticker, extGaps, '', EXTENDED_PHASE_SYSTEM,
+          100 + extRound, model, investorNote, 'gap_fill', costTracker,
+        );
+
+        let extDesc = `extended round ${extRound}`;
+        try {
+          const m = extResp.match(/\{[\s\S]*"description"[\s\S]*\}/);
+          if (m) extDesc = JSON.parse(m[0]).description ?? extDesc;
+        } catch {}
+        console.log(`Extended agent: ${extDesc}`);
+
+        const commitHash = gitCommit(`initial-max ext-r${extRound}: ${extDesc.slice(0, 55)} — ext ${extScore.extendedTotal}/45`);
+        history.push({
+          round: 100 + extRound, commit: commitHash, score: prevScore,
+          status: 'keep', description: `[extended] ${extDesc}`, timestamp: new Date().toISOString(),
+        });
+        appendTsv(tsvPath, history[history.length - 1]!);
+      } catch (err: any) {
+        console.error(`Extended round ${extRound} CRASH: ${err.message}`);
+        history.push({
+          round: 100 + extRound, commit: gitShortHash(), score: prevScore,
+          status: 'crash', description: `[extended] ${err.message.slice(0, 80)}`, timestamp: new Date().toISOString(),
+        });
+        appendTsv(tsvPath, history[history.length - 1]!);
+        break;
+      }
+    }
+    // Final extended score
+    const finalExtScore = await scoreExtendedResearch(ticker, 999, scoringModel);
+    console.log(`\nFinal extended score: ${finalExtScore.extendedTotal}/45`);
+    const commitHash = gitCommit(`initial-max extended-final: score ${finalExtScore.extendedTotal}/45`);
+  } else if (extended && !ranAtLeastOneResearchRound) {
+    console.log('\n（略過延伸分析：無研究輪執行）');
+  } else if (!extended) {
+    console.log('\n（未啟用延伸分析，使用 --extended 啟用）');
+  }
+
   // Final summary
   const finalScore = history[history.length - 1].score;
   const kept = history.filter(r => r.status === 'keep').length;
@@ -1123,6 +1232,7 @@ async function main() {
   console.log('╚══════════════════════════════════════╝');
   console.log(`Rounds: ${history.length - 1} | Improved: ${kept} | No-improvement: ${noImprove} | Crashed: ${crashed}`);
   console.log(`Score: ${baselineScore.total} → ${finalScore} (+${finalScore - baselineScore.total})`);
+  console.log(`Cost:   $${costTracker.totalCostUsd.toFixed(2)}`);
   console.log(`Status: ${finalScore >= PASS_THRESHOLD ? '✓ PASSED' : '✗ NOT YET (more rounds needed)'}`);
   console.log(`Results: ${tsvPath}`);
   cleanupTickerScoreAndGapsFiles(ticker);
