@@ -33,15 +33,24 @@ loadEnv();
 
 const ANTHROPIC_KEY = process.env.ANTHROPIC_API_KEY ?? '';
 const OPENROUTER_KEY = process.env.OPENROUTER_API_KEY ?? '';
-const USE_OPENROUTER = !ANTHROPIC_KEY && !!OPENROUTER_KEY;
+const USE_CLAUDE_CLI = process.env.USE_CLAUDE_CLI === '1' || (!ANTHROPIC_KEY && !OPENROUTER_KEY);
+const USE_OPENROUTER = !USE_CLAUDE_CLI && !ANTHROPIC_KEY && !!OPENROUTER_KEY;
 
-if (!ANTHROPIC_KEY && !OPENROUTER_KEY) {
-  console.error('Neither ANTHROPIC_API_KEY nor OPENROUTER_API_KEY found. Set one in .env at project root.');
-  process.exit(1);
+if (!ANTHROPIC_KEY && !OPENROUTER_KEY && !USE_CLAUDE_CLI) {
+  // Check if claude CLI is available as fallback
+  try {
+    const { execSync } = await import('child_process');
+    execSync('which claude', { encoding: 'utf-8' });
+  } catch {
+    console.error('No LLM backend available. Set ANTHROPIC_API_KEY, OPENROUTER_API_KEY, or USE_CLAUDE_CLI=1 in .env.');
+    process.exit(1);
+  }
 }
 
-if (USE_OPENROUTER) {
-  console.log('[llm] Using OpenRouter backend (set ANTHROPIC_API_KEY to use Anthropic directly)');
+if (USE_CLAUDE_CLI) {
+  console.log('[llm] Using Claude CLI (claude -p) backend with OAuth');
+} else if (USE_OPENROUTER) {
+  console.log('[llm] Using OpenRouter backend');
 } else {
   console.log('[llm] Using Anthropic SDK');
 }
@@ -77,6 +86,8 @@ async function retryWithBackoff<T>(fn: () => Promise<T>, maxRetries = 3): Promis
       return await fn();
     } catch (err: any) {
       const status = err?.status ?? err?.statusCode;
+      // Don't retry on billing/auth errors (400, 401, 403)
+      if (status === 400 || status === 401 || status === 403) throw err;
       const retryable = status === 429 || status === 529 || status === 503;
       if (!retryable || attempt === maxRetries) throw err;
       const delay = Math.min(1000 * Math.pow(2, attempt), 30000);
@@ -103,6 +114,9 @@ export async function chat(
 ): Promise<ChatResult> {
   const model = options?.model ?? MODELS.SCORING;
 
+  if (USE_CLAUDE_CLI) {
+    return chatViaClaude(system, messages, model, options);
+  }
   if (USE_OPENROUTER) {
     return chatViaOpenRouter(system, messages, model, options);
   }
@@ -155,6 +169,127 @@ export async function chat(
       costUsd: estimateCostUsd(model, inputTokens, outputTokens),
     },
   };
+}
+
+/** Claude CLI backend — uses `claude -p` with OAuth. No tool calling in chat();
+ *  for tool-based research, use runClaudeAgent() directly. */
+async function chatViaClaude(
+  system: string,
+  messages: Anthropic.MessageParam[],
+  model: string,
+  _options?: { tools?: AnthropicTool[]; maxTokens?: number },
+): Promise<ChatResult> {
+  const { execSync } = await import('child_process');
+
+  // Build a single prompt from system + messages
+  let prompt = '';
+  for (const msg of messages) {
+    if (msg.role === 'user') {
+      if (typeof msg.content === 'string') {
+        prompt += msg.content + '\n\n';
+      } else if (Array.isArray(msg.content)) {
+        const text = (msg.content as any[]).map((b: any) => typeof b === 'string' ? b : b.text ?? '').join('');
+        prompt += text + '\n\n';
+      }
+    }
+  }
+
+  const modelAlias = model.includes('opus') ? 'opus' : 'sonnet';
+
+  // Pass system prompt + user prompt via stdin to avoid shell escaping issues
+  const { execFileSync } = await import('child_process');
+  const fullInput = `${system}\n\n---\n\n${prompt}`;
+
+  try {
+    const result = execFileSync(
+      'claude',
+      ['-p', '--output-format', 'json', '--model', modelAlias, '--no-session-persistence'],
+      {
+        input: fullInput,
+        encoding: 'utf-8',
+        timeout: 300_000,
+        maxBuffer: 50 * 1024 * 1024,
+        cwd: process.cwd(),
+      },
+    );
+
+    let parsed: any;
+    try { parsed = JSON.parse(result); } catch {
+      return { content: result.trim(), toolUses: [], usage: { inputTokens: 0, outputTokens: 0, costUsd: 0 } };
+    }
+
+    const responseText = parsed.result ?? parsed.content ?? result.trim();
+    const costUsd = parsed.total_cost_usd ?? 0;
+    const usage = parsed.usage ?? {};
+
+    return {
+      content: responseText,
+      toolUses: [],
+      usage: {
+        inputTokens: usage.input_tokens ?? 0,
+        outputTokens: usage.output_tokens ?? 0,
+        costUsd,
+      },
+    };
+  } catch (err: any) {
+    throw new Error(`Claude CLI error: ${err.message?.slice(0, 500) ?? 'unknown'}`);
+  }
+}
+
+/**
+ * Run Claude Code as an autonomous agent for research.
+ * Uses claude -p with full tool access (WebSearch, Read, Write, Bash).
+ * Returns the text result and cost.
+ */
+export async function runClaudeAgent(
+  systemPrompt: string,
+  taskPrompt: string,
+  options?: { model?: string; allowedTools?: string[]; maxBudgetUsd?: number },
+): Promise<{ result: string; costUsd: number }> {
+  const { execSync } = await import('child_process');
+
+  const modelAlias = (options?.model ?? '').includes('opus') ? 'opus' : 'sonnet';
+  const tools = options?.allowedTools ?? ['WebSearch', 'WebFetch', 'Read', 'Write', 'Bash', 'Glob', 'Grep'];
+
+  // Use execFileSync to avoid shell escaping issues
+  const { execFileSync } = await import('child_process');
+
+  const cliArgs = [
+    '-p',
+    '--output-format', 'json',
+    '--model', modelAlias,
+    '--no-session-persistence',
+    '--permission-mode', 'bypassPermissions',
+    '--allowedTools', tools.join(','),
+  ];
+
+  if (options?.maxBudgetUsd) {
+    cliArgs.push('--max-budget-usd', String(options.maxBudgetUsd));
+  }
+
+  const fullPrompt = `${systemPrompt}\n\n---\n\n${taskPrompt}`;
+
+  try {
+    const result = execFileSync('claude', cliArgs, {
+      input: fullPrompt,
+      encoding: 'utf-8',
+      timeout: 600_000,
+      maxBuffer: 100 * 1024 * 1024,
+      cwd: process.cwd(),
+    });
+
+    let parsed: any;
+    try { parsed = JSON.parse(result); } catch {
+      return { result: result.trim(), costUsd: 0 };
+    }
+
+    return {
+      result: parsed.result ?? parsed.content ?? result.trim(),
+      costUsd: parsed.total_cost_usd ?? 0,
+    };
+  } catch (err: any) {
+    throw new Error(`Claude agent error: ${err.message?.slice(0, 800) ?? 'unknown'}`);
+  }
 }
 
 /** OpenRouter fallback — translates native Anthropic format to OpenAI format for OpenRouter */

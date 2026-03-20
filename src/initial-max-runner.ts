@@ -22,7 +22,7 @@ import path from 'path';
 import { execSync } from 'child_process';
 import { fileURLToPath } from 'url';
 import Anthropic from '@anthropic-ai/sdk';
-import { chat, type ToolUse, type AnthropicTool, type ChatResult } from './llm.js';
+import { chat, runClaudeAgent, type ToolUse, type AnthropicTool, type ChatResult } from './llm.js';
 import { MODELS, DEFAULT_MAX_COST_USD, estimateCostUsd } from './config.js';
 import { scoreCompanyResearch, scoreExtendedResearch, type InitialMaxScore, type InitialMaxGaps, type ExtendedScore } from './initial-max-scorer.js';
 
@@ -750,6 +750,8 @@ const POLISH_TOOLS: AnthropicTool[] = [
   },
 ];
 
+const USE_CLAUDE_CLI = process.env.USE_CLAUDE_CLI === '1';
+
 async function runGapFillAgent(
   ticker: string,
   gaps: InitialMaxGaps,
@@ -825,6 +827,45 @@ ${topGaps}
     systemContent = `${programTrimmed}\n\n---\n\n## 研究 SKILL 指引\n\n${skillTrimmed}`;
   }
 
+  // ── Claude CLI agent path ──
+  if (USE_CLAUDE_CLI) {
+    // Adapt the system prompt for Claude Code: replace custom tool references with
+    // instructions to use built-in tools (WebSearch, Write, Read, Bash, WebFetch)
+    const cliSystemPrompt = systemContent
+      .replace(/write_research_section\([^)]*\)/g, 'Write tool')
+      .replace(/read_research_file\([^)]*\)/g, 'Read tool')
+      .replace(/web_search\([^)]*\)/g, 'WebSearch tool')
+      .replace(/fetch_url\([^)]*\)/g, 'WebFetch tool');
+
+    const cliTaskPrompt = `## Working Directory
+${PROJECT_ROOT}
+
+## File Paths
+- Main report: data/companies/${ticker}/${mainFile}
+- Transcripts: data/companies/${ticker}/transcripts/
+- Companies DB: data/database/companies_database.json
+
+## Instructions
+Write all research to the main report file at \`data/companies/${ticker}/${mainFile}\`.
+Use WebSearch to find information, WebFetch to download pages, Write to create/update files.
+Use Read to check existing files. Use Bash for API calls (curl) to API Ninjas if NINJA_API_KEY is set.
+
+Create the data/companies/${ticker}/ directory if it doesn't exist.
+
+${userContent}`;
+
+    console.log('  [claude-agent] Launching Claude Code agent...');
+    const { result, costUsd } = await runClaudeAgent(
+      cliSystemPrompt,
+      cliTaskPrompt,
+      { model, maxBudgetUsd: 5 },
+    );
+    if (costTracker) costTracker.totalCostUsd += costUsd;
+    console.log(`  [claude-agent] Done (cost: $${costUsd.toFixed(2)})`);
+    return result;
+  }
+
+  // ── API-based tool loop (Anthropic SDK / OpenRouter) ──
   const messages: Anthropic.MessageParam[] = [
     { role: 'user', content: userContent },
   ];
