@@ -239,20 +239,19 @@ async function chatViaClaude(
 /**
  * Run Claude Code as an autonomous agent for research.
  * Uses claude -p with full tool access (WebSearch, Read, Write, Bash).
- * Returns the text result and cost.
+ * Spawns async process with stdin piping to avoid ETIMEDOUT on long runs.
+ * Budget flag is the primary completion mechanism; soft timeout at 25min as safety net.
  */
 export async function runClaudeAgent(
   systemPrompt: string,
   taskPrompt: string,
   options?: { model?: string; allowedTools?: string[]; maxBudgetUsd?: number },
 ): Promise<{ result: string; costUsd: number }> {
-  const { execSync } = await import('child_process');
+  const { spawn } = await import('child_process');
 
   const modelAlias = (options?.model ?? '').includes('opus') ? 'opus' : 'sonnet';
   const tools = options?.allowedTools ?? ['WebSearch', 'WebFetch', 'Read', 'Write', 'Bash', 'Glob', 'Grep'];
-
-  // Use execFileSync to avoid shell escaping issues
-  const { execFileSync } = await import('child_process');
+  const maxBudget = options?.maxBudgetUsd ?? 3;
 
   const cliArgs = [
     '-p',
@@ -261,35 +260,92 @@ export async function runClaudeAgent(
     '--no-session-persistence',
     '--permission-mode', 'bypassPermissions',
     '--allowedTools', tools.join(','),
+    '--max-budget-usd', String(maxBudget),
   ];
-
-  if (options?.maxBudgetUsd) {
-    cliArgs.push('--max-budget-usd', String(options.maxBudgetUsd));
-  }
 
   const fullPrompt = `${systemPrompt}\n\n---\n\n${taskPrompt}`;
 
-  try {
-    const result = execFileSync('claude', cliArgs, {
-      input: fullPrompt,
-      encoding: 'utf-8',
-      timeout: 1_200_000, // 20 min for research tasks
-      maxBuffer: 100 * 1024 * 1024,
+  const SOFT_TIMEOUT_MS = 25 * 60 * 1000;  // 25 minutes
+  const KILL_GRACE_MS = 10 * 1000;          // 10 seconds after SIGTERM
+
+  return new Promise<{ result: string; costUsd: number }>((resolve, reject) => {
+    const child = spawn('claude', cliArgs, {
+      stdio: ['pipe', 'pipe', 'pipe'],
       cwd: process.cwd(),
     });
 
-    let parsed: any;
-    try { parsed = JSON.parse(result); } catch {
-      return { result: result.trim(), costUsd: 0 };
-    }
+    // Pipe prompt to stdin, then close
+    child.stdin.write(fullPrompt);
+    child.stdin.end();
 
-    return {
-      result: parsed.result ?? parsed.content ?? result.trim(),
-      costUsd: parsed.total_cost_usd ?? 0,
-    };
-  } catch (err: any) {
-    throw new Error(`Claude agent error: ${err.message?.slice(0, 800) ?? 'unknown'}`);
-  }
+    // Accumulate stdout
+    const stdoutChunks: Buffer[] = [];
+    child.stdout.on('data', (chunk: Buffer) => {
+      stdoutChunks.push(chunk);
+    });
+
+    // Log stderr lines in real-time as progress
+    let stderrRemainder = '';
+    child.stderr.on('data', (chunk: Buffer) => {
+      const text = stderrRemainder + chunk.toString('utf-8');
+      const lines = text.split('\n');
+      stderrRemainder = lines.pop() ?? '';
+      for (const line of lines) {
+        if (line.trim()) console.log(`  [claude-agent] ${line}`);
+      }
+    });
+
+    // Soft timeout: SIGTERM then SIGKILL
+    let timedOut = false;
+    const softTimer = setTimeout(() => {
+      timedOut = true;
+      console.log(`  [claude-agent] Soft timeout (${SOFT_TIMEOUT_MS / 60000}min) reached — sending SIGTERM`);
+      child.kill('SIGTERM');
+      setTimeout(() => {
+        if (!child.killed) {
+          console.log('  [claude-agent] Grace period expired — sending SIGKILL');
+          child.kill('SIGKILL');
+        }
+      }, KILL_GRACE_MS);
+    }, SOFT_TIMEOUT_MS);
+
+    child.on('close', (code) => {
+      clearTimeout(softTimer);
+
+      // Flush any remaining stderr
+      if (stderrRemainder.trim()) {
+        console.log(`  [claude-agent] ${stderrRemainder}`);
+      }
+
+      const stdout = Buffer.concat(stdoutChunks).toString('utf-8');
+
+      if (timedOut && !stdout.trim()) {
+        reject(new Error('Claude agent timed out with no output'));
+        return;
+      }
+
+      if (code !== 0 && !stdout.trim()) {
+        reject(new Error(`Claude agent exited with code ${code}`));
+        return;
+      }
+
+      let parsed: any;
+      try { parsed = JSON.parse(stdout); } catch {
+        resolve({ result: stdout.trim(), costUsd: 0 });
+        return;
+      }
+
+      resolve({
+        result: parsed.result ?? parsed.content ?? stdout.trim(),
+        costUsd: parsed.total_cost_usd ?? 0,
+      });
+    });
+
+    child.on('error', (err) => {
+      clearTimeout(softTimer);
+      reject(new Error(`Claude agent spawn error: ${err.message}`));
+    });
+  });
 }
 
 /** OpenRouter fallback — translates native Anthropic format to OpenAI format for OpenRouter */

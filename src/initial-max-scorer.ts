@@ -152,11 +152,21 @@ function scoreFromMainFile(content: string): { 環境: number; 生意: number; �
   let 生意 = 0;
   const yearMatches = content.match(/20\d\d/g) ?? [];
   生意 += Math.min(new Set(yearMatches).size, 10);
-  const quotes = (content.match(/"|「|『/g) ?? []).length;
-  生意 += Math.min(Math.floor(quotes / 4), 10);
+  // Count actual quoted passages (「...」 or "..." or 『...』 with 10+ chars inside)
+  const directQuotes = (content.match(/「[^」]{10,}」|"[^"]{10,}"|『[^』]{10,}』/g) ?? []);
+  生意 += Math.min(directQuotes.length, 10);
   if (/五力|Five Forces|5a|5b|5c|5d|5e|護城河|moat/i.test(content)) 生意 += 10;
-  if (/DCF|IRR|dcf_config|情境.*估值/i.test(content)) 生意 += 5;
+  // DCF validation: check for quality indicators, not just keyword presence
+  const hasDCFKeyword = /DCF|IRR|dcf_config|情境.*估值/i.test(content);
+  const hasWACC = /WACC|加權平均|折現率|discount rate/i.test(content);
+  const scenarioCount = (content.match(/樂觀|保守|合理|optimistic|conservative|base case/gi) ?? []).length;
+  if (hasDCFKeyword && hasWACC && scenarioCount >= 2) 生意 += 5;
+  else if (hasDCFKeyword) 生意 += 2;
   生意 = Math.min(生意, 35);
+
+  // CEO quote minimum: framework requires ≥25 direct quotes
+  const ceoQuoteMatches = content.match(/「[^」]{15,}」|"[^"]{15,}"/g) ?? [];
+  if (ceoQuoteMatches.length < 25) 生意 = Math.min(生意, 20);
 
   let 組織 = 0;
   if (/來源|source|10-K|20-F|法說|earnings call/i.test(content)) 組織 += 4;
@@ -247,7 +257,14 @@ function heuristicScore(ticker: string): InitialMaxScore {
     人Score = Math.min(人ScoreScattered, 25);
   }
 
-  const total = Math.min(環境Score + 生意Score + 組織Score + 人Score, 100);
+  let total = Math.min(環境Score + 生意Score + 組織Score + 人Score, 100);
+
+  // URL citation floor: reports with <20 URLs lack sufficient sourcing
+  if (fs.existsSync(mainFile)) {
+    const mainContentForUrls = fs.readFileSync(mainFile, 'utf-8');
+    const totalUrlCount = (mainContentForUrls.match(/https?:\/\//g) ?? []).length;
+    if (totalUrlCount < 20) total = Math.min(total, 60);
+  }
 
   let hasDCF = false;
   if (fs.existsSync(mainFile)) {
@@ -502,26 +519,35 @@ export async function scoreCompanyResearch(
       round,
     };
   } else {
-    // Try LLM scorer
-    console.log(`[scorer] Running LLM scorer (${model}) for ${ticker}...`);
-    const llmResult = await llmScore(ticker, reportContent, model);
+    // Hybrid scoring: heuristic first as gate, then LLM if worthwhile
+    const heuristic = heuristicScore(ticker);
+    console.log(`[scorer] Heuristic score: ${heuristic.total}/100 (環境:${heuristic.環境.score} 生意:${heuristic.生意.score} 組織:${heuristic.組織.score} 人:${heuristic.人.score})`);
 
-    if (llmResult) {
-      score = { ...llmResult, round };
-      const mainFile = path.join(dir, `${ticker}_Initial_MAX.md`);
-      if (fs.existsSync(mainFile)) {
-        const sectionCoverage = checkAllSectionsCovered(fs.readFileSync(mainFile, 'utf-8'));
-        if (!sectionCoverage.allCovered) {
-          score.passThreshold = false;
-          score.環境.gaps = [...score.環境.gaps, `子節未全覆蓋：${sectionCoverage.missing.join('、')} 須有實質內容`];
-        }
-      }
-      console.log(`[scorer] LLM score: ${score.total}/100 (環境:${score.環境.score} 生意:${score.生意.score} 組織:${score.組織.score} 人:${score.人.score})`);
+    if (heuristic.total < 50) {
+      // Low-quality report: skip expensive LLM call
+      console.log(`[scorer] Heuristic < 50, skipping LLM (not worth the cost)`);
+      score = { ...heuristic, round };
     } else {
-      // Heuristic fallback
-      console.log('[scorer] LLM failed, using heuristic fallback');
-      score = { ...heuristicScore(ticker), round };
-      console.log(`[scorer] Heuristic score: ${score.total}/100`);
+      // Worth scoring with LLM — it's authoritative when available
+      console.log(`[scorer] Running LLM scorer (${model}) for ${ticker}...`);
+      const llmResult = await llmScore(ticker, reportContent, model);
+
+      if (llmResult) {
+        score = { ...llmResult, round };
+        const mainFile = path.join(dir, `${ticker}_Initial_MAX.md`);
+        if (fs.existsSync(mainFile)) {
+          const sectionCoverage = checkAllSectionsCovered(fs.readFileSync(mainFile, 'utf-8'));
+          if (!sectionCoverage.allCovered) {
+            score.passThreshold = false;
+            score.環境.gaps = [...score.環境.gaps, `子節未全覆蓋：${sectionCoverage.missing.join('、')} 須有實質內容`];
+          }
+        }
+        console.log(`[scorer] LLM score: ${score.total}/100 (環境:${score.環境.score} 生意:${score.生意.score} 組織:${score.組織.score} 人:${score.人.score})`);
+      } else {
+        // LLM failed, fall back to heuristic
+        console.log('[scorer] LLM failed, using heuristic fallback');
+        score = { ...heuristic, round };
+      }
     }
   }
 
