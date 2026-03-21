@@ -42,3 +42,9 @@ ebad25f	79.0	no_improvement	Added EV/EBITDA + P/FCF multi-metric valuation with 
 cf71bc2	98.0	keep	Added full succession risk section (CEO age 72-73, 2 Co-COOs Y.J. Mii + Y.P. Chyn with detailed profiles, 4 supporting execs, Medium-High bench depth rating, 2025 leadership transition analysis), expa
 cf71bc2	98.0	crash	polish: Claude agent timed out with no output
 aab9ba8	98.0	keep	[extended] Added 3-tier conflict GDP quantification ($2K/$5.3T/$10.6T), ASML EUV kill switch + 4-phase supply disruption model, export control worst case with gross margin dilution (-0.8~1.2pp), compo
+65d621d	98.0	baseline	baseline score 98/100
+823b9c4	98.0	keep	[extended] Added supply chain equipment/materials vulnerability analysis (5 equipment vendors + 4 chemical material categories + TEL-TSMC 2nm IP leak + sanction scenario resilience) and customer alter
+6066fb2	98.0	keep	[extended] added TSMC economic importance to Taiwan quantification (GDP 11.4%/exports 12%/tax 15.9%), CFIUS framework + Taiwan N-2 rule analysis, updated SMIC to 2026-03 (N+3 5nm confirmed, yields, 15
+d0a681e	98.0	keep	[extended] Fixed energy data inconsistency in 1.2 (7%→8.9% with Statista URL), added industrial share 41.3%, 2030E projection 24%, Taiwan energy import dependency 97%, RE100 progress, cross-reference 
+a388174	98.0	keep	[extended] extended round 4
+ddec3e9	98.0	keep	[extended] added FTSE4Good ESG index inclusion (All-World + Emerging + TIP Taiwan ESG triple inclusion), groundwater controversies (Chiayi-Yunlin cross-county water transfer dispute + Kumamoto JASM PF

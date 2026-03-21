@@ -30,6 +30,7 @@ import { queryKnowledgeBaseJson } from './knowledge-retrieval.js';
 import { extractKnowledge } from './knowledge-extractor.js';
 import {
   writeResearchSection, buildMainFileFullAttachment, readResearchFile, listCompanyFiles,
+  findSectionRange, replaceSection,
   INITIAL_MAX_MAIN_IN_USER_CHARS, READ_RESEARCH_FILE_MAX_CHARS,
 } from './markdown-utils.js';
 import { GAP_FILL_TOOLS, POLISH_TOOLS } from './tool-schemas.js';
@@ -213,6 +214,7 @@ async function runGapFillAgent(
   investorNote?: string,
   phase: 'gap_fill' | 'polish' = 'gap_fill',
   costTracker?: { totalCostUsd: number },
+  softTimeoutMs?: number,
 ): Promise<string> {
   const today = new Date().toISOString().slice(0, 10);
   const mainFile = `${ticker}_Initial_MAX.md`;
@@ -309,7 +311,7 @@ ${userContent}`;
     const { result, costUsd } = await runClaudeAgent(
       cliSystemPrompt,
       cliTaskPrompt,
-      { model, maxBudgetUsd: 5 },
+      { model, maxBudgetUsd: 5, ...(softTimeoutMs ? { softTimeoutMs } : {}) },
     );
     if (costTracker) costTracker.totalCostUsd += costUsd;
     console.log(`  [claude-agent] Done (cost: $${costUsd.toFixed(2)})`);
@@ -516,6 +518,7 @@ async function main() {
   const history: RoundResult[] = [baselineResult];
   let prevScore = baselineScore.total;
   let plateauCount = 0;
+  const gapAttempts = new Map<string, number>();  // per-item round cap (max 2 attempts)
 
   for (let round = 1; round <= maxRounds && !baselineScore.passThreshold; round++) {
     console.log(`\n═══ Round ${round}/${maxRounds} (current: ${prevScore}/100) ═══`);
@@ -529,7 +532,22 @@ async function main() {
         gaps = JSON.parse(fs.readFileSync(gapsPath, 'utf-8'));
       }
 
+      // Filter out gap items that have been attempted 2+ times without improvement
+      const preFilterCount = gaps.gaps.length;
+      gaps.gaps = gaps.gaps.filter(g => {
+        const key = `${g.dimension}|${g.item}`;
+        return (gapAttempts.get(key) ?? 0) < 2;
+      });
+      const retired = preFilterCount - gaps.gaps.length;
+      if (retired > 0) console.log(`[round-cap] Retired ${retired} gap(s) after 2 failed attempts`);
+
+      if (gaps.gaps.length === 0) {
+        console.log('[round-cap] All remaining gaps have been retired — stopping core loop');
+        break;
+      }
+
       console.log(`Running gap-fill agent... (cost so far: $${costTracker.totalCostUsd.toFixed(2)})`);
+      const prevGapKeys = new Set(gaps.gaps.map(g => `${g.dimension}|${g.item}`));
       const agentResponse = await runGapFillAgent(ticker, gaps, skillContent, programPrompt, round, model, investorNote, 'gap_fill', costTracker);
 
       // Parse agent summary
@@ -545,9 +563,24 @@ async function main() {
 
       // Score new state
       console.log('Scoring...');
-      const { score: newScore } = await scoreCompanyResearch(ticker, round, scoringModel);
+      const { score: newScore, gaps: newGaps } = await scoreCompanyResearch(ticker, round, scoringModel);
       const delta = newScore.total - prevScore;
       console.log(`Score: ${newScore.total}/100 (${delta >= 0 ? '+' : ''}${delta} from ${prevScore})`);
+
+      // Update per-item attempt counters
+      const newGapKeys = new Set(newGaps.gaps.map(g => `${g.dimension}|${g.item}`));
+      for (const key of prevGapKeys) {
+        if (newGapKeys.has(key)) {
+          // Gap still present — increment attempt count
+          gapAttempts.set(key, (gapAttempts.get(key) ?? 0) + 1);
+          if ((gapAttempts.get(key) ?? 0) >= 2) {
+            console.log(`[round-cap] Retiring gap: ${key} after 2 failed attempts`);
+          }
+        } else {
+          // Gap resolved — clear counter
+          gapAttempts.delete(key);
+        }
+      }
 
       // Commit (always — research is additive)
       const commitMsg = `initial-max r${round}: ${description.slice(0, 60)} — score ${newScore.total}/100`;
@@ -617,6 +650,7 @@ async function main() {
         investorNote,
         'polish',
         costTracker,
+        45 * 60 * 1000,  // 45min for polish on large reports
       );
       let polishDesc = 'polish pass';
       try {
@@ -663,6 +697,13 @@ async function main() {
     const mainPath = path.join(PROJECT_ROOT, 'data', 'companies', tk, `${tk}_Initial_MAX.md`);
     const mainContent = fs.existsSync(mainPath) ? fs.readFileSync(mainPath, 'utf-8').slice(0, 50000) : '';
 
+    // Snapshot 8.3 and 8.4 before contrarian rewrites 8.1/8.2
+    const preLines = fs.existsSync(mainPath) ? fs.readFileSync(mainPath, 'utf-8').split(/\r?\n/) : [];
+    const snap83Range = findSectionRange(preLines, '8.3');
+    const snap84Range = findSectionRange(preLines, '8.4');
+    const snap83 = snap83Range ? preLines.slice(snap83Range[0], snap83Range[1]).join('\n') : null;
+    const snap84 = snap84Range ? preLines.slice(snap84Range[0], snap84Range[1]).join('\n') : null;
+
     const bullPrompt = `You are an equity BULL analyst. Make the STRONGEST possible investment case for ${tk}.
 
 ## Rules
@@ -694,10 +735,11 @@ Write section 8.2 now. Output ONLY the Markdown for that section (including the 
     try {
       // Call 1: Steelman Bull
       console.log('  [contrarian] Steelman Bull Case...');
+      const contrarianTools = ['WebSearch', 'WebFetch', 'Read', 'Write'];
       const bullResult = await runClaudeAgent(
         'You are a conviction equity bull analyst. Write the strongest possible investment case.',
         bullPrompt,
-        { model: mdl, maxBudgetUsd: 2 },
+        { model: mdl, maxBudgetUsd: 2, allowedTools: contrarianTools },
       );
       ct.totalCostUsd += bullResult.costUsd;
       console.log(`  [contrarian] Bull done ($${bullResult.costUsd.toFixed(2)})`);
@@ -707,10 +749,44 @@ Write section 8.2 now. Output ONLY the Markdown for that section (including the 
       const bearResult = await runClaudeAgent(
         'You are a conviction short seller. Write the strongest possible case against this stock.',
         bearPrompt,
-        { model: mdl, maxBudgetUsd: 2 },
+        { model: mdl, maxBudgetUsd: 2, allowedTools: contrarianTools },
       );
       ct.totalCostUsd += bearResult.costUsd;
       console.log(`  [contrarian] Bear done ($${bearResult.costUsd.toFixed(2)})`);
+
+      // Restore 8.3/8.4 if damaged by contrarian agents
+      if (snap83 || snap84) {
+        const postContent = fs.existsSync(mainPath) ? fs.readFileSync(mainPath, 'utf-8') : '';
+        const postLines = postContent.split(/\r?\n/);
+        const post83Range = findSectionRange(postLines, '8.3');
+        const post84Range = findSectionRange(postLines, '8.4');
+        const post83 = post83Range ? postLines.slice(post83Range[0], post83Range[1]).join('\n') : null;
+        const post84 = post84Range ? postLines.slice(post84Range[0], post84Range[1]).join('\n') : null;
+
+        let restored = false;
+        if (snap83 && post83 !== snap83) {
+          if (post83Range) {
+            replaceSection(mainPath, '8.3', snap83);
+          } else {
+            // Section was deleted — append it back
+            fs.writeFileSync(mainPath, fs.readFileSync(mainPath, 'utf-8') + '\n\n' + snap83);
+          }
+          console.log('  [contrarian] Restored section 8.3 (was damaged)');
+          restored = true;
+        }
+        if (snap84 && post84 !== snap84) {
+          if (findSectionRange(fs.readFileSync(mainPath, 'utf-8').split(/\r?\n/), '8.4')) {
+            replaceSection(mainPath, '8.4', snap84);
+          } else {
+            fs.writeFileSync(mainPath, fs.readFileSync(mainPath, 'utf-8') + '\n\n' + snap84);
+          }
+          console.log('  [contrarian] Restored section 8.4 (was damaged)');
+          restored = true;
+        }
+        if (!restored) {
+          console.log('  [contrarian] Sections 8.3/8.4 intact — no restoration needed');
+        }
+      }
 
       gitCommit(`initial-max contrarian: adversarial bull+bear for ${tk}`);
     } catch (err: any) {
@@ -753,7 +829,7 @@ Write section 8.2 now. Output ONLY the Markdown for that section (including the 
 
         const extResp = await runGapFillAgent(
           ticker, extGaps, '', EXTENDED_PHASE_SYSTEM,
-          100 + extRound, model, investorNote, 'gap_fill', costTracker,
+          100 + extRound, model, investorNote, 'gap_fill', costTracker, 35 * 60 * 1000,
         );
 
         let extDesc = `extended round ${extRound}`;

@@ -171,15 +171,15 @@ export async function chat(
   };
 }
 
-/** Claude CLI backend — uses `claude -p` with OAuth. No tool calling in chat();
- *  for tool-based research, use runClaudeAgent() directly. */
+/** Claude CLI backend — uses `claude -p` with OAuth via spawn + stdin pipe.
+ *  No tool calling in chat(); for tool-based research, use runClaudeAgent() directly. */
 async function chatViaClaude(
   system: string,
   messages: Anthropic.MessageParam[],
   model: string,
   _options?: { tools?: AnthropicTool[]; maxTokens?: number },
 ): Promise<ChatResult> {
-  const { execSync } = await import('child_process');
+  const { spawn } = await import('child_process');
 
   // Build a single prompt from system + messages
   let prompt = '';
@@ -195,45 +195,81 @@ async function chatViaClaude(
   }
 
   const modelAlias = model.includes('opus') ? 'opus' : 'sonnet';
-
-  // Pass system prompt + user prompt via stdin to avoid shell escaping issues
-  const { execFileSync } = await import('child_process');
   const fullInput = `${system}\n\n---\n\n${prompt}`;
 
-  try {
-    const result = execFileSync(
+  const CHAT_TIMEOUT_MS = 10 * 60 * 1000;  // 10 minutes
+  const KILL_GRACE_MS = 10 * 1000;
+
+  return new Promise<ChatResult>((resolve, reject) => {
+    const child = spawn(
       'claude',
       ['-p', '--output-format', 'json', '--model', modelAlias, '--no-session-persistence'],
-      {
-        input: fullInput,
-        encoding: 'utf-8',
-        timeout: 300_000,
-        maxBuffer: 50 * 1024 * 1024,
-        cwd: process.cwd(),
-      },
+      { stdio: ['pipe', 'pipe', 'pipe'], cwd: process.cwd() },
     );
 
-    let parsed: any;
-    try { parsed = JSON.parse(result); } catch {
-      return { content: result.trim(), toolUses: [], usage: { inputTokens: 0, outputTokens: 0, costUsd: 0 } };
-    }
+    child.stdin.write(fullInput);
+    child.stdin.end();
 
-    const responseText = parsed.result ?? parsed.content ?? result.trim();
-    const costUsd = parsed.total_cost_usd ?? 0;
-    const usage = parsed.usage ?? {};
+    const stdoutChunks: Buffer[] = [];
+    child.stdout.on('data', (chunk: Buffer) => stdoutChunks.push(chunk));
 
-    return {
-      content: responseText,
-      toolUses: [],
-      usage: {
-        inputTokens: usage.input_tokens ?? 0,
-        outputTokens: usage.output_tokens ?? 0,
-        costUsd,
-      },
-    };
-  } catch (err: any) {
-    throw new Error(`Claude CLI error: ${err.message?.slice(0, 500) ?? 'unknown'}`);
-  }
+    // Buffer stderr by line (same pattern as runClaudeAgent)
+    let stderrRemainder = '';
+    child.stderr.on('data', (chunk: Buffer) => {
+      stderrRemainder += chunk.toString('utf-8');
+      const lines = stderrRemainder.split('\n');
+      stderrRemainder = lines.pop()!;
+      for (const line of lines) {
+        const trimmed = line.trim();
+        if (trimmed) console.log(`  [claude-chat] ${trimmed}`);
+      }
+    });
+
+    let timedOut = false;
+    const timer = setTimeout(() => {
+      timedOut = true;
+      console.log(`  [claude-chat] Timeout (${CHAT_TIMEOUT_MS / 60000}min) — sending SIGTERM`);
+      child.kill('SIGTERM');
+      setTimeout(() => { if (!child.killed) child.kill('SIGKILL'); }, KILL_GRACE_MS);
+    }, CHAT_TIMEOUT_MS);
+
+    child.on('close', () => {
+      clearTimeout(timer);
+      // Flush any remaining stderr
+      if (stderrRemainder.trim()) console.log(`  [claude-chat] ${stderrRemainder.trim()}`);
+      const stdout = Buffer.concat(stdoutChunks).toString('utf-8');
+
+      if (timedOut && !stdout.trim()) {
+        reject(new Error('Claude CLI chat timed out with no output'));
+        return;
+      }
+
+      let parsed: any;
+      try { parsed = JSON.parse(stdout); } catch {
+        resolve({ content: stdout.trim(), toolUses: [], usage: { inputTokens: 0, outputTokens: 0, costUsd: 0 } });
+        return;
+      }
+
+      const responseText = parsed.result ?? parsed.content ?? stdout.trim();
+      const costUsd = parsed.total_cost_usd ?? 0;
+      const usage = parsed.usage ?? {};
+
+      resolve({
+        content: responseText,
+        toolUses: [],
+        usage: {
+          inputTokens: usage.input_tokens ?? 0,
+          outputTokens: usage.output_tokens ?? 0,
+          costUsd,
+        },
+      });
+    });
+
+    child.on('error', (err) => {
+      clearTimeout(timer);
+      reject(new Error(`Claude CLI error: ${err.message}`));
+    });
+  });
 }
 
 /**
@@ -245,7 +281,7 @@ async function chatViaClaude(
 export async function runClaudeAgent(
   systemPrompt: string,
   taskPrompt: string,
-  options?: { model?: string; allowedTools?: string[]; maxBudgetUsd?: number },
+  options?: { model?: string; allowedTools?: string[]; maxBudgetUsd?: number; softTimeoutMs?: number },
 ): Promise<{ result: string; costUsd: number }> {
   const { spawn } = await import('child_process');
 
@@ -265,7 +301,7 @@ export async function runClaudeAgent(
 
   const fullPrompt = `${systemPrompt}\n\n---\n\n${taskPrompt}`;
 
-  const SOFT_TIMEOUT_MS = 25 * 60 * 1000;  // 25 minutes
+  const SOFT_TIMEOUT_MS = options?.softTimeoutMs ?? 25 * 60 * 1000;  // default 25 minutes
   const KILL_GRACE_MS = 10 * 1000;          // 10 seconds after SIGTERM
 
   return new Promise<{ result: string; costUsd: number }>((resolve, reject) => {
