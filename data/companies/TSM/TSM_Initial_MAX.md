@@ -1750,6 +1750,32 @@ According to TrendForce（2024-10），TSMC 管理層在 2024 Q3 法說中確認
 
 **結論**：電價翻倍與先進製程能耗攀升合計對 TSMC 毛利率構成 **~2pp** 的結構性壓力，但被先進製程 mix 提升（ASP +50%）與節能措施部分對沖。真正的風險不在於正常電價調整，而在於 Taipower 虧損 NT$4,179 億若引發**一次性大幅補漲**（如 30%+），可能在單一季度對毛利率造成 1pp+ 的超預期衝擊——According to Tom's Hardware（2024），「超級用電戶」曾面臨高達 **30%** 的單次漲幅威脅。（[來源：Tom's Hardware — Taiwan Electricity Price Hikes](https://www.tomshardware.com/tech-industry/impending-taiwan-electricity-price-hikes-to-impact-tsmc-other-chipmakers)）
 
+### N2/A16 絕對碳排增量推算——從「每片晶圓 +25%」到「每年 +X 萬噸 CO₂e」
+
+既有分析已量化 N2/A16 對毛利率的邊際影響（~0.3-0.5pp），但投資人與 ESG 評級機構更需要的是**絕對碳排噸數**——SBTi 以絕對量（而非強度）為減碳基準，因此 N2/A16 的碳排增量直接影響 TSMC 能否在 2025 年「碳排達峰」。
+
+**N2 產能爬坡時程**：According to TrendForce（2025-01），TSMC N2 製程產能規劃如下：
+
+| 時間點 | N2 月產能（千片 300mm） | 年化產出（千片） | A16 狀態 | 出處 |
+|--------|----------------------|---------------|---------|------|
+| 2025 Q4（量產起步） | **~40-50K** | ~120-150（部分季度） | 研發/試產 | [TrendForce, 2025-01](https://www.trendforce.com/news/2025/01/01/news-tsmc-sets-up-2nm-pilot-line-aims-for-130000-wafers-monthly-by-2026/)；[Tom's Hardware, 2025](https://www.tomshardware.com/tech-industry/semiconductors/tsmc-begins-quietly-volume-production-of-2nm-class-chips-first-gaa-transistor-for-tsmc-claims-up-to-15-percent-improvement-at-iso-power) |
+| 2026 年底 | **~120-130K** | ~1,200-1,560 | H2 2026 量產 | [TrendForce, 2025-01](https://www.trendforce.com/news/2025/01/01/news-tsmc-sets-up-2nm-pilot-line-aims-for-130000-wafers-monthly-by-2026/) |
+| 2027 年（目標） | **~200K**（N2+A16 合計） | ~2,400 | 全面量產 | [Dr. Robert Castellano, 2025](https://drrobertcastellano.substack.com/p/tsmcs-2-nm-era-technology-leadership) |
+
+**絕對碳排增量計算**：
+
+推算邏輯：TSMC 2024 年總用電 ~28 TWh、300mm 等效年產出估計 ~15M 片（含成熟+先進製程），平均每片晶圓能耗 ~1.87 MWh。先進製程（N5/N3）每片能耗顯著高於平均，估計 ~2.5-3.0 MWh/片（EUV 層數多、蝕刻步驟複雜）。N2/A16 在此基礎上再增加 **20-30%**，即 ~3.0-3.9 MWh/片。
+
+| 年份 | N2/A16 年產出（千片） | 每片能耗（MWh） | N2/A16 總用電（TWh） | 增量用電 vs N5 基線（TWh） | 增量碳排（萬 tCO₂e）† | 佔當年總排放比 |
+|------|---------------------|----------------|---------------------|-------------------------|---------------------|-------------|
+| 2025（部分年度） | ~120-150 | ~3.0-3.9 | ~0.36-0.59 | ~0.06-0.14 | **~3-7** | <0.3% |
+| 2026 | ~1,200-1,560 | ~3.0-3.9 | ~3.6-6.1 | ~0.6-1.4 | **~30-70** | ~1.2-2.8% |
+| **2027** | **~2,400** | ~3.0-3.9 | **~7.2-9.4** | **~1.2-2.2** | **~60-110** | **~2.3-4.0%** |
+
+† 以台灣電網排放因子 ~0.502 tCO₂e/MWh（2024 年）計算。增量 = N2/A16 用電 vs 同等產出以 N5 製程生產的用電差額。
+
+**對 SBTi 達峰目標的影響**：2027 年 N2/A16 增量碳排約 **60-110 萬噸 CO₂e**，相當於 TSMC 2024 年 Scope 2 排放的 **5.5-10%**。這一增量將直接抵銷 TSMC 節能措施的減碳成效（2024 年 1,177 項措施節省 810 GWh ≈ 減碳 ~40.7 萬噸）——意味著 **N2/A16 量產的碳排增量（60-110 萬噸）是全年節能減碳成效（41 萬噸）的 1.5-2.7 倍**。除非再生能源採購同步大幅增加，否則 TSMC 2025 年「碳排達峰」目標在 N2/A16 快速爬坡期間幾乎不可能達成。
+
 ### 水資源——日用量、年度消耗與回收體系
 
 半導體製造對超純水（UPW）的需求極高——每片晶圓需使用數千公升純水進行清洗、蝕刻與化學製程。TSMC 作為全球最大的晶片製造商，其用水規模在台灣引發持續關注。According to Taiwan Insight（2025），TSMC 目前日用水量已從 2021 年旱災時的 ~20,000 噸暴增至 **~150,000 噸/日**——4 年內增長 **650%**，反映 N5/N3 產能擴張對水資源的指數級需求。
@@ -1953,7 +1979,7 @@ According to TSMC 2024 Sustainability Report 與 Tracenable ESG 數據庫，TSMC
 
 **SBTi 承諾與碳減排里程碑——目標 vs 實際進度**：
 
-TSMC 於 2024 年正式承諾遵循科學基礎減碳倡議（SBTi）企業淨零標準，以 **2025 年為基準年**，設定 Scope 1/2/3 絕對減量目標，目標在未來十年內達成。（[來源：TSMC PR — SBTi, 2024](https://pr.tsmc.com/english/news/3227)）
+TSMC 於 2024 年正式承諾遵循科學基礎減碳倡議（SBTi）企業淨零標準，以 **2025 年為基準年**，設定 Scope 1/2/3 絕對減量目標，目標在未來十年內達成。According to Manufacturing Digital（2025-04），TSMC 於 **2025 年 4 月正式確認 SBTi Pathway 承諾**，成為全球首批承諾 SBTi 企業淨零標準的半導體製造商之一。根據 SBTi 標準作業程序，目標驗證流程通常需 **12-18 個月**，TSMC 的近期目標（Near-Term Targets）預計將於 **2026 年中至 2027 年初**完成 SBTi 正式驗證。需注意：SBTi Corporate Net-Zero Standard V2.0 預計 2026 年發布、2028 年起強制適用——TSMC 若在 2027 年前完成驗證，可依現行 V1.0 標準設定目標並維持有效至目標期結束。（[來源：TSMC PR — SBTi, 2024](https://pr.tsmc.com/english/news/3227)；[Manufacturing Digital — TSMC SBTi Commitment, 2025-04](https://manufacturingdigital.com/sustainability-esg/tsmc-commits-to-sbti-pathway-for-emissions-reduction)；[TechInsights — Semiconductor Sustainability H1 2025 Recap](https://www.techinsights.com/blog/semiconductor-sustainability-six-month-2025-recap-clean-energy-carbon-transparency)；[SBTi — Target Validation SOP](https://docs.sbtiservices.com/resources/SOPTargetValidation.pdf)）
 
 | 里程碑 | 目標年份 | 目標值 | 2024 實際 | 差距/進度 | 出處 |
 |--------|---------|--------|----------|----------|------|
