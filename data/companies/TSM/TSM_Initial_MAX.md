@@ -69,6 +69,8 @@ Morris Chang 曾回憶創業初心：「I wanted to establish a company that wou
 
 代工市場從 2000 年的 ~$150 億成長至 2025 年的 ~$1,627 億，25 年 CAGR 約 10%。TSMC 市佔率在此期間從 50% 攀升至 64%——不僅市場在擴大，TSMC 佔據的份額也持續提高。
 
+**SIA 一手數據——全球半導體總市場（含 IDM+代工+封測）**：根據 SIA（Semiconductor Industry Association）官方統計，全球半導體銷售額 2024 年達 **$6,276 億美元**（YoY +19.0%），2025 年預估達 **$7,917 億美元**（YoY +26.1%），2026 年有望突破 **$1 兆美元** 大關。其中邏輯晶片（Logic）——TSMC 核心業務所在——從 2024 年的 $2,126 億成長至 2025 年的 $3,019 億（YoY +42%），為所有產品類別中成長最快的區塊，主要受 AI 加速器與先進 GPU 需求驅動。代工市場約佔全球半導體市場的 20-22%，但 TSMC 透過 AI/HPC 的結構性成長，在這一子市場中的佔比持續擴大。（[來源：SIA Global Semiconductor Sales Report, 2025-02](https://www.semiconductors.org/global-semiconductor-sales-increase-19-0-in-2024-to-reach-627-6-billion/)；[SIA 2025 Forecast](https://www.semiconductors.org/global-semiconductor-sales-forecast-to-reach-791-7-billion-in-2025/)）
+
 - **CAGR**：2025–2035 約 12.2%（[GM Insights](https://www.gminsights.com/industry-analysis/semiconductor-foundry-market)）；2025–2034 約 5.8–8%（[Precedence Research](https://www.precedenceresearch.com/semiconductor-foundry-market), [Fortune Business Insights](https://www.fortunebusinessinsights.com/semiconductor-foundry-market-110068)）
 - **先進製程壟斷**：7nm 以下市佔超過 90%（[來源：TSMC 2024 Annual Report](https://investor.tsmc.com/sites/ir/annual-report/2024/2024%20Annual%20Report_E.pdf)）——這一趨勢在先進製程尤為極端
 - **AI 驅動的結構性成長**：AI/HPC 已取代智慧手機成為 TSMC 最大營收平台，2024 年 HPC 佔營收比重超過 50%，2025 Q2 達 60%
@@ -131,6 +133,30 @@ Wei 在 2024 Q3 法說中被問及是否有興趣收購 Intel 或 Samsung 的晶
 | SMIC | ~5% | 7nm（受制裁限制） | N/A | 美國出口管制限制 EUV 取得 |
 
 **來源**：[Statista](https://www.statista.com/statistics/867223/worldwide-semiconductor-foundries-by-market-share/), [Counterpoint Research](https://counterpointresearch.com/en/insights/global-semiconductor-foundry-market-share), [TSMC 2024 AR](https://investor.tsmc.com/sites/ir/annual-report/2024/2024%20Annual%20Report_E.pdf)
+
+### IP/EDA 上游生態系——TSMC OIP 平台與設計工具認證
+
+TSMC 的護城河不僅在製造端，更深嵌於 **設計工具（EDA）與矽智財（IP）的生態鎖定效應**。TSMC 透過 Open Innovation Platform（OIP）建立了業界最完整的設計生態系，涵蓋 EDA 工具認證、IP 驗證、設計服務夥伴、雲端設計平台四大支柱。
+
+**EDA Alliance 四大夥伴**：TSMC OIP 的 EDA Alliance 核心成員為 **Cadence、Synopsys、Siemens EDA、Ansys** 四家——全球 EDA 產業前四大廠商全數深度綁定 TSMC 先進製程。（[來源：TSMC OIP Ecosystem](https://www.tsmc.com/english/dedicatedFoundry/technology/oip)）
+
+**Cadence × TSMC N2/A16 認證**：Cadence 已完成 TSMC N2（2nm）與 A16（1.6nm）製程的全流程 EDA 工具認證，涵蓋數位設計（Innovus/Genus）、客製化/類比設計（Virtuoso）、驗證（Tempus/Voltus）等完整工具鏈。Cadence 並與 TSMC 合作開發 3D-IC 設計解決方案（Integrity 3D-IC），支援 TSMC 的 3DFabric 先進封裝技術（CoWoS/SoIC/InFO）。（[來源：Cadence TSMC Collaboration](https://www.cadence.com/en_US/home/partnerships/tsmc.html)）
+
+**Synopsys × TSMC 深度整合**：Synopsys 在 2025 年 TSMC OIP Forum 上一舉獲得 **6 項 Partner of the Year** 大獎，創歷屆紀錄，涵蓋 EDA、IP、3D-IC、雲端設計等類別。Synopsys 的 Fusion Design Platform 已通過 N2 認證，其 DesignWare IP（包括 PCIe 6.0、DDR5/LPDDR5X、UCIe 等介面 IP）為 TSMC 先進製程客戶提供經過矽驗證的 IP 元件。（[來源：Synopsys OIP 2025 Awards](https://news.synopsys.com/2025-10-28-Synopsys-Earns-a-Record-Six-TSMC-OIP-Partner-of-the-Year-Awards)）
+
+**Arm × TSMC 架構共生**：Arm 架構在 TSMC 先進製程中佔據核心地位——Apple Silicon（A/M 系列）、Qualcomm Snapdragon、MediaTek Dimensity、AWS Graviton 等 TSMC 主要客戶的旗艦晶片均基於 Arm 架構。Arm 的 Artisan Physical IP 與 POP IP 針對 TSMC 每一代先進製程進行優化，形成「Arm 設計 + TSMC 製造」的緊密共生關係。
+
+**Chiplets 商業化與生態延伸**：TSMC 在 2025 OIP Forum 上宣布 chiplets 設計已進入「商業現實」（commercial reality）階段，UCIe（Universal Chiplet Interconnect Express）標準生態正在成形。TSMC 為 A14（1.4nm）製程已開始向 EDA 合作夥伴釋出 PDK（Process Design Kit），預計 2025 年底完成。（[來源：TSMC 2025 OIP Forum](https://www.tsmc.com/english/dedicatedFoundry/technology/oip)）
+
+**生態鎖定效應的投資意涵**：一旦 IC 設計公司在 TSMC 特定製程上完成設計定案（tape-out），轉換至其他代工廠意味著重新驗證整套 EDA 工具、IP、PDK——這一轉換成本以億美元計且耗時 12-18 個月。此生態鎖定效應使 TSMC 的客戶黏性遠超單純的製造良率優勢，構成深層護城河。
+
+| EDA/IP 夥伴 | OIP 角色 | N2/A16 認證狀態 | 關鍵 IP/工具 | 來源 |
+|-------------|---------|----------------|------------|------|
+| Synopsys | EDA+IP | ✅ N2 認證 | Fusion Platform, DesignWare IP, 6× OIP Awards | [Synopsys](https://news.synopsys.com/2025-10-28-Synopsys-Earns-a-Record-Six-TSMC-OIP-Partner-of-the-Year-Awards) |
+| Cadence | EDA+IP+3D-IC | ✅ N2/A16 認證 | Innovus, Virtuoso, Integrity 3D-IC | [Cadence](https://www.cadence.com/en_US/home/partnerships/tsmc.html) |
+| Siemens EDA | EDA | ✅ 認證中 | Calibre DRC/LVS, Aprisa | [TSMC OIP](https://www.tsmc.com/english/dedicatedFoundry/technology/oip) |
+| Ansys | 模擬驗證 | ✅ 認證中 | RedHawk-SC, Totem | [TSMC OIP](https://www.tsmc.com/english/dedicatedFoundry/technology/oip) |
+| Arm | IP 架構 | ✅ 每代優化 | Artisan Physical IP, POP IP, CSS | [Arm](https://www.arm.com/partners/tsmc) |
 
 ### 監管與政策環境
 
