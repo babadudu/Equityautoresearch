@@ -1,4 +1,4 @@
-# TSM (台積電 TSMC) Initial MAX 深度研究（張磊四維框架）
+# TSM (台積電 TSMC) Initial MAX 深度研究
 
 ## IRR 模型與關鍵假設
 
