@@ -11,7 +11,7 @@ export const COST_PER_1M: Record<string, { input: number; output: number }> = {
   [MODELS.SCORING]: { input: 3, output: 15 },
 };
 
-export const DEFAULT_MAX_COST_USD = 15;
+export const DEFAULT_MAX_COST_USD = 200;
 
 export function estimateCostUsd(model: string, inputTokens: number, outputTokens: number): number {
   const rates = COST_PER_1M[model] ?? { input: 3, output: 15 };

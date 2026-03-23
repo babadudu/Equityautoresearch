@@ -1,7 +1,7 @@
 /**
  * Initial MAX Scorer
  *
- * 使用 google/gemini-3.1-pro-preview 對公司研究報告打分（張磊四維框架，100分）。
+ * 使用 google/gemini-3.1-pro-preview 對公司研究報告打分（四維框架，100分）。
  * 提供 LLM 打分 + heuristic fallback。
  *
  * Usage (standalone):
@@ -333,7 +333,7 @@ function heuristicScore(ticker: string): InitialMaxScore {
 
 // ── LLM scorer ──
 
-const SCORER_SYSTEM_PROMPT = `你是一位專業的投資研究品質評審。請根據張磊（高瓴資本）「環境→生意→組織→人」投資研究框架，對以下公司研究報告進行**嚴格**評分。
+const SCORER_SYSTEM_PROMPT = `你是一位專業的投資研究品質評審。請根據「環境→生意→組織→人」四維投資研究框架，對以下公司研究報告進行**嚴格**評分。
 
 **達標條件（須全部滿足）**：總分 ≥ **95 分**，且各維度達最低分：環境≥16、生意≥30、組織≥16、人≥20；**缺「2.5 DCF 估值」小節（情境表/三表/IRR 或 dcf_config）則生意維度不得達標**（DCF 為必達項）。**每個子節（1.1～4.2）皆須有實質內容**，缺一則不達標。
 **內容深度**：**環境**須從**該產業的起源或現代形態起點**論述（例如廣告業從現代廣告誕生開始）；**4.1 CEO/創業家**須從**學經歷**開始，含**重要拐點、重要成就、每個時期的訪談**、**成功與失敗的檢討與反思**；不足者扣分。

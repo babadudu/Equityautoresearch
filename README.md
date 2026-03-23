@@ -297,7 +297,7 @@ Deep Research 給你一份報告，然後就結束了。如果你發現某個章
 
 ### 不同之一：有框架，有標準，有分數
 
-Initial MAX 採用**張磊（高瓴資本創始人）的四維投資框架**作為評分體系：
+Initial MAX 採用**四維投資框架（環境→生意→組織→人）**作為評分體系：
 
 | 維度 | 滿分 | 核心問題 |
 |------|------|---------|
@@ -460,4 +460,4 @@ results/
 
 ---
 
-*Initial MAX Autoresearch — 以 [Andrej Karpathy autoresearch](https://github.com/karpathy/autoresearch) 為靈感，以張磊四維框架為評分標準，以 FUTU 深度報告為品質標竿。*
+*Initial MAX Autoresearch — 以 [Andrej Karpathy autoresearch](https://github.com/karpathy/autoresearch) 為靈感，以四維框架（環境→生意→組織→人）為評分標準，以 FUTU 深度報告為品質標竿。*

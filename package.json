@@ -9,7 +9,9 @@
     "extract-knowledge": "tsx src/knowledge-extractor.ts",
     "rebuild-index": "tsx src/knowledge-index.ts --rebuild",
     "query-kb": "tsx src/knowledge-retrieval.ts",
-    "compare": "tsx src/expert-comparison.ts"
+    "compare": "tsx src/expert-comparison.ts",
+    "queue-gen": "tsx src/research-queue-generator.ts",
+    "queue-run": "tsx src/research-queue-runner.ts"
   },
   "devDependencies": {
     "@types/node": "^24.10.1",
