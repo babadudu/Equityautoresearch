@@ -10,7 +10,7 @@ import { READ_RESEARCH_FILE_MAX_CHARS } from './markdown-utils.js';
 export const GAP_FILL_TOOLS: AnthropicTool[] = [
   {
     name: 'web_search',
-    description: '搜尋網頁。最多 5 次/輪。',
+    description: '搜尋網頁。最多 12 次/輪。',
     input_schema: {
       type: 'object',
       properties: {

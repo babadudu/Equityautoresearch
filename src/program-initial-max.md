@@ -16,7 +16,7 @@ query_companies_db(ticker)        — 查資料庫：companies_database.json 中
 search_data_for_company(ticker)   — 在 data/ 下搜尋與該公司/CEO 相關內容（what-happened 訪談、meeting-minutes、Knowledge），回傳匹配 path + snippet
 read_project_file(path)           — 讀取 data/ 下任意檔案（path 如 data/content/what-happened/xxx.md），摘錄管理層原話寫入主檔
 ninja_api(action, ticker, ...)    — API Ninjas：earnings/earnings_historical（財報）、earningstranscript（法說逐字稿）、stockprice、sec
-web_search(query, count)          — 搜尋網頁，最多 5 次/輪
+web_search(query, count)          — 搜尋網頁，最多 12 次/輪
 fetch_url(url)                    — 抓取 URL 完整內容（逐字稿、年報等）
 write_research_section(ticker, filename, content, mode, section_anchor?)
                                   — 寫入 data/companies/{TICKER}/{filename}。**主檔**：優先用 **replace_section**＝整節**重寫／修正**（可刪冗、改寫句子、重排段落），content 須含該節標題；**不是**只能插入。必要時才用 insert_into_section 接在節尾。勿 append。跑完全部研究輪後，Runner 會自動加一輪 **整理輪**（僅順稿與格式、無新研究）；可用 `--skip-polish` 略過。
@@ -28,7 +28,7 @@ read_research_file(ticker, filename)
 
 ## 搜尋預算分配策略
 
-每輪最多 5 次 web_search。依缺分高低分配：
+每輪最多 12 次 web_search。依缺分高低分配：
 
 | 缺口維度 | 建議搜尋數 | 搜尋模板 |
 |---------|---------|---------|

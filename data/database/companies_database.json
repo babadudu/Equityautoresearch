@@ -1,7 +1,71 @@
 {
   "metadata": {
     "version": "1.0",
-    "note": "standalone initial-max：可手動加入公司條目，或從主專案複製完整檔"
+    "last_updated": "2026-03-22"
   },
-  "companies": []
+  "companies": [
+    {
+      "symbol": "AAPL",
+      "name": "Apple Inc.",
+      "ceo": "Tim Cook",
+      "industry": "Consumer Electronics & Software",
+      "sector": "Technology",
+      "market_cap_approx": "$3.5T",
+      "summary": "Apple is a consumer technology platform company centered on its ecosystem, with Services as a high-growth engine (26.2% of revenue, 70% margins) and Apple Silicon as a technology moat. FY2025 revenue of $416.2B with 23 billion active devices drives strong network effects."
+    },
+    {
+      "symbol": "AMZN",
+      "name": "Amazon.com, Inc.",
+      "ceo": "Andy Jassy",
+      "industry": "E-Commerce, Cloud Computing & Digital Advertising",
+      "sector": "Technology & Retail",
+      "market_cap_approx": "$2.2T",
+      "summary": "Amazon is the world's largest multi-platform tech company spanning e-commerce, AWS cloud infrastructure (31% global market share), and digital advertising (3rd largest globally). AWS generates 57% of operating profit on 18% of revenue, while retail flywheel effects continue strengthening."
+    },
+    {
+      "symbol": "COST",
+      "name": "Costco Wholesale Corporation",
+      "ceo": "Ron Vachris",
+      "industry": "Warehouse Retail",
+      "sector": "Consumer Discretionary",
+      "market_cap_approx": "$1.2T",
+      "summary": "Costco operates a premium warehouse club model with exceptional member loyalty (92.9% renewal rate) and Kirkland Signature private label (25% of sales) driving deep moat. FY2025 revenue of $275.2B with membership fees converting nearly entirely to profit."
+    },
+    {
+      "symbol": "EBAY",
+      "name": "eBay Inc.",
+      "ceo": "Jamie Iannone",
+      "industry": "E-Commerce Marketplace",
+      "sector": "Technology & Retail",
+      "market_cap_approx": "$115B",
+      "summary": "eBay has transformed from a general marketplace into a focused enthusiast economy platform specializing in high-value categories (automotive, collectibles, luxury). FY2025 GMV of $79.6B with take rate expanded to 14.0% and AI tools driving 50%+ improvement in listing acceleration."
+    },
+    {
+      "symbol": "GOOG",
+      "name": "Alphabet Inc.",
+      "ceo": "Sundar Pichai",
+      "industry": "Digital Advertising, Cloud Computing & AI",
+      "sector": "Technology",
+      "market_cap_approx": "$2.0T",
+      "summary": "Alphabet dominates digital search (90% global market share) and operates YouTube as the leading video platform, while Google Cloud is the 2nd largest cloud provider growing 25%+ annually. 2024 revenue of $350B with Gemini AI reshaping the entire product portfolio."
+    },
+    {
+      "symbol": "LLY",
+      "name": "Eli Lilly and Company",
+      "ceo": "David Ricks",
+      "industry": "Pharmaceutical",
+      "sector": "Healthcare",
+      "market_cap_approx": "$820B",
+      "summary": "Eli Lilly dominates the GLP-1 receptor agonist market with tirzepatide (Mounjaro/Zepbound), which generated $36.5B in 2025 revenue (56% of total). The GLP-1 TAM is expected to grow from $63B to $254B by 2034 as obesity treatment penetration accelerates."
+    },
+    {
+      "symbol": "TSM",
+      "name": "Taiwan Semiconductor Manufacturing Company Limited",
+      "ceo": "C.C. Wei",
+      "industry": "Semiconductor Manufacturing (Foundry)",
+      "sector": "Technology",
+      "market_cap_approx": "$820B",
+      "summary": "TSMC is the world's most advanced semiconductor foundry and irreplaceable to AI chip production, controlling 90%+ of advanced process (7nm and below) manufacturing. 2024 HPC/AI revenue exceeded 50% of total as company leads global AI infrastructure buildout with $52-56B annual CapEx."
+    }
+  ]
 }
