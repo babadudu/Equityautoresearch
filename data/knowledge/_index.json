@@ -1,6 +1,6 @@
 {
-  "generated": "2026-03-23T07:57:24.436Z",
-  "atom_count": 342,
+  "generated": "2026-03-23T09:40:54.751Z",
+  "atom_count": 411,
   "atoms": [
     {
       "id": "aapl-business-model-unit-economics-ecosystem-lock-in",
@@ -617,6 +617,38 @@
       "path": "data/knowledge/atoms/company-profile/ebay-organizational-culture-incentives.md"
     },
     {
+      "id": "goog-business-model-dna-attention-monetization",
+      "archetype": "company-profile",
+      "title": "Google (Alphabet) Business Model DNA: Attention Monetization Platform",
+      "companies": [
+        "GOOG"
+      ],
+      "people": [
+        "Sundar Pichai",
+        "Anat Ashkenazi",
+        "Philipp Schindler"
+      ],
+      "industries": [
+        "cloud-infrastructure"
+      ],
+      "tags": [
+        "business-model",
+        "moat",
+        "revenue-mix",
+        "founding"
+      ],
+      "temporality": "evergreen",
+      "created": "2026-03-23",
+      "updated": "2026-03-23",
+      "source_report": "data/companies/GOOG/GOOG_Initial_MAX.md",
+      "source_sections": [
+        "2.2",
+        "2.3"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/company-profile/goog-business-model-dna-attention-monetization.md"
+    },
+    {
       "id": "goog-five-segment-business-model-2024",
       "archetype": "company-profile",
       "title": "Google (Alphabet) Five-Segment Business Model and Unit Economics (FY2024)",
@@ -678,6 +710,127 @@
       "path": "data/knowledge/atoms/company-profile/goog-organizational-culture-engineering-driven-innovation.md"
     },
     {
+      "id": "goog-organizational-culture-incentives",
+      "archetype": "company-profile",
+      "title": "Google/Alphabet Organizational Culture and Incentive Mechanisms",
+      "companies": [
+        "GOOG"
+      ],
+      "people": [
+        "Sundar Pichai",
+        "David Rubenstein"
+      ],
+      "industries": [
+        "cloud-infrastructure"
+      ],
+      "tags": [
+        "culture",
+        "business-model",
+        "founding"
+      ],
+      "temporality": "evergreen",
+      "created": "2026-03-23",
+      "updated": "2026-03-23",
+      "source_report": "data/companies/GOOG/GOOG_Initial_MAX.md",
+      "source_sections": [
+        "3.1"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/company-profile/goog-organizational-culture-incentives.md"
+    },
+    {
+      "id": "goog-revenue-mix-segment-financials-2024-2025",
+      "archetype": "company-profile",
+      "title": "Google (Alphabet) Revenue Mix and Segment Financials 2024–2025",
+      "companies": [
+        "GOOG"
+      ],
+      "people": [
+        "Sundar Pichai",
+        "Anat Ashkenazi",
+        "Philipp Schindler"
+      ],
+      "industries": [
+        "cloud-infrastructure"
+      ],
+      "tags": [
+        "revenue-mix",
+        "margins",
+        "business-model"
+      ],
+      "temporality": "time-bound",
+      "created": "2026-03-23",
+      "updated": "2026-03-23",
+      "source_report": "data/companies/GOOG/GOOG_Initial_MAX.md",
+      "source_sections": [
+        "2.2",
+        "2.3"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/company-profile/goog-revenue-mix-segment-financials-2024-2025.md"
+    },
+    {
+      "id": "goog-unit-economics-cost-structure",
+      "archetype": "company-profile",
+      "title": "Google (Alphabet) Unit Economics and Cost Structure",
+      "companies": [
+        "GOOG"
+      ],
+      "people": [
+        "Sundar Pichai",
+        "Anat Ashkenazi"
+      ],
+      "industries": [
+        "cloud-infrastructure"
+      ],
+      "tags": [
+        "business-model",
+        "margins",
+        "capex",
+        "revenue-mix"
+      ],
+      "temporality": "time-bound",
+      "created": "2026-03-23",
+      "updated": "2026-03-23",
+      "source_report": "data/companies/GOOG/GOOG_Initial_MAX.md",
+      "source_sections": [
+        "2.2",
+        "2.3"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/company-profile/goog-unit-economics-cost-structure.md"
+    },
+    {
+      "id": "lly-business-model-dna",
+      "archetype": "company-profile",
+      "title": "Eli Lilly Business Model DNA: Pure-Play Innovation Engine",
+      "companies": [
+        "LLY"
+      ],
+      "people": [
+        "Dave Ricks"
+      ],
+      "industries": [],
+      "tags": [
+        "business-model",
+        "moat",
+        "margins",
+        "revenue-mix",
+        "capex",
+        "pricing"
+      ],
+      "temporality": "evergreen",
+      "created": "2026-03-23",
+      "updated": "2026-03-23",
+      "source_report": "data/companies/LLY/LLY_Initial_MAX.md",
+      "source_sections": [
+        "2.2",
+        "2.3"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/company-profile/lly-business-model-dna.md"
+    },
+    {
       "id": "lly-executive-compensation-incentive-structure-2025",
       "archetype": "company-profile",
       "title": "Eli Lilly Executive Compensation Structure: Three-Dimensional Incentive Design and CEO Pay Analysis (2025)",
@@ -704,6 +857,34 @@
       ],
       "quality": 4,
       "path": "data/knowledge/atoms/company-profile/lly-executive-compensation-incentive-structure-2025.md"
+    },
+    {
+      "id": "lly-organizational-culture-incentives",
+      "archetype": "company-profile",
+      "title": "Eli Lilly Organizational Culture, Executive Design, and Incentive Structure",
+      "companies": [
+        "LLY"
+      ],
+      "people": [
+        "David Ricks",
+        "Lars Jørgensen",
+        "Albert Bourla"
+      ],
+      "industries": [],
+      "tags": [
+        "culture",
+        "business-model",
+        "governance"
+      ],
+      "temporality": "evergreen",
+      "created": "2026-03-23",
+      "updated": "2026-03-23",
+      "source_report": "data/companies/LLY/LLY_Initial_MAX.md",
+      "source_sections": [
+        "3.1"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/company-profile/lly-organizational-culture-incentives.md"
     },
     {
       "id": "lly-organizational-culture-ricks-leadership-philosophy",
@@ -760,6 +941,33 @@
       ],
       "quality": 4,
       "path": "data/knowledge/atoms/company-profile/lly-six-segment-business-model-fy2025.md"
+    },
+    {
+      "id": "lly-therapeutic-area-portfolio",
+      "archetype": "company-profile",
+      "title": "Eli Lilly Therapeutic Area Portfolio: Six Pillars of Unmet Need",
+      "companies": [
+        "LLY"
+      ],
+      "people": [
+        "Dave Ricks"
+      ],
+      "industries": [],
+      "tags": [
+        "business-model",
+        "revenue-mix",
+        "moat"
+      ],
+      "temporality": "semi-evergreen",
+      "created": "2026-03-23",
+      "updated": "2026-03-23",
+      "source_report": "data/companies/LLY/LLY_Initial_MAX.md",
+      "source_sections": [
+        "2.2",
+        "2.3"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/company-profile/lly-therapeutic-area-portfolio.md"
     },
     {
       "id": "tsmc-organizational-culture-values",
@@ -1752,6 +1960,110 @@
       "path": "data/knowledge/atoms/competitive-landscape/ebay-vertical-category-market-concentration-2025.md"
     },
     {
+      "id": "glp1-market-duopoly-structure-lly-nvo",
+      "archetype": "competitive-landscape",
+      "title": "GLP-1 Market Duopoly Structure: Lilly vs. Novo Nordisk",
+      "companies": [
+        "LLY",
+        "NVO",
+        "AMGN",
+        "PFE",
+        "AZN"
+      ],
+      "people": [
+        "David Ricks"
+      ],
+      "industries": [
+        "pharmaceutical"
+      ],
+      "tags": [
+        "market-share",
+        "five-forces",
+        "competitive-dynamics",
+        "duopoly",
+        "glp-1",
+        "obesity",
+        "diabetes"
+      ],
+      "temporality": "semi-evergreen",
+      "created": "2026-03-23",
+      "updated": "2026-03-23",
+      "source_report": "data/companies/LLY/LLY_Initial_MAX.md",
+      "source_sections": [
+        "1.2",
+        "2.4"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/competitive-landscape/glp1-market-duopoly-structure-lly-nvo.md"
+    },
+    {
+      "id": "glp1-regulatory-environment-global-lly",
+      "archetype": "competitive-landscape",
+      "title": "GLP-1 Global Regulatory Environment: US, Europe, Japan, China Risk Matrix",
+      "companies": [
+        "LLY",
+        "NVO"
+      ],
+      "people": [
+        "David Ricks"
+      ],
+      "industries": [
+        "pharmaceutical"
+      ],
+      "tags": [
+        "five-forces",
+        "competitive-dynamics",
+        "glp-1",
+        "obesity",
+        "regulatory",
+        "ira",
+        "medicare",
+        "pricing",
+        "market-access"
+      ],
+      "temporality": "semi-evergreen",
+      "created": "2026-03-23",
+      "updated": "2026-03-23",
+      "source_report": "data/companies/LLY/LLY_Initial_MAX.md",
+      "source_sections": [
+        "1.2",
+        "2.4"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/competitive-landscape/glp1-regulatory-environment-global-lly.md"
+    },
+    {
+      "id": "goog-digital-ad-cloud-market-structure",
+      "archetype": "competitive-landscape",
+      "title": "Google (GOOG) Digital Advertising & Cloud Market Structure: Oligopoly Dynamics and Value Chain",
+      "companies": [
+        "GOOG"
+      ],
+      "people": [
+        "Sundar Pichai"
+      ],
+      "industries": [
+        "cloud-infrastructure"
+      ],
+      "tags": [
+        "market-share",
+        "competitive-dynamics",
+        "five-forces",
+        "business-model",
+        "moat"
+      ],
+      "temporality": "semi-evergreen",
+      "created": "2026-03-23",
+      "updated": "2026-03-23",
+      "source_report": "data/companies/GOOG/GOOG_Initial_MAX.md",
+      "source_sections": [
+        "1.2",
+        "2.4"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/competitive-landscape/goog-digital-ad-cloud-market-structure.md"
+    },
+    {
       "id": "goog-five-forces-competitive-moat-analysis-2025",
       "archetype": "competitive-landscape",
       "title": "Google Five Forces Analysis & Competitive Moat (2025)",
@@ -1781,6 +2093,38 @@
       ],
       "quality": 4,
       "path": "data/knowledge/atoms/competitive-landscape/goog-five-forces-competitive-moat-analysis-2025.md"
+    },
+    {
+      "id": "goog-five-forces-competitive-moat",
+      "archetype": "competitive-landscape",
+      "title": "Google (GOOG) Five Forces Analysis & Competitive Moat Summary",
+      "companies": [
+        "GOOG"
+      ],
+      "people": [
+        "Sundar Pichai",
+        "Sergey Brin"
+      ],
+      "industries": [
+        "cloud-infrastructure"
+      ],
+      "tags": [
+        "five-forces",
+        "competitive-dynamics",
+        "market-share",
+        "moat",
+        "tam"
+      ],
+      "temporality": "semi-evergreen",
+      "created": "2026-03-23",
+      "updated": "2026-03-23",
+      "source_report": "data/companies/GOOG/GOOG_Initial_MAX.md",
+      "source_sections": [
+        "1.2",
+        "2.4"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/competitive-landscape/goog-five-forces-competitive-moat.md"
     },
     {
       "id": "goog-market-structure-digital-advertising-cloud-2025",
@@ -1843,6 +2187,35 @@
       "path": "data/knowledge/atoms/competitive-landscape/goog-regulatory-antitrust-doj-dma-dsa-2025.md"
     },
     {
+      "id": "goog-regulatory-antitrust-landscape",
+      "archetype": "competitive-landscape",
+      "title": "Google (GOOG) Regulatory & Antitrust Landscape: DOJ Cases, EU DMA, DSA, and Global Enforcement",
+      "companies": [
+        "GOOG"
+      ],
+      "people": [
+        "Sundar Pichai"
+      ],
+      "industries": [
+        "cloud-infrastructure"
+      ],
+      "tags": [
+        "competitive-dynamics",
+        "market-share",
+        "five-forces"
+      ],
+      "temporality": "semi-evergreen",
+      "created": "2026-03-23",
+      "updated": "2026-03-23",
+      "source_report": "data/companies/GOOG/GOOG_Initial_MAX.md",
+      "source_sections": [
+        "1.2",
+        "2.4"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/competitive-landscape/goog-regulatory-antitrust-landscape.md"
+    },
+    {
       "id": "lly-five-forces-competitive-moat-analysis-2025",
       "archetype": "competitive-landscape",
       "title": "LLY Five Forces & Competitive Moat Analysis: GLP-1 Market (2025)",
@@ -1870,6 +2243,44 @@
       ],
       "quality": 4,
       "path": "data/knowledge/atoms/competitive-landscape/lly-five-forces-competitive-moat-analysis-2025.md"
+    },
+    {
+      "id": "lly-five-forces-moat-analysis",
+      "archetype": "competitive-landscape",
+      "title": "Eli Lilly Five Forces & Competitive Moat Analysis (GLP-1 Era)",
+      "companies": [
+        "LLY",
+        "NVO",
+        "AMGN",
+        "PFE"
+      ],
+      "people": [
+        "David Ricks"
+      ],
+      "industries": [
+        "pharmaceutical"
+      ],
+      "tags": [
+        "five-forces",
+        "moat",
+        "competitive-dynamics",
+        "market-share",
+        "glp-1",
+        "obesity",
+        "pricing",
+        "capex",
+        "supply-chain"
+      ],
+      "temporality": "semi-evergreen",
+      "created": "2026-03-23",
+      "updated": "2026-03-23",
+      "source_report": "data/companies/LLY/LLY_Initial_MAX.md",
+      "source_sections": [
+        "1.2",
+        "2.4"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/competitive-landscape/lly-five-forces-moat-analysis.md"
     },
     {
       "id": "lly-glp1-market-structure-hhi-dual-oligopoly-2025",
@@ -3264,6 +3675,35 @@
       "path": "data/knowledge/atoms/financial-snapshot/ebay-ten-year-financials-fy2014-fy2025.md"
     },
     {
+      "id": "goog-10yr-financial-metrics-2014-2024",
+      "archetype": "financial-snapshot",
+      "title": "Alphabet (GOOG) 10-Year Core Financial Metrics 2014–2024",
+      "companies": [
+        "GOOG"
+      ],
+      "people": [
+        "Sundar Pichai"
+      ],
+      "industries": [
+        "cloud-infrastructure"
+      ],
+      "tags": [
+        "revenue-mix",
+        "margins",
+        "valuation",
+        "capex"
+      ],
+      "temporality": "time-bound",
+      "created": "2026-03-23",
+      "updated": "2026-03-23",
+      "source_report": "data/companies/GOOG/GOOG_Initial_MAX.md",
+      "source_sections": [
+        "2.1"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/financial-snapshot/goog-10yr-financial-metrics-2014-2024.md"
+    },
+    {
       "id": "goog-dcf-valuation-fy2025-three-scenario",
       "archetype": "financial-snapshot",
       "title": "Google (Alphabet) DCF Valuation & Multi-Method Appraisal — FY2024 Base, Three Scenarios",
@@ -3290,6 +3730,36 @@
       ],
       "quality": 4,
       "path": "data/knowledge/atoms/financial-snapshot/goog-dcf-valuation-fy2025-three-scenario.md"
+    },
+    {
+      "id": "goog-dcf-valuation-multiples-2024",
+      "archetype": "financial-snapshot",
+      "title": "Google (Alphabet) DCF Valuation & Multi-Method Fair Value Analysis — FY2024",
+      "companies": [
+        "GOOG"
+      ],
+      "people": [
+        "Aswath Damodaran"
+      ],
+      "industries": [
+        "cloud-infrastructure"
+      ],
+      "tags": [
+        "valuation",
+        "dcf",
+        "margins",
+        "revenue-mix",
+        "capex"
+      ],
+      "temporality": "time-bound",
+      "created": "2026-03-23",
+      "updated": "2026-03-23",
+      "source_report": "data/companies/GOOG/GOOG_Initial_MAX.md",
+      "source_sections": [
+        "2.5"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/financial-snapshot/goog-dcf-valuation-multiples-2024.md"
     },
     {
       "id": "goog-geographic-revenue-breakdown-fy2024",
@@ -3322,6 +3792,66 @@
       "path": "data/knowledge/atoms/financial-snapshot/goog-geographic-revenue-breakdown-fy2024.md"
     },
     {
+      "id": "goog-geographic-revenue-fy2024-fy2025",
+      "archetype": "financial-snapshot",
+      "title": "Alphabet Geographic Revenue Breakdown FY2024–FY2025",
+      "companies": [
+        "GOOG"
+      ],
+      "people": [
+        "Sundar Pichai",
+        "Anat Ashkenazi",
+        "Philipp Schindler"
+      ],
+      "industries": [
+        "cloud-infrastructure"
+      ],
+      "tags": [
+        "revenue-mix",
+        "geographic-breakdown",
+        "time-bound"
+      ],
+      "temporality": "time-bound",
+      "created": "2026-03-23",
+      "updated": "2026-03-23",
+      "source_report": "data/companies/GOOG/GOOG_Initial_MAX.md",
+      "source_sections": [
+        "1.4"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/financial-snapshot/goog-geographic-revenue-fy2024-fy2025.md"
+    },
+    {
+      "id": "goog-operating-efficiency-roic-fcf-2020-2025",
+      "archetype": "financial-snapshot",
+      "title": "Google (Alphabet) Operating Efficiency: ROIC, Margins, FCF, and AI Productivity Leverage 2020–2025E",
+      "companies": [
+        "GOOG"
+      ],
+      "people": [
+        "Sundar Pichai",
+        "Anat Ashkenazi"
+      ],
+      "industries": [
+        "cloud-infrastructure"
+      ],
+      "tags": [
+        "margins",
+        "capex",
+        "valuation",
+        "revenue-mix"
+      ],
+      "temporality": "time-bound",
+      "created": "2026-03-23",
+      "updated": "2026-03-23",
+      "source_report": "data/companies/GOOG/GOOG_Initial_MAX.md",
+      "source_sections": [
+        "3.2"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/financial-snapshot/goog-operating-efficiency-roic-fcf-2020-2025.md"
+    },
+    {
       "id": "goog-operating-efficiency-roic-margins-fy2020-fy2024",
       "archetype": "financial-snapshot",
       "title": "Google (Alphabet) Operating Efficiency: ROIC, Margins, and Capital Efficiency FY2020–FY2024",
@@ -3348,6 +3878,67 @@
       ],
       "quality": 4,
       "path": "data/knowledge/atoms/financial-snapshot/goog-operating-efficiency-roic-margins-fy2020-fy2024.md"
+    },
+    {
+      "id": "goog-segment-revenue-operating-profit-fy2024-fy2025",
+      "archetype": "financial-snapshot",
+      "title": "Alphabet Segment Revenue and Operating Profit FY2024–FY2025",
+      "companies": [
+        "GOOG"
+      ],
+      "people": [
+        "Sundar Pichai",
+        "Anat Ashkenazi"
+      ],
+      "industries": [
+        "cloud-infrastructure"
+      ],
+      "tags": [
+        "revenue-mix",
+        "margins",
+        "valuation",
+        "time-bound"
+      ],
+      "temporality": "time-bound",
+      "created": "2026-03-23",
+      "updated": "2026-03-23",
+      "source_report": "data/companies/GOOG/GOOG_Initial_MAX.md",
+      "source_sections": [
+        "1.4"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/financial-snapshot/goog-segment-revenue-operating-profit-fy2024-fy2025.md"
+    },
+    {
+      "id": "goog-strategic-inflection-points-2015-2024",
+      "archetype": "financial-snapshot",
+      "title": "Alphabet (GOOG) Seven Strategic Inflection Points 2015–2024",
+      "companies": [
+        "GOOG"
+      ],
+      "people": [
+        "Sundar Pichai",
+        "Larry Page",
+        "Sergey Brin"
+      ],
+      "industries": [
+        "cloud-infrastructure"
+      ],
+      "tags": [
+        "revenue-mix",
+        "margins",
+        "capex",
+        "competitive-dynamics"
+      ],
+      "temporality": "time-bound",
+      "created": "2026-03-23",
+      "updated": "2026-03-23",
+      "source_report": "data/companies/GOOG/GOOG_Initial_MAX.md",
+      "source_sections": [
+        "2.1"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/financial-snapshot/goog-strategic-inflection-points-2015-2024.md"
     },
     {
       "id": "goog-ten-year-financials-fy2014-fy2024",
@@ -3382,6 +3973,30 @@
       "path": "data/knowledge/atoms/financial-snapshot/goog-ten-year-financials-fy2014-fy2024.md"
     },
     {
+      "id": "lly-annual-financials-2014-2025",
+      "archetype": "financial-snapshot",
+      "title": "Eli Lilly Annual Financials 2014–2025: Revenue, Operating Margin, and EPS",
+      "companies": [
+        "LLY"
+      ],
+      "people": [],
+      "industries": [],
+      "tags": [
+        "revenue-mix",
+        "margins",
+        "valuation"
+      ],
+      "temporality": "time-bound",
+      "created": "2026-03-23",
+      "updated": "2026-03-23",
+      "source_report": "data/companies/LLY/LLY_Initial_MAX.md",
+      "source_sections": [
+        "2.1"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/financial-snapshot/lly-annual-financials-2014-2025.md"
+    },
+    {
       "id": "lly-dcf-valuation-fy2026-three-scenario",
       "archetype": "financial-snapshot",
       "title": "Eli Lilly DCF Valuation & Multi-Method Appraisal — FY2026 Three-Scenario Analysis",
@@ -3406,6 +4021,33 @@
       ],
       "quality": 4,
       "path": "data/knowledge/atoms/financial-snapshot/lly-dcf-valuation-fy2026-three-scenario.md"
+    },
+    {
+      "id": "lly-dcf-valuation-multiples-2026",
+      "archetype": "financial-snapshot",
+      "title": "Eli Lilly DCF Valuation, WACC Decomposition & Multi-Method Fair Value (March 2026)",
+      "companies": [
+        "LLY"
+      ],
+      "people": [
+        "Aswath Damodaran"
+      ],
+      "industries": [],
+      "tags": [
+        "valuation",
+        "dcf",
+        "margins",
+        "revenue-mix"
+      ],
+      "temporality": "time-bound",
+      "created": "2026-03-23",
+      "updated": "2026-03-23",
+      "source_report": "data/companies/LLY/LLY_Initial_MAX.md",
+      "source_sections": [
+        "2.5"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/financial-snapshot/lly-dcf-valuation-multiples-2026.md"
     },
     {
       "id": "lly-geographic-revenue-breakdown-fy2023-fy2025",
@@ -3436,6 +4078,60 @@
       "path": "data/knowledge/atoms/financial-snapshot/lly-geographic-revenue-breakdown-fy2023-fy2025.md"
     },
     {
+      "id": "lly-geographic-revenue-fy2023-fy2025",
+      "archetype": "financial-snapshot",
+      "title": "Eli Lilly Geographic Revenue Breakdown FY2023–FY2025",
+      "companies": [
+        "LLY"
+      ],
+      "people": [
+        "David Ricks"
+      ],
+      "industries": [],
+      "tags": [
+        "revenue-mix",
+        "geographic-breakdown",
+        "glp1",
+        "international-expansion"
+      ],
+      "temporality": "time-bound",
+      "created": "2026-03-23",
+      "updated": "2026-03-23",
+      "source_report": "data/companies/LLY/LLY_Initial_MAX.md",
+      "source_sections": [
+        "1.4"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/financial-snapshot/lly-geographic-revenue-fy2023-fy2025.md"
+    },
+    {
+      "id": "lly-operating-efficiency-roic-fcf-2021-2025",
+      "archetype": "financial-snapshot",
+      "title": "Eli Lilly Operating Efficiency, ROIC, and Margin Expansion 2021–2025",
+      "companies": [
+        "LLY"
+      ],
+      "people": [
+        "Dave Ricks"
+      ],
+      "industries": [],
+      "tags": [
+        "margins",
+        "capex",
+        "valuation",
+        "revenue-mix"
+      ],
+      "temporality": "time-bound",
+      "created": "2026-03-23",
+      "updated": "2026-03-23",
+      "source_report": "data/companies/LLY/LLY_Initial_MAX.md",
+      "source_sections": [
+        "3.2"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/financial-snapshot/lly-operating-efficiency-roic-fcf-2021-2025.md"
+    },
+    {
       "id": "lly-operating-efficiency-roic-margins-fy2021-fy2025",
       "archetype": "financial-snapshot",
       "title": "Eli Lilly Operating Efficiency: Margins, ROIC, and Operating Leverage FY2021–FY2025",
@@ -3462,6 +4158,58 @@
       ],
       "quality": 4,
       "path": "data/knowledge/atoms/financial-snapshot/lly-operating-efficiency-roic-margins-fy2021-fy2025.md"
+    },
+    {
+      "id": "lly-product-revenue-fy2024-fy2025",
+      "archetype": "financial-snapshot",
+      "title": "Eli Lilly Product Revenue Mix FY2024–FY2025",
+      "companies": [
+        "LLY"
+      ],
+      "people": [],
+      "industries": [],
+      "tags": [
+        "revenue-mix",
+        "glp1",
+        "tirzepatide",
+        "product-concentration"
+      ],
+      "temporality": "time-bound",
+      "created": "2026-03-23",
+      "updated": "2026-03-23",
+      "source_report": "data/companies/LLY/LLY_Initial_MAX.md",
+      "source_sections": [
+        "1.4"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/financial-snapshot/lly-product-revenue-fy2024-fy2025.md"
+    },
+    {
+      "id": "lly-strategic-inflection-points-2014-2025",
+      "archetype": "financial-snapshot",
+      "title": "Eli Lilly Strategic and Financial Inflection Points 2014–2025: Patent Cliff to GLP-1 Dominance",
+      "companies": [
+        "LLY"
+      ],
+      "people": [
+        "David Ricks"
+      ],
+      "industries": [],
+      "tags": [
+        "revenue-mix",
+        "margins",
+        "capex",
+        "business-model"
+      ],
+      "temporality": "time-bound",
+      "created": "2026-03-23",
+      "updated": "2026-03-23",
+      "source_report": "data/companies/LLY/LLY_Initial_MAX.md",
+      "source_sections": [
+        "2.1"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/financial-snapshot/lly-strategic-inflection-points-2014-2025.md"
     },
     {
       "id": "lly-ten-year-financials-fy2015-fy2025",
@@ -4174,6 +4922,147 @@
       "path": "data/knowledge/atoms/industry/ebay-tam-global-ecommerce-recommerce-2025.md"
     },
     {
+      "id": "glp1-market-tam-sizing-lly",
+      "archetype": "industry",
+      "title": "GLP-1 Receptor Agonist Market: TAM Sizing and Growth Forecasts (2024–2035)",
+      "companies": [
+        "LLY",
+        "NVO"
+      ],
+      "people": [
+        "David Ricks"
+      ],
+      "industries": [],
+      "tags": [
+        "tam",
+        "market-share",
+        "competitive-dynamics"
+      ],
+      "temporality": "semi-evergreen",
+      "created": "2026-03-23",
+      "updated": "2026-03-23",
+      "source_report": "data/companies/LLY/LLY_Initial_MAX.md",
+      "source_sections": [
+        "1.1"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/industry/glp1-market-tam-sizing-lly.md"
+    },
+    {
+      "id": "glp1-penetration-scurve-catalysts",
+      "archetype": "industry",
+      "title": "GLP-1 採用 S 曲線：滲透率分析與加速催化劑",
+      "companies": [
+        "LLY",
+        "NVO"
+      ],
+      "people": [
+        "David Ricks"
+      ],
+      "industries": [],
+      "tags": [
+        "tam",
+        "competitive-dynamics"
+      ],
+      "temporality": "semi-evergreen",
+      "created": "2026-03-23",
+      "updated": "2026-03-23",
+      "source_report": "data/companies/LLY/LLY_Initial_MAX.md",
+      "source_sections": [
+        "1.1"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/industry/glp1-penetration-scurve-catalysts.md"
+    },
+    {
+      "id": "goog-adjacent-tam-expansion",
+      "archetype": "industry",
+      "title": "Alphabet's Adjacent TAMs — Workspace, Android, Waymo, YouTube",
+      "companies": [
+        "GOOG"
+      ],
+      "people": [],
+      "industries": [
+        "cloud-infrastructure",
+        "consumer-electronics",
+        "automotive-semiconductor"
+      ],
+      "tags": [
+        "tam",
+        "market-share",
+        "business-model",
+        "competitive-dynamics"
+      ],
+      "temporality": "semi-evergreen",
+      "created": "2026-03-23",
+      "updated": "2026-03-23",
+      "source_report": "data/companies/GOOG/GOOG_Initial_MAX.md",
+      "source_sections": [
+        "1.1"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/industry/goog-adjacent-tam-expansion.md"
+    },
+    {
+      "id": "goog-cloud-computing-tam-growth",
+      "archetype": "industry",
+      "title": "Google Cloud & Cloud Computing TAM — Market Size and AI-Driven Growth",
+      "companies": [
+        "GOOG",
+        "AMZN",
+        "MSFT"
+      ],
+      "people": [],
+      "industries": [
+        "cloud-infrastructure",
+        "ai-accelerator"
+      ],
+      "tags": [
+        "tam",
+        "market-share",
+        "competitive-dynamics",
+        "capex"
+      ],
+      "temporality": "semi-evergreen",
+      "created": "2026-03-23",
+      "updated": "2026-03-23",
+      "source_report": "data/companies/GOOG/GOOG_Initial_MAX.md",
+      "source_sections": [
+        "1.1"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/industry/goog-cloud-computing-tam-growth.md"
+    },
+    {
+      "id": "goog-digital-advertising-tam-growth",
+      "archetype": "industry",
+      "title": "Google / Alphabet — Digital Advertising TAM & Growth Drivers",
+      "companies": [
+        "GOOG"
+      ],
+      "people": [
+        "Sundar Pichai"
+      ],
+      "industries": [
+        "cloud-infrastructure"
+      ],
+      "tags": [
+        "tam",
+        "market-share",
+        "competitive-dynamics",
+        "revenue-mix"
+      ],
+      "temporality": "semi-evergreen",
+      "created": "2026-03-23",
+      "updated": "2026-03-23",
+      "source_report": "data/companies/GOOG/GOOG_Initial_MAX.md",
+      "source_sections": [
+        "1.1"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/industry/goog-digital-advertising-tam-growth.md"
+    },
+    {
       "id": "goog-tam-digital-advertising-cloud-multi-market-2025",
       "archetype": "industry",
       "title": "Alphabet TAM: Digital Advertising, Cloud Computing, and Emerging Markets (2025)",
@@ -4727,6 +5616,117 @@
       ],
       "quality": 4,
       "path": "data/knowledge/atoms/leadership/goog-sundar-pichai-ceo-profile.md"
+    },
+    {
+      "id": "goog-sundar-pichai-leadership-profile",
+      "archetype": "leadership",
+      "title": "Sundar Pichai: Career History, Management Philosophy, and CEO Track Record",
+      "companies": [
+        "GOOG"
+      ],
+      "people": [
+        "Sundar Pichai",
+        "Larry Page",
+        "Sergey Brin",
+        "Demis Hassabis",
+        "Thomas Kurian",
+        "Prabhakar Raghavan"
+      ],
+      "industries": [
+        "cloud-infrastructure",
+        "ai-accelerator"
+      ],
+      "tags": [
+        "founding",
+        "culture",
+        "business-model",
+        "moat"
+      ],
+      "temporality": "evergreen",
+      "created": "2026-03-23",
+      "updated": "2026-03-23",
+      "source_report": "data/companies/GOOG/GOOG_Initial_MAX.md",
+      "source_sections": [
+        "4.1"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/leadership/goog-sundar-pichai-leadership-profile.md"
+    },
+    {
+      "id": "lly-ceo-david-ricks-career-profile",
+      "archetype": "leadership",
+      "title": "David A. Ricks — Eli Lilly CEO Career Profile & Background",
+      "companies": [
+        "LLY"
+      ],
+      "people": [
+        "David A. Ricks"
+      ],
+      "industries": [],
+      "tags": [
+        "founding",
+        "culture"
+      ],
+      "temporality": "evergreen",
+      "created": "2026-03-23",
+      "updated": "2026-03-23",
+      "source_report": "data/companies/LLY/LLY_Initial_MAX.md",
+      "source_sections": [
+        "4.1"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/leadership/lly-ceo-david-ricks-career-profile.md"
+    },
+    {
+      "id": "lly-ceo-david-ricks-decision-philosophy",
+      "archetype": "leadership",
+      "title": "David A. Ricks — Seven First-Principles of Leadership & Decision-Making",
+      "companies": [
+        "LLY"
+      ],
+      "people": [
+        "David A. Ricks"
+      ],
+      "industries": [],
+      "tags": [
+        "culture",
+        "business-model",
+        "moat"
+      ],
+      "temporality": "evergreen",
+      "created": "2026-03-23",
+      "updated": "2026-03-23",
+      "source_report": "data/companies/LLY/LLY_Initial_MAX.md",
+      "source_sections": [
+        "4.1"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/leadership/lly-ceo-david-ricks-decision-philosophy.md"
+    },
+    {
+      "id": "lly-ceo-david-ricks-ethics-track-record",
+      "archetype": "leadership",
+      "title": "David A. Ricks — Ethics, Moral Track Record & Reflections on Failure",
+      "companies": [
+        "LLY"
+      ],
+      "people": [
+        "David A. Ricks"
+      ],
+      "industries": [],
+      "tags": [
+        "culture",
+        "governance"
+      ],
+      "temporality": "evergreen",
+      "created": "2026-03-23",
+      "updated": "2026-03-23",
+      "source_report": "data/companies/LLY/LLY_Initial_MAX.md",
+      "source_sections": [
+        "4.1"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/leadership/lly-ceo-david-ricks-ethics-track-record.md"
     },
     {
       "id": "lly-david-ricks-ceo-profile",
@@ -7973,6 +8973,297 @@
       "path": "data/knowledge/atoms/quotes/ebay-pierre-omidyar-founding-era-quotes-part-1.md"
     },
     {
+      "id": "goog-ashkenazi-quotes-capital-allocation-efficiency-part-3",
+      "archetype": "quotes",
+      "title": "Anat Ashkenazi (CFO) Quotes: Capital Allocation, CapEx Discipline & Operational Efficiency",
+      "companies": [
+        "GOOG"
+      ],
+      "people": [
+        "Anat Ashkenazi"
+      ],
+      "industries": [
+        "cloud-infrastructure"
+      ],
+      "tags": [
+        "capex",
+        "margins",
+        "valuation",
+        "revenue-mix"
+      ],
+      "temporality": "time-bound",
+      "created": "2026-03-23",
+      "updated": "2026-03-23",
+      "source_report": "data/companies/GOOG/GOOG_Initial_MAX.md",
+      "source_sections": [
+        "all"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/quotes/goog-ashkenazi-quotes-capital-allocation-efficiency-part-3.md"
+    },
+    {
+      "id": "goog-executive-quotes-financials-2025-2026-part-1",
+      "archetype": "quotes",
+      "title": "Alphabet CFO & CBO Quotes — Revenue Acceleration and Geographic Growth (2025–2026)",
+      "companies": [
+        "GOOG"
+      ],
+      "people": [
+        "Anat Ashkenazi",
+        "Philipp Schindler"
+      ],
+      "industries": [
+        "cloud-infrastructure"
+      ],
+      "tags": [
+        "revenue-mix",
+        "margins",
+        "competitive-dynamics"
+      ],
+      "temporality": "time-bound",
+      "created": "2026-03-23",
+      "updated": "2026-03-23",
+      "source_report": "data/companies/GOOG/GOOG_Initial_MAX.md",
+      "source_sections": [
+        "all"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/quotes/goog-executive-quotes-financials-2025-2026-part-1.md"
+    },
+    {
+      "id": "goog-executive-quotes-financials-2025-2026-part-2",
+      "archetype": "quotes",
+      "title": "Alphabet CFO & CBO Quotes: Cloud Margins, CapEx, Advertising AI ROI (2024–2026)",
+      "companies": [
+        "GOOG"
+      ],
+      "people": [
+        "Anat Ashkenazi",
+        "Philipp Schindler"
+      ],
+      "industries": [
+        "cloud-infrastructure"
+      ],
+      "tags": [
+        "margins",
+        "capex",
+        "revenue-mix",
+        "valuation"
+      ],
+      "temporality": "time-bound",
+      "created": "2026-03-23",
+      "updated": "2026-03-23",
+      "source_report": "data/companies/GOOG/GOOG_Initial_MAX.md",
+      "source_sections": [
+        "all"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/quotes/goog-executive-quotes-financials-2025-2026-part-2.md"
+    },
+    {
+      "id": "goog-pichai-quotes-ai-strategy-historical-perspective-part-3",
+      "archetype": "quotes",
+      "title": "Sundar Pichai Quotes: AI Strategy, Historical Perspective & Mission Evolution",
+      "companies": [
+        "GOOG"
+      ],
+      "people": [
+        "Sundar Pichai"
+      ],
+      "industries": [
+        "cloud-infrastructure",
+        "ai-accelerator"
+      ],
+      "tags": [
+        "business-model",
+        "moat",
+        "competitive-dynamics"
+      ],
+      "temporality": "semi-evergreen",
+      "created": "2026-03-23",
+      "updated": "2026-03-23",
+      "source_report": "data/companies/GOOG/GOOG_Initial_MAX.md",
+      "source_sections": [
+        "all"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/quotes/goog-pichai-quotes-ai-strategy-historical-perspective-part-3.md"
+    },
+    {
+      "id": "goog-pichai-quotes-ai-strategy-infrastructure-part-4",
+      "archetype": "quotes",
+      "title": "Sundar Pichai — AI Strategy, Full-Stack Infrastructure & AJI Concept (Part 4)",
+      "companies": [
+        "GOOG"
+      ],
+      "people": [
+        "Sundar Pichai"
+      ],
+      "industries": [
+        "cloud-infrastructure",
+        "ai-accelerator"
+      ],
+      "tags": [
+        "culture",
+        "business-model",
+        "moat",
+        "capex"
+      ],
+      "temporality": "evergreen",
+      "created": "2026-03-23",
+      "updated": "2026-03-23",
+      "source_report": "data/companies/GOOG/GOOG_Initial_MAX.md",
+      "source_sections": [
+        "all"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/quotes/goog-pichai-quotes-ai-strategy-infrastructure-part-4.md"
+    },
+    {
+      "id": "goog-pichai-quotes-browser-technology-impact-part-3",
+      "archetype": "quotes",
+      "title": "Sundar Pichai Quotes: Chrome, Browser Philosophy & Technology's Transformative Power",
+      "companies": [
+        "GOOG"
+      ],
+      "people": [
+        "Sundar Pichai"
+      ],
+      "industries": [
+        "cloud-infrastructure"
+      ],
+      "tags": [
+        "founding",
+        "business-model",
+        "culture",
+        "moat"
+      ],
+      "temporality": "evergreen",
+      "created": "2026-03-23",
+      "updated": "2026-03-23",
+      "source_report": "data/companies/GOOG/GOOG_Initial_MAX.md",
+      "source_sections": [
+        "all"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/quotes/goog-pichai-quotes-browser-technology-impact-part-3.md"
+    },
+    {
+      "id": "goog-pichai-quotes-competition-ai-market-dynamics-part-3",
+      "archetype": "quotes",
+      "title": "Sundar Pichai Quotes: Competition, AI Market Dynamics & Search Defense",
+      "companies": [
+        "GOOG"
+      ],
+      "people": [
+        "Sundar Pichai"
+      ],
+      "industries": [
+        "cloud-infrastructure",
+        "ai-accelerator"
+      ],
+      "tags": [
+        "competitive-dynamics",
+        "market-share",
+        "five-forces",
+        "moat"
+      ],
+      "temporality": "semi-evergreen",
+      "created": "2026-03-23",
+      "updated": "2026-03-23",
+      "source_report": "data/companies/GOOG/GOOG_Initial_MAX.md",
+      "source_sections": [
+        "all"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/quotes/goog-pichai-quotes-competition-ai-market-dynamics-part-3.md"
+    },
+    {
+      "id": "goog-pichai-quotes-culture-leadership-decision-making-part-3",
+      "archetype": "quotes",
+      "title": "Sundar Pichai Quotes: Organizational Culture, Leadership Philosophy & Decision-Making",
+      "companies": [
+        "GOOG"
+      ],
+      "people": [
+        "Sundar Pichai"
+      ],
+      "industries": [
+        "cloud-infrastructure"
+      ],
+      "tags": [
+        "culture",
+        "founding",
+        "business-model"
+      ],
+      "temporality": "evergreen",
+      "created": "2026-03-23",
+      "updated": "2026-03-23",
+      "source_report": "data/companies/GOOG/GOOG_Initial_MAX.md",
+      "source_sections": [
+        "all"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/quotes/goog-pichai-quotes-culture-leadership-decision-making-part-3.md"
+    },
+    {
+      "id": "goog-pichai-quotes-ethics-safety-society-part-4",
+      "archetype": "quotes",
+      "title": "Sundar Pichai — AI Ethics, Safety, Privacy & Societal Impact (Part 4)",
+      "companies": [
+        "GOOG"
+      ],
+      "people": [
+        "Sundar Pichai"
+      ],
+      "industries": [
+        "cloud-infrastructure",
+        "ai-accelerator"
+      ],
+      "tags": [
+        "governance",
+        "culture",
+        "moat"
+      ],
+      "temporality": "evergreen",
+      "created": "2026-03-23",
+      "updated": "2026-03-23",
+      "source_report": "data/companies/GOOG/GOOG_Initial_MAX.md",
+      "source_sections": [
+        "all"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/quotes/goog-pichai-quotes-ethics-safety-society-part-4.md"
+    },
+    {
+      "id": "goog-pichai-quotes-regulatory-culture-leadership-part-4",
+      "archetype": "quotes",
+      "title": "Sundar Pichai — Regulatory Defense, Antitrust & Organizational Culture (Part 4)",
+      "companies": [
+        "GOOG"
+      ],
+      "people": [
+        "Sundar Pichai"
+      ],
+      "industries": [
+        "cloud-infrastructure"
+      ],
+      "tags": [
+        "governance",
+        "culture",
+        "competitive-dynamics"
+      ],
+      "temporality": "evergreen",
+      "created": "2026-03-23",
+      "updated": "2026-03-23",
+      "source_report": "data/companies/GOOG/GOOG_Initial_MAX.md",
+      "source_sections": [
+        "all"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/quotes/goog-pichai-quotes-regulatory-culture-leadership-part-4.md"
+    },
+    {
       "id": "goog-sundar-pichai-quotes-ai-philosophy-agi-society-2023-2025-part-2",
       "archetype": "quotes",
       "title": "Sundar Pichai on AI Philosophy, AGI Timeline, and Societal Impact (2023–2025)",
@@ -8127,6 +9418,37 @@
       "path": "data/knowledge/atoms/quotes/goog-sundar-pichai-quotes-leadership-culture-decisions-part-2.md"
     },
     {
+      "id": "goog-sundar-pichai-quotes-part1-part-1",
+      "archetype": "quotes",
+      "title": "Sundar Pichai Quotes — AI Strategy, Search, Competition & Antitrust (2020–2026)",
+      "companies": [
+        "GOOG"
+      ],
+      "people": [
+        "Sundar Pichai"
+      ],
+      "industries": [
+        "cloud-infrastructure",
+        "ai-accelerator"
+      ],
+      "tags": [
+        "culture",
+        "moat",
+        "competitive-dynamics",
+        "business-model",
+        "ai-accelerator"
+      ],
+      "temporality": "evergreen",
+      "created": "2026-03-23",
+      "updated": "2026-03-23",
+      "source_report": "data/companies/GOOG/GOOG_Initial_MAX.md",
+      "source_sections": [
+        "all"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/quotes/goog-sundar-pichai-quotes-part1-part-1.md"
+    },
+    {
       "id": "goog-sundar-pichai-quotes-personal-background-origin-story-part-2",
       "archetype": "quotes",
       "title": "Sundar Pichai Personal Background and Origin Story Quotes",
@@ -8152,6 +9474,169 @@
       ],
       "quality": 4,
       "path": "data/knowledge/atoms/quotes/goog-sundar-pichai-quotes-personal-background-origin-story-part-2.md"
+    },
+    {
+      "id": "goog-sundar-pichai-quotes-search-ai-commerce-part2-part-2",
+      "archetype": "quotes",
+      "title": "Sundar Pichai Quotes: Search AI Evolution, Agentic Commerce & Innovation Philosophy",
+      "companies": [
+        "GOOG"
+      ],
+      "people": [
+        "Sundar Pichai"
+      ],
+      "industries": [
+        "cloud-infrastructure"
+      ],
+      "tags": [
+        "business-model",
+        "culture",
+        "moat",
+        "competitive-dynamics"
+      ],
+      "temporality": "evergreen",
+      "created": "2026-03-23",
+      "updated": "2026-03-23",
+      "source_report": "data/companies/GOOG/GOOG_Initial_MAX.md",
+      "source_sections": [
+        "all"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/quotes/goog-sundar-pichai-quotes-search-ai-commerce-part2-part-2.md"
+    },
+    {
+      "id": "goog-sundar-pichai-quotes",
+      "archetype": "quotes",
+      "title": "Sundar Pichai: Curated Quotes on AI Strategy, Leadership, and Google's Mission",
+      "companies": [
+        "GOOG"
+      ],
+      "people": [
+        "Sundar Pichai"
+      ],
+      "industries": [
+        "cloud-infrastructure",
+        "ai-accelerator"
+      ],
+      "tags": [
+        "culture",
+        "business-model",
+        "moat"
+      ],
+      "temporality": "evergreen",
+      "created": "2026-03-23",
+      "updated": "2026-03-23",
+      "source_report": "data/companies/GOOG/GOOG_Initial_MAX.md",
+      "source_sections": [
+        "4.1"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/quotes/goog-sundar-pichai-quotes.md"
+    },
+    {
+      "id": "lly-ceo-david-ricks-quotes",
+      "archetype": "quotes",
+      "title": "David A. Ricks — Direct Quotes: Strategy, Culture, Science, and Ethics",
+      "companies": [
+        "LLY"
+      ],
+      "people": [
+        "David A. Ricks"
+      ],
+      "industries": [],
+      "tags": [
+        "culture",
+        "business-model",
+        "founding"
+      ],
+      "temporality": "evergreen",
+      "created": "2026-03-23",
+      "updated": "2026-03-23",
+      "source_report": "data/companies/LLY/LLY_Initial_MAX.md",
+      "source_sections": [
+        "4.1"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/quotes/lly-ceo-david-ricks-quotes.md"
+    },
+    {
+      "id": "lly-david-ricks-career-profile-leadership-trajectory-part-3",
+      "archetype": "quotes",
+      "title": "David Ricks — Career Trajectory Quotes: From IBM Analyst to Eli Lilly CEO (Part 3)",
+      "companies": [
+        "LLY"
+      ],
+      "people": [
+        "David Ricks"
+      ],
+      "industries": [],
+      "tags": [
+        "culture",
+        "founding"
+      ],
+      "temporality": "evergreen",
+      "created": "2026-03-23",
+      "updated": "2026-03-23",
+      "source_report": "data/companies/LLY/LLY_Initial_MAX.md",
+      "source_sections": [
+        "all"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/quotes/lly-david-ricks-career-profile-leadership-trajectory-part-3.md"
+    },
+    {
+      "id": "lly-david-ricks-quotes-competitive-moat-market-structure-part-3",
+      "archetype": "quotes",
+      "title": "David Ricks — Competitive Moat, Market Structure, and GLP-1 Barriers (Part 3)",
+      "companies": [
+        "LLY"
+      ],
+      "people": [
+        "David Ricks"
+      ],
+      "industries": [],
+      "tags": [
+        "competitive-dynamics",
+        "moat",
+        "market-share",
+        "capacity",
+        "supply-chain"
+      ],
+      "temporality": "evergreen",
+      "created": "2026-03-23",
+      "updated": "2026-03-23",
+      "source_report": "data/companies/LLY/LLY_Initial_MAX.md",
+      "source_sections": [
+        "all"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/quotes/lly-david-ricks-quotes-competitive-moat-market-structure-part-3.md"
+    },
+    {
+      "id": "lly-david-ricks-quotes-decision-philosophy-rd-principles-part-3",
+      "archetype": "quotes",
+      "title": "David Ricks — R&D Decision Philosophy: Human Suffering, Discovery Uncertainty, and Institutional Rigor (Part 3)",
+      "companies": [
+        "LLY"
+      ],
+      "people": [
+        "David Ricks"
+      ],
+      "industries": [],
+      "tags": [
+        "culture",
+        "business-model",
+        "moat"
+      ],
+      "temporality": "evergreen",
+      "created": "2026-03-23",
+      "updated": "2026-03-23",
+      "source_report": "data/companies/LLY/LLY_Initial_MAX.md",
+      "source_sections": [
+        "all"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/quotes/lly-david-ricks-quotes-decision-philosophy-rd-principles-part-3.md"
     },
     {
       "id": "lly-david-ricks-quotes-diversity-leadership-succession-part-3",
@@ -8181,6 +9666,90 @@
       "path": "data/knowledge/atoms/quotes/lly-david-ricks-quotes-diversity-leadership-succession-part-3.md"
     },
     {
+      "id": "lly-david-ricks-quotes-glp1-addiction-neuroscience-part-2",
+      "archetype": "quotes",
+      "title": "David Ricks Quotes: GLP-1 Addiction Indications & Neuroscience (Part 2)",
+      "companies": [
+        "LLY"
+      ],
+      "people": [
+        "David Ricks"
+      ],
+      "industries": [],
+      "tags": [
+        "glp1",
+        "addiction",
+        "neuroscience",
+        "alzheimers",
+        "tam",
+        "pipeline",
+        "anti-hedonics"
+      ],
+      "temporality": "evergreen",
+      "created": "2026-03-23",
+      "updated": "2026-03-23",
+      "source_report": "data/companies/LLY/LLY_Initial_MAX.md",
+      "source_sections": [
+        "all"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/quotes/lly-david-ricks-quotes-glp1-addiction-neuroscience-part-2.md"
+    },
+    {
+      "id": "lly-david-ricks-quotes-glp1-obesity-market-part-1",
+      "archetype": "quotes",
+      "title": "David Ricks (Eli Lilly CEO) — GLP-1 Market, Pricing, Competition & Compounders Quotes",
+      "companies": [
+        "LLY"
+      ],
+      "people": [
+        "David Ricks"
+      ],
+      "industries": [],
+      "tags": [
+        "tam",
+        "market-share",
+        "competitive-dynamics",
+        "pricing",
+        "moat"
+      ],
+      "temporality": "semi-evergreen",
+      "created": "2026-03-23",
+      "updated": "2026-03-23",
+      "source_report": "data/companies/LLY/LLY_Initial_MAX.md",
+      "source_sections": [
+        "all"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/quotes/lly-david-ricks-quotes-glp1-obesity-market-part-1.md"
+    },
+    {
+      "id": "lly-david-ricks-quotes-glp1-substitutes-compounding-part-3",
+      "archetype": "quotes",
+      "title": "David Ricks — GLP-1 Substitutes, Compounding Threat, and Buyer Power (Part 3)",
+      "companies": [
+        "LLY"
+      ],
+      "people": [
+        "David Ricks"
+      ],
+      "industries": [],
+      "tags": [
+        "competitive-dynamics",
+        "moat",
+        "pricing"
+      ],
+      "temporality": "semi-evergreen",
+      "created": "2026-03-23",
+      "updated": "2026-03-23",
+      "source_report": "data/companies/LLY/LLY_Initial_MAX.md",
+      "source_sections": [
+        "all"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/quotes/lly-david-ricks-quotes-glp1-substitutes-compounding-part-3.md"
+    },
+    {
       "id": "lly-david-ricks-quotes-leadership-culture-org-design-part-2",
       "archetype": "quotes",
       "title": "David Ricks on Leadership Philosophy, Organizational Design, and Culture (Part 2)",
@@ -8206,6 +9775,92 @@
       ],
       "quality": 4,
       "path": "data/knowledge/atoms/quotes/lly-david-ricks-quotes-leadership-culture-org-design-part-2.md"
+    },
+    {
+      "id": "lly-david-ricks-quotes-manufacturing-capacity-dtc-part-2",
+      "archetype": "quotes",
+      "title": "David Ricks Quotes: Manufacturing Capacity Build-Out & LillyDirect DTC (Part 2)",
+      "companies": [
+        "LLY"
+      ],
+      "people": [
+        "David Ricks"
+      ],
+      "industries": [],
+      "tags": [
+        "supply-chain",
+        "capacity",
+        "capex",
+        "manufacturing",
+        "dtc",
+        "pricing",
+        "glp1"
+      ],
+      "temporality": "semi-evergreen",
+      "created": "2026-03-23",
+      "updated": "2026-03-23",
+      "source_report": "data/companies/LLY/LLY_Initial_MAX.md",
+      "source_sections": [
+        "all"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/quotes/lly-david-ricks-quotes-manufacturing-capacity-dtc-part-2.md"
+    },
+    {
+      "id": "lly-david-ricks-quotes-market-leadership-competition-part-2",
+      "archetype": "quotes",
+      "title": "David Ricks Quotes: GLP-1 Market Leadership & Competitive Dynamics (Part 2)",
+      "companies": [
+        "LLY"
+      ],
+      "people": [
+        "David Ricks"
+      ],
+      "industries": [],
+      "tags": [
+        "market-share",
+        "competitive-dynamics",
+        "glp1",
+        "five-forces",
+        "moat",
+        "duopoly"
+      ],
+      "temporality": "semi-evergreen",
+      "created": "2026-03-23",
+      "updated": "2026-03-23",
+      "source_report": "data/companies/LLY/LLY_Initial_MAX.md",
+      "source_sections": [
+        "all"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/quotes/lly-david-ricks-quotes-market-leadership-competition-part-2.md"
+    },
+    {
+      "id": "lly-david-ricks-quotes-mission-strategy-part-1",
+      "archetype": "quotes",
+      "title": "David Ricks (Eli Lilly CEO) — Mission, Culture & Pharmaceutical Strategy Quotes",
+      "companies": [
+        "LLY"
+      ],
+      "people": [
+        "David Ricks"
+      ],
+      "industries": [],
+      "tags": [
+        "culture",
+        "business-model",
+        "founding",
+        "moat"
+      ],
+      "temporality": "evergreen",
+      "created": "2026-03-23",
+      "updated": "2026-03-23",
+      "source_report": "data/companies/LLY/LLY_Initial_MAX.md",
+      "source_sections": [
+        "all"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/quotes/lly-david-ricks-quotes-mission-strategy-part-1.md"
     },
     {
       "id": "lly-david-ricks-quotes-obesity-glp1-disease-mission-part-1",
@@ -8235,6 +9890,87 @@
       "path": "data/knowledge/atoms/quotes/lly-david-ricks-quotes-obesity-glp1-disease-mission-part-1.md"
     },
     {
+      "id": "lly-david-ricks-quotes-organizational-culture-leadership-part-3",
+      "archetype": "quotes",
+      "title": "David Ricks — Organizational Culture, Incentive Design, and Leadership Philosophy (Part 3)",
+      "companies": [
+        "LLY"
+      ],
+      "people": [
+        "David Ricks"
+      ],
+      "industries": [],
+      "tags": [
+        "culture",
+        "business-model"
+      ],
+      "temporality": "evergreen",
+      "created": "2026-03-23",
+      "updated": "2026-03-23",
+      "source_report": "data/companies/LLY/LLY_Initial_MAX.md",
+      "source_sections": [
+        "all"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/quotes/lly-david-ricks-quotes-organizational-culture-leadership-part-3.md"
+    },
+    {
+      "id": "lly-david-ricks-quotes-pipeline-ai-future-part-1",
+      "archetype": "quotes",
+      "title": "David Ricks (Eli Lilly CEO) — Pipeline Innovation, AI in Drug Discovery & Future of Medicine Quotes",
+      "companies": [
+        "LLY"
+      ],
+      "people": [
+        "David Ricks"
+      ],
+      "industries": [],
+      "tags": [
+        "process-node",
+        "tam",
+        "competitive-dynamics",
+        "business-model"
+      ],
+      "temporality": "semi-evergreen",
+      "created": "2026-03-23",
+      "updated": "2026-03-23",
+      "source_report": "data/companies/LLY/LLY_Initial_MAX.md",
+      "source_sections": [
+        "all"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/quotes/lly-david-ricks-quotes-pipeline-ai-future-part-1.md"
+    },
+    {
+      "id": "lly-david-ricks-quotes-rd-drug-discovery-philosophy-part-2",
+      "archetype": "quotes",
+      "title": "David Ricks Quotes: R&D Investment, Drug Discovery Philosophy & Cost Structure (Part 2)",
+      "companies": [
+        "LLY"
+      ],
+      "people": [
+        "David Ricks"
+      ],
+      "industries": [],
+      "tags": [
+        "capex",
+        "margins",
+        "revenue-mix",
+        "business-model",
+        "moat",
+        "pricing"
+      ],
+      "temporality": "evergreen",
+      "created": "2026-03-23",
+      "updated": "2026-03-23",
+      "source_report": "data/companies/LLY/LLY_Initial_MAX.md",
+      "source_sections": [
+        "all"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/quotes/lly-david-ricks-quotes-rd-drug-discovery-philosophy-part-2.md"
+    },
+    {
       "id": "lly-david-ricks-quotes-rd-innovation-drug-discovery-part-2",
       "archetype": "quotes",
       "title": "David Ricks on R&D Investment, Drug Discovery, and Manufacturing Scale-Up (Part 2)",
@@ -8261,6 +9997,35 @@
       ],
       "quality": 4,
       "path": "data/knowledge/atoms/quotes/lly-david-ricks-quotes-rd-innovation-drug-discovery-part-2.md"
+    },
+    {
+      "id": "lly-david-ricks-quotes-strategic-history-ceo-tenure-part-2",
+      "archetype": "quotes",
+      "title": "David Ricks Quotes: Strategic Inflection Points & CEO Tenure Reflections (Part 2)",
+      "companies": [
+        "LLY"
+      ],
+      "people": [
+        "David Ricks"
+      ],
+      "industries": [],
+      "tags": [
+        "founding",
+        "business-model",
+        "culture",
+        "moat",
+        "glp1",
+        "tam"
+      ],
+      "temporality": "evergreen",
+      "created": "2026-03-23",
+      "updated": "2026-03-23",
+      "source_report": "data/companies/LLY/LLY_Initial_MAX.md",
+      "source_sections": [
+        "all"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/quotes/lly-david-ricks-quotes-strategic-history-ceo-tenure-part-2.md"
     },
     {
       "id": "lly-david-ricks-quotes-strategy-competition-pricing-access-part-1",
@@ -10069,6 +11834,207 @@
       "path": "data/knowledge/atoms/technology/ebay-four-scurve-ecommerce-technology-transitions.md"
     },
     {
+      "id": "goog-ai-adoption-scurve-quantitative",
+      "archetype": "technology",
+      "title": "Google/AI Industry: Technology Adoption S-Curve Quantitative Analysis (GenAI, Agentic AI, Cloud, Digital Ads)",
+      "companies": [
+        "GOOG"
+      ],
+      "people": [],
+      "industries": [
+        "cloud-infrastructure",
+        "ai-accelerator"
+      ],
+      "tags": [
+        "tam",
+        "ai-adoption",
+        "s-curve",
+        "genai",
+        "agentic-ai",
+        "cloud-infrastructure",
+        "digital-advertising",
+        "penetration-rate",
+        "mckinsey",
+        "gartner"
+      ],
+      "temporality": "semi-evergreen",
+      "created": "2026-03-23",
+      "updated": "2026-03-23",
+      "source_report": "data/companies/GOOG/GOOG_Initial_MAX.md",
+      "source_sections": [
+        "1.3"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/technology/goog-ai-adoption-scurve-quantitative.md"
+    },
+    {
+      "id": "goog-demand-shift-search-youtube-enterprise",
+      "archetype": "technology",
+      "title": "Google: Three Simultaneous Demand Shifts — Enterprise AI, Search Behavior, Video Consumption",
+      "companies": [
+        "GOOG"
+      ],
+      "people": [
+        "Sundar Pichai"
+      ],
+      "industries": [
+        "cloud-infrastructure",
+        "ai-accelerator"
+      ],
+      "tags": [
+        "tam",
+        "ai-adoption",
+        "genai",
+        "search",
+        "youtube",
+        "ctv",
+        "ai-overviews",
+        "agentic-ai",
+        "enterprise-demand",
+        "consumer-behavior"
+      ],
+      "temporality": "semi-evergreen",
+      "created": "2026-03-23",
+      "updated": "2026-03-23",
+      "source_report": "data/companies/GOOG/GOOG_Initial_MAX.md",
+      "source_sections": [
+        "1.3"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/technology/goog-demand-shift-search-youtube-enterprise.md"
+    },
+    {
+      "id": "goog-llm-evolution-roadmap-gemini",
+      "archetype": "technology",
+      "title": "Google's LLM Evolution Roadmap: BERT to Gemini 2.5 Pro",
+      "companies": [
+        "GOOG"
+      ],
+      "people": [
+        "Sundar Pichai"
+      ],
+      "industries": [
+        "ai-accelerator",
+        "cloud-infrastructure"
+      ],
+      "tags": [
+        "process-node",
+        "ai-adoption",
+        "genai",
+        "llm",
+        "model-roadmap",
+        "gemini",
+        "r&d",
+        "scaling-laws",
+        "vertex-ai"
+      ],
+      "temporality": "semi-evergreen",
+      "created": "2026-03-23",
+      "updated": "2026-03-23",
+      "source_report": "data/companies/GOOG/GOOG_Initial_MAX.md",
+      "source_sections": [
+        "1.3"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/technology/goog-llm-evolution-roadmap-gemini.md"
+    },
+    {
+      "id": "goog-tpu-infrastructure-vertical-integration",
+      "archetype": "technology",
+      "title": "Google TPU Evolution: Six Generations of AI Infrastructure Vertical Integration",
+      "companies": [
+        "GOOG"
+      ],
+      "people": [
+        "Sundar Pichai"
+      ],
+      "industries": [
+        "ai-accelerator",
+        "cloud-infrastructure"
+      ],
+      "tags": [
+        "process-node",
+        "capex",
+        "supply-chain",
+        "ai-accelerator",
+        "tpu",
+        "vertical-integration",
+        "inference",
+        "training",
+        "cost-advantage"
+      ],
+      "temporality": "semi-evergreen",
+      "created": "2026-03-23",
+      "updated": "2026-03-23",
+      "source_report": "data/companies/GOOG/GOOG_Initial_MAX.md",
+      "source_sections": [
+        "1.3"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/technology/goog-tpu-infrastructure-vertical-integration.md"
+    },
+    {
+      "id": "lly-ai-drug-discovery-strategy",
+      "archetype": "technology",
+      "title": "Eli Lilly AI Drug Discovery Strategy: Repurposed AI, Genomics, and Early-Stage Investment",
+      "companies": [
+        "LLY"
+      ],
+      "people": [
+        "David Ricks"
+      ],
+      "industries": [],
+      "tags": [
+        "ai-drug-discovery",
+        "genomics",
+        "protein-folding",
+        "r-and-d",
+        "pipeline",
+        "alphafold"
+      ],
+      "temporality": "semi-evergreen",
+      "created": "2026-03-23",
+      "updated": "2026-03-23",
+      "source_report": "data/companies/LLY/LLY_Initial_MAX.md",
+      "source_sections": [
+        "1.3"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/technology/lly-ai-drug-discovery-strategy.md"
+    },
+    {
+      "id": "lly-glp1-demand-structural-shifts",
+      "archetype": "technology",
+      "title": "GLP-1 Demand Structural Shifts: Obesity Reclassification, Alzheimer's, and Addiction Indications",
+      "companies": [
+        "LLY"
+      ],
+      "people": [
+        "David Ricks"
+      ],
+      "industries": [],
+      "tags": [
+        "tam",
+        "glp1",
+        "indication-expansion",
+        "obesity",
+        "alzheimer",
+        "addiction",
+        "chronic-disease",
+        "tirzepatide",
+        "kisunla"
+      ],
+      "temporality": "semi-evergreen",
+      "created": "2026-03-23",
+      "updated": "2026-03-23",
+      "source_report": "data/companies/LLY/LLY_Initial_MAX.md",
+      "source_sections": [
+        "1.3"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/technology/lly-glp1-demand-structural-shifts.md"
+    },
+    {
       "id": "lly-glp1-scurve-diffusion-demand-trends-2025",
       "archetype": "technology",
       "title": "LLY GLP-1 S-Curve Diffusion, AI Drug Discovery, and Demand Structural Shifts (2025)",
@@ -10096,6 +12062,39 @@
       "path": "data/knowledge/atoms/technology/lly-glp1-scurve-diffusion-demand-trends-2025.md"
     },
     {
+      "id": "lly-glp1-technology-generation-evolution",
+      "archetype": "technology",
+      "title": "GLP-1 Drug Technology: Three Generations from Single-Receptor to Oral Multi-Receptor",
+      "companies": [
+        "LLY",
+        "NVO"
+      ],
+      "people": [
+        "David Ricks"
+      ],
+      "industries": [],
+      "tags": [
+        "process-node",
+        "glp1",
+        "oral-drug-delivery",
+        "multi-receptor",
+        "pipeline",
+        "drug-generations",
+        "tirzepatide",
+        "orforglipron",
+        "retatrutide"
+      ],
+      "temporality": "semi-evergreen",
+      "created": "2026-03-23",
+      "updated": "2026-03-23",
+      "source_report": "data/companies/LLY/LLY_Initial_MAX.md",
+      "source_sections": [
+        "1.3"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/technology/lly-glp1-technology-generation-evolution.md"
+    },
+    {
       "id": "lly-glp1-technology-generations-roadmap-2025",
       "archetype": "technology",
       "title": "LLY GLP-1 Technology Generations: From Single-Receptor to Oral Multi-Receptor (2025)",
@@ -10121,6 +12120,38 @@
       ],
       "quality": 4,
       "path": "data/knowledge/atoms/technology/lly-glp1-technology-generations-roadmap-2025.md"
+    },
+    {
+      "id": "lly-orforglipron-small-molecule-oral-glp1",
+      "archetype": "technology",
+      "title": "Orforglipron: Non-Peptide Small Molecule GLP-1 — Technology Architecture and Manufacturing Advantage",
+      "companies": [
+        "LLY",
+        "NVO"
+      ],
+      "people": [
+        "David Ricks"
+      ],
+      "industries": [],
+      "tags": [
+        "oral-drug-delivery",
+        "small-molecule",
+        "glp1",
+        "manufacturing",
+        "bioavailability",
+        "allosteric-agonist",
+        "orforglipron",
+        "supply-chain"
+      ],
+      "temporality": "semi-evergreen",
+      "created": "2026-03-23",
+      "updated": "2026-03-23",
+      "source_report": "data/companies/LLY/LLY_Initial_MAX.md",
+      "source_sections": [
+        "1.3"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/technology/lly-orforglipron-small-molecule-oral-glp1.md"
     },
     {
       "id": "tsmc-ai-demand-drivers-token-growth",
@@ -10447,6 +12478,7 @@
       "amzn-ten-year-financials-fy2014-fy2025",
       "amzn-tam-ecommerce-cloud-advertising-2024",
       "amzn-tam-three-markets-ecommerce-cloud-ads",
+      "goog-cloud-computing-tam-growth",
       "amzn-andy-jassy-ceo-profile",
       "amzn-jeff-bezos-founder-profile",
       "amzn-leadership-succession-bench",
@@ -10588,45 +12620,114 @@
       "ebay-four-scurve-ecommerce-technology-transitions"
     ],
     "GOOG": [
+      "goog-business-model-dna-attention-monetization",
       "goog-five-segment-business-model-2024",
       "goog-organizational-culture-engineering-driven-innovation",
+      "goog-organizational-culture-incentives",
+      "goog-revenue-mix-segment-financials-2024-2025",
+      "goog-unit-economics-cost-structure",
+      "goog-digital-ad-cloud-market-structure",
       "goog-five-forces-competitive-moat-analysis-2025",
+      "goog-five-forces-competitive-moat",
       "goog-market-structure-digital-advertising-cloud-2025",
       "goog-regulatory-antitrust-doj-dma-dsa-2025",
+      "goog-regulatory-antitrust-landscape",
+      "goog-10yr-financial-metrics-2014-2024",
       "goog-dcf-valuation-fy2025-three-scenario",
+      "goog-dcf-valuation-multiples-2024",
       "goog-geographic-revenue-breakdown-fy2024",
+      "goog-geographic-revenue-fy2024-fy2025",
+      "goog-operating-efficiency-roic-fcf-2020-2025",
       "goog-operating-efficiency-roic-margins-fy2020-fy2024",
+      "goog-segment-revenue-operating-profit-fy2024-fy2025",
+      "goog-strategic-inflection-points-2015-2024",
       "goog-ten-year-financials-fy2014-fy2024",
+      "goog-adjacent-tam-expansion",
+      "goog-cloud-computing-tam-growth",
+      "goog-digital-advertising-tam-growth",
       "goog-tam-digital-advertising-cloud-multi-market-2025",
       "goog-sundar-pichai-ceo-profile",
+      "goog-sundar-pichai-leadership-profile",
+      "goog-ashkenazi-quotes-capital-allocation-efficiency-part-3",
+      "goog-executive-quotes-financials-2025-2026-part-1",
+      "goog-executive-quotes-financials-2025-2026-part-2",
+      "goog-pichai-quotes-ai-strategy-historical-perspective-part-3",
+      "goog-pichai-quotes-ai-strategy-infrastructure-part-4",
+      "goog-pichai-quotes-browser-technology-impact-part-3",
+      "goog-pichai-quotes-competition-ai-market-dynamics-part-3",
+      "goog-pichai-quotes-culture-leadership-decision-making-part-3",
+      "goog-pichai-quotes-ethics-safety-society-part-4",
+      "goog-pichai-quotes-regulatory-culture-leadership-part-4",
       "goog-sundar-pichai-quotes-ai-philosophy-agi-society-2023-2025-part-2",
       "goog-sundar-pichai-quotes-ai-search-strategy-2025-part-1",
       "goog-sundar-pichai-quotes-competition-regulation-infrastructure-2020-2025-part-1",
       "goog-sundar-pichai-quotes-innovation-competition-chrome-platform-2020-2025-part-2",
       "goog-sundar-pichai-quotes-leadership-culture-decisions-part-2",
-      "goog-sundar-pichai-quotes-personal-background-origin-story-part-2"
+      "goog-sundar-pichai-quotes-part1-part-1",
+      "goog-sundar-pichai-quotes-personal-background-origin-story-part-2",
+      "goog-sundar-pichai-quotes-search-ai-commerce-part2-part-2",
+      "goog-sundar-pichai-quotes",
+      "goog-ai-adoption-scurve-quantitative",
+      "goog-demand-shift-search-youtube-enterprise",
+      "goog-llm-evolution-roadmap-gemini",
+      "goog-tpu-infrastructure-vertical-integration"
     ],
     "LLY": [
+      "lly-business-model-dna",
       "lly-executive-compensation-incentive-structure-2025",
+      "lly-organizational-culture-incentives",
       "lly-organizational-culture-ricks-leadership-philosophy",
       "lly-six-segment-business-model-fy2025",
+      "lly-therapeutic-area-portfolio",
+      "glp1-market-duopoly-structure-lly-nvo",
+      "glp1-regulatory-environment-global-lly",
       "lly-five-forces-competitive-moat-analysis-2025",
+      "lly-five-forces-moat-analysis",
       "lly-glp1-market-structure-hhi-dual-oligopoly-2025",
       "lly-glp1-regulatory-environment-global-2025",
+      "lly-annual-financials-2014-2025",
       "lly-dcf-valuation-fy2026-three-scenario",
+      "lly-dcf-valuation-multiples-2026",
       "lly-geographic-revenue-breakdown-fy2023-fy2025",
+      "lly-geographic-revenue-fy2023-fy2025",
+      "lly-operating-efficiency-roic-fcf-2021-2025",
       "lly-operating-efficiency-roic-margins-fy2021-fy2025",
+      "lly-product-revenue-fy2024-fy2025",
+      "lly-strategic-inflection-points-2014-2025",
       "lly-ten-year-financials-fy2015-fy2025",
+      "glp1-market-tam-sizing-lly",
+      "glp1-penetration-scurve-catalysts",
       "lly-glp1-tam-industry-growth-drivers",
+      "lly-ceo-david-ricks-career-profile",
+      "lly-ceo-david-ricks-decision-philosophy",
+      "lly-ceo-david-ricks-ethics-track-record",
       "lly-david-ricks-ceo-profile",
+      "lly-ceo-david-ricks-quotes",
+      "lly-david-ricks-career-profile-leadership-trajectory-part-3",
+      "lly-david-ricks-quotes-competitive-moat-market-structure-part-3",
+      "lly-david-ricks-quotes-decision-philosophy-rd-principles-part-3",
       "lly-david-ricks-quotes-diversity-leadership-succession-part-3",
+      "lly-david-ricks-quotes-glp1-addiction-neuroscience-part-2",
+      "lly-david-ricks-quotes-glp1-obesity-market-part-1",
+      "lly-david-ricks-quotes-glp1-substitutes-compounding-part-3",
       "lly-david-ricks-quotes-leadership-culture-org-design-part-2",
+      "lly-david-ricks-quotes-manufacturing-capacity-dtc-part-2",
+      "lly-david-ricks-quotes-market-leadership-competition-part-2",
+      "lly-david-ricks-quotes-mission-strategy-part-1",
       "lly-david-ricks-quotes-obesity-glp1-disease-mission-part-1",
+      "lly-david-ricks-quotes-organizational-culture-leadership-part-3",
+      "lly-david-ricks-quotes-pipeline-ai-future-part-1",
+      "lly-david-ricks-quotes-rd-drug-discovery-philosophy-part-2",
       "lly-david-ricks-quotes-rd-innovation-drug-discovery-part-2",
+      "lly-david-ricks-quotes-strategic-history-ceo-tenure-part-2",
       "lly-david-ricks-quotes-strategy-competition-pricing-access-part-1",
       "lly-david-ricks-quotes-technology-ai-pipeline-manufacturing-part-1",
+      "lly-ai-drug-discovery-strategy",
+      "lly-glp1-demand-structural-shifts",
       "lly-glp1-scurve-diffusion-demand-trends-2025",
-      "lly-glp1-technology-generations-roadmap-2025"
+      "lly-glp1-technology-generation-evolution",
+      "lly-glp1-technology-generations-roadmap-2025",
+      "lly-orforglipron-small-molecule-oral-glp1"
     ],
     "TSM": [
       "tsmc-organizational-culture-values",
@@ -10704,6 +12805,7 @@
     "MSFT": [
       "amzn-five-forces-competitive-moat-2024",
       "amzn-market-structure-oligopoly-2024",
+      "goog-cloud-computing-tam-growth",
       "tsmc-ai-demand-drivers-token-growth"
     ],
     "GOOGL": [
@@ -10738,10 +12840,28 @@
       "ebay-market-structure-hhi-concentration-2025"
     ],
     "NVO": [
+      "glp1-market-duopoly-structure-lly-nvo",
+      "glp1-regulatory-environment-global-lly",
       "lly-five-forces-competitive-moat-analysis-2025",
+      "lly-five-forces-moat-analysis",
       "lly-glp1-market-structure-hhi-dual-oligopoly-2025",
       "lly-glp1-regulatory-environment-global-2025",
-      "lly-glp1-tam-industry-growth-drivers"
+      "glp1-market-tam-sizing-lly",
+      "glp1-penetration-scurve-catalysts",
+      "lly-glp1-tam-industry-growth-drivers",
+      "lly-glp1-technology-generation-evolution",
+      "lly-orforglipron-small-molecule-oral-glp1"
+    ],
+    "AMGN": [
+      "glp1-market-duopoly-structure-lly-nvo",
+      "lly-five-forces-moat-analysis"
+    ],
+    "PFE": [
+      "glp1-market-duopoly-structure-lly-nvo",
+      "lly-five-forces-moat-analysis"
+    ],
+    "AZN": [
+      "glp1-market-duopoly-structure-lly-nvo"
     ],
     "INTC": [
       "tsm-five-forces-entry-substitutes-rivalry",
@@ -11129,51 +13249,130 @@
       "ebay-four-scurve-ecommerce-technology-transitions"
     ],
     "Sundar Pichai": [
+      "goog-business-model-dna-attention-monetization",
       "goog-five-segment-business-model-2024",
       "goog-organizational-culture-engineering-driven-innovation",
+      "goog-organizational-culture-incentives",
+      "goog-revenue-mix-segment-financials-2024-2025",
+      "goog-unit-economics-cost-structure",
+      "goog-digital-ad-cloud-market-structure",
       "goog-five-forces-competitive-moat-analysis-2025",
+      "goog-five-forces-competitive-moat",
       "goog-market-structure-digital-advertising-cloud-2025",
       "goog-regulatory-antitrust-doj-dma-dsa-2025",
+      "goog-regulatory-antitrust-landscape",
+      "goog-10yr-financial-metrics-2014-2024",
+      "goog-geographic-revenue-fy2024-fy2025",
+      "goog-operating-efficiency-roic-fcf-2020-2025",
+      "goog-segment-revenue-operating-profit-fy2024-fy2025",
+      "goog-strategic-inflection-points-2015-2024",
       "goog-ten-year-financials-fy2014-fy2024",
+      "goog-digital-advertising-tam-growth",
       "goog-tam-digital-advertising-cloud-multi-market-2025",
       "goog-sundar-pichai-ceo-profile",
+      "goog-sundar-pichai-leadership-profile",
+      "goog-pichai-quotes-ai-strategy-historical-perspective-part-3",
+      "goog-pichai-quotes-ai-strategy-infrastructure-part-4",
+      "goog-pichai-quotes-browser-technology-impact-part-3",
+      "goog-pichai-quotes-competition-ai-market-dynamics-part-3",
+      "goog-pichai-quotes-culture-leadership-decision-making-part-3",
+      "goog-pichai-quotes-ethics-safety-society-part-4",
+      "goog-pichai-quotes-regulatory-culture-leadership-part-4",
       "goog-sundar-pichai-quotes-ai-philosophy-agi-society-2023-2025-part-2",
       "goog-sundar-pichai-quotes-ai-search-strategy-2025-part-1",
       "goog-sundar-pichai-quotes-competition-regulation-infrastructure-2020-2025-part-1",
       "goog-sundar-pichai-quotes-innovation-competition-chrome-platform-2020-2025-part-2",
       "goog-sundar-pichai-quotes-leadership-culture-decisions-part-2",
-      "goog-sundar-pichai-quotes-personal-background-origin-story-part-2"
+      "goog-sundar-pichai-quotes-part1-part-1",
+      "goog-sundar-pichai-quotes-personal-background-origin-story-part-2",
+      "goog-sundar-pichai-quotes-search-ai-commerce-part2-part-2",
+      "goog-sundar-pichai-quotes",
+      "goog-demand-shift-search-youtube-enterprise",
+      "goog-llm-evolution-roadmap-gemini",
+      "goog-tpu-infrastructure-vertical-integration"
     ],
-    "David Ricks": [
-      "lly-executive-compensation-incentive-structure-2025",
-      "lly-organizational-culture-ricks-leadership-philosophy",
-      "lly-five-forces-competitive-moat-analysis-2025",
-      "lly-glp1-market-structure-hhi-dual-oligopoly-2025",
-      "lly-glp1-regulatory-environment-global-2025",
-      "lly-geographic-revenue-breakdown-fy2023-fy2025",
-      "lly-ten-year-financials-fy2015-fy2025",
-      "lly-david-ricks-quotes-diversity-leadership-succession-part-3",
-      "lly-david-ricks-quotes-leadership-culture-org-design-part-2",
-      "lly-david-ricks-quotes-obesity-glp1-disease-mission-part-1",
-      "lly-david-ricks-quotes-rd-innovation-drug-discovery-part-2",
-      "lly-david-ricks-quotes-strategy-competition-pricing-access-part-1",
-      "lly-david-ricks-quotes-technology-ai-pipeline-manufacturing-part-1"
+    "Anat Ashkenazi": [
+      "goog-business-model-dna-attention-monetization",
+      "goog-revenue-mix-segment-financials-2024-2025",
+      "goog-unit-economics-cost-structure",
+      "goog-geographic-revenue-fy2024-fy2025",
+      "goog-operating-efficiency-roic-fcf-2020-2025",
+      "goog-segment-revenue-operating-profit-fy2024-fy2025",
+      "lly-david-ricks-ceo-profile",
+      "goog-ashkenazi-quotes-capital-allocation-efficiency-part-3",
+      "goog-executive-quotes-financials-2025-2026-part-1",
+      "goog-executive-quotes-financials-2025-2026-part-2"
     ],
-    "Lars Jørgensen": [
-      "lly-executive-compensation-incentive-structure-2025"
+    "Philipp Schindler": [
+      "goog-business-model-dna-attention-monetization",
+      "goog-revenue-mix-segment-financials-2024-2025",
+      "goog-geographic-revenue-fy2024-fy2025",
+      "goog-executive-quotes-financials-2025-2026-part-1",
+      "goog-executive-quotes-financials-2025-2026-part-2"
     ],
-    "Albert Bourla": [
-      "lly-executive-compensation-incentive-structure-2025"
-    ],
-    "Eli Lilly": [
-      "lly-organizational-culture-ricks-leadership-philosophy"
+    "David Rubenstein": [
+      "goog-organizational-culture-incentives"
     ],
     "Dave Ricks": [
+      "lly-business-model-dna",
       "lly-six-segment-business-model-fy2025",
+      "lly-therapeutic-area-portfolio",
+      "lly-operating-efficiency-roic-fcf-2021-2025",
       "lly-operating-efficiency-roic-margins-fy2021-fy2025",
       "lly-glp1-tam-industry-growth-drivers",
       "lly-glp1-scurve-diffusion-demand-trends-2025",
       "lly-glp1-technology-generations-roadmap-2025"
+    ],
+    "David Ricks": [
+      "lly-executive-compensation-incentive-structure-2025",
+      "lly-organizational-culture-incentives",
+      "lly-organizational-culture-ricks-leadership-philosophy",
+      "glp1-market-duopoly-structure-lly-nvo",
+      "glp1-regulatory-environment-global-lly",
+      "lly-five-forces-competitive-moat-analysis-2025",
+      "lly-five-forces-moat-analysis",
+      "lly-glp1-market-structure-hhi-dual-oligopoly-2025",
+      "lly-glp1-regulatory-environment-global-2025",
+      "lly-geographic-revenue-breakdown-fy2023-fy2025",
+      "lly-geographic-revenue-fy2023-fy2025",
+      "lly-strategic-inflection-points-2014-2025",
+      "lly-ten-year-financials-fy2015-fy2025",
+      "glp1-market-tam-sizing-lly",
+      "glp1-penetration-scurve-catalysts",
+      "lly-david-ricks-career-profile-leadership-trajectory-part-3",
+      "lly-david-ricks-quotes-competitive-moat-market-structure-part-3",
+      "lly-david-ricks-quotes-decision-philosophy-rd-principles-part-3",
+      "lly-david-ricks-quotes-diversity-leadership-succession-part-3",
+      "lly-david-ricks-quotes-glp1-addiction-neuroscience-part-2",
+      "lly-david-ricks-quotes-glp1-obesity-market-part-1",
+      "lly-david-ricks-quotes-glp1-substitutes-compounding-part-3",
+      "lly-david-ricks-quotes-leadership-culture-org-design-part-2",
+      "lly-david-ricks-quotes-manufacturing-capacity-dtc-part-2",
+      "lly-david-ricks-quotes-market-leadership-competition-part-2",
+      "lly-david-ricks-quotes-mission-strategy-part-1",
+      "lly-david-ricks-quotes-obesity-glp1-disease-mission-part-1",
+      "lly-david-ricks-quotes-organizational-culture-leadership-part-3",
+      "lly-david-ricks-quotes-pipeline-ai-future-part-1",
+      "lly-david-ricks-quotes-rd-drug-discovery-philosophy-part-2",
+      "lly-david-ricks-quotes-rd-innovation-drug-discovery-part-2",
+      "lly-david-ricks-quotes-strategic-history-ceo-tenure-part-2",
+      "lly-david-ricks-quotes-strategy-competition-pricing-access-part-1",
+      "lly-david-ricks-quotes-technology-ai-pipeline-manufacturing-part-1",
+      "lly-ai-drug-discovery-strategy",
+      "lly-glp1-demand-structural-shifts",
+      "lly-glp1-technology-generation-evolution",
+      "lly-orforglipron-small-molecule-oral-glp1"
+    ],
+    "Lars Jørgensen": [
+      "lly-executive-compensation-incentive-structure-2025",
+      "lly-organizational-culture-incentives"
+    ],
+    "Albert Bourla": [
+      "lly-executive-compensation-incentive-structure-2025",
+      "lly-organizational-culture-incentives"
+    ],
+    "Eli Lilly": [
+      "lly-organizational-culture-ricks-leadership-philosophy"
     ],
     "Morris Chang": [
       "tsmc-organizational-culture-values",
@@ -11299,8 +13498,11 @@
     ],
     "Sergey Brin": [
       "goog-five-forces-competitive-moat-analysis-2025",
+      "goog-five-forces-competitive-moat",
+      "goog-strategic-inflection-points-2015-2024",
       "goog-ten-year-financials-fy2014-fy2024",
       "goog-sundar-pichai-ceo-profile",
+      "goog-sundar-pichai-leadership-profile",
       "goog-sundar-pichai-quotes-leadership-culture-decisions-part-2"
     ],
     "Amit P. Mehta": [
@@ -11331,9 +13533,15 @@
     "Carl Icahn": [
       "ebay-ten-year-financials-fy2014-fy2025"
     ],
+    "Aswath Damodaran": [
+      "goog-dcf-valuation-multiples-2024",
+      "lly-dcf-valuation-multiples-2026"
+    ],
     "Larry Page": [
+      "goog-strategic-inflection-points-2015-2024",
       "goog-ten-year-financials-fy2014-fy2024",
-      "goog-sundar-pichai-ceo-profile"
+      "goog-sundar-pichai-ceo-profile",
+      "goog-sundar-pichai-leadership-profile"
     ],
     "Jeff Su": [
       "tsm-operating-efficiency-roic-roe-margins-2021-2025"
@@ -11415,19 +13623,23 @@
       "ebay-executive-succession-bench-alford-rawashdeh-sweetnam-2025-part-5"
     ],
     "Demis Hassabis": [
-      "goog-sundar-pichai-ceo-profile"
+      "goog-sundar-pichai-ceo-profile",
+      "goog-sundar-pichai-leadership-profile"
     ],
     "Prabhakar Raghavan": [
-      "goog-sundar-pichai-ceo-profile"
+      "goog-sundar-pichai-ceo-profile",
+      "goog-sundar-pichai-leadership-profile"
     ],
     "Thomas Kurian": [
-      "goog-sundar-pichai-ceo-profile"
+      "goog-sundar-pichai-ceo-profile",
+      "goog-sundar-pichai-leadership-profile"
     ],
     "David A. Ricks": [
-      "lly-david-ricks-ceo-profile"
-    ],
-    "Anat Ashkenazi": [
-      "lly-david-ricks-ceo-profile"
+      "lly-ceo-david-ricks-career-profile",
+      "lly-ceo-david-ricks-decision-philosophy",
+      "lly-ceo-david-ricks-ethics-track-record",
+      "lly-david-ricks-ceo-profile",
+      "lly-ceo-david-ricks-quotes"
     ],
     "Lucas Montarce": [
       "lly-david-ricks-ceo-profile"
@@ -11518,6 +13730,7 @@
       "aapl-tam-five-markets-overview",
       "apple-corporate-origins-pc-revolution",
       "cost-warehouse-club-industry-tam-growth-drivers",
+      "goog-adjacent-tam-expansion",
       "smartphone-industry-origins-iphone-revolution",
       "aapl-executive-succession-bench",
       "aapl-tim-cook-career-profile",
@@ -11578,8 +13791,12 @@
       "amzn-six-segment-business-model-fy2025",
       "ebay-business-model-unit-economics-2024",
       "ebay-five-business-pillars-vertical-strategy-2025",
+      "goog-business-model-dna-attention-monetization",
       "goog-five-segment-business-model-2024",
       "goog-organizational-culture-engineering-driven-innovation",
+      "goog-organizational-culture-incentives",
+      "goog-revenue-mix-segment-financials-2024-2025",
+      "goog-unit-economics-cost-structure",
       "amzn-five-forces-competitive-moat-2024",
       "amzn-five-forces-competitive-moat-analysis",
       "amzn-market-structure-hhi-three-markets",
@@ -11590,9 +13807,12 @@
       "ebay-market-structure-hhi-concentration-2025",
       "ebay-regulatory-environment-tariffs-dsa-tax-2025",
       "ebay-vertical-category-market-concentration-2025",
+      "goog-digital-ad-cloud-market-structure",
       "goog-five-forces-competitive-moat-analysis-2025",
+      "goog-five-forces-competitive-moat",
       "goog-market-structure-digital-advertising-cloud-2025",
       "goog-regulatory-antitrust-doj-dma-dsa-2025",
+      "goog-regulatory-antitrust-landscape",
       "tsm-bear-case-geopolitical-structural-risks-2025",
       "tsm-bull-case-ai-supercycle-moat-2025",
       "amzn-20-year-financial-history-2006-2025",
@@ -11604,12 +13824,21 @@
       "amzn-operating-efficiency-roic-leverage-fy2018-fy2025",
       "amzn-ten-year-financials-fy2014-fy2025",
       "ebay-geographic-revenue-breakdown-fy2024-2025",
+      "goog-10yr-financial-metrics-2014-2024",
       "goog-dcf-valuation-fy2025-three-scenario",
+      "goog-dcf-valuation-multiples-2024",
       "goog-geographic-revenue-breakdown-fy2024",
+      "goog-geographic-revenue-fy2024-fy2025",
+      "goog-operating-efficiency-roic-fcf-2020-2025",
       "goog-operating-efficiency-roic-margins-fy2020-fy2024",
+      "goog-segment-revenue-operating-profit-fy2024-fy2025",
+      "goog-strategic-inflection-points-2015-2024",
       "goog-ten-year-financials-fy2014-fy2024",
       "amzn-tam-ecommerce-cloud-advertising-2024",
       "amzn-tam-three-markets-ecommerce-cloud-ads",
+      "goog-adjacent-tam-expansion",
+      "goog-cloud-computing-tam-growth",
+      "goog-digital-advertising-tam-growth",
       "goog-tam-digital-advertising-cloud-multi-market-2025",
       "amzn-andy-jassy-ceo-profile",
       "amzn-jeff-bezos-founder-profile",
@@ -11618,6 +13847,7 @@
       "ebay-jamie-iannone-ceo-profile",
       "ebay-pierre-omidyar-founder-profile",
       "goog-sundar-pichai-ceo-profile",
+      "goog-sundar-pichai-leadership-profile",
       "amzn-andy-jassy-ai-strategy-quotes-part-1",
       "amzn-andy-jassy-ai-strategy-quotes-part-2",
       "amzn-andy-jassy-ai-technology-quotes-part-3",
@@ -11652,12 +13882,25 @@
       "ebay-iannone-ai-infrastructure-platform-quotes-part-3",
       "ebay-iannone-seller-partnership-culture-quotes-part-4",
       "ebay-omidyar-founding-philosophy-community-quotes-part-4",
+      "goog-ashkenazi-quotes-capital-allocation-efficiency-part-3",
+      "goog-executive-quotes-financials-2025-2026-part-1",
+      "goog-executive-quotes-financials-2025-2026-part-2",
+      "goog-pichai-quotes-ai-strategy-historical-perspective-part-3",
+      "goog-pichai-quotes-ai-strategy-infrastructure-part-4",
+      "goog-pichai-quotes-browser-technology-impact-part-3",
+      "goog-pichai-quotes-competition-ai-market-dynamics-part-3",
+      "goog-pichai-quotes-culture-leadership-decision-making-part-3",
+      "goog-pichai-quotes-ethics-safety-society-part-4",
+      "goog-pichai-quotes-regulatory-culture-leadership-part-4",
       "goog-sundar-pichai-quotes-ai-philosophy-agi-society-2023-2025-part-2",
       "goog-sundar-pichai-quotes-ai-search-strategy-2025-part-1",
       "goog-sundar-pichai-quotes-competition-regulation-infrastructure-2020-2025-part-1",
       "goog-sundar-pichai-quotes-innovation-competition-chrome-platform-2020-2025-part-2",
       "goog-sundar-pichai-quotes-leadership-culture-decisions-part-2",
+      "goog-sundar-pichai-quotes-part1-part-1",
       "goog-sundar-pichai-quotes-personal-background-origin-story-part-2",
+      "goog-sundar-pichai-quotes-search-ai-commerce-part2-part-2",
+      "goog-sundar-pichai-quotes",
       "amzn-advertising-technology-retail-media-prime-video-2024",
       "amzn-alexa-voice-ai-ecosystem-2024-2025",
       "amzn-alexa-voice-ai-ecosystem-pivot-2025",
@@ -11672,6 +13915,10 @@
       "ebay-ai-strategy-generative-ai-deployment-2024-2025",
       "ebay-demand-trends-recommerce-sustainability-gen-z-2025",
       "ebay-ecommerce-scurve-four-waves-technology-adoption",
+      "goog-ai-adoption-scurve-quantitative",
+      "goog-demand-shift-search-youtube-enterprise",
+      "goog-llm-evolution-roadmap-gemini",
+      "goog-tpu-infrastructure-vertical-integration",
       "tsmc-ai-demand-drivers-token-growth",
       "tsmc-cowos-advanced-packaging-capacity-expansion"
     ],
@@ -11688,8 +13935,10 @@
       "tsm-ten-year-financial-trajectory-2014-2025",
       "tsmc-allied-framework-chip4-quad-industry-dependency",
       "tsmc-geopolitical-pe-discount-analysis",
+      "goog-cloud-computing-tam-growth",
       "semiconductor-foundry-tam-growth-2000-2035",
       "goog-sundar-pichai-ceo-profile",
+      "goog-sundar-pichai-leadership-profile",
       "aapl-tim-cook-ai-apple-intelligence-quotes-2024-2026-part-3",
       "amzn-andy-jassy-ai-strategy-quotes-part-1",
       "amzn-andy-jassy-ai-strategy-quotes-part-2",
@@ -11701,10 +13950,16 @@
       "cc-wei-quotes-ai-demand-cowos-globalization",
       "cc-wei-quotes-ai-demand-customer-validation-part-4",
       "cc-wei-quotes-intel-competition-investment-leadership-2024-2025-part-3-part-1",
+      "goog-pichai-quotes-ai-strategy-historical-perspective-part-3",
+      "goog-pichai-quotes-ai-strategy-infrastructure-part-4",
+      "goog-pichai-quotes-competition-ai-market-dynamics-part-3",
+      "goog-pichai-quotes-ethics-safety-society-part-4",
       "goog-sundar-pichai-quotes-ai-philosophy-agi-society-2023-2025-part-2",
       "goog-sundar-pichai-quotes-ai-search-strategy-2025-part-1",
       "goog-sundar-pichai-quotes-competition-regulation-infrastructure-2020-2025-part-1",
       "goog-sundar-pichai-quotes-innovation-competition-chrome-platform-2020-2025-part-2",
+      "goog-sundar-pichai-quotes-part1-part-1",
+      "goog-sundar-pichai-quotes",
       "morris-chang-quotes-nvidia-jensen-ceo-succession-part-2",
       "aapl-ai-pc-penetration-s-curve-arm-transition-2025",
       "aapl-apple-intelligence-genai-adoption-2025",
@@ -11714,6 +13969,10 @@
       "amzn-alexa-voice-ai-ecosystem-pivot-2025",
       "amzn-generative-ai-aws-platform-strategy-2024",
       "amzn-generative-ai-aws-strategy-2024-2025",
+      "goog-ai-adoption-scurve-quantitative",
+      "goog-demand-shift-search-youtube-enterprise",
+      "goog-llm-evolution-roadmap-gemini",
+      "goog-tpu-infrastructure-vertical-integration",
       "tsmc-ai-demand-drivers-token-growth",
       "tsmc-cowos-advanced-packaging-capacity-expansion",
       "tsmc-finfet-to-gaa-transition",
@@ -11795,7 +14054,8 @@
     "automotive-semiconductor": [
       "tsmc-revenue-platform-breakdown-hpc-ai-dominance",
       "tsm-platform-and-process-revenue-mix-2024",
-      "tsmc-allied-framework-chip4-quad-industry-dependency"
+      "tsmc-allied-framework-chip4-quad-industry-dependency",
+      "goog-adjacent-tam-expansion"
     ],
     "semiconductor-fabless": [
       "aapl-mac-apple-silicon-competitive-repositioning",
@@ -11807,6 +14067,11 @@
       "aapl-apple-silicon-financial-impact-performance-2025",
       "aapl-apple-silicon-performance-benchmarks-competitive-analysis-2025",
       "tsmc-finfet-to-gaa-transition"
+    ],
+    "pharmaceutical": [
+      "glp1-market-duopoly-structure-lly-nvo",
+      "glp1-regulatory-environment-global-lly",
+      "lly-five-forces-moat-analysis"
     ],
     "semiconductor-equipment": [
       "tsm-five-forces-supplier-buyer-power",
@@ -11844,11 +14109,18 @@
       "ebay-marketplace-unit-economics-capital-returns-2024",
       "ebay-organizational-culture-iannone-transformation",
       "ebay-organizational-culture-incentives",
+      "goog-business-model-dna-attention-monetization",
       "goog-five-segment-business-model-2024",
       "goog-organizational-culture-engineering-driven-innovation",
+      "goog-organizational-culture-incentives",
+      "goog-revenue-mix-segment-financials-2024-2025",
+      "goog-unit-economics-cost-structure",
+      "lly-business-model-dna",
       "lly-executive-compensation-incentive-structure-2025",
+      "lly-organizational-culture-incentives",
       "lly-organizational-culture-ricks-leadership-philosophy",
       "lly-six-segment-business-model-fy2025",
+      "lly-therapeutic-area-portfolio",
       "tsmc-organizational-culture-values",
       "tsmc-pure-play-foundry-business-model",
       "tsmc-revenue-platform-breakdown-hpc-ai-dominance",
@@ -11882,10 +14154,16 @@
       "ebay-regulatory-environment-tariffs-dsa-1099k-gdpr-2025",
       "ebay-regulatory-environment-tariffs-dsa-tax-2025",
       "ebay-vertical-category-market-concentration-2025",
+      "glp1-market-duopoly-structure-lly-nvo",
+      "glp1-regulatory-environment-global-lly",
+      "goog-digital-ad-cloud-market-structure",
       "goog-five-forces-competitive-moat-analysis-2025",
+      "goog-five-forces-competitive-moat",
       "goog-market-structure-digital-advertising-cloud-2025",
       "goog-regulatory-antitrust-doj-dma-dsa-2025",
+      "goog-regulatory-antitrust-landscape",
       "lly-five-forces-competitive-moat-analysis-2025",
+      "lly-five-forces-moat-analysis",
       "lly-glp1-market-structure-hhi-dual-oligopoly-2025",
       "lly-glp1-regulatory-environment-global-2025",
       "tsm-bear-case-geopolitical-structural-risks-2025",
@@ -11936,13 +14214,25 @@
       "ebay-operating-efficiency-roic-fcf-2021-2024",
       "ebay-operating-efficiency-roic-margins-fy2021-2024",
       "ebay-ten-year-financials-fy2014-fy2025",
+      "goog-10yr-financial-metrics-2014-2024",
       "goog-dcf-valuation-fy2025-three-scenario",
+      "goog-dcf-valuation-multiples-2024",
       "goog-geographic-revenue-breakdown-fy2024",
+      "goog-geographic-revenue-fy2024-fy2025",
+      "goog-operating-efficiency-roic-fcf-2020-2025",
       "goog-operating-efficiency-roic-margins-fy2020-fy2024",
+      "goog-segment-revenue-operating-profit-fy2024-fy2025",
+      "goog-strategic-inflection-points-2015-2024",
       "goog-ten-year-financials-fy2014-fy2024",
+      "lly-annual-financials-2014-2025",
       "lly-dcf-valuation-fy2026-three-scenario",
+      "lly-dcf-valuation-multiples-2026",
       "lly-geographic-revenue-breakdown-fy2023-fy2025",
+      "lly-geographic-revenue-fy2023-fy2025",
+      "lly-operating-efficiency-roic-fcf-2021-2025",
       "lly-operating-efficiency-roic-margins-fy2021-fy2025",
+      "lly-product-revenue-fy2024-fy2025",
+      "lly-strategic-inflection-points-2014-2025",
       "lly-ten-year-financials-fy2015-fy2025",
       "tsm-dcf-valuation-2026e",
       "tsm-geographic-revenue-breakdown-2018-2024",
@@ -11969,6 +14259,11 @@
       "cost-warehouse-club-industry-tam-growth-drivers",
       "ebay-tam-ecommerce-recommerce-growth-2025",
       "ebay-tam-global-ecommerce-recommerce-2025",
+      "glp1-market-tam-sizing-lly",
+      "glp1-penetration-scurve-catalysts",
+      "goog-adjacent-tam-expansion",
+      "goog-cloud-computing-tam-growth",
+      "goog-digital-advertising-tam-growth",
       "goog-tam-digital-advertising-cloud-multi-market-2025",
       "lly-glp1-tam-industry-growth-drivers",
       "semiconductor-foundry-tam-growth-2000-2035",
@@ -11989,6 +14284,10 @@
       "ebay-jamie-iannone-ceo-profile",
       "ebay-pierre-omidyar-founder-profile",
       "goog-sundar-pichai-ceo-profile",
+      "goog-sundar-pichai-leadership-profile",
+      "lly-ceo-david-ricks-career-profile",
+      "lly-ceo-david-ricks-decision-philosophy",
+      "lly-ceo-david-ricks-ethics-track-record",
       "lly-david-ricks-ceo-profile",
       "tsm-cc-wei-ceo-profile",
       "tsm-morris-chang-founder-profile"
@@ -12102,16 +14401,43 @@
       "ebay-omidyar-quotes-community-governance-feedback-forum-part-2",
       "ebay-omidyar-quotes-founding-trust-community-economic-democracy-part-4",
       "ebay-pierre-omidyar-founding-era-quotes-part-1",
+      "goog-ashkenazi-quotes-capital-allocation-efficiency-part-3",
+      "goog-executive-quotes-financials-2025-2026-part-1",
+      "goog-executive-quotes-financials-2025-2026-part-2",
+      "goog-pichai-quotes-ai-strategy-historical-perspective-part-3",
+      "goog-pichai-quotes-ai-strategy-infrastructure-part-4",
+      "goog-pichai-quotes-browser-technology-impact-part-3",
+      "goog-pichai-quotes-competition-ai-market-dynamics-part-3",
+      "goog-pichai-quotes-culture-leadership-decision-making-part-3",
+      "goog-pichai-quotes-ethics-safety-society-part-4",
+      "goog-pichai-quotes-regulatory-culture-leadership-part-4",
       "goog-sundar-pichai-quotes-ai-philosophy-agi-society-2023-2025-part-2",
       "goog-sundar-pichai-quotes-ai-search-strategy-2025-part-1",
       "goog-sundar-pichai-quotes-competition-regulation-infrastructure-2020-2025-part-1",
       "goog-sundar-pichai-quotes-innovation-competition-chrome-platform-2020-2025-part-2",
       "goog-sundar-pichai-quotes-leadership-culture-decisions-part-2",
+      "goog-sundar-pichai-quotes-part1-part-1",
       "goog-sundar-pichai-quotes-personal-background-origin-story-part-2",
+      "goog-sundar-pichai-quotes-search-ai-commerce-part2-part-2",
+      "goog-sundar-pichai-quotes",
+      "lly-ceo-david-ricks-quotes",
+      "lly-david-ricks-career-profile-leadership-trajectory-part-3",
+      "lly-david-ricks-quotes-competitive-moat-market-structure-part-3",
+      "lly-david-ricks-quotes-decision-philosophy-rd-principles-part-3",
       "lly-david-ricks-quotes-diversity-leadership-succession-part-3",
+      "lly-david-ricks-quotes-glp1-addiction-neuroscience-part-2",
+      "lly-david-ricks-quotes-glp1-obesity-market-part-1",
+      "lly-david-ricks-quotes-glp1-substitutes-compounding-part-3",
       "lly-david-ricks-quotes-leadership-culture-org-design-part-2",
+      "lly-david-ricks-quotes-manufacturing-capacity-dtc-part-2",
+      "lly-david-ricks-quotes-market-leadership-competition-part-2",
+      "lly-david-ricks-quotes-mission-strategy-part-1",
       "lly-david-ricks-quotes-obesity-glp1-disease-mission-part-1",
+      "lly-david-ricks-quotes-organizational-culture-leadership-part-3",
+      "lly-david-ricks-quotes-pipeline-ai-future-part-1",
+      "lly-david-ricks-quotes-rd-drug-discovery-philosophy-part-2",
       "lly-david-ricks-quotes-rd-innovation-drug-discovery-part-2",
+      "lly-david-ricks-quotes-strategic-history-ceo-tenure-part-2",
       "lly-david-ricks-quotes-strategy-competition-pricing-access-part-1",
       "lly-david-ricks-quotes-technology-ai-pipeline-manufacturing-part-1",
       "morris-chang-apple-intel-foundry-decision-quotes",
@@ -12174,8 +14500,16 @@
       "ebay-demand-trends-sustainability-inflation-genz-2025",
       "ebay-ecommerce-scurve-four-waves-technology-adoption",
       "ebay-four-scurve-ecommerce-technology-transitions",
+      "goog-ai-adoption-scurve-quantitative",
+      "goog-demand-shift-search-youtube-enterprise",
+      "goog-llm-evolution-roadmap-gemini",
+      "goog-tpu-infrastructure-vertical-integration",
+      "lly-ai-drug-discovery-strategy",
+      "lly-glp1-demand-structural-shifts",
       "lly-glp1-scurve-diffusion-demand-trends-2025",
+      "lly-glp1-technology-generation-evolution",
       "lly-glp1-technology-generations-roadmap-2025",
+      "lly-orforglipron-small-molecule-oral-glp1",
       "tsmc-ai-demand-drivers-token-growth",
       "tsmc-cowos-advanced-packaging-capacity-expansion",
       "tsmc-euv-adoption-curve",
@@ -12206,11 +14540,18 @@
       "ebay-marketplace-unit-economics-capital-returns-2024",
       "ebay-organizational-culture-iannone-transformation",
       "ebay-organizational-culture-incentives",
+      "goog-business-model-dna-attention-monetization",
       "goog-five-segment-business-model-2024",
       "goog-organizational-culture-engineering-driven-innovation",
+      "goog-organizational-culture-incentives",
+      "goog-revenue-mix-segment-financials-2024-2025",
+      "goog-unit-economics-cost-structure",
+      "lly-business-model-dna",
       "lly-executive-compensation-incentive-structure-2025",
+      "lly-organizational-culture-incentives",
       "lly-organizational-culture-ricks-leadership-philosophy",
       "lly-six-segment-business-model-fy2025",
+      "lly-therapeutic-area-portfolio",
       "tsmc-organizational-culture-values",
       "tsmc-pure-play-foundry-business-model",
       "tsmc-revenue-platform-breakdown-hpc-ai-dominance",
@@ -12220,6 +14561,7 @@
       "amzn-five-forces-competitive-moat-analysis",
       "amzn-market-structure-hhi-three-markets",
       "cost-five-forces-moat-analysis",
+      "goog-digital-ad-cloud-market-structure",
       "goog-market-structure-digital-advertising-cloud-2025",
       "aapl-operating-efficiency-roic-margins-fy2023-2025",
       "aapl-services-revenue-growth-fy2025",
@@ -12229,9 +14571,11 @@
       "cost-operating-efficiency-roic-fy2021-fy2025",
       "ebay-operating-efficiency-roic-margins-fy2021-2024",
       "ebay-ten-year-financials-fy2014-fy2025",
+      "lly-strategic-inflection-points-2014-2025",
       "tsm-operating-efficiency-roic-roe-margins-2021-2025",
       "apple-corporate-origins-pc-revolution",
       "cost-warehouse-club-industry-tam-growth-drivers",
+      "goog-adjacent-tam-expansion",
       "semiconductor-foundry-tam-growth-2000-2035",
       "smartphone-industry-origins-iphone-revolution",
       "aapl-tim-cook-career-profile",
@@ -12245,6 +14589,8 @@
       "ebay-jamie-iannone-ceo-profile",
       "ebay-pierre-omidyar-founder-profile",
       "goog-sundar-pichai-ceo-profile",
+      "goog-sundar-pichai-leadership-profile",
+      "lly-ceo-david-ricks-decision-philosophy",
       "lly-david-ricks-ceo-profile",
       "tsm-morris-chang-founder-profile",
       "aapl-cfo-hardware-leadership-services-flywheel-quotes-part-4",
@@ -12320,13 +14666,27 @@
       "ebay-omidyar-quotes-community-governance-feedback-forum-part-2",
       "ebay-omidyar-quotes-founding-trust-community-economic-democracy-part-4",
       "ebay-pierre-omidyar-founding-era-quotes-part-1",
+      "goog-pichai-quotes-ai-strategy-historical-perspective-part-3",
+      "goog-pichai-quotes-ai-strategy-infrastructure-part-4",
+      "goog-pichai-quotes-browser-technology-impact-part-3",
+      "goog-pichai-quotes-culture-leadership-decision-making-part-3",
       "goog-sundar-pichai-quotes-ai-philosophy-agi-society-2023-2025-part-2",
       "goog-sundar-pichai-quotes-ai-search-strategy-2025-part-1",
       "goog-sundar-pichai-quotes-innovation-competition-chrome-platform-2020-2025-part-2",
       "goog-sundar-pichai-quotes-leadership-culture-decisions-part-2",
+      "goog-sundar-pichai-quotes-part1-part-1",
+      "goog-sundar-pichai-quotes-search-ai-commerce-part2-part-2",
+      "goog-sundar-pichai-quotes",
+      "lly-ceo-david-ricks-quotes",
+      "lly-david-ricks-quotes-decision-philosophy-rd-principles-part-3",
       "lly-david-ricks-quotes-leadership-culture-org-design-part-2",
+      "lly-david-ricks-quotes-mission-strategy-part-1",
       "lly-david-ricks-quotes-obesity-glp1-disease-mission-part-1",
+      "lly-david-ricks-quotes-organizational-culture-leadership-part-3",
+      "lly-david-ricks-quotes-pipeline-ai-future-part-1",
+      "lly-david-ricks-quotes-rd-drug-discovery-philosophy-part-2",
       "lly-david-ricks-quotes-rd-innovation-drug-discovery-part-2",
+      "lly-david-ricks-quotes-strategic-history-ceo-tenure-part-2",
       "morris-chang-apple-intel-foundry-decision-quotes",
       "morris-chang-quotes-acquired-briefing-apple-ibm-nvidia-scale-2025-part-3",
       "morris-chang-quotes-apple-ibm-partnerships-part-2",
@@ -12373,7 +14733,10 @@
       "ebay-five-business-pillars-vertical-strategy-2025",
       "ebay-five-pillar-business-model-2025",
       "ebay-marketplace-unit-economics-capital-returns-2024",
+      "goog-business-model-dna-attention-monetization",
+      "lly-business-model-dna",
       "lly-six-segment-business-model-fy2025",
+      "lly-therapeutic-area-portfolio",
       "tsmc-organizational-culture-values",
       "tsmc-pure-play-foundry-business-model",
       "aapl-competitive-moat-four-layers",
@@ -12389,9 +14752,12 @@
       "ebay-five-forces-competitive-moat-analysis-2025",
       "ebay-five-forces-moat-analysis-2025",
       "ebay-market-structure-hhi-ecommerce-concentration-2024",
+      "goog-digital-ad-cloud-market-structure",
       "goog-five-forces-competitive-moat-analysis-2025",
+      "goog-five-forces-competitive-moat",
       "goog-market-structure-digital-advertising-cloud-2025",
       "lly-five-forces-competitive-moat-analysis-2025",
+      "lly-five-forces-moat-analysis",
       "tsm-bull-case-ai-supercycle-moat-2025",
       "tsm-five-forces-entry-substitutes-rivalry",
       "aapl-services-segment-revenue-model-fy2025",
@@ -12405,6 +14771,8 @@
       "ebay-jamie-iannone-ceo-profile",
       "ebay-pierre-omidyar-founder-profile",
       "goog-sundar-pichai-ceo-profile",
+      "goog-sundar-pichai-leadership-profile",
+      "lly-ceo-david-ricks-decision-philosophy",
       "lly-david-ricks-ceo-profile",
       "tsm-cc-wei-ceo-profile",
       "tsm-morris-chang-founder-profile",
@@ -12466,10 +14834,26 @@
       "ebay-omidyar-iannone-quotes-trust-community-accidental-entrepreneurs-part-3",
       "ebay-omidyar-iannone-recommerce-differentiation-quotes-part-2",
       "ebay-omidyar-quotes-community-governance-feedback-forum-part-2",
+      "goog-pichai-quotes-ai-strategy-historical-perspective-part-3",
+      "goog-pichai-quotes-ai-strategy-infrastructure-part-4",
+      "goog-pichai-quotes-browser-technology-impact-part-3",
+      "goog-pichai-quotes-competition-ai-market-dynamics-part-3",
+      "goog-pichai-quotes-ethics-safety-society-part-4",
       "goog-sundar-pichai-quotes-competition-regulation-infrastructure-2020-2025-part-1",
       "goog-sundar-pichai-quotes-innovation-competition-chrome-platform-2020-2025-part-2",
+      "goog-sundar-pichai-quotes-part1-part-1",
+      "goog-sundar-pichai-quotes-search-ai-commerce-part2-part-2",
+      "goog-sundar-pichai-quotes",
+      "lly-david-ricks-quotes-competitive-moat-market-structure-part-3",
+      "lly-david-ricks-quotes-decision-philosophy-rd-principles-part-3",
+      "lly-david-ricks-quotes-glp1-obesity-market-part-1",
+      "lly-david-ricks-quotes-glp1-substitutes-compounding-part-3",
       "lly-david-ricks-quotes-leadership-culture-org-design-part-2",
+      "lly-david-ricks-quotes-market-leadership-competition-part-2",
+      "lly-david-ricks-quotes-mission-strategy-part-1",
+      "lly-david-ricks-quotes-rd-drug-discovery-philosophy-part-2",
       "lly-david-ricks-quotes-rd-innovation-drug-discovery-part-2",
+      "lly-david-ricks-quotes-strategic-history-ceo-tenure-part-2",
       "morris-chang-apple-intel-foundry-decision-quotes",
       "morris-chang-quotes-acquired-briefing-apple-ibm-nvidia-scale-2025-part-3",
       "morris-chang-quotes-apple-ibm-partnerships-part-2",
@@ -12510,9 +14894,12 @@
       "cost-membership-flywheel-business-model",
       "ebay-business-model-unit-economics-2024",
       "goog-five-segment-business-model-2024",
+      "lly-business-model-dna",
       "lly-six-segment-business-model-fy2025",
       "tsmc-pure-play-foundry-business-model",
       "tsmc-wafer-pricing-unit-economics-capex-discipline",
+      "glp1-regulatory-environment-global-lly",
+      "lly-five-forces-moat-analysis",
       "tsm-five-forces-supplier-buyer-power",
       "cost-craig-jelinek-ceo-profile",
       "cost-jim-sinegal-founder-profile",
@@ -12529,6 +14916,10 @@
       "cost-ron-vachris-executive-quotes-strategy-culture-leadership-part-2",
       "cost-ron-vachris-executive-quotes-strategy-growth-tariffs-part-1",
       "lly-david-ricks-quotes-diversity-leadership-succession-part-3",
+      "lly-david-ricks-quotes-glp1-obesity-market-part-1",
+      "lly-david-ricks-quotes-glp1-substitutes-compounding-part-3",
+      "lly-david-ricks-quotes-manufacturing-capacity-dtc-part-2",
+      "lly-david-ricks-quotes-rd-drug-discovery-philosophy-part-2",
       "lly-david-ricks-quotes-rd-innovation-drug-discovery-part-2",
       "lly-david-ricks-quotes-strategy-competition-pricing-access-part-1",
       "morris-chang-quotes-acquired-briefing-apple-ibm-nvidia-scale-2025-part-3",
@@ -12545,6 +14936,9 @@
       "ebay-business-model-unit-economics-2024",
       "ebay-marketplace-unit-economics-capital-returns-2024",
       "goog-five-segment-business-model-2024",
+      "goog-revenue-mix-segment-financials-2024-2025",
+      "goog-unit-economics-cost-structure",
+      "lly-business-model-dna",
       "lly-six-segment-business-model-fy2025",
       "tsmc-wafer-pricing-unit-economics-capex-discipline",
       "tsm-bear-case-geopolitical-structural-risks-2025",
@@ -12575,12 +14969,21 @@
       "ebay-operating-efficiency-roic-fcf-2021-2024",
       "ebay-operating-efficiency-roic-margins-fy2021-2024",
       "ebay-ten-year-financials-fy2014-fy2025",
+      "goog-10yr-financial-metrics-2014-2024",
       "goog-dcf-valuation-fy2025-three-scenario",
+      "goog-dcf-valuation-multiples-2024",
       "goog-geographic-revenue-breakdown-fy2024",
+      "goog-operating-efficiency-roic-fcf-2020-2025",
       "goog-operating-efficiency-roic-margins-fy2020-fy2024",
+      "goog-segment-revenue-operating-profit-fy2024-fy2025",
+      "goog-strategic-inflection-points-2015-2024",
       "goog-ten-year-financials-fy2014-fy2024",
+      "lly-annual-financials-2014-2025",
       "lly-dcf-valuation-fy2026-three-scenario",
+      "lly-dcf-valuation-multiples-2026",
+      "lly-operating-efficiency-roic-fcf-2021-2025",
       "lly-operating-efficiency-roic-margins-fy2021-fy2025",
+      "lly-strategic-inflection-points-2014-2025",
       "lly-ten-year-financials-fy2015-fy2025",
       "tsm-dcf-valuation-2026e",
       "tsm-operating-efficiency-roic-roe-margins-2021-2025",
@@ -12594,6 +14997,10 @@
       "amzn-executives-supporting-quotes-part-2",
       "amzn-executives-supporting-quotes-part-3",
       "cost-richard-galanti-analyst-quotes-technology-ai-part-1",
+      "goog-ashkenazi-quotes-capital-allocation-efficiency-part-3",
+      "goog-executive-quotes-financials-2025-2026-part-1",
+      "goog-executive-quotes-financials-2025-2026-part-2",
+      "lly-david-ricks-quotes-rd-drug-discovery-philosophy-part-2",
       "wendell-huang-quotes-margins-capex-philosophy-part-3",
       "wendell-huang-quotes-rd-advanced-nodes-n2",
       "wendell-huang-quotes-us-fab-economics-margins-part-4",
@@ -12612,8 +15019,13 @@
       "ebay-business-model-unit-economics-2024",
       "ebay-five-business-pillars-vertical-strategy-2025",
       "ebay-marketplace-unit-economics-capital-returns-2024",
+      "goog-business-model-dna-attention-monetization",
       "goog-five-segment-business-model-2024",
+      "goog-revenue-mix-segment-financials-2024-2025",
+      "goog-unit-economics-cost-structure",
+      "lly-business-model-dna",
       "lly-six-segment-business-model-fy2025",
+      "lly-therapeutic-area-portfolio",
       "tsmc-revenue-platform-breakdown-hpc-ai-dominance",
       "tsmc-wafer-pricing-unit-economics-capex-discipline",
       "aapl-10-year-financial-history-2015-2025",
@@ -12647,13 +15059,25 @@
       "ebay-operating-efficiency-roic-fcf-2021-2024",
       "ebay-operating-efficiency-roic-margins-fy2021-2024",
       "ebay-ten-year-financials-fy2014-fy2025",
+      "goog-10yr-financial-metrics-2014-2024",
       "goog-dcf-valuation-fy2025-three-scenario",
+      "goog-dcf-valuation-multiples-2024",
       "goog-geographic-revenue-breakdown-fy2024",
+      "goog-geographic-revenue-fy2024-fy2025",
+      "goog-operating-efficiency-roic-fcf-2020-2025",
       "goog-operating-efficiency-roic-margins-fy2020-fy2024",
+      "goog-segment-revenue-operating-profit-fy2024-fy2025",
+      "goog-strategic-inflection-points-2015-2024",
       "goog-ten-year-financials-fy2014-fy2024",
+      "lly-annual-financials-2014-2025",
       "lly-dcf-valuation-fy2026-three-scenario",
+      "lly-dcf-valuation-multiples-2026",
       "lly-geographic-revenue-breakdown-fy2023-fy2025",
+      "lly-geographic-revenue-fy2023-fy2025",
+      "lly-operating-efficiency-roic-fcf-2021-2025",
       "lly-operating-efficiency-roic-margins-fy2021-fy2025",
+      "lly-product-revenue-fy2024-fy2025",
+      "lly-strategic-inflection-points-2014-2025",
       "lly-ten-year-financials-fy2015-fy2025",
       "tsm-dcf-valuation-2026e",
       "tsm-geographic-revenue-breakdown-2018-2024",
@@ -12663,6 +15087,7 @@
       "aapl-services-tam-submarket-breakdown-2025",
       "aapl-tam-five-markets-overview-2025",
       "amzn-tam-ecommerce-cloud-advertising-2024",
+      "goog-digital-advertising-tam-growth",
       "goog-tam-digital-advertising-cloud-multi-market-2025",
       "aapl-cfo-hardware-leadership-services-flywheel-quotes-part-4",
       "aapl-cfo-parekh-maestri-services-installed-base-quotes-part-5",
@@ -12680,6 +15105,10 @@
       "ebay-iannone-alford-quotes-europe-macro-pokemon-geographic-2025-2026-part-3",
       "ebay-iannone-geographic-macro-trade-policy-quotes-part-3",
       "ebay-iannone-regulatory-de-minimis-quotes-part-3-part-1",
+      "goog-ashkenazi-quotes-capital-allocation-efficiency-part-3",
+      "goog-executive-quotes-financials-2025-2026-part-1",
+      "goog-executive-quotes-financials-2025-2026-part-2",
+      "lly-david-ricks-quotes-rd-drug-discovery-philosophy-part-2",
       "wendell-huang-quotes-margins-capex-philosophy-part-3",
       "aapl-apple-silicon-financial-impact-asp-margins-fy2019-fy2025",
       "aapl-apple-silicon-financial-impact-performance-2025",
@@ -12704,7 +15133,9 @@
       "ebay-organizational-culture-iannone-transformation",
       "ebay-organizational-culture-incentives",
       "goog-organizational-culture-engineering-driven-innovation",
+      "goog-organizational-culture-incentives",
       "lly-executive-compensation-incentive-structure-2025",
+      "lly-organizational-culture-incentives",
       "lly-organizational-culture-ricks-leadership-philosophy",
       "tsmc-organizational-culture-values",
       "tsmc-pure-play-foundry-business-model",
@@ -12722,6 +15153,10 @@
       "ebay-jamie-iannone-ceo-profile",
       "ebay-pierre-omidyar-founder-profile",
       "goog-sundar-pichai-ceo-profile",
+      "goog-sundar-pichai-leadership-profile",
+      "lly-ceo-david-ricks-career-profile",
+      "lly-ceo-david-ricks-decision-philosophy",
+      "lly-ceo-david-ricks-ethics-track-record",
       "lly-david-ricks-ceo-profile",
       "tsm-cc-wei-ceo-profile",
       "tsm-morris-chang-founder-profile",
@@ -12802,14 +15237,28 @@
       "ebay-omidyar-quotes-community-governance-feedback-forum-part-2",
       "ebay-omidyar-quotes-founding-trust-community-economic-democracy-part-4",
       "ebay-pierre-omidyar-founding-era-quotes-part-1",
+      "goog-pichai-quotes-ai-strategy-infrastructure-part-4",
+      "goog-pichai-quotes-browser-technology-impact-part-3",
+      "goog-pichai-quotes-culture-leadership-decision-making-part-3",
+      "goog-pichai-quotes-ethics-safety-society-part-4",
+      "goog-pichai-quotes-regulatory-culture-leadership-part-4",
       "goog-sundar-pichai-quotes-ai-philosophy-agi-society-2023-2025-part-2",
       "goog-sundar-pichai-quotes-competition-regulation-infrastructure-2020-2025-part-1",
       "goog-sundar-pichai-quotes-leadership-culture-decisions-part-2",
+      "goog-sundar-pichai-quotes-part1-part-1",
       "goog-sundar-pichai-quotes-personal-background-origin-story-part-2",
+      "goog-sundar-pichai-quotes-search-ai-commerce-part2-part-2",
+      "goog-sundar-pichai-quotes",
+      "lly-ceo-david-ricks-quotes",
+      "lly-david-ricks-career-profile-leadership-trajectory-part-3",
+      "lly-david-ricks-quotes-decision-philosophy-rd-principles-part-3",
       "lly-david-ricks-quotes-diversity-leadership-succession-part-3",
       "lly-david-ricks-quotes-leadership-culture-org-design-part-2",
+      "lly-david-ricks-quotes-mission-strategy-part-1",
       "lly-david-ricks-quotes-obesity-glp1-disease-mission-part-1",
+      "lly-david-ricks-quotes-organizational-culture-leadership-part-3",
       "lly-david-ricks-quotes-rd-innovation-drug-discovery-part-2",
+      "lly-david-ricks-quotes-strategic-history-ceo-tenure-part-2",
       "morris-chang-quotes-apple-ibm-partnerships-part-2",
       "morris-chang-quotes-customers-pricing-asml-partnership-part-1",
       "morris-chang-quotes-early-career-transitions-part-3",
@@ -12837,7 +15286,9 @@
       "ebay-five-pillar-business-model-2025",
       "ebay-organizational-culture-iannone-transformation",
       "ebay-organizational-culture-incentives",
+      "goog-business-model-dna-attention-monetization",
       "goog-organizational-culture-engineering-driven-innovation",
+      "goog-organizational-culture-incentives",
       "lly-organizational-culture-ricks-leadership-philosophy",
       "tsmc-organizational-culture-values",
       "tsmc-pure-play-foundry-business-model",
@@ -12856,6 +15307,8 @@
       "ebay-executive-succession-bench",
       "ebay-pierre-omidyar-founder-profile",
       "goog-sundar-pichai-ceo-profile",
+      "goog-sundar-pichai-leadership-profile",
+      "lly-ceo-david-ricks-career-profile",
       "lly-david-ricks-ceo-profile",
       "tsm-morris-chang-founder-profile",
       "aapl-steve-jobs-founding-era-quotes-part-1",
@@ -12902,13 +15355,19 @@
       "ebay-omidyar-quotes-community-governance-feedback-forum-part-2",
       "ebay-omidyar-quotes-founding-trust-community-economic-democracy-part-4",
       "ebay-pierre-omidyar-founding-era-quotes-part-1",
+      "goog-pichai-quotes-browser-technology-impact-part-3",
+      "goog-pichai-quotes-culture-leadership-decision-making-part-3",
       "goog-sundar-pichai-quotes-ai-philosophy-agi-society-2023-2025-part-2",
       "goog-sundar-pichai-quotes-innovation-competition-chrome-platform-2020-2025-part-2",
       "goog-sundar-pichai-quotes-leadership-culture-decisions-part-2",
       "goog-sundar-pichai-quotes-personal-background-origin-story-part-2",
+      "lly-ceo-david-ricks-quotes",
+      "lly-david-ricks-career-profile-leadership-trajectory-part-3",
       "lly-david-ricks-quotes-diversity-leadership-succession-part-3",
       "lly-david-ricks-quotes-leadership-culture-org-design-part-2",
+      "lly-david-ricks-quotes-mission-strategy-part-1",
       "lly-david-ricks-quotes-obesity-glp1-disease-mission-part-1",
+      "lly-david-ricks-quotes-strategic-history-ceo-tenure-part-2",
       "morris-chang-apple-intel-foundry-decision-quotes",
       "morris-chang-quotes-acquired-briefing-apple-ibm-nvidia-scale-2025-part-3",
       "morris-chang-quotes-competition-learning-curve-moat-part-1",
@@ -12946,10 +15405,17 @@
       "ebay-operating-efficiency-roic-fcf-2021-2024",
       "ebay-operating-efficiency-roic-margins-fy2021-2024",
       "ebay-ten-year-financials-fy2014-fy2025",
+      "goog-10yr-financial-metrics-2014-2024",
       "goog-dcf-valuation-fy2025-three-scenario",
+      "goog-dcf-valuation-multiples-2024",
+      "goog-operating-efficiency-roic-fcf-2020-2025",
       "goog-operating-efficiency-roic-margins-fy2020-fy2024",
+      "goog-segment-revenue-operating-profit-fy2024-fy2025",
       "goog-ten-year-financials-fy2014-fy2024",
+      "lly-annual-financials-2014-2025",
       "lly-dcf-valuation-fy2026-three-scenario",
+      "lly-dcf-valuation-multiples-2026",
+      "lly-operating-efficiency-roic-fcf-2021-2025",
       "lly-operating-efficiency-roic-margins-fy2021-fy2025",
       "lly-ten-year-financials-fy2015-fy2025",
       "tsm-dcf-valuation-2026e",
@@ -12957,6 +15423,8 @@
       "tsm-ten-year-financial-trajectory-2014-2025",
       "tsmc-geopolitical-pe-discount-analysis",
       "cc-wei-quotes-intel-competition-investment-leadership-2024-2025-part-3-part-1",
+      "goog-ashkenazi-quotes-capital-allocation-efficiency-part-3",
+      "goog-executive-quotes-financials-2025-2026-part-2",
       "tsm-silicon-shield-geopolitical-scoring-summary-part-5",
       "wendell-huang-quotes-margins-capex-philosophy-part-3",
       "aapl-apple-silicon-financial-impact-asp-margins-fy2019-fy2025"
@@ -12991,10 +15459,16 @@
       "ebay-regulatory-environment-tariffs-dsa-1099k-gdpr-2025",
       "ebay-regulatory-environment-tariffs-dsa-tax-2025",
       "ebay-vertical-category-market-concentration-2025",
+      "glp1-market-duopoly-structure-lly-nvo",
+      "glp1-regulatory-environment-global-lly",
+      "goog-digital-ad-cloud-market-structure",
       "goog-five-forces-competitive-moat-analysis-2025",
+      "goog-five-forces-competitive-moat",
       "goog-market-structure-digital-advertising-cloud-2025",
       "goog-regulatory-antitrust-doj-dma-dsa-2025",
+      "goog-regulatory-antitrust-landscape",
       "lly-five-forces-competitive-moat-analysis-2025",
+      "lly-five-forces-moat-analysis",
       "lly-glp1-market-structure-hhi-dual-oligopoly-2025",
       "lly-glp1-regulatory-environment-global-2025",
       "tsm-bear-case-geopolitical-structural-risks-2025",
@@ -13005,6 +15479,7 @@
       "tsm-foundry-market-concentration-2024",
       "tsm-intel-foundry-competitive-analysis",
       "tsm-samsung-foundry-yield-crisis-2025",
+      "goog-strategic-inflection-points-2015-2024",
       "aapl-cagr-growth-drivers-five-markets-2025",
       "aapl-smartphone-industry-history-iphone-revolution",
       "aapl-tam-five-markets-overview",
@@ -13012,6 +15487,11 @@
       "apple-corporate-origins-pc-revolution",
       "cost-warehouse-club-industry-tam-growth-drivers",
       "ebay-tam-global-ecommerce-recommerce-2025",
+      "glp1-market-tam-sizing-lly",
+      "glp1-penetration-scurve-catalysts",
+      "goog-adjacent-tam-expansion",
+      "goog-cloud-computing-tam-growth",
+      "goog-digital-advertising-tam-growth",
       "goog-tam-digital-advertising-cloud-multi-market-2025",
       "lly-glp1-tam-industry-growth-drivers",
       "semiconductor-foundry-tam-growth-2000-2035",
@@ -13064,7 +15544,18 @@
       "ebay-jamie-iannone-quotes-strategy-enthusiast-differentiation-part-1",
       "ebay-omidyar-iannone-recommerce-differentiation-quotes-part-2",
       "ebay-pierre-omidyar-founding-era-quotes-part-1",
+      "goog-executive-quotes-financials-2025-2026-part-1",
+      "goog-pichai-quotes-ai-strategy-historical-perspective-part-3",
+      "goog-pichai-quotes-competition-ai-market-dynamics-part-3",
+      "goog-pichai-quotes-regulatory-culture-leadership-part-4",
       "goog-sundar-pichai-quotes-innovation-competition-chrome-platform-2020-2025-part-2",
+      "goog-sundar-pichai-quotes-part1-part-1",
+      "goog-sundar-pichai-quotes-search-ai-commerce-part2-part-2",
+      "lly-david-ricks-quotes-competitive-moat-market-structure-part-3",
+      "lly-david-ricks-quotes-glp1-obesity-market-part-1",
+      "lly-david-ricks-quotes-glp1-substitutes-compounding-part-3",
+      "lly-david-ricks-quotes-market-leadership-competition-part-2",
+      "lly-david-ricks-quotes-pipeline-ai-future-part-1",
       "lly-david-ricks-quotes-strategy-competition-pricing-access-part-1",
       "morris-chang-apple-intel-foundry-decision-quotes",
       "morris-chang-quotes-acquired-briefing-apple-ibm-nvidia-scale-2025-part-3",
@@ -13099,13 +15590,17 @@
       "ebay-organizational-culture-incentives",
       "goog-organizational-culture-engineering-driven-innovation",
       "lly-executive-compensation-incentive-structure-2025",
+      "lly-organizational-culture-incentives",
       "tsmc-esg-ratings-environmental-performance",
       "cost-executive-succession-bench",
+      "lly-ceo-david-ricks-ethics-track-record",
       "aapl-tim-cook-health-privacy-technology-philosophy-quotes-part-4",
       "aapl-tim-cook-moat-culture-leadership-quotes-part-6",
       "aapl-tim-cook-privacy-regulation-policy-quotes-part-3",
       "aapl-tim-cook-regulatory-antitrust-quotes-2020-2026-part-2",
       "ebay-omidyar-quotes-community-governance-feedback-forum-part-2",
+      "goog-pichai-quotes-ethics-safety-society-part-4",
+      "goog-pichai-quotes-regulatory-culture-leadership-part-4",
       "lly-david-ricks-quotes-diversity-leadership-succession-part-3",
       "morris-chang-quotes-globalization-identity-integrity-part-3",
       "morris-chang-quotes-integrity-governance-part-2",
@@ -13118,6 +15613,7 @@
       "amzn-market-structure-oligopoly-2024",
       "ebay-market-structure-hhi-concentration-2025",
       "ebay-vertical-category-market-concentration-2025",
+      "goog-five-forces-competitive-moat",
       "lly-glp1-market-structure-hhi-dual-oligopoly-2025",
       "lly-glp1-regulatory-environment-global-2025",
       "tsm-foundry-market-concentration-2024",
@@ -13132,6 +15628,11 @@
       "cost-warehouse-club-industry-tam-growth-drivers",
       "ebay-tam-ecommerce-recommerce-growth-2025",
       "ebay-tam-global-ecommerce-recommerce-2025",
+      "glp1-market-tam-sizing-lly",
+      "glp1-penetration-scurve-catalysts",
+      "goog-adjacent-tam-expansion",
+      "goog-cloud-computing-tam-growth",
+      "goog-digital-advertising-tam-growth",
       "goog-tam-digital-advertising-cloud-multi-market-2025",
       "lly-glp1-tam-industry-growth-drivers",
       "semiconductor-foundry-tam-growth-2000-2035",
@@ -13149,7 +15650,11 @@
       "ebay-iannone-quotes-recommerce-sustainability-gen-z-2021-2025-part-2",
       "ebay-jamie-iannone-quotes-ai-recommerce-tam-part-1",
       "goog-sundar-pichai-quotes-ai-search-strategy-2025-part-1",
+      "lly-david-ricks-quotes-glp1-addiction-neuroscience-part-2",
+      "lly-david-ricks-quotes-glp1-obesity-market-part-1",
       "lly-david-ricks-quotes-obesity-glp1-disease-mission-part-1",
+      "lly-david-ricks-quotes-pipeline-ai-future-part-1",
+      "lly-david-ricks-quotes-strategic-history-ceo-tenure-part-2",
       "aapl-ai-pc-penetration-s-curve-arm-transition-2025",
       "aapl-demand-side-macro-trends-upgrade-cycles-subscriptions-health-privacy-2025",
       "aapl-demand-trends-upgrade-cycles-health-subscriptions-2025",
@@ -13166,10 +15671,87 @@
       "ebay-demand-trends-sustainability-inflation-genz-2025",
       "ebay-ecommerce-scurve-four-waves-technology-adoption",
       "ebay-four-scurve-ecommerce-technology-transitions",
+      "goog-ai-adoption-scurve-quantitative",
+      "goog-demand-shift-search-youtube-enterprise",
+      "lly-glp1-demand-structural-shifts",
       "lly-glp1-scurve-diffusion-demand-trends-2025",
       "lly-glp1-technology-generations-roadmap-2025",
       "tsmc-ai-demand-drivers-token-growth",
       "tsmc-cowos-advanced-packaging-capacity-expansion"
+    ],
+    "capex": [
+      "goog-unit-economics-cost-structure",
+      "lly-business-model-dna",
+      "tsmc-wafer-pricing-unit-economics-capex-discipline",
+      "cost-warehouse-club-entry-barriers-five-dimensions",
+      "lly-five-forces-moat-analysis",
+      "tsm-bear-case-geopolitical-structural-risks-2025",
+      "tsm-bull-bear-key-debates-scorecard-2025",
+      "tsm-bull-case-ai-supercycle-moat-2025",
+      "tsm-five-forces-supplier-buyer-power",
+      "tsmc-carbon-emissions-sbti-climate-transition",
+      "tsmc-energy-consumption-renewable-targets",
+      "aapl-10-year-financial-history-2015-2025",
+      "aapl-dcf-valuation-fy2026-three-scenario",
+      "aapl-operating-efficiency-fy2023-fy2025",
+      "aapl-operating-efficiency-roic-margins-fy2023-2025",
+      "aapl-ten-year-financials-fy2015-fy2025",
+      "amzn-20-year-financial-history-2006-2025",
+      "amzn-dcf-valuation-multi-method-2026",
+      "amzn-operating-efficiency-roic-leverage-2025",
+      "amzn-operating-efficiency-roic-leverage-fy2018-fy2025",
+      "amzn-ten-year-financials-fy2014-fy2025",
+      "cost-operating-efficiency-roic-fy2021-fy2025",
+      "cost-ten-year-financials-fy2015-fy2025",
+      "ebay-operating-efficiency-roic-fcf-2021-2024",
+      "ebay-operating-efficiency-roic-margins-fy2021-2024",
+      "goog-10yr-financial-metrics-2014-2024",
+      "goog-dcf-valuation-fy2025-three-scenario",
+      "goog-dcf-valuation-multiples-2024",
+      "goog-operating-efficiency-roic-fcf-2020-2025",
+      "goog-operating-efficiency-roic-margins-fy2020-fy2024",
+      "goog-strategic-inflection-points-2015-2024",
+      "goog-ten-year-financials-fy2014-fy2024",
+      "lly-dcf-valuation-fy2026-three-scenario",
+      "lly-operating-efficiency-roic-fcf-2021-2025",
+      "lly-operating-efficiency-roic-margins-fy2021-fy2025",
+      "lly-strategic-inflection-points-2014-2025",
+      "tsm-dcf-valuation-2026e",
+      "tsm-operating-efficiency-roic-roe-margins-2021-2025",
+      "tsm-platform-and-process-revenue-mix-2024",
+      "tsm-ten-year-financial-trajectory-2014-2025",
+      "goog-cloud-computing-tam-growth",
+      "amzn-andy-jassy-ai-strategy-quotes-part-1",
+      "amzn-andy-jassy-ai-strategy-quotes-part-2",
+      "amzn-andy-jassy-ai-technology-quotes-part-3",
+      "amzn-executives-supporting-quotes-part-2",
+      "amzn-executives-supporting-quotes-part-3",
+      "cc-wei-quotes-ai-demand-capex-intel-competition-part-3",
+      "cc-wei-quotes-ai-demand-customer-validation-part-4",
+      "cc-wei-quotes-intel-competition-investment-leadership-2024-2025-part-3-part-1",
+      "goog-ashkenazi-quotes-capital-allocation-efficiency-part-3",
+      "goog-executive-quotes-financials-2025-2026-part-2",
+      "goog-pichai-quotes-ai-strategy-infrastructure-part-4",
+      "goog-sundar-pichai-quotes-competition-regulation-infrastructure-2020-2025-part-1",
+      "lly-david-ricks-quotes-manufacturing-capacity-dtc-part-2",
+      "lly-david-ricks-quotes-rd-drug-discovery-philosophy-part-2",
+      "lly-david-ricks-quotes-rd-innovation-drug-discovery-part-2",
+      "lly-david-ricks-quotes-technology-ai-pipeline-manufacturing-part-1",
+      "morris-chang-quotes-technology-rd-moores-law-part-1",
+      "wendell-huang-quotes-capex-philosophy-advanced-packaging",
+      "wendell-huang-quotes-margins-capex-philosophy-part-3",
+      "wendell-huang-quotes-rd-advanced-nodes-n2",
+      "wendell-huang-quotes-us-fab-economics-margins-part-4",
+      "wendell-huang-quotes-us-fab-economics-margins",
+      "aapl-apple-silicon-financial-impact-asp-margins-fy2019-fy2025",
+      "aapl-apple-silicon-financial-impact-performance-2025",
+      "amzn-generative-ai-aws-platform-strategy-2024",
+      "amzn-generative-ai-aws-strategy-2024-2025",
+      "amzn-logistics-same-day-delivery-technology-2024",
+      "goog-tpu-infrastructure-vertical-integration",
+      "tsmc-ai-demand-drivers-token-growth",
+      "tsmc-cowos-advanced-packaging-capacity-expansion",
+      "tsmc-euv-adoption-curve"
     ],
     "market-share": [
       "tsmc-revenue-platform-breakdown-hpc-ai-dominance",
@@ -13194,10 +15776,15 @@
       "ebay-regulatory-environment-tariffs-dsa-1099k-gdpr-2025",
       "ebay-regulatory-environment-tariffs-dsa-tax-2025",
       "ebay-vertical-category-market-concentration-2025",
+      "glp1-market-duopoly-structure-lly-nvo",
+      "goog-digital-ad-cloud-market-structure",
       "goog-five-forces-competitive-moat-analysis-2025",
+      "goog-five-forces-competitive-moat",
       "goog-market-structure-digital-advertising-cloud-2025",
       "goog-regulatory-antitrust-doj-dma-dsa-2025",
+      "goog-regulatory-antitrust-landscape",
       "lly-five-forces-competitive-moat-analysis-2025",
+      "lly-five-forces-moat-analysis",
       "lly-glp1-market-structure-hhi-dual-oligopoly-2025",
       "lly-glp1-regulatory-environment-global-2025",
       "tsm-bear-case-geopolitical-structural-risks-2025",
@@ -13219,6 +15806,10 @@
       "cost-warehouse-club-industry-tam-growth-drivers",
       "ebay-tam-ecommerce-recommerce-growth-2025",
       "ebay-tam-global-ecommerce-recommerce-2025",
+      "glp1-market-tam-sizing-lly",
+      "goog-adjacent-tam-expansion",
+      "goog-cloud-computing-tam-growth",
+      "goog-digital-advertising-tam-growth",
       "goog-tam-digital-advertising-cloud-multi-market-2025",
       "lly-glp1-tam-industry-growth-drivers",
       "semiconductor-foundry-tam-growth-2000-2035",
@@ -13232,6 +15823,10 @@
       "ebay-iannone-geographic-macro-trade-policy-quotes-part-3",
       "ebay-iannone-quotes-transformation-milestone-strategy-2025-part-5",
       "ebay-jamie-iannone-quotes-strategy-enthusiast-differentiation-part-1",
+      "goog-pichai-quotes-competition-ai-market-dynamics-part-3",
+      "lly-david-ricks-quotes-competitive-moat-market-structure-part-3",
+      "lly-david-ricks-quotes-glp1-obesity-market-part-1",
+      "lly-david-ricks-quotes-market-leadership-competition-part-2",
       "lly-david-ricks-quotes-strategy-competition-pricing-access-part-1",
       "aapl-ai-pc-penetration-s-curve-arm-transition-2025",
       "aapl-apple-intelligence-genai-adoption-2025",
@@ -13251,64 +15846,6 @@
       "ebay-ecommerce-scurve-four-waves-technology-adoption",
       "ebay-four-scurve-ecommerce-technology-transitions",
       "tsmc-ai-demand-drivers-token-growth"
-    ],
-    "capex": [
-      "tsmc-wafer-pricing-unit-economics-capex-discipline",
-      "cost-warehouse-club-entry-barriers-five-dimensions",
-      "tsm-bear-case-geopolitical-structural-risks-2025",
-      "tsm-bull-bear-key-debates-scorecard-2025",
-      "tsm-bull-case-ai-supercycle-moat-2025",
-      "tsm-five-forces-supplier-buyer-power",
-      "tsmc-carbon-emissions-sbti-climate-transition",
-      "tsmc-energy-consumption-renewable-targets",
-      "aapl-10-year-financial-history-2015-2025",
-      "aapl-dcf-valuation-fy2026-three-scenario",
-      "aapl-operating-efficiency-fy2023-fy2025",
-      "aapl-operating-efficiency-roic-margins-fy2023-2025",
-      "aapl-ten-year-financials-fy2015-fy2025",
-      "amzn-20-year-financial-history-2006-2025",
-      "amzn-dcf-valuation-multi-method-2026",
-      "amzn-operating-efficiency-roic-leverage-2025",
-      "amzn-operating-efficiency-roic-leverage-fy2018-fy2025",
-      "amzn-ten-year-financials-fy2014-fy2025",
-      "cost-operating-efficiency-roic-fy2021-fy2025",
-      "cost-ten-year-financials-fy2015-fy2025",
-      "ebay-operating-efficiency-roic-fcf-2021-2024",
-      "ebay-operating-efficiency-roic-margins-fy2021-2024",
-      "goog-dcf-valuation-fy2025-three-scenario",
-      "goog-operating-efficiency-roic-margins-fy2020-fy2024",
-      "goog-ten-year-financials-fy2014-fy2024",
-      "lly-dcf-valuation-fy2026-three-scenario",
-      "lly-operating-efficiency-roic-margins-fy2021-fy2025",
-      "tsm-dcf-valuation-2026e",
-      "tsm-operating-efficiency-roic-roe-margins-2021-2025",
-      "tsm-platform-and-process-revenue-mix-2024",
-      "tsm-ten-year-financial-trajectory-2014-2025",
-      "amzn-andy-jassy-ai-strategy-quotes-part-1",
-      "amzn-andy-jassy-ai-strategy-quotes-part-2",
-      "amzn-andy-jassy-ai-technology-quotes-part-3",
-      "amzn-executives-supporting-quotes-part-2",
-      "amzn-executives-supporting-quotes-part-3",
-      "cc-wei-quotes-ai-demand-capex-intel-competition-part-3",
-      "cc-wei-quotes-ai-demand-customer-validation-part-4",
-      "cc-wei-quotes-intel-competition-investment-leadership-2024-2025-part-3-part-1",
-      "goog-sundar-pichai-quotes-competition-regulation-infrastructure-2020-2025-part-1",
-      "lly-david-ricks-quotes-rd-innovation-drug-discovery-part-2",
-      "lly-david-ricks-quotes-technology-ai-pipeline-manufacturing-part-1",
-      "morris-chang-quotes-technology-rd-moores-law-part-1",
-      "wendell-huang-quotes-capex-philosophy-advanced-packaging",
-      "wendell-huang-quotes-margins-capex-philosophy-part-3",
-      "wendell-huang-quotes-rd-advanced-nodes-n2",
-      "wendell-huang-quotes-us-fab-economics-margins-part-4",
-      "wendell-huang-quotes-us-fab-economics-margins",
-      "aapl-apple-silicon-financial-impact-asp-margins-fy2019-fy2025",
-      "aapl-apple-silicon-financial-impact-performance-2025",
-      "amzn-generative-ai-aws-platform-strategy-2024",
-      "amzn-generative-ai-aws-strategy-2024-2025",
-      "amzn-logistics-same-day-delivery-technology-2024",
-      "tsmc-ai-demand-drivers-token-growth",
-      "tsmc-cowos-advanced-packaging-capacity-expansion",
-      "tsmc-euv-adoption-curve"
     ],
     "five-forces": [
       "aapl-five-forces-analysis",
@@ -13330,9 +15867,15 @@
       "ebay-market-structure-hhi-concentration-2025",
       "ebay-market-structure-hhi-ecommerce-concentration-2024",
       "ebay-vertical-category-market-concentration-2025",
+      "glp1-market-duopoly-structure-lly-nvo",
+      "glp1-regulatory-environment-global-lly",
+      "goog-digital-ad-cloud-market-structure",
       "goog-five-forces-competitive-moat-analysis-2025",
+      "goog-five-forces-competitive-moat",
       "goog-market-structure-digital-advertising-cloud-2025",
+      "goog-regulatory-antitrust-landscape",
       "lly-five-forces-competitive-moat-analysis-2025",
+      "lly-five-forces-moat-analysis",
       "lly-glp1-market-structure-hhi-dual-oligopoly-2025",
       "tsm-five-forces-entry-substitutes-rivalry",
       "tsm-five-forces-supplier-buyer-power",
@@ -13342,6 +15885,8 @@
       "tsm-samsung-foundry-yield-crisis-2025",
       "tsm-ten-year-financial-trajectory-2014-2025",
       "cc-wei-quotes-competitor-customer-success-globalization-part-2-part-1",
+      "goog-pichai-quotes-competition-ai-market-dynamics-part-3",
+      "lly-david-ricks-quotes-market-leadership-competition-part-2",
       "lly-david-ricks-quotes-strategy-competition-pricing-access-part-1",
       "morris-chang-quotes-competition-learning-curve-moat-part-1"
     ],
@@ -13361,6 +15906,7 @@
       "amzn-andy-jassy-executive-quotes-ai-cloud-strategy-part-1",
       "cc-wei-quotes-ai-demand-capex-intel-competition-part-3",
       "cc-wei-quotes-ai-demand-cowos-globalization-part-1",
+      "lly-david-ricks-quotes-pipeline-ai-future-part-1",
       "lly-david-ricks-quotes-technology-ai-pipeline-manufacturing-part-1",
       "morris-chang-quotes-technology-rd-moores-law-part-1",
       "wendell-huang-quotes-rd-advanced-nodes-n2",
@@ -13376,6 +15922,9 @@
       "ebay-ai-genai-strategy-tools-metrics-2024-2025",
       "ebay-ai-strategy-generative-ai-deployment-2024-2025",
       "ebay-ecommerce-scurve-four-waves-technology-adoption",
+      "goog-llm-evolution-roadmap-gemini",
+      "goog-tpu-infrastructure-vertical-integration",
+      "lly-glp1-technology-generation-evolution",
       "lly-glp1-technology-generations-roadmap-2025",
       "tsmc-ai-demand-drivers-token-growth",
       "tsmc-euv-adoption-curve",
@@ -13441,6 +15990,7 @@
     ],
     "regulatory": [
       "cost-regulatory-tariff-risk-2025-2026",
+      "glp1-regulatory-environment-global-lly",
       "aapl-tim-cook-privacy-regulation-policy-quotes-part-3",
       "ebay-executives-trade-regulatory-quotes-part-2",
       "ebay-iannone-alford-quotes-de-minimis-trade-policy-2025-part-2",
@@ -13449,6 +15999,7 @@
     ],
     "supply-chain": [
       "cost-regulatory-tariff-risk-2025-2026",
+      "lly-five-forces-moat-analysis",
       "tsm-bear-case-geopolitical-structural-risks-2025",
       "tsm-five-forces-supplier-buyer-power",
       "tsm-regulatory-policy-environment-2025",
@@ -13464,6 +16015,8 @@
       "cost-richard-galanti-analyst-quotes-technology-ai-part-1",
       "cost-ron-vachris-executive-quotes-strategy-culture-leadership-part-2",
       "cost-ron-vachris-executive-quotes-strategy-growth-tariffs-part-1",
+      "lly-david-ricks-quotes-competitive-moat-market-structure-part-3",
+      "lly-david-ricks-quotes-manufacturing-capacity-dtc-part-2",
       "lly-david-ricks-quotes-technology-ai-pipeline-manufacturing-part-1",
       "morris-chang-apple-intel-foundry-decision-quotes",
       "morris-chang-quotes-customers-pricing-asml-partnership-part-1",
@@ -13474,6 +16027,8 @@
       "amzn-logistics-technology-same-day-delivery-2024",
       "cost-ai-supply-chain-technology-strategy-2025",
       "cost-demand-trends-structural-shifts-2020-2025",
+      "goog-tpu-infrastructure-vertical-integration",
+      "lly-orforglipron-small-molecule-oral-glp1",
       "tsmc-cowos-advanced-packaging-capacity-expansion",
       "tsmc-euv-adoption-curve"
     ],
@@ -13481,7 +16036,37 @@
       "cost-warehouse-club-market-structure-hhi-2025"
     ],
     "duopoly": [
-      "cost-warehouse-club-market-structure-hhi-2025"
+      "cost-warehouse-club-market-structure-hhi-2025",
+      "glp1-market-duopoly-structure-lly-nvo",
+      "lly-david-ricks-quotes-market-leadership-competition-part-2"
+    ],
+    "glp-1": [
+      "glp1-market-duopoly-structure-lly-nvo",
+      "glp1-regulatory-environment-global-lly",
+      "lly-five-forces-moat-analysis",
+      "lly-geographic-revenue-breakdown-fy2023-fy2025",
+      "lly-ten-year-financials-fy2015-fy2025",
+      "lly-glp1-tam-industry-growth-drivers"
+    ],
+    "obesity": [
+      "glp1-market-duopoly-structure-lly-nvo",
+      "glp1-regulatory-environment-global-lly",
+      "lly-five-forces-moat-analysis",
+      "lly-glp1-tam-industry-growth-drivers",
+      "lly-glp1-demand-structural-shifts"
+    ],
+    "diabetes": [
+      "glp1-market-duopoly-structure-lly-nvo",
+      "lly-glp1-tam-industry-growth-drivers"
+    ],
+    "ira": [
+      "glp1-regulatory-environment-global-lly"
+    ],
+    "medicare": [
+      "glp1-regulatory-environment-global-lly"
+    ],
+    "market-access": [
+      "glp1-regulatory-environment-global-lly"
     ],
     "trade-war": [
       "tsm-bear-case-geopolitical-structural-risks-2025",
@@ -13574,6 +16159,8 @@
       "ebay-category-gmv-mix-focus-categories-fy2025",
       "ebay-geographic-revenue-breakdown-fy2024-2025",
       "ebay-geographic-revenue-breakdown-fy2024-fy2025",
+      "goog-geographic-revenue-fy2024-fy2025",
+      "goog-segment-revenue-operating-profit-fy2024-fy2025",
       "goog-ten-year-financials-fy2014-fy2024",
       "lly-ten-year-financials-fy2015-fy2025"
     ],
@@ -13586,7 +16173,9 @@
       "ebay-dcf-valuation-fy2026-three-scenario",
       "ebay-dcf-valuation-multi-method-2026",
       "goog-dcf-valuation-fy2025-three-scenario",
+      "goog-dcf-valuation-multiples-2024",
       "lly-dcf-valuation-fy2026-three-scenario",
+      "lly-dcf-valuation-multiples-2026",
       "tsm-dcf-valuation-2026e",
       "tsmc-geopolitical-pe-discount-analysis",
       "tsm-silicon-shield-geopolitical-scoring-summary-part-5"
@@ -13599,7 +16188,9 @@
       "ebay-geographic-revenue-breakdown-fy2024-2025",
       "ebay-geographic-revenue-breakdown-fy2024-fy2025",
       "goog-geographic-revenue-breakdown-fy2024",
-      "lly-geographic-revenue-breakdown-fy2023-fy2025"
+      "goog-geographic-revenue-fy2024-fy2025",
+      "lly-geographic-revenue-breakdown-fy2023-fy2025",
+      "lly-geographic-revenue-fy2023-fy2025"
     ],
     "segments": [
       "aapl-geographic-revenue-breakdown-fy2023-fy2025",
@@ -13638,7 +16229,8 @@
     ],
     "international-expansion": [
       "cost-geographic-revenue-breakdown-fy2025",
-      "lly-geographic-revenue-breakdown-fy2023-fy2025"
+      "lly-geographic-revenue-breakdown-fy2023-fy2025",
+      "lly-geographic-revenue-fy2023-fy2025"
     ],
     "ecommerce": [
       "cost-geographic-revenue-breakdown-fy2025",
@@ -13689,13 +16281,25 @@
       "goog-geographic-revenue-breakdown-fy2024",
       "amzn-tam-three-markets-ecommerce-cloud-ads"
     ],
-    "glp-1": [
-      "lly-geographic-revenue-breakdown-fy2023-fy2025",
-      "lly-ten-year-financials-fy2015-fy2025",
-      "lly-glp1-tam-industry-growth-drivers"
-    ],
     "tirzepatide": [
-      "lly-geographic-revenue-breakdown-fy2023-fy2025"
+      "lly-geographic-revenue-breakdown-fy2023-fy2025",
+      "lly-product-revenue-fy2024-fy2025",
+      "lly-glp1-demand-structural-shifts",
+      "lly-glp1-technology-generation-evolution"
+    ],
+    "glp1": [
+      "lly-geographic-revenue-fy2023-fy2025",
+      "lly-product-revenue-fy2024-fy2025",
+      "lly-david-ricks-quotes-glp1-addiction-neuroscience-part-2",
+      "lly-david-ricks-quotes-manufacturing-capacity-dtc-part-2",
+      "lly-david-ricks-quotes-market-leadership-competition-part-2",
+      "lly-david-ricks-quotes-strategic-history-ceo-tenure-part-2",
+      "lly-glp1-demand-structural-shifts",
+      "lly-glp1-technology-generation-evolution",
+      "lly-orforglipron-small-molecule-oral-glp1"
+    ],
+    "product-concentration": [
+      "lly-product-revenue-fy2024-fy2025"
     ],
     "ai-accelerator": [
       "tsm-dcf-valuation-2026e",
@@ -13712,6 +16316,7 @@
       "cc-wei-quotes-ai-demand-customer-validation-part-4",
       "cc-wei-quotes-intel-competition-investment-leadership-2024-2025-part-3-part-1",
       "ebay-iannone-ai-infrastructure-platform-quotes-part-3",
+      "goog-sundar-pichai-quotes-part1-part-1",
       "aapl-apple-intelligence-genai-adoption-2025",
       "aapl-apple-intelligence-vs-google-gemini-vs-samsung-galaxy-ai-feature-matrix-2025",
       "aapl-apple-silicon-performance-benchmarks-competitive-analysis-2025",
@@ -13719,6 +16324,7 @@
       "amzn-alexa-voice-ai-ecosystem-pivot-2025",
       "amzn-generative-ai-aws-platform-strategy-2024",
       "amzn-generative-ai-aws-strategy-2024-2025",
+      "goog-tpu-infrastructure-vertical-integration",
       "tsmc-ai-demand-drivers-token-growth",
       "tsmc-cowos-advanced-packaging-capacity-expansion",
       "tsmc-finfet-to-gaa-transition"
@@ -13736,6 +16342,8 @@
       "tsmc-taiwan-strait-conflict-probability-scenarios",
       "cc-wei-quotes-ai-demand-cowos-globalization-part-1",
       "cc-wei-quotes-ai-demand-cowos-globalization",
+      "lly-david-ricks-quotes-competitive-moat-market-structure-part-3",
+      "lly-david-ricks-quotes-manufacturing-capacity-dtc-part-2",
       "lly-david-ricks-quotes-technology-ai-pipeline-manufacturing-part-1",
       "wendell-huang-quotes-capex-philosophy-advanced-packaging",
       "amzn-logistics-technology-same-day-delivery-2024",
@@ -13756,11 +16364,13 @@
     ],
     "cloud-infrastructure": [
       "aapl-tam-five-markets-overview",
-      "amzn-andy-jassy-ai-technology-quotes-part-3"
+      "amzn-andy-jassy-ai-technology-quotes-part-3",
+      "goog-ai-adoption-scurve-quantitative"
     ],
     "digital-advertising": [
       "amzn-tam-ecommerce-cloud-advertising-2024",
-      "amzn-tam-three-markets-ecommerce-cloud-ads"
+      "amzn-tam-three-markets-ecommerce-cloud-ads",
+      "goog-ai-adoption-scurve-quantitative"
     ],
     "secular-growth": [
       "amzn-tam-three-markets-ecommerce-cloud-ads"
@@ -13786,17 +16396,12 @@
     "marketplace": [
       "ebay-tam-global-ecommerce-recommerce-2025"
     ],
-    "obesity": [
-      "lly-glp1-tam-industry-growth-drivers"
-    ],
-    "diabetes": [
-      "lly-glp1-tam-industry-growth-drivers"
-    ],
     "pharmaceuticals": [
       "lly-glp1-tam-industry-growth-drivers"
     ],
     "s-curve": [
-      "lly-glp1-tam-industry-growth-drivers"
+      "lly-glp1-tam-industry-growth-drivers",
+      "goog-ai-adoption-scurve-quantitative"
     ],
     "penetration": [
       "lly-glp1-tam-industry-growth-drivers"
@@ -13862,7 +16467,8 @@
       "ebay-iannone-quotes-ai-platform-magical-listing-agentic-commerce-2024-2025-part-2"
     ],
     "llm": [
-      "ebay-iannone-ai-strategy-magical-listing-agentic-quotes-part-2"
+      "ebay-iannone-ai-strategy-magical-listing-agentic-quotes-part-2",
+      "goog-llm-evolution-roadmap-gemini"
     ],
     "product-innovation": [
       "ebay-iannone-ai-strategy-magical-listing-agentic-quotes-part-2"
@@ -13877,7 +16483,10 @@
     "genai": [
       "ebay-iannone-quotes-ai-platform-magical-listing-agentic-commerce-2024-2025-part-2",
       "aapl-apple-intelligence-vs-google-gemini-vs-samsung-galaxy-ai-feature-matrix-2025",
-      "aapl-genai-on-device-penetration-apple-intelligence-2024-2025"
+      "aapl-genai-on-device-penetration-apple-intelligence-2024-2025",
+      "goog-ai-adoption-scurve-quantitative",
+      "goog-demand-shift-search-youtube-enterprise",
+      "goog-llm-evolution-roadmap-gemini"
     ],
     "magical-listing": [
       "ebay-iannone-quotes-ai-platform-magical-listing-agentic-commerce-2024-2025-part-2"
@@ -13897,13 +16506,16 @@
       "ebay-omidyar-quotes-founding-trust-community-economic-democracy-part-4"
     ],
     "search": [
-      "goog-sundar-pichai-quotes-ai-search-strategy-2025-part-1"
+      "goog-sundar-pichai-quotes-ai-search-strategy-2025-part-1",
+      "goog-demand-shift-search-youtube-enterprise"
     ],
     "gemini": [
-      "goog-sundar-pichai-quotes-ai-search-strategy-2025-part-1"
+      "goog-sundar-pichai-quotes-ai-search-strategy-2025-part-1",
+      "goog-llm-evolution-roadmap-gemini"
     ],
     "tpu": [
-      "goog-sundar-pichai-quotes-ai-search-strategy-2025-part-1"
+      "goog-sundar-pichai-quotes-ai-search-strategy-2025-part-1",
+      "goog-tpu-infrastructure-vertical-integration"
     ],
     "scaling": [
       "goog-sundar-pichai-quotes-ai-search-strategy-2025-part-1"
@@ -13913,6 +16525,31 @@
     ],
     "antitrust": [
       "goog-sundar-pichai-quotes-competition-regulation-infrastructure-2020-2025-part-1"
+    ],
+    "addiction": [
+      "lly-david-ricks-quotes-glp1-addiction-neuroscience-part-2",
+      "lly-glp1-demand-structural-shifts"
+    ],
+    "neuroscience": [
+      "lly-david-ricks-quotes-glp1-addiction-neuroscience-part-2"
+    ],
+    "alzheimers": [
+      "lly-david-ricks-quotes-glp1-addiction-neuroscience-part-2"
+    ],
+    "pipeline": [
+      "lly-david-ricks-quotes-glp1-addiction-neuroscience-part-2",
+      "lly-ai-drug-discovery-strategy",
+      "lly-glp1-technology-generation-evolution"
+    ],
+    "anti-hedonics": [
+      "lly-david-ricks-quotes-glp1-addiction-neuroscience-part-2"
+    ],
+    "manufacturing": [
+      "lly-david-ricks-quotes-manufacturing-capacity-dtc-part-2",
+      "lly-orforglipron-small-molecule-oral-glp1"
+    ],
+    "dtc": [
+      "lly-david-ricks-quotes-manufacturing-capacity-dtc-part-2"
     ],
     "on-device-ai": [
       "aapl-apple-intelligence-vs-google-gemini-vs-samsung-galaxy-ai-feature-matrix-2025",
@@ -13936,7 +16573,8 @@
       "aapl-apple-silicon-performance-benchmarks-competitive-analysis-2025"
     ],
     "vertical-integration": [
-      "aapl-apple-silicon-financial-impact-asp-margins-fy2019-fy2025"
+      "aapl-apple-silicon-financial-impact-asp-margins-fy2019-fy2025",
+      "goog-tpu-infrastructure-vertical-integration"
     ],
     "benchmark": [
       "aapl-apple-silicon-performance-benchmarks-competitive-analysis-2025"
@@ -13990,6 +16628,114 @@
     "omnichannel": [
       "cost-ecommerce-penetration-digital-transformation-fy2018-fy2025"
     ],
+    "ai-adoption": [
+      "goog-ai-adoption-scurve-quantitative",
+      "goog-demand-shift-search-youtube-enterprise",
+      "goog-llm-evolution-roadmap-gemini"
+    ],
+    "agentic-ai": [
+      "goog-ai-adoption-scurve-quantitative",
+      "goog-demand-shift-search-youtube-enterprise"
+    ],
+    "penetration-rate": [
+      "goog-ai-adoption-scurve-quantitative"
+    ],
+    "mckinsey": [
+      "goog-ai-adoption-scurve-quantitative"
+    ],
+    "gartner": [
+      "goog-ai-adoption-scurve-quantitative"
+    ],
+    "youtube": [
+      "goog-demand-shift-search-youtube-enterprise"
+    ],
+    "ctv": [
+      "goog-demand-shift-search-youtube-enterprise"
+    ],
+    "ai-overviews": [
+      "goog-demand-shift-search-youtube-enterprise"
+    ],
+    "enterprise-demand": [
+      "goog-demand-shift-search-youtube-enterprise"
+    ],
+    "consumer-behavior": [
+      "goog-demand-shift-search-youtube-enterprise"
+    ],
+    "model-roadmap": [
+      "goog-llm-evolution-roadmap-gemini"
+    ],
+    "r&d": [
+      "goog-llm-evolution-roadmap-gemini",
+      "tsmc-process-node-roadmap-1987-2027"
+    ],
+    "scaling-laws": [
+      "goog-llm-evolution-roadmap-gemini"
+    ],
+    "vertex-ai": [
+      "goog-llm-evolution-roadmap-gemini"
+    ],
+    "inference": [
+      "goog-tpu-infrastructure-vertical-integration"
+    ],
+    "training": [
+      "goog-tpu-infrastructure-vertical-integration"
+    ],
+    "cost-advantage": [
+      "goog-tpu-infrastructure-vertical-integration"
+    ],
+    "ai-drug-discovery": [
+      "lly-ai-drug-discovery-strategy"
+    ],
+    "genomics": [
+      "lly-ai-drug-discovery-strategy"
+    ],
+    "protein-folding": [
+      "lly-ai-drug-discovery-strategy"
+    ],
+    "r-and-d": [
+      "lly-ai-drug-discovery-strategy"
+    ],
+    "alphafold": [
+      "lly-ai-drug-discovery-strategy"
+    ],
+    "indication-expansion": [
+      "lly-glp1-demand-structural-shifts"
+    ],
+    "alzheimer": [
+      "lly-glp1-demand-structural-shifts"
+    ],
+    "chronic-disease": [
+      "lly-glp1-demand-structural-shifts"
+    ],
+    "kisunla": [
+      "lly-glp1-demand-structural-shifts"
+    ],
+    "oral-drug-delivery": [
+      "lly-glp1-technology-generation-evolution",
+      "lly-orforglipron-small-molecule-oral-glp1"
+    ],
+    "multi-receptor": [
+      "lly-glp1-technology-generation-evolution"
+    ],
+    "drug-generations": [
+      "lly-glp1-technology-generation-evolution"
+    ],
+    "orforglipron": [
+      "lly-glp1-technology-generation-evolution",
+      "lly-orforglipron-small-molecule-oral-glp1"
+    ],
+    "retatrutide": [
+      "lly-glp1-technology-generation-evolution"
+    ],
+    "small-molecule": [
+      "lly-orforglipron-small-molecule-oral-glp1"
+    ],
+    "bioavailability": [
+      "lly-orforglipron-small-molecule-oral-glp1"
+    ],
+    "allosteric-agonist": [
+      "lly-orforglipron-small-molecule-oral-glp1"
+    ],
     "gaa": [
       "tsmc-euv-adoption-curve",
       "tsmc-finfet-to-gaa-transition",
@@ -14005,9 +16751,6 @@
     "moores-law": [
       "tsmc-process-node-roadmap-1987-2027",
       "tsmc-transistor-density-scaling-s-curve"
-    ],
-    "r&d": [
-      "tsmc-process-node-roadmap-1987-2027"
     ],
     "roadmap": [
       "tsmc-process-node-roadmap-1987-2027"
