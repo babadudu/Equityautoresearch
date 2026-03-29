@@ -11,7 +11,12 @@
     "query-kb": "tsx src/knowledge-retrieval.ts",
     "compare": "tsx src/expert-comparison.ts",
     "queue-gen": "tsx src/research-queue-generator.ts",
-    "queue-run": "tsx src/research-queue-runner.ts"
+    "queue-run": "tsx src/research-queue-runner.ts",
+    "queue-status": "tsx src/research-queue-status.ts",
+    "queue-watch": "tsx src/research-queue-status.ts --watch",
+    "burn": "bash ~/.claude/scripts/research-burn.sh",
+    "test": "tsx --test src/__tests__/*.test.ts",
+    "test:dispatch": "tsx --test src/__tests__/gemini-dispatch.test.ts"
   },
   "devDependencies": {
     "@types/node": "^24.10.1",
