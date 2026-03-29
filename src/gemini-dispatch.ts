@@ -13,6 +13,7 @@ import fs from 'fs';
 import os from 'os';
 import path from 'path';
 import { execSync } from 'child_process';
+import { MODELS } from './config.js';
 
 const GEMINI_BIN = '/opt/homebrew/bin/gemini';
 const CLAUDE_BIN = 'claude';
@@ -20,6 +21,8 @@ const DEFAULT_TIMEOUT_SEC = 120;
 const MAX_BUFFER_BYTES = 10 * 1024 * 1024; // 10MB for large responses
 
 export interface GeminiDispatchOptions {
+  /** Model to use (e.g., gemini-3.1-pro-preview). Default from config.ts. */
+  model?: string;
   /** Path to a file whose contents are prepended to the prompt (for large reports). */
   inputFile?: string;
   /** Timeout in seconds. Default: 120. */
@@ -32,7 +35,7 @@ export interface GeminiDispatchResult {
   /** The raw text output from the model. */
   output: string;
   /** Which model actually produced the response. */
-  model: 'gemini' | 'sonnet';
+  model: string;
   /** Wall-clock duration in milliseconds. */
   durationMs: number;
   /** Whether the primary model (Gemini) failed and fallback was used. */
@@ -46,7 +49,7 @@ export interface GeminiDispatchResult {
  * (critical for 300K+ char research reports). Cleans up temp files on all paths.
  *
  * @param prompt - The full prompt text to send.
- * @param options - Timeout, input file, output format.
+ * @param options - Timeout, input file, output format, model.
  * @returns Result with output text, model used, and timing.
  * @throws If both Gemini and Sonnet fallback fail.
  */
@@ -56,6 +59,7 @@ export function dispatchToGemini(
 ): GeminiDispatchResult {
   const timeoutSec = options?.timeoutSec ?? DEFAULT_TIMEOUT_SEC;
   const outputFormat = options?.outputFormat ?? 'text';
+  const model = options?.model ?? MODELS.GEMINI;
 
   // Build the full prompt: optional input file content + user prompt
   let fullPrompt = '';
@@ -80,10 +84,10 @@ export function dispatchToGemini(
 
   try {
     // Attempt Gemini first
-    const geminiOutput = execGemini(tmpFile, timeoutSec);
+    const geminiOutput = execGemini(tmpFile, timeoutSec, model);
     const durationMs = Date.now() - startMs;
-    console.log(`[gemini-dispatch] Gemini success (${(durationMs / 1000).toFixed(1)}s, ${geminiOutput.length} chars)`);
-    return { output: geminiOutput, model: 'gemini', durationMs, usedFallback: false };
+    console.log(`[gemini-dispatch] Gemini success (${(durationMs / 1000).toFixed(1)}s, ${geminiOutput.length} chars, model: ${model})`);
+    return { output: geminiOutput, model, durationMs, usedFallback: false };
   } catch (geminiErr: any) {
     const geminiDuration = Date.now() - startMs;
     console.log(`[gemini-dispatch] Gemini failed after ${(geminiDuration / 1000).toFixed(1)}s: ${geminiErr.message?.slice(0, 200)}`);
@@ -114,14 +118,15 @@ export function dispatchToGemini(
  * Execute Gemini CLI with prompt from a temp file.
  * Uses `cat tmpFile | gemini -p` to pipe large prompts via stdin.
  */
-function execGemini(promptFile: string, timeoutSec: number): string {
+function execGemini(promptFile: string, timeoutSec: number, model: string): string {
   // Verify gemini binary exists
   if (!fs.existsSync(GEMINI_BIN)) {
     throw new Error(`Gemini CLI not found at ${GEMINI_BIN}`);
   }
 
   // -p requires a string arg; pass empty string so stdin is used as the prompt
-  const cmd = `cat "${promptFile}" | "${GEMINI_BIN}" -p ""`;
+  // -m specifies the model
+  const cmd = `cat "${promptFile}" | "${GEMINI_BIN}" -m "${model}" -p ""`;
   const stdout = execSync(cmd, {
     timeout: timeoutSec * 1000,
     maxBuffer: MAX_BUFFER_BYTES,
