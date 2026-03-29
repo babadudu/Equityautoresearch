@@ -14,7 +14,8 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { chat } from './llm.js';
-import { MODELS } from './config.js';
+import { MODELS, NADIRCLAW_MODELS } from './config.js';
+import { dispatchToGemini } from './gemini-dispatch.js';
 // Note: We use findFullSectionRange() locally instead of findSectionRange() from markdown-utils,
 // because the latter stops at sub-headings (###) within a section.
 import { rebuildIndex } from './knowledge-index.js';
@@ -194,6 +195,43 @@ Return ONLY the JSON array, no other text. Example:
 [{"id":"tsmc-founding-story","archetype":"company-profile","title":"TSMC Founding Story","companies":["TSM"],"people":["Morris Chang"],"industries":["semiconductor-foundry"],"tags":["founding","business-model"],"temporality":"evergreen","body":"..."}]`;
 }
 
+/** Build extraction prompt for single-call (Gemini) mode — whole report in one call. */
+function buildSingleCallPrompt(ticker: string, taxonomyJson: string): string {
+  const archetypes = [...new Set(SECTION_ARCHETYPE_MAP.map(m => m.archetype))];
+  return `You are a world-class knowledge extraction system. Extract a comprehensive set of "knowledge atoms" from the provided research report in a SINGLE response.
+
+## CRITICAL REQUIREMENTS
+1. **EXHAUSTIVE**: Extract at least 10 distinct knowledge atoms, covering as many archetypes as possible.
+2. **SUBSTANTIVE**: Each atom body MUST be **500-3000 words**. Do NOT provide short summaries. We need depth, data, and detailed analysis.
+3. **SELF-CONTAINED**: Each atom must be a complete, readable standalone article.
+4. **DATA-RICH**: Include exact numerical data, market share percentages, revenue figures, specific names, and dates.
+5. **VERBATIM**: Preserve direct quotes and source URLs exactly as they appear in the report.
+6. **FORMAT**: Valid JSON array only. If your response would exceed the output limit, return fewer atoms rather than truncating mid-JSON.
+
+## Target Archetypes (aim for 1+ per archetype)
+${archetypes.join(', ')}
+
+## Company: ${ticker}
+
+## Taxonomy (for reference):
+${taxonomyJson}
+
+## Output Format
+Return a JSON array of atom objects. Each atom has:
+- id: string (kebab-case slug, e.g., "${ticker.toLowerCase()}-business-model-dna")
+- archetype: string (one of the target archetypes)
+- title: string (human-readable)
+- companies: string[] (ticker symbols)
+- people: string[] (full names of people mentioned)
+- industries: string[] (relevant industries)
+- tags: string[] (relevant tags)
+- temporality: "evergreen" | "semi-evergreen" | "time-bound"
+- source_sections: string[] (report section numbers this atom draws from, e.g., ["2.1", "2.2"], or ["all"] if spanning the whole report)
+- body: string (Markdown, 500-3000 words, high depth, with inline source URLs preserved)
+
+Return ONLY the JSON array. No other text.`;
+}
+
 /** Write a single atom to disk. */
 function writeAtom(atom: AtomOutput, ticker: string, sourceReport: string, sourceSections: string[]): string {
   const dir = path.join(ATOMS_DIR, atom.archetype);
@@ -201,6 +239,10 @@ function writeAtom(atom: AtomOutput, ticker: string, sourceReport: string, sourc
 
   const filePath = path.join(dir, `${atom.id}.md`);
   const today = new Date().toISOString().slice(0, 10);
+
+  // Phase 3.5: Distinguish fact-atoms vs inference-atoms for cascade risk
+  const isInference = /inference|opinion|predict|估計|推測|可能|或許|widening|narrowing|trend/i.test(atom.body);
+  const atomType = isInference ? 'inference' : 'fact';
 
   const frontmatter = [
     '---',
@@ -217,34 +259,39 @@ function writeAtom(atom: AtomOutput, ticker: string, sourceReport: string, sourc
     `source_report: "${sourceReport}"`,
     `source_sections: ${JSON.stringify(sourceSections)}`,
     `quality: 4`,
+    `atom_type: "${atomType}"`,
+    `confidence: 1.0`,
+    `provenance: "${ticker} research report ${today}"`,
     '---',
     '',
   ].join('\n');
+
+  // Phase 3.5: Contradiction detection — flag if existing atom for same company differs significantly
+  if (fs.existsSync(filePath)) {
+    const existing = fs.readFileSync(filePath, 'utf-8');
+    const existingBody = existing.split('---').slice(2).join('---').trim();
+    // Simple heuristic: if the new body differs > 50% from existing, flag it
+    const overlap = existingBody.split(/\s+/).filter(w => atom.body.includes(w)).length;
+    const existingWords = existingBody.split(/\s+/).length;
+    if (existingWords > 20 && overlap / existingWords < 0.5) {
+      console.log(`  [atom-conflict] ${atom.id}: new content differs significantly from existing. Flagging, not overwriting.`);
+      // Write as a conflict variant instead
+      const conflictPath = filePath.replace('.md', `_conflict_${today.replace(/-/g, '')}.md`);
+      fs.writeFileSync(conflictPath, frontmatter + atom.body);
+      return conflictPath;
+    }
+  }
 
   fs.writeFileSync(filePath, frontmatter + atom.body);
   return filePath;
 }
 
-/** Main extraction pipeline. */
-async function extractKnowledge(ticker: string, dryRun: boolean, quotesOnly = false): Promise<void> {
-  const reportPath = path.join(PROJECT_ROOT, 'data', 'companies', ticker, `${ticker}_Initial_MAX.md`);
-  if (!fs.existsSync(reportPath)) {
-    console.error(`Report not found: ${reportPath}`);
-    process.exit(1);
-  }
-
-  const reportContent = fs.readFileSync(reportPath, 'utf-8');
-  const lines = reportContent.split('\n');
-  const taxonomy = fs.readFileSync(TAXONOMY_PATH, 'utf-8');
-  const sourceReport = `data/companies/${ticker}/${ticker}_Initial_MAX.md`;
-
-  let totalAtoms = 0;
-
-  // Process each section group (skip if --quotes-only)
-  if (quotesOnly) {
-    console.log('  [quotes-only] Skipping section extraction');
-  }
-  for (const mapping of quotesOnly ? [] : SECTION_ARCHETYPE_MAP) {
+/** Multi-call extraction: one LLM call per section group (original 8-call pipeline). */
+async function extractMultiCall(
+  lines: string[], ticker: string, taxonomy: string, dryRun: boolean, sourceReport: string,
+): Promise<number> {
+  let atomCount = 0;
+  for (const mapping of SECTION_ARCHETYPE_MAP) {
     const sectionContent = extractSections(lines, mapping.sections);
     if (!sectionContent.trim()) {
       console.log(`  [skip] No content for ${mapping.label} (sections: ${mapping.sections.join(', ')})`);
@@ -268,7 +315,6 @@ async function extractKnowledge(ticker: string, dryRun: boolean, quotesOnly = fa
       );
 
       const text = response.content ?? '';
-      // Extract JSON array from response (may be wrapped in markdown code block)
       const jsonMatch = text.match(/\[[\s\S]*\]/);
       if (!jsonMatch) {
         console.error(`    [error] No JSON array in response for ${mapping.label}`);
@@ -290,11 +336,112 @@ async function extractKnowledge(ticker: string, dryRun: boolean, quotesOnly = fa
         }
         const filePath = writeAtom(atom, ticker, sourceReport, mapping.sections);
         console.log(`    [wrote] ${atom.id} → ${path.relative(PROJECT_ROOT, filePath)}`);
-        totalAtoms++;
+        atomCount++;
       }
     } catch (err: any) {
       console.error(`    [error] LLM call failed for ${mapping.label}: ${err.message}`);
     }
+  }
+  return atomCount;
+}
+
+/** Single-call extraction: full report in one Gemini call (with Claude fallback). */
+function extractSingleCall(
+  ticker: string, reportPath: string, taxonomy: string, dryRun: boolean, sourceReport: string,
+): { atomCount: number; usedFallback: boolean; model: string } {
+  if (dryRun) {
+    console.log(`  [dry-run] Would extract all atoms in single Gemini call from ${reportPath}`);
+    return { atomCount: 0, usedFallback: false, model: 'dry-run' };
+  }
+
+  const prompt = buildSingleCallPrompt(ticker, taxonomy);
+  const result = dispatchToGemini(prompt, {
+    inputFile: reportPath,
+    timeoutSec: 400,
+    outputFormat: 'json',
+  });
+
+  console.log(`  [single-call] Completed in ${(result.durationMs / 1000).toFixed(1)}s using ${result.model}${result.usedFallback ? ' (fallback)' : ''}`);
+
+  // Parse JSON — strip code fences if present
+  let cleanOutput = result.output.trim();
+  if (cleanOutput.startsWith('```json')) {
+    cleanOutput = cleanOutput.replace(/^```json/, '').replace(/```$/, '').trim();
+  } else if (cleanOutput.startsWith('```')) {
+    cleanOutput = cleanOutput.replace(/^```/, '').replace(/```$/, '').trim();
+  }
+
+  let rawAtoms: any[];
+  try {
+    rawAtoms = JSON.parse(cleanOutput);
+  } catch (parseErr) {
+    // Try extracting JSON array from within the response
+    const jsonMatch = cleanOutput.match(/\[[\s\S]*\]/);
+    if (jsonMatch) {
+      try {
+        rawAtoms = JSON.parse(jsonMatch[0]);
+      } catch {
+        console.error(`  [error] JSON parse failed. Output length: ${cleanOutput.length}, last 200 chars: ${cleanOutput.slice(-200)}`);
+        return { atomCount: 0, usedFallback: result.usedFallback, model: result.model };
+      }
+    } else {
+      console.error(`  [error] No JSON array in response. Output length: ${cleanOutput.length}, last 200 chars: ${cleanOutput.slice(-200)}`);
+      return { atomCount: 0, usedFallback: result.usedFallback, model: result.model };
+    }
+  }
+
+  let atomCount = 0;
+  for (const raw of rawAtoms) {
+    const atom: AtomOutput = {
+      id: raw.id,
+      archetype: raw.archetype,
+      title: raw.title,
+      companies: raw.companies ?? [],
+      people: raw.people ?? [],
+      industries: raw.industries ?? [],
+      tags: raw.tags ?? [],
+      temporality: raw.temporality ?? 'semi-evergreen',
+      body: raw.body ?? '',
+    };
+    if (!atom.id || !atom.body) {
+      console.log(`    [skip] Invalid atom (missing id or body)`);
+      continue;
+    }
+    const sourceSections = Array.isArray(raw.source_sections) ? raw.source_sections : ['all'];
+    const filePath = writeAtom(atom, ticker, sourceReport, sourceSections);
+    console.log(`    [wrote] ${atom.id} → ${path.relative(PROJECT_ROOT, filePath)}`);
+    atomCount++;
+  }
+
+  return { atomCount, usedFallback: result.usedFallback, model: result.model };
+}
+
+/** Main extraction pipeline. */
+async function extractKnowledge(
+  ticker: string, dryRun: boolean, quotesOnly = false, backend: 'gemini' | 'claude' = 'gemini',
+): Promise<void> {
+  const reportPath = path.join(PROJECT_ROOT, 'data', 'companies', ticker, `${ticker}_Initial_MAX.md`);
+  if (!fs.existsSync(reportPath)) {
+    console.error(`Report not found: ${reportPath}`);
+    process.exit(1);
+  }
+
+  const reportContent = fs.readFileSync(reportPath, 'utf-8');
+  const lines = reportContent.split('\n');
+  const taxonomy = fs.readFileSync(TAXONOMY_PATH, 'utf-8');
+  const sourceReport = `data/companies/${ticker}/${ticker}_Initial_MAX.md`;
+
+  let totalAtoms = 0;
+
+  if (quotesOnly) {
+    console.log('  [quotes-only] Skipping section extraction');
+  } else if (backend === 'gemini') {
+    console.log(`\n  [extract] Single-call extraction (${(fs.statSync(reportPath).size / 1024).toFixed(0)} KB report)`);
+    const result = extractSingleCall(ticker, reportPath, taxonomy, dryRun, sourceReport);
+    totalAtoms = result.atomCount;
+    if (!dryRun) console.log(`  [model] ${result.model}${result.usedFallback ? ' (fallback)' : ''}`);
+  } else {
+    totalAtoms = await extractMultiCall(lines, ticker, taxonomy, dryRun, sourceReport);
   }
 
   // Special-case: extract quotes per person (chunked to avoid timeout)
@@ -352,7 +499,7 @@ async function extractKnowledge(ticker: string, dryRun: boolean, quotesOnly = fa
         const response = await chat(
           'You are a precise knowledge extraction system. Return only valid JSON arrays.',
           [{ role: 'user', content: quotePrompt }],
-          { model: MODELS.SCORING, maxTokens: 16384 },
+          { model: NADIRCLAW_MODELS.ECO, backend: 'nadirclaw', maxTokens: 16384 },
         );
 
         const text = response.content ?? '';
@@ -408,9 +555,10 @@ if (process.argv[1]?.endsWith('knowledge-extractor.ts') || process.argv[1]?.ends
   const dryRun = args['dry-run'] === 'true';
   const migrate = args['migrate'] === 'true';
   const quotesOnly = args['quotes-only'] === 'true';
+  const backend = (args.backend === 'claude' ? 'claude' : 'gemini') as 'gemini' | 'claude';
 
   if (!migrate && !dryRun) {
-    console.error('Specify --migrate to run extraction, or --dry-run to preview');
+    console.error('Usage: npx tsx src/knowledge-extractor.ts --ticker TSM --migrate [--dry-run] [--backend gemini|claude]');
     process.exit(1);
   }
 
@@ -419,10 +567,10 @@ if (process.argv[1]?.endsWith('knowledge-extractor.ts') || process.argv[1]?.ends
   console.log(`╚══════════════════════════════════════╝`);
   console.log(`Ticker:   ${ticker}`);
   console.log(`Dry run:  ${dryRun}`);
-  console.log(`Model:    ${MODELS.SCORING} (Sonnet)`);
+  console.log(`Backend:  ${backend} ${backend === 'gemini' ? '(single-call)' : '(multi-call)'}`);
   console.log();
 
-  extractKnowledge(ticker, dryRun, quotesOnly).catch((err) => {
+  extractKnowledge(ticker, dryRun, quotesOnly, backend).catch((err) => {
     console.error('Fatal:', err);
     process.exit(1);
   });
