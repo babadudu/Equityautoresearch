@@ -8,7 +8,7 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import Anthropic from '@anthropic-ai/sdk';
-import { estimateCostUsd, MODELS } from './config.js';
+import { estimateCostUsd, MODELS, NADIRCLAW_URL, NADIRCLAW_HEALTH_URL } from './config.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -57,6 +57,19 @@ if (USE_CLAUDE_CLI) {
 
 const client = ANTHROPIC_KEY ? new Anthropic({ apiKey: ANTHROPIC_KEY }) : null;
 const OPENROUTER_URL = 'https://openrouter.ai/api/v1/chat/completions';
+
+// ── Nadirclaw health check (awaited before first chat call) ──
+
+let nadirclawAvailable = false;
+const nadirclawReady: Promise<void> = (async () => {
+  try {
+    const res = await fetch(NADIRCLAW_HEALTH_URL, { signal: AbortSignal.timeout(10000) });
+    nadirclawAvailable = res.ok;
+    if (nadirclawAvailable) console.log('[llm] Nadirclaw proxy available at localhost:4100');
+  } catch {
+    console.log('[llm] Nadirclaw proxy not available — will use Claude backend for all calls');
+  }
+})();
 
 // ── Exported types ──
 
@@ -107,12 +120,30 @@ export async function chat(
   messages: Anthropic.MessageParam[],
   options?: {
     model?: string;
+    backend?: 'nadirclaw' | 'claude' | 'auto';
     tools?: AnthropicTool[];
     toolChoice?: { type: 'auto' | 'any' | 'none' };
     maxTokens?: number;
+    thinkingBudget?: number;
   },
 ): Promise<ChatResult> {
   const model = options?.model ?? MODELS.SCORING;
+
+  // Ensure health check has completed before routing
+  await nadirclawReady;
+
+  // Route to nadirclaw when explicitly requested and available (no tool support)
+  if (options?.backend === 'nadirclaw' && !options?.tools?.length) {
+    if (nadirclawAvailable) {
+      try {
+        return await chatViaNadirclaw(system, messages, model, options);
+      } catch (err: any) {
+        console.log(`  [llm] Nadirclaw failed (${err.message}), falling back to Claude`);
+      }
+    } else {
+      console.log('  [llm] Nadirclaw not available, falling back to Claude');
+    }
+  }
 
   if (USE_CLAUDE_CLI) {
     return chatViaClaude(system, messages, model, options);
@@ -177,7 +208,7 @@ async function chatViaClaude(
   system: string,
   messages: Anthropic.MessageParam[],
   model: string,
-  _options?: { tools?: AnthropicTool[]; maxTokens?: number },
+  _options?: { tools?: AnthropicTool[]; maxTokens?: number; thinkingBudget?: number },
 ): Promise<ChatResult> {
   const { spawn } = await import('child_process');
 
@@ -200,10 +231,17 @@ async function chatViaClaude(
   const CHAT_TIMEOUT_MS = 10 * 60 * 1000;  // 10 minutes
   const KILL_GRACE_MS = 10 * 1000;
 
+  const cliArgs = ['-p', '--output-format', 'json', '--model', modelAlias, '--no-session-persistence'];
+  if (_options?.thinkingBudget && _options.thinkingBudget > 0) {
+    // Use --effort for extended thinking (thinkingBudget is a hint: >4000 → high, >8000 → max)
+    const effort = _options.thinkingBudget >= 8000 ? 'max' : _options.thinkingBudget >= 4000 ? 'high' : 'medium';
+    cliArgs.push('--effort', effort);
+  }
+
   return new Promise<ChatResult>((resolve, reject) => {
     const child = spawn(
       'claude',
-      ['-p', '--output-format', 'json', '--model', modelAlias, '--no-session-persistence'],
+      cliArgs,
       { stdio: ['pipe', 'pipe', 'pipe'], cwd: process.cwd() },
     );
 
@@ -282,13 +320,11 @@ export async function runClaudeAgent(
   systemPrompt: string,
   taskPrompt: string,
   options?: { model?: string; allowedTools?: string[]; maxBudgetUsd?: number; softTimeoutMs?: number },
-): Promise<{ result: string; costUsd: number }> {
+): Promise<{ result: string; costUsd: number; inputTokens: number; outputTokens: number; durationSec: number }> {
   const { spawn } = await import('child_process');
 
   const modelAlias = (options?.model ?? '').includes('opus') ? 'opus' : 'sonnet';
   const tools = options?.allowedTools ?? ['WebSearch', 'WebFetch', 'Read', 'Write', 'Bash', 'Glob', 'Grep'];
-  const maxBudget = options?.maxBudgetUsd ?? 3;
-
   const cliArgs = [
     '-p',
     '--output-format', 'json',
@@ -296,15 +332,15 @@ export async function runClaudeAgent(
     '--no-session-persistence',
     '--permission-mode', 'bypassPermissions',
     '--allowedTools', tools.join(','),
-    '--max-budget-usd', String(maxBudget),
   ];
 
   const fullPrompt = `${systemPrompt}\n\n---\n\n${taskPrompt}`;
 
   const SOFT_TIMEOUT_MS = options?.softTimeoutMs ?? 25 * 60 * 1000;  // default 25 minutes
   const KILL_GRACE_MS = 10 * 1000;          // 10 seconds after SIGTERM
+  const startTime = Date.now();
 
-  return new Promise<{ result: string; costUsd: number }>((resolve, reject) => {
+  return new Promise<{ result: string; costUsd: number; inputTokens: number; outputTokens: number; durationSec: number }>((resolve, reject) => {
     const child = spawn('claude', cliArgs, {
       stdio: ['pipe', 'pipe', 'pipe'],
       cwd: process.cwd(),
@@ -365,15 +401,19 @@ export async function runClaudeAgent(
         return;
       }
 
+      const durationSec = Math.round((Date.now() - startTime) / 1000);
       let parsed: any;
       try { parsed = JSON.parse(stdout); } catch {
-        resolve({ result: stdout.trim(), costUsd: 0 });
+        resolve({ result: stdout.trim(), costUsd: 0, inputTokens: 0, outputTokens: 0, durationSec });
         return;
       }
 
       resolve({
         result: parsed.result ?? parsed.content ?? stdout.trim(),
         costUsd: parsed.total_cost_usd ?? 0,
+        inputTokens: parsed.input_tokens ?? parsed.usage?.input_tokens ?? 0,
+        outputTokens: parsed.output_tokens ?? parsed.usage?.output_tokens ?? 0,
+        durationSec,
       });
     });
 
@@ -382,6 +422,67 @@ export async function runClaudeAgent(
       reject(new Error(`Claude agent spawn error: ${err.message}`));
     });
   });
+}
+
+/** Nadirclaw local proxy — OpenAI-compatible format, no auth needed */
+async function chatViaNadirclaw(
+  system: string,
+  messages: Anthropic.MessageParam[],
+  _model: string,
+  options?: { model?: string; maxTokens?: number },
+): Promise<ChatResult> {
+  const nadirModel = options?.model ?? 'premium';
+
+  // Convert Anthropic messages to OpenAI format
+  const oaiMessages: any[] = [{ role: 'system', content: system }];
+  for (const msg of messages) {
+    if (typeof msg.content === 'string') {
+      oaiMessages.push({ role: msg.role, content: msg.content });
+    } else if (Array.isArray(msg.content)) {
+      const text = (msg.content as any[]).map((b: any) => typeof b === 'string' ? b : b.text ?? '').join('');
+      oaiMessages.push({ role: msg.role, content: text });
+    }
+  }
+
+  // Request JSON output when system prompt mentions JSON
+  const wantsJson = /json/i.test(system);
+
+  const body: Record<string, unknown> = {
+    model: nadirModel,
+    messages: oaiMessages,
+    max_tokens: options?.maxTokens ?? 16384,
+    stream: false,
+    ...(wantsJson ? { response_format: { type: 'json_object' } } : {}),
+  };
+
+  const doFetch = async () => {
+    const res = await fetch(NADIRCLAW_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      signal: AbortSignal.timeout(5 * 60 * 1000), // 5 min timeout for local inference
+      body: JSON.stringify(body),
+    });
+    if (!res.ok) {
+      const errText = await res.text();
+      const err = new Error(`Nadirclaw ${res.status}: ${errText.slice(0, 500)}`);
+      (err as any).status = res.status;
+      throw err;
+    }
+    return res.json() as Promise<any>;
+  };
+
+  const data = await retryWithBackoff(doFetch);
+  const choice = data.choices?.[0];
+
+  return {
+    content: choice?.message?.content ?? null,
+    toolUses: [],
+    usage: {
+      inputTokens: data.usage?.prompt_tokens ?? 0,
+      outputTokens: data.usage?.completion_tokens ?? 0,
+      costUsd: 0,
+    },
+  };
 }
 
 /** OpenRouter fallback — translates native Anthropic format to OpenAI format for OpenRouter */

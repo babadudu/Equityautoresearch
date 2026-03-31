@@ -15,6 +15,8 @@ import fs from 'fs';
 import path from 'path';
 import { execSync, spawn } from 'child_process';
 import { fileURLToPath } from 'url';
+import { SCHEDULE_WINDOW, CAPACITY_GATE_PCT } from './config.js';
+import { appendTrace, type TraceEntry } from './run-trace.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const PROJECT_ROOT = path.resolve(__dirname, '..');
@@ -42,6 +44,11 @@ interface QueueData {
   pending: number;
   completed: number;
   queue: QueueItem[];
+}
+
+function isWithinScheduleWindow(): boolean {
+  const hour = new Date().getHours();
+  return hour >= SCHEDULE_WINDOW.startHour && hour < SCHEDULE_WINDOW.endHour;
 }
 
 function parseArgs(): Record<string, string> {
@@ -112,11 +119,41 @@ async function runInitialMax(item: QueueItem, maxCostOverride?: number): Promise
   });
 }
 
+function verifyResearchOutput(ticker: string): boolean {
+  const atomsDir = path.join(PROJECT_ROOT, 'data/knowledge/atoms');
+  if (!fs.existsSync(atomsDir)) return false;
+  const prefix = ticker.toLowerCase();
+  for (const dir of fs.readdirSync(atomsDir)) {
+    const full = path.join(atomsDir, dir);
+    if (fs.statSync(full).isDirectory()) {
+      if (fs.readdirSync(full).some(f => f.startsWith(prefix))) return true;
+    }
+  }
+  return false;
+}
+
 async function main() {
   const args = parseArgs();
   const dryRun = args['dry-run'] === 'true';
   const forceTicker = args.ticker;
   const maxCost = args['max-cost'] ? parseFloat(args['max-cost']) : undefined;
+  const force = args['force'] === 'true';
+  const capacity = args.capacity ? parseFloat(args.capacity) : undefined;
+
+  // Capacity gate: refuse to run if below threshold
+  if (capacity !== undefined && capacity < CAPACITY_GATE_PCT) {
+    console.log(`⛔ Capacity ${capacity}% < ${CAPACITY_GATE_PCT}% gate. Skipping run.`);
+    return;
+  }
+  if (capacity === undefined) {
+    console.log(`⚠ No --capacity flag provided. Proceeding without capacity check.`);
+  }
+
+  if (!force && !isWithinScheduleWindow()) {
+    const { startHour, endHour } = SCHEDULE_WINDOW;
+    console.log(`Outside schedule window (${startHour}:00–${endHour}:00). Use --force to override.`);
+    return;
+  }
 
   const queue = loadQueue();
 
@@ -124,6 +161,7 @@ async function main() {
   console.log('║     Research Queue Runner             ║');
   console.log('╚══════════════════════════════════════╝');
   console.log(`Queue: ${queue.pending} pending / ${queue.total_items} total`);
+  if (capacity !== undefined) console.log(`Capacity: ${capacity}%`);
 
   const target = findTarget(queue, forceTicker);
   if (!target) {
@@ -147,18 +185,43 @@ async function main() {
   target.status = 'running';
   saveQueue(queue);
 
+  const startTime = Date.now();
   const result = await runInitialMax(target, maxCost);
+  const durationSec = Math.round((Date.now() - startTime) / 1000);
 
   if (result.success) {
-    target.status = 'completed';
-    target.completed_date = new Date().toISOString().slice(0, 10);
-    delete target.error;
-    console.log(`\n✓ ${target.ticker} completed successfully`);
+    // Verify actual output was produced
+    if (!verifyResearchOutput(target.ticker)) {
+      target.status = 'failed';
+      target.error = 'No research output produced';
+      console.error(`\n✗ ${target.ticker} exited OK but produced no research files`);
+    } else {
+      target.status = 'completed';
+      target.completed_date = new Date().toISOString().slice(0, 10);
+      delete target.error;
+      console.log(`\n✓ ${target.ticker} completed successfully`);
+    }
   } else {
     target.status = 'failed';
     target.error = result.error;
     console.error(`\n✗ ${target.ticker} failed: ${result.error}`);
   }
+
+  // Write trace entry
+  appendTrace({
+    ts: new Date().toISOString(),
+    ticker: target.ticker,
+    phase: 'queue-run',
+    round: 0,
+    model: 'mixed',
+    durationSec,
+    inputTokens: 0,
+    outputTokens: 0,
+    costUsd: 0,
+    filesWritten: 0,
+    scoreChange: target.status === 'completed' ? 'done' : 'failed',
+    agentExitCode: result.success ? 0 : 1,
+  });
 
   saveQueue(queue);
   console.log(`\nQueue updated: ${queue.pending} pending remaining`);

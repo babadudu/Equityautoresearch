@@ -18,6 +18,9 @@ export const NADIRCLAW_MODELS = {
 /** Schedule window for automated pipeline runs (0 = midnight, 15 = 3pm) */
 export const SCHEDULE_WINDOW = { startHour: 0, endHour: 15 };
 
+/** Minimum capacity (%) required before starting a research run */
+export const CAPACITY_GATE_PCT = 20;
+
 /** Cost per 1M tokens (USD) — for budget tracking */
 export const COST_PER_1M: Record<string, { input: number; output: number }> = {
   [MODELS.RESEARCH]: { input: 15, output: 75 },

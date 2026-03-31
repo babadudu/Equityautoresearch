@@ -3,7 +3,7 @@
  * Initial MAX Runner
  *
  * 以四維框架（環境→生意→組織→人）為評分基準，對公司研究報告進行
- * 迭代深度補研究，直到品質達標（≥80/100）、plateau（2輪同分）或用完 maxRounds。
+ * 迭代深度補研究，直到品質達標（≥85/100）、plateau（3輪同分）或用完 maxRounds。
  *
  * 核心差異 vs skill-optimizer.ts：
  *  - 研究內容是加法，不做 git reset on discard
@@ -23,7 +23,10 @@ import { execSync } from 'child_process';
 import { fileURLToPath } from 'url';
 import Anthropic from '@anthropic-ai/sdk';
 import { chat, runClaudeAgent, type ToolUse, type AnthropicTool, type ChatResult } from './llm.js';
-import { MODELS, DEFAULT_MAX_COST_USD, estimateCostUsd } from './config.js';
+import {
+  MODELS, DEFAULT_MAX_COST_USD, estimateCostUsd, PASS_THRESHOLD as SCORER_PASS_THRESHOLD,
+  PLATEAU_ROUNDS, MICRO_ROUND_THRESHOLD, MICRO_ROUND_GAP_COUNT,
+} from './config.js';
 import { scoreCompanyResearch, scoreExtendedResearch, type InitialMaxScore, type InitialMaxGaps, type ExtendedScore } from './initial-max-scorer.js';
 import { webSearch, fetchUrl, callNinjaApi, queryCompaniesDb, searchDataForCompany, readProjectFile } from './api-tools.js';
 import { queryKnowledgeBaseJson } from './knowledge-retrieval.js';
@@ -34,12 +37,16 @@ import {
   INITIAL_MAX_MAIN_IN_USER_CHARS, READ_RESEARCH_FILE_MAX_CHARS,
 } from './markdown-utils.js';
 import { GAP_FILL_TOOLS, POLISH_TOOLS } from './tool-schemas.js';
+import { appendGapAttempt, countAttempts, getMaxAttemptsForGap, loadGapAttempts, countAttemptsFromLoaded, getMaxAttemptsFromLoaded, isGloballyRetired } from './gap-tracker.js';
+import { findSimilarSearch, appendSearchEntry } from './search-log.js';
+import { getScoringReadback } from './scoring-store.js';
+import { appendTrace } from './run-trace.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const PROJECT_ROOT = path.resolve(__dirname, '..');
 const DEFAULT_MODEL = MODELS.RESEARCH;
-const DEFAULT_MAX_ROUNDS = 30;
-const PASS_THRESHOLD = 95;
+const DEFAULT_MAX_ROUNDS = 15;
+const PASS_THRESHOLD = SCORER_PASS_THRESHOLD;  // 85, from config
 
 const POLISH_PHASE_SYSTEM = `# Initial MAX 主檔整理輪
 
@@ -187,9 +194,10 @@ interface RoundResult {
   round: number;
   commit: string;
   score: number;
-  status: 'keep' | 'no_improvement' | 'crash' | 'baseline';
+  status: 'keep' | 'no_improvement' | 'crash' | 'baseline' | 'scorer_failure';
   description: string;
   timestamp: string;
+  costAtStart?: number;
 }
 
 function appendTsv(tsvPath: string, r: RoundResult): void {
@@ -245,9 +253,23 @@ async function runGapFillAgent(
 **輸出格式**（工具完成後）：
 {"description": "polished 1.1–2.3, fixed ## headings, deduped 4.1", "files_written": ["${mainFile}"], "interviews_added": 0, "dimensions_addressed": ["polish"]}`;
   } else {
+    // Phase 3.4: TSV read-back — inject scoring history
+    let historySection = '';
+    const readback = getScoringReadback(ticker);
+    if (readback) {
+      const persistentGapStr = readback.persistentGaps.length > 0
+        ? readback.persistentGaps.map(g => `  - ${g.gap} (解決率: ${(g.resolutionRate * 100).toFixed(0)}%)`).join('\n')
+        : '  （無）';
+      historySection = `\n\n### 歷史研究記錄
+- 過去最佳分數：${readback.bestScore}/100
+- 成功解決的缺口：${readback.resolvedGaps.length > 0 ? readback.resolvedGaps.join('、') : '（無）'}
+- 多次未解決的缺口：
+${persistentGapStr}`;
+    }
+
     taskMessage = `## ${ticker} 研究缺口補充任務（第 ${round} 輪，${today}）
 
-**當前分數**：${gaps.score}/100（目標 **≥95/100**，且各維度達最低分、2.5 DCF 必達）
+**當前分數**：${gaps.score}/100（目標 **≥${PASS_THRESHOLD}/100**，結構分≥34 + 品質分≥51、2.5 DCF 必達）${historySection}
 
 ### 優先缺口（依缺分高低排列）：
 ${topGaps}
@@ -354,15 +376,35 @@ ${userContent}`;
       let result: string;
 
       switch (tc.name) {
-        case 'web_search':
+        case 'web_search': {
+          const query = String(args.query ?? '');
           if (searchCalls >= MAX_SEARCH) {
             result = JSON.stringify({ error: `搜尋預算耗盡（最多${MAX_SEARCH}次）` });
           } else {
-            searchCalls++;
-            console.log(`  [search ${searchCalls}/${MAX_SEARCH}] ${String(args.query ?? '').slice(0, 60)}...`);
-            result = await webSearch(String(args.query ?? ''), Number(args.count ?? 5));
+            // Phase 3.3: Search dedup — check if similar query already tried
+            const cached = findSimilarSearch(ticker, query);
+            if (cached) {
+              console.log(`  [search-dedup] Reusing cached result for "${query.slice(0, 50)}..."`);
+              result = JSON.stringify({ query: cached.query, results: cached.topResults, cached: true });
+            } else {
+              searchCalls++;
+              console.log(`  [search ${searchCalls}/${MAX_SEARCH}] ${query.slice(0, 60)}...`);
+              result = await webSearch(query, Number(args.count ?? 5));
+              // Log the search for future dedup
+              try {
+                const parsed = JSON.parse(result);
+                appendSearchEntry({
+                  ticker,
+                  query,
+                  timestamp: new Date().toISOString(),
+                  resultCount: parsed.results?.length ?? 0,
+                  topResults: (parsed.results ?? []).slice(0, 5).map((r: any) => ({ title: r.title ?? '', url: r.url ?? '' })),
+                });
+              } catch {}
+            }
           }
           break;
+        }
         case 'fetch_url':
           console.log(`  [fetch] ${String(args.url ?? '').slice(0, 80)}...`);
           result = await fetchUrl(String(args.url ?? ''));
@@ -517,12 +559,14 @@ async function main() {
   // Main loop
   const history: RoundResult[] = [baselineResult];
   let prevScore = baselineScore.total;
+  let bestScore = baselineScore.total;
   let plateauCount = 0;
-  const gapAttempts = new Map<string, number>();  // per-item round cap (max 2 attempts)
+  // Gap attempts now tracked persistently via gap-tracker.ts (cross-company learning)
 
   for (let round = 1; round <= maxRounds && !baselineScore.passThreshold; round++) {
     console.log(`\n═══ Round ${round}/${maxRounds} (current: ${prevScore}/100) ═══`);
     const roundStart = Date.now();
+    const roundStartCost = costTracker.totalCostUsd;
 
     try {
       // Get latest gaps (from previous round)
@@ -532,18 +576,45 @@ async function main() {
         gaps = JSON.parse(fs.readFileSync(gapsPath, 'utf-8'));
       }
 
-      // Filter out gap items that have been attempted 2+ times without improvement
+      // Filter out gap items using persistent gap-tracker (adaptive + global retirement)
+      // Load all gap data once to avoid O(N) file reads per gap
+      const gapData = loadGapAttempts(ticker);
       const preFilterCount = gaps.gaps.length;
+      let globalRetiredCount = 0;
       gaps.gaps = gaps.gaps.filter(g => {
         const key = `${g.dimension}|${g.item}`;
-        return (gapAttempts.get(key) ?? 0) < 3;
+        // Global retirement: universally unsolvable across tickers
+        if (isGloballyRetired(gapData, key)) {
+          globalRetiredCount++;
+          return false;
+        }
+        // Per-ticker adaptive retirement
+        const attempts = countAttemptsFromLoaded(gapData, key);
+        const maxAttempts = getMaxAttemptsFromLoaded(gapData, key);
+        return attempts < maxAttempts;
       });
       const retired = preFilterCount - gaps.gaps.length;
-      if (retired > 0) console.log(`[round-cap] Retired ${retired} gap(s) after 3 failed attempts`);
+      if (globalRetiredCount > 0) console.log(`[global-retire] Retired ${globalRetiredCount} gap(s) — universally unsolvable across tickers`);
+      if (retired > globalRetiredCount) console.log(`[round-cap] Retired ${retired - globalRetiredCount} gap(s) via adaptive threshold`);
 
       if (gaps.gaps.length === 0) {
         console.log('[round-cap] All remaining gaps have been retired — stopping core loop');
         break;
+      }
+
+      // Micro-round mode: after Round 2, if cumulative improvement < threshold, limit gaps
+      const cumulativeImprovement = prevScore - baselineScore.total;
+      const isMicroRound = round > 2 && cumulativeImprovement < MICRO_ROUND_THRESHOLD;
+      if (isMicroRound) {
+        gaps.gaps = gaps.gaps.slice(0, MICRO_ROUND_GAP_COUNT);
+        console.log(`[micro-round] Targeting top ${MICRO_ROUND_GAP_COUNT} gap(s) only (cumulative +${cumulativeImprovement}pts < ${MICRO_ROUND_THRESHOLD})`);
+      }
+
+      // Snapshot main file before agent modifies it (for rollback protection)
+      const mainFilePathForRound = path.join(PROJECT_ROOT, 'data', 'companies', ticker, `${ticker}_Initial_MAX.md`);
+      const bakPath = mainFilePathForRound + '.bak';
+      if (fs.existsSync(mainFilePathForRound)) {
+        fs.copyFileSync(mainFilePathForRound, bakPath);
       }
 
       console.log(`Running gap-fill agent... (cost so far: $${costTracker.totalCostUsd.toFixed(2)})`);
@@ -563,42 +634,83 @@ async function main() {
 
       // Score new state
       console.log('Scoring...');
-      const { score: newScore, gaps: newGaps } = await scoreCompanyResearch(ticker, round, scoringModel);
-      const delta = newScore.total - prevScore;
-      console.log(`Score: ${newScore.total}/100 (${delta >= 0 ? '+' : ''}${delta} from ${prevScore})`);
+      let { score: newScore, gaps: newGaps } = await scoreCompanyResearch(ticker, round, scoringModel);
+      let delta = newScore.total - bestScore;
 
-      // Update per-item attempt counters
-      const newGapKeys = new Set(newGaps.gaps.map(g => `${g.dimension}|${g.item}`));
-      for (const key of prevGapKeys) {
-        if (newGapKeys.has(key)) {
-          // Gap still present — increment attempt count
-          gapAttempts.set(key, (gapAttempts.get(key) ?? 0) + 1);
-          if ((gapAttempts.get(key) ?? 0) >= 3) {
-            console.log(`[round-cap] Retiring gap: ${key} after 3 failed attempts`);
+      // Rollback protection: if score regressed, check for scorer partial failure
+      if (newScore.total < bestScore) {
+        if (newScore.scorerPartialFailure) {
+          console.log(`[rollback] Score regressed ${bestScore}→${newScore.total} with scorer_partial_failure — re-scoring once...`);
+          const rescore = await scoreCompanyResearch(ticker, round, scoringModel);
+          if (rescore.score.total >= bestScore) {
+            newScore = rescore.score;
+            newGaps = rescore.gaps;
+            delta = newScore.total - bestScore;
+            console.log(`[rollback] Re-score OK: ${newScore.total}/100`);
+          } else {
+            // Still regressed after re-score — rollback
+            console.log(`[rollback] Re-score still regressed (${rescore.score.total}) — restoring from backup`);
+            if (fs.existsSync(bakPath)) fs.copyFileSync(bakPath, mainFilePathForRound);
+            description = `[rollback] ${description}`;
           }
         } else {
-          // Gap resolved — clear counter
-          gapAttempts.delete(key);
+          // Score regressed without partial failure — rollback
+          console.log(`[rollback] Score regressed ${bestScore}→${newScore.total} — restoring from backup`);
+          if (fs.existsSync(bakPath)) fs.copyFileSync(bakPath, mainFilePathForRound);
+          description = `[rollback] ${description}`;
+        }
+      }
+      console.log(`Score: ${newScore.total}/100 (${delta >= 0 ? '+' : ''}${delta} from best ${bestScore})`);
+
+      // Clean up backup
+      if (fs.existsSync(bakPath)) fs.unlinkSync(bakPath);
+
+      // Persist gap attempts to gap-tracker (cross-company learning)
+      const newGapKeys = new Set(newGaps.gaps.map(g => `${g.dimension}|${g.item}`));
+      for (const key of prevGapKeys) {
+        const resolved = !newGapKeys.has(key);
+        appendGapAttempt({
+          ticker,
+          round,
+          timestamp: new Date().toISOString(),
+          gapKey: key,
+          scoreBefore: prevScore,
+          scoreAfter: newScore.total,
+          resolved,
+          costUsd: costTracker.totalCostUsd - roundStartCost,
+          remedy: description.slice(0, 200),
+        });
+        if (!resolved) {
+          const attempts = countAttempts(ticker, key);
+          const maxAttempts = getMaxAttemptsForGap(key);
+          if (attempts >= maxAttempts) {
+            console.log(`[round-cap] Retiring gap: ${key} after ${attempts} attempts (max: ${maxAttempts})`);
+          }
         }
       }
 
-      // Commit (always — research is additive)
-      const commitMsg = `initial-max r${round}: ${description.slice(0, 60)} — score ${newScore.total}/100`;
-      const commitHash = gitCommit(commitMsg);
+      // Only commit if we kept the changes (not rolled back)
+      const wasRolledBack = description.startsWith('[rollback]');
+      const commitMsg = wasRolledBack
+        ? `initial-max r${round}: rollback — score stayed ${bestScore}/100`
+        : `initial-max r${round}: ${description.slice(0, 60)} — score ${newScore.total}/100`;
+      const commitHash = wasRolledBack ? gitShortHash() : gitCommit(commitMsg);
 
       const status: RoundResult['status'] = delta > 0 ? 'keep' : 'no_improvement';
       const result: RoundResult = {
         round, commit: commitHash, score: newScore.total, status,
         description, timestamp: new Date().toISOString(),
+        costAtStart: roundStartCost,
       };
       history.push(result);
       appendTsv(tsvPath, result);
 
-      if (delta > 0) {
-        console.log(`✓ IMPROVED by +${delta}`);
+      if (newScore.total > bestScore) {
+        console.log(`✓ IMPROVED by +${delta} (new best: ${newScore.total})`);
+        bestScore = newScore.total;
         plateauCount = 0;
       } else {
-        console.log(`→ No improvement (plateau count: ${plateauCount + 1}/2)`);
+        console.log(`→ No improvement (plateau count: ${plateauCount + 1}/${PLATEAU_ROUNDS})`);
         plateauCount++;
       }
 
@@ -609,8 +721,8 @@ async function main() {
         console.log(`\n✓ TARGET REACHED: ${newScore.total}/100 ≥ ${PASS_THRESHOLD}`);
         break;
       }
-      if (plateauCount >= 2) {
-        console.log(`\n⚠ PLATEAU DETECTED: 2 consecutive rounds with no improvement. Stopping.`);
+      if (plateauCount >= PLATEAU_ROUNDS) {
+        console.log(`\n⚠ PLATEAU DETECTED: ${PLATEAU_ROUNDS} consecutive rounds with no improvement. Stopping.`);
         break;
       }
       if (costTracker.totalCostUsd >= maxCost) {
@@ -618,8 +730,36 @@ async function main() {
         break;
       }
 
-      const elapsed = ((Date.now() - roundStart) / 1000).toFixed(1);
-      console.log(`Round ${round} done in ${elapsed}s`);
+      // Cost-aware circuit breaker: if cost > $50 and marginal cost/point over last 3 rounds > $3 → stop
+      if (costTracker.totalCostUsd > 50 && history.length >= 4) {
+        const last3 = history.slice(-3);
+        const scoreGain = newScore.total - (last3[0]?.score ?? newScore.total);
+        const windowStartCost = last3[0]?.costAtStart ?? 0;
+        const marginalCost = costTracker.totalCostUsd - windowStartCost;
+        if (scoreGain > 0 && marginalCost / scoreGain > 3) {
+          console.log(`\n⚠ COST CIRCUIT BREAKER: $${(marginalCost / scoreGain).toFixed(1)}/point > $3/point threshold (marginal $${marginalCost.toFixed(2)} for +${scoreGain}pts). Stopping.`);
+          break;
+        }
+      }
+
+      const elapsedSec = Math.round((Date.now() - roundStart) / 1000);
+      console.log(`Round ${round} done in ${elapsedSec}s`);
+
+      // Trace entry for observability
+      appendTrace({
+        ts: new Date().toISOString(),
+        ticker,
+        phase: 'gap-fill',
+        round,
+        model,
+        durationSec: elapsedSec,
+        inputTokens: 0,
+        outputTokens: 0,
+        costUsd: costTracker.totalCostUsd - roundStartCost,
+        filesWritten: 0,
+        scoreChange: `${delta >= 0 ? '+' : ''}${delta}`,
+        agentExitCode: 0,
+      });
 
     } catch (err: any) {
       console.error(`Round ${round} CRASH: ${err.message}`);
@@ -639,6 +779,10 @@ async function main() {
   if (!skipPolish && fs.existsSync(mainFilePath) && ranAtLeastOneResearchRound) {
     console.log('\n═══ Polish pass（主檔順稿／格式整理，無新研究）═══');
     try {
+      // Snapshot before polish for rollback protection
+      const polishBakPath = mainFilePath + '.polish-bak';
+      fs.copyFileSync(mainFilePath, polishBakPath);
+
       const polishGaps: InitialMaxGaps = { round: polishRoundId, score: prevScore, gaps: [] };
       const polishResp = await runGapFillAgent(
         ticker,
@@ -661,17 +805,37 @@ async function main() {
       console.log('Scoring after polish...');
       const { score: afterPolish } = await scoreCompanyResearch(ticker, polishRoundId, scoringModel);
       console.log(`Score after polish: ${afterPolish.total}/100`);
-      const commitHash = gitCommit(`initial-max polish: ${polishDesc.slice(0, 55)} — score ${afterPolish.total}/100`);
-      history.push({
-        round: polishRoundId,
-        commit: commitHash,
-        score: afterPolish.total,
-        status: 'keep',
-        description: polishDesc,
-        timestamp: new Date().toISOString(),
-      });
+
+      // Rollback if polish degraded the score
+      if (afterPolish.total < bestScore) {
+        console.log(`[rollback] Polish degraded score ${bestScore}→${afterPolish.total} — restoring from backup`);
+        fs.copyFileSync(polishBakPath, mainFilePath);
+        polishDesc = `[rollback] ${polishDesc}`;
+        history.push({
+          round: polishRoundId,
+          commit: gitShortHash(),
+          score: bestScore,
+          status: 'no_improvement',
+          description: polishDesc,
+          timestamp: new Date().toISOString(),
+        });
+      } else {
+        const commitHash = gitCommit(`initial-max polish: ${polishDesc.slice(0, 55)} — score ${afterPolish.total}/100`);
+        history.push({
+          round: polishRoundId,
+          commit: commitHash,
+          score: afterPolish.total,
+          status: 'keep',
+          description: polishDesc,
+          timestamp: new Date().toISOString(),
+        });
+        if (afterPolish.total > bestScore) bestScore = afterPolish.total;
+        prevScore = afterPolish.total;
+      }
       appendTsv(tsvPath, history[history.length - 1]!);
-      prevScore = afterPolish.total;
+
+      // Clean up polish backup
+      if (fs.existsSync(polishBakPath)) fs.unlinkSync(polishBakPath);
     } catch (err: any) {
       console.error(`Polish pass CRASH: ${err.message}`);
       const crashResult: RoundResult = {
