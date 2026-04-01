@@ -660,7 +660,7 @@ function variance(nums: number[]): number {
 async function llmScoreStructured(
   ticker: string,
   mainContent: string,
-  model: string = MODELS.SCORING,
+  model: string = MODELS.CLAUDE,
 ): Promise<{
   dimensions: Record<Dimension, { score: number; criteria: Record<string, number>; gaps: string[] }>;
   rawCalls: ScoringEvent['rawCalls'];
@@ -878,7 +878,7 @@ function buildGapsJson(score: InitialMaxScore, round: number, ticker?: string): 
 export async function scoreCompanyResearch(
   ticker: string,
   round = 0,
-  model: string = MODELS.SCORING,
+  model: string = MODELS.CLAUDE,
 ): Promise<{ score: InitialMaxScore; gaps: InitialMaxGaps }> {
   const reportContent = readResearchFiles(ticker);
   const mainContent = readMainFile(ticker);
@@ -1110,7 +1110,7 @@ const EXTENDED_SCORER_PROMPT = `你是一位專業的研究品質評審。請對
 async function llmExtendedScore(
   ticker: string,
   reportContent: string,
-  model: string = MODELS.SCORING,
+  model: string = MODELS.CLAUDE,
 ): Promise<ExtendedScore | null> {
   const emptyCoreScore: InitialMaxScore = {
     環境: { score: 0, max: WEIGHTS.環境, gaps: [] },
@@ -1179,7 +1179,7 @@ function heuristicExtendedScore(mainContent: string): { geopolitical: number; su
 export async function scoreExtendedResearch(
   ticker: string,
   round = 0,
-  model: string = MODELS.SCORING,
+  model: string = MODELS.CLAUDE,
 ): Promise<ExtendedScore> {
   const dir = getCompanyDir(ticker);
   const mainFile = path.join(dir, `${ticker}_Initial_MAX.md`);
@@ -1248,7 +1248,7 @@ async function main() {
     process.exit(1);
   }
 
-  const model = args.model ?? MODELS.SCORING;
+  const model = args.model ?? MODELS.CLAUDE;
   const round = parseInt(args.round ?? '0', 10);
 
   const { score } = await scoreCompanyResearch(ticker.toUpperCase(), round, model);

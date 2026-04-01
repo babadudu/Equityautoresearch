@@ -22,7 +22,7 @@ import path from 'path';
 import { execSync } from 'child_process';
 import { fileURLToPath } from 'url';
 import Anthropic from '@anthropic-ai/sdk';
-import { chat, runClaudeAgent, type ToolUse, type AnthropicTool, type ChatResult } from './llm.js';
+import { chat, runClaudeAgent, runGeminiAgent, type ToolUse, type AnthropicTool, type ChatResult } from './llm.js';
 import {
   MODELS, DEFAULT_MAX_COST_USD, estimateCostUsd, PASS_THRESHOLD as SCORER_PASS_THRESHOLD,
   PLATEAU_ROUNDS, MICRO_ROUND_THRESHOLD, MICRO_ROUND_GAP_COUNT,
@@ -44,7 +44,7 @@ import { appendTrace } from './run-trace.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const PROJECT_ROOT = path.resolve(__dirname, '..');
-const DEFAULT_MODEL = MODELS.RESEARCH;
+const DEFAULT_MODEL = MODELS.CLAUDE;  // Used for polish phase (Claude); gap-fill uses MODELS.GEMINI
 const DEFAULT_MAX_ROUNDS = 15;
 const PASS_THRESHOLD = SCORER_PASS_THRESHOLD;  // 85, from config
 
@@ -302,10 +302,8 @@ ${topGaps}
     systemContent = `${programTrimmed}\n\n---\n\n## 研究 SKILL 指引\n\n${skillTrimmed}`;
   }
 
-  // ── Claude CLI agent path ──
+  // ── CLI agent path (Gemini for gap-fill, Claude for polish) ──
   if (USE_CLAUDE_CLI) {
-    // Adapt the system prompt for Claude Code: replace custom tool references with
-    // instructions to use built-in tools (WebSearch, Write, Read, Bash, WebFetch)
     const cliSystemPrompt = systemContent
       .replace(/write_research_section\([^)]*\)/g, 'Write tool')
       .replace(/read_research_file\([^)]*\)/g, 'Read tool')
@@ -329,15 +327,28 @@ Create the data/companies/${ticker}/ directory if it doesn't exist.
 
 ${userContent}`;
 
-    console.log('  [claude-agent] Launching Claude Code agent...');
-    const { result, costUsd } = await runClaudeAgent(
-      cliSystemPrompt,
-      cliTaskPrompt,
-      { model, maxBudgetUsd: 5, ...(softTimeoutMs ? { softTimeoutMs } : {}) },
-    );
-    if (costTracker) costTracker.totalCostUsd += costUsd;
-    console.log(`  [claude-agent] Done (cost: $${costUsd.toFixed(2)})`);
-    return result;
+    // Gap-fill → Gemini (grounded search, saves Claude capacity). Polish → Claude.
+    if (phase === 'gap_fill') {
+      console.log('  [gemini-agent] Launching Gemini agent for gap-fill...');
+      const { result, costUsd } = await runGeminiAgent(
+        cliSystemPrompt,
+        cliTaskPrompt,
+        { model: MODELS.GEMINI, ...(softTimeoutMs ? { softTimeoutMs } : {}) },
+      );
+      if (costTracker) costTracker.totalCostUsd += costUsd;
+      console.log(`  [gemini-agent] Done (cost: ~$${costUsd.toFixed(2)})`);
+      return result;
+    } else {
+      console.log('  [claude-agent] Launching Claude agent for polish...');
+      const { result, costUsd } = await runClaudeAgent(
+        cliSystemPrompt,
+        cliTaskPrompt,
+        { model, ...(softTimeoutMs ? { softTimeoutMs } : {}) },
+      );
+      if (costTracker) costTracker.totalCostUsd += costUsd;
+      console.log(`  [claude-agent] Done (cost: $${costUsd.toFixed(2)})`);
+      return result;
+    }
   }
 
   // ── API-based tool loop (Anthropic SDK / OpenRouter) ──
@@ -490,7 +501,7 @@ async function main() {
   const extended = args['extended'] === 'true';
   const extractKnowledgeFlag = args['extract-knowledge'] === 'true';
   const model = args.model ?? DEFAULT_MODEL;
-  const scoringModel = args['scoring-model'] ?? MODELS.SCORING;
+  const scoringModel = args['scoring-model'] ?? MODELS.CLAUDE;
   const investorNote = args.why ?? args.note ?? '';
   const tag = args.tag ?? new Date().toISOString().slice(5, 10).replace('-', '');
   const maxCost = parseFloat(args['max-cost'] ?? String(DEFAULT_MAX_COST_USD));
@@ -790,7 +801,7 @@ async function main() {
         skillContent,
         programPrompt,
         polishRoundId,
-        MODELS.SCORING,
+        MODELS.CLAUDE,
         investorNote,
         'polish',
         costTracker,

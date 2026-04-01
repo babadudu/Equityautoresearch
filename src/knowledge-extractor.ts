@@ -311,7 +311,7 @@ async function extractMultiCall(
       const response = await chat(
         'You are a precise knowledge extraction system. Return only valid JSON arrays.',
         [{ role: 'user', content: prompt }],
-        { model: MODELS.SCORING, maxTokens: 16384 },
+        { model: MODELS.CLAUDE, maxTokens: 16384 },
       );
 
       const text = response.content ?? '';

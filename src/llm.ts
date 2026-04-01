@@ -127,7 +127,7 @@ export async function chat(
     thinkingBudget?: number;
   },
 ): Promise<ChatResult> {
-  const model = options?.model ?? MODELS.SCORING;
+  const model = options?.model ?? MODELS.CLAUDE;
 
   // Ensure health check has completed before routing
   await nadirclawReady;
@@ -424,6 +424,136 @@ export async function runClaudeAgent(
   });
 }
 
+/**
+ * Gemini CLI agent — async spawn of `gemini -p` with tool access.
+ * Parallel to runClaudeAgent but uses Gemini for grounded web search.
+ * Falls back to runClaudeAgent on failure.
+ */
+export async function runGeminiAgent(
+  systemPrompt: string,
+  taskPrompt: string,
+  options?: { model?: string; softTimeoutMs?: number },
+): Promise<{ result: string; costUsd: number; inputTokens: number; outputTokens: number; durationSec: number; usedFallback: boolean }> {
+  const { spawn } = await import('child_process');
+  const fs = await import('fs');
+  const os = await import('os');
+  const path = await import('path');
+
+  const GEMINI_BIN = '/opt/homebrew/bin/gemini';
+  const model = options?.model ?? MODELS.GEMINI;
+
+  // Check gemini binary exists
+  if (!fs.existsSync(GEMINI_BIN)) {
+    console.log('  [gemini-agent] Gemini CLI not found, falling back to Claude');
+    const fb = await runClaudeAgent(systemPrompt, taskPrompt, { model: 'sonnet', softTimeoutMs: options?.softTimeoutMs });
+    return { ...fb, usedFallback: true };
+  }
+
+  const fullPrompt = `${systemPrompt}\n\n---\n\n${taskPrompt}`;
+
+  // Write prompt to temp file (avoids stdin pipe limits for large prompts)
+  const tmpFile = path.join(os.tmpdir(), `gemini-agent-${process.pid}-${Date.now()}.txt`);
+  fs.writeFileSync(tmpFile, fullPrompt, 'utf-8');
+
+  const cliArgs = [
+    '-m', model,
+    '-p', '',
+    '--approval-mode', 'yolo',
+  ];
+
+  const SOFT_TIMEOUT_MS = options?.softTimeoutMs ?? 25 * 60 * 1000;
+  const KILL_GRACE_MS = 10 * 1000;
+  const startTime = Date.now();
+
+  return new Promise<{ result: string; costUsd: number; inputTokens: number; outputTokens: number; durationSec: number; usedFallback: boolean }>((resolve, reject) => {
+    // Pipe prompt file via stdin: cat tmpFile | gemini ...
+    const child = spawn(GEMINI_BIN, cliArgs, {
+      stdio: ['pipe', 'pipe', 'pipe'],
+      cwd: process.cwd(),
+    });
+
+    // Pipe the prompt and close stdin
+    const promptStream = fs.createReadStream(tmpFile);
+    promptStream.pipe(child.stdin);
+    promptStream.on('end', () => child.stdin.end());
+
+    const stdoutChunks: Buffer[] = [];
+    child.stdout.on('data', (chunk: Buffer) => {
+      stdoutChunks.push(chunk);
+    });
+
+    let stderrRemainder = '';
+    child.stderr.on('data', (chunk: Buffer) => {
+      const text = stderrRemainder + chunk.toString('utf-8');
+      const lines = text.split('\n');
+      stderrRemainder = lines.pop() ?? '';
+      for (const line of lines) {
+        if (line.trim()) console.log(`  [gemini-agent] ${line}`);
+      }
+    });
+
+    let timedOut = false;
+    const softTimer = setTimeout(() => {
+      timedOut = true;
+      console.log(`  [gemini-agent] Soft timeout (${SOFT_TIMEOUT_MS / 60000}min) reached — sending SIGTERM`);
+      child.kill('SIGTERM');
+      setTimeout(() => {
+        if (!child.killed) {
+          console.log('  [gemini-agent] Grace period expired — sending SIGKILL');
+          child.kill('SIGKILL');
+        }
+      }, KILL_GRACE_MS);
+    }, SOFT_TIMEOUT_MS);
+
+    child.on('close', (code) => {
+      clearTimeout(softTimer);
+      // Clean up temp file
+      try { fs.unlinkSync(tmpFile); } catch { /* ignore */ }
+
+      if (stderrRemainder.trim()) {
+        console.log(`  [gemini-agent] ${stderrRemainder}`);
+      }
+
+      const durationSec = Math.round((Date.now() - startTime) / 1000);
+      const stdout = Buffer.concat(stdoutChunks).toString('utf-8');
+
+      // Fallback to Claude on failure
+      if ((code !== 0 && !stdout.trim()) || (timedOut && !stdout.trim())) {
+        console.log(`  [gemini-agent] Failed (code=${code}, timeout=${timedOut}), falling back to Claude`);
+        runClaudeAgent(systemPrompt, taskPrompt, { model: 'sonnet', softTimeoutMs: options?.softTimeoutMs })
+          .then(r => resolve({ ...r, usedFallback: true })).catch(reject);
+        return;
+      }
+
+      // Gemini CLI doesn't return structured JSON with token counts.
+      // Estimate using chars/2 (mixed CJK/English content averages ~2 chars/token).
+      const outputChars = stdout.length;
+      const estOutputTokens = Math.round(outputChars / 2);
+      const estInputTokens = Math.round(fullPrompt.length / 2);
+      const estCost = estimateCostUsd(model, estInputTokens, estOutputTokens);
+
+      console.log(`  [gemini-agent] Done (${durationSec}s, ~${estOutputTokens} tokens, ~$${estCost.toFixed(2)})`);
+
+      resolve({
+        result: stdout.trim(),
+        costUsd: estCost,
+        inputTokens: estInputTokens,
+        outputTokens: estOutputTokens,
+        durationSec,
+        usedFallback: false,
+      });
+    });
+
+    child.on('error', (err) => {
+      clearTimeout(softTimer);
+      try { fs.unlinkSync(tmpFile); } catch { /* ignore */ }
+      console.log(`  [gemini-agent] Spawn error: ${err.message}, falling back to Claude`);
+      runClaudeAgent(systemPrompt, taskPrompt, { model: 'sonnet', softTimeoutMs: options?.softTimeoutMs })
+        .then(r => resolve({ ...r, usedFallback: true })).catch(reject);
+    });
+  });
+}
+
 /** Nadirclaw local proxy — OpenAI-compatible format, no auth needed */
 async function chatViaNadirclaw(
   system: string,
@@ -494,8 +624,7 @@ async function chatViaOpenRouter(
 ): Promise<ChatResult> {
   // Map model names to OpenRouter model IDs
   const modelMap: Record<string, string> = {
-    [MODELS.RESEARCH]: 'anthropic/claude-opus-4-6',
-    [MODELS.SCORING]: 'anthropic/claude-sonnet-4-6',
+    [MODELS.CLAUDE]: 'anthropic/claude-opus-4-6',
   };
   const orModel = modelMap[model] ?? model;
 

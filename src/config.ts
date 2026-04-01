@@ -1,9 +1,8 @@
 /** Model constants and cost tracking for Anthropic SDK */
 
 export const MODELS = {
-  RESEARCH: 'claude-opus-4-6-20250219',
-  SCORING: 'claude-sonnet-4-6-20250514',
-  GEMINI: 'gemini-3.1-pro-preview',
+  CLAUDE: 'claude-opus-4-6-20250219',   // Scoring + polish (quality-critical)
+  GEMINI: 'gemini-3.1-pro-preview',     // Gap-fill research (grounded search)
 } as const;
 
 /** Nadirclaw local LLM proxy (LiteLLM → Ollama) */
@@ -23,8 +22,7 @@ export const CAPACITY_GATE_PCT = 20;
 
 /** Cost per 1M tokens (USD) — for budget tracking */
 export const COST_PER_1M: Record<string, { input: number; output: number }> = {
-  [MODELS.RESEARCH]: { input: 15, output: 75 },
-  [MODELS.SCORING]: { input: 3, output: 15 },
+  [MODELS.CLAUDE]: { input: 15, output: 75 },
   [MODELS.GEMINI]: { input: 2, output: 12 },
   'nadirclaw-local': { input: 0, output: 0 },
 };
