@@ -26,6 +26,25 @@ read_research_file(ticker, filename)
 
 **工具依需求呼叫**：僅在本輪要補的缺口需要時才呼叫。勿每輪固定先呼叫 list_company_files、query_companies_db、search_data_for_company。主檔已附於訊息末尾時，**不必**為對照而再 read_research_file（除非訊息內主檔被截斷）。例如：要補「人」或 CEO 原話時再 search_data_for_company + read_project_file；要補財報再 ninja_api(earnings_historical)。
 
+## 優先來源清單
+
+搜尋時優先使用這些已驗證來源（完整清單見 `data/research_sources.md`）：
+
+| 資料類型 | 優先來源 |
+|---------|---------|
+| 財報/EPS/營收 | API Ninjas (`earnings_historical`) → StockAnalysis → MacroTrends |
+| 法說逐字稿 | API Ninjas (`earningstranscript`) → Motley Fool (fool.com/earnings-call-transcripts/) → Rev.com |
+| SEC 文件 | API Ninjas (`sec`) → SEC EDGAR (sec.gov) |
+| 年報/20-F | 公司 IR 頁面 (investor.{company}.com) → SEC EDGAR |
+| 市場規模/TAM | Statista → Fortune Business Insights → Grand View Research → Precedence Research |
+| 半導體產業 | SemiWiki → TrendForce → Tom's Hardware → WikiChip → DigiTimes |
+| CEO 訪談 | Acquired.fm → Dwarkesh → Lex Fridman → Chief Executive → Podscripts |
+| 地緣政治 | Brookings → CFR → CSIS → Global Taiwan Institute |
+| ESG/環保 | 公司 ESG 報告 → Greenpeace → TraceNable |
+| 商業新聞 | CNBC → Fortune → The Register → Semafor → Bloomberg |
+
+**規則**：搜尋結果出現多個來源時，優先引用上表中的來源。非表列來源仍可使用，但須確保 URL 可點擊且內容可驗證。
+
 ## 搜尋預算分配策略
 
 每輪最多 12 次 web_search。依缺分高低分配：
