@@ -449,10 +449,10 @@ async function extractKnowledge(
   const personQuotes = extractQuotesByPerson(reportContent);
 
   // Remove stale combined quotes atom from leadership extraction if it exists
-  const staleQuotesPath = path.join(ATOMS_DIR, 'quotes', 'tsm-leadership-quotes.md');
+  const staleQuotesPath = path.join(ATOMS_DIR, 'quotes', `${ticker.toLowerCase()}-leadership-quotes.md`);
   if (fs.existsSync(staleQuotesPath)) {
     fs.unlinkSync(staleQuotesPath);
-    console.log('    [cleanup] Removed tsm-leadership-quotes.md (replaced by per-person atoms)');
+    console.log(`    [cleanup] Removed ${ticker.toLowerCase()}-leadership-quotes.md (replaced by per-person atoms)`);
   }
 
   const MAX_QUOTE_CHARS = 20000; // Keep each LLM call under 20K content chars

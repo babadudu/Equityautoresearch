@@ -12,12 +12,13 @@
 import fs from 'fs';
 import os from 'os';
 import path from 'path';
-import { execSync } from 'child_process';
+import { spawnSync } from 'child_process';
 import { MODELS } from './config.js';
 
 const GEMINI_BIN = '/opt/homebrew/bin/gemini';
 const CLAUDE_BIN = 'claude';
 const DEFAULT_TIMEOUT_SEC = 120;
+let tmpCounter = 0;
 const MAX_BUFFER_BYTES = 10 * 1024 * 1024; // 10MB for large responses
 
 export interface GeminiDispatchOptions {
@@ -77,7 +78,7 @@ export function dispatchToGemini(
 
   // Write prompt to temp file (avoids shell string limits for 366K reports)
   const tmpDir = os.tmpdir();
-  const tmpFile = path.join(tmpDir, `gemini-dispatch-${process.pid}-${Date.now()}.txt`);
+  const tmpFile = path.join(tmpDir, `gemini-dispatch-${process.pid}-${Date.now()}-${tmpCounter++}.txt`);
   fs.writeFileSync(tmpFile, fullPrompt, 'utf-8');
 
   const startMs = Date.now();
@@ -126,15 +127,19 @@ function execGemini(promptFile: string, timeoutSec: number, model: string): stri
 
   // -p requires a string arg; pass empty string so stdin is used as the prompt
   // -m specifies the model
-  const cmd = `cat "${promptFile}" | "${GEMINI_BIN}" -m "${model}" -p ""`;
-  const stdout = execSync(cmd, {
+  const input = fs.readFileSync(promptFile, 'utf-8');
+  const result = spawnSync(GEMINI_BIN, ['-m', model, '-p', ''], {
+    input,
     timeout: timeoutSec * 1000,
     maxBuffer: MAX_BUFFER_BYTES,
     encoding: 'utf-8',
-    stdio: ['pipe', 'pipe', 'pipe'],
   });
 
-  const trimmed = stdout.trim();
+  if (result.error) throw result.error;
+  if (result.status !== 0) {
+    throw new Error(`Gemini exited with code ${result.status}: ${result.stderr}`);
+  }
+  const trimmed = (result.stdout as string).trim();
   if (!trimmed) {
     throw new Error('Gemini returned empty output');
   }
@@ -146,15 +151,19 @@ function execGemini(promptFile: string, timeoutSec: number, model: string): stri
  * Uses stdin pipe from temp file, same pattern as gemini.
  */
 function execClaudeSonnet(promptFile: string, timeoutSec: number): string {
-  const cmd = `cat "${promptFile}" | "${CLAUDE_BIN}" -p --model sonnet`;
-  const stdout = execSync(cmd, {
+  const input = fs.readFileSync(promptFile, 'utf-8');
+  const result = spawnSync(CLAUDE_BIN, ['-p', '--model', 'sonnet'], {
+    input,
     timeout: timeoutSec * 1000,
     maxBuffer: MAX_BUFFER_BYTES,
     encoding: 'utf-8',
-    stdio: ['pipe', 'pipe', 'pipe'],
   });
 
-  const trimmed = stdout.trim();
+  if (result.error) throw result.error;
+  if (result.status !== 0) {
+    throw new Error(`Claude Sonnet exited with code ${result.status}: ${result.stderr}`);
+  }
+  const trimmed = (result.stdout as string).trim();
   if (!trimmed) {
     throw new Error('Claude Sonnet returned empty output');
   }

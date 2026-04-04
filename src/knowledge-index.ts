@@ -85,7 +85,7 @@ function collectAtomFiles(dir: string): string[] {
     const full = path.join(dir, entry.name);
     if (entry.isDirectory()) {
       results.push(...collectAtomFiles(full));
-    } else if (entry.isFile() && entry.name.endsWith('.md')) {
+    } else if (entry.isFile() && entry.name.endsWith('.md') && !entry.name.includes('_conflict_')) {
       results.push(full);
     }
   }

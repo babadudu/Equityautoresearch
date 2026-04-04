@@ -8,7 +8,7 @@
  * Usage:
  *   npx tsx src/research-queue-generator.ts
  */
-import fs from 'fs';
+import fs, { writeFileSync, readFileSync, unlinkSync } from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
@@ -20,6 +20,43 @@ const HOLDINGS_PATH = path.join(INVESTMENT_INTEL, 'data/holdings.json');
 const SIGNALS_PATH = path.join(INVESTMENT_INTEL, 'data/signal_snapshots.json');
 const COMPANIES_DIR = path.join(PROJECT_ROOT, 'data/companies');
 const QUEUE_PATH = path.join(PROJECT_ROOT, 'data/research_queue.json');
+const LOCK_PATH = `${QUEUE_PATH}.lock`;
+function isLockStale(): boolean {
+  try {
+    const lock = JSON.parse(readFileSync(LOCK_PATH, 'utf-8'));
+    // Check if the owning process is still alive
+    try { process.kill(lock.pid, 0); return false; } catch { /* process dead */ }
+    return true;
+  } catch { return true; }
+}
+
+function acquireLock(): boolean {
+  try {
+    writeFileSync(LOCK_PATH, JSON.stringify({ pid: process.pid, ts: Date.now() }), { flag: 'wx' });
+    return true;
+  } catch (err: any) {
+    if (err.code === 'EEXIST') {
+      if (isLockStale()) {
+        // Dead process — safe to remove and retry once
+        try { unlinkSync(LOCK_PATH); } catch { /* someone else cleaned it */ }
+        try {
+          writeFileSync(LOCK_PATH, JSON.stringify({ pid: process.pid, ts: Date.now() }), { flag: 'wx' });
+          return true;
+        } catch { /* another process won the race — fall through */ }
+      }
+      console.error(`Queue lock held by another process (${LOCK_PATH}). Exiting.`);
+      return false;
+    }
+    throw err;
+  }
+}
+
+function releaseLock(): void {
+  try {
+    const lock = JSON.parse(readFileSync(LOCK_PATH, 'utf-8'));
+    if (lock.pid === process.pid) unlinkSync(LOCK_PATH);
+  } catch { /* already released or not our lock */ }
+}
 
 /** Classifications to skip (ETFs, bonds, index funds) */
 const SKIP_CLASSIFICATIONS = ['Government Bond', 'Bond ETF', 'Tech ETF', 'Consumer ETF', 'Index'];
@@ -210,7 +247,14 @@ function main() {
     queue,
   };
 
-  fs.writeFileSync(QUEUE_PATH, JSON.stringify(output, null, 2) + '\n');
+  if (!acquireLock()) {
+    process.exit(1);
+  }
+  try {
+    fs.writeFileSync(QUEUE_PATH, JSON.stringify(output, null, 2) + '\n');
+  } finally {
+    releaseLock();
+  }
   console.log(`Research queue generated: ${QUEUE_PATH}`);
   console.log(`  Total: ${output.total_items} | Pending: ${output.pending} | Completed: ${output.completed}`);
   console.log('\nTop 5:');

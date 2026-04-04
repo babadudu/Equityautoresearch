@@ -11,9 +11,9 @@
  *   npx tsx src/research-queue-runner.ts --ticker GOOG # force specific ticker
  *   npx tsx src/research-queue-runner.ts --max-cost 20 # override cost limit
  */
-import fs from 'fs';
+import fs, { writeFileSync, readFileSync, unlinkSync } from 'fs';
 import path from 'path';
-import { execSync, spawn } from 'child_process';
+import { spawn } from 'child_process';
 import { fileURLToPath } from 'url';
 import { SCHEDULE_WINDOW, CAPACITY_GATE_PCT } from './config.js';
 import { appendTrace, type TraceEntry } from './run-trace.js';
@@ -21,6 +21,43 @@ import { appendTrace, type TraceEntry } from './run-trace.js';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const PROJECT_ROOT = path.resolve(__dirname, '..');
 const QUEUE_PATH = path.join(PROJECT_ROOT, 'data/research_queue.json');
+const LOCK_PATH = `${QUEUE_PATH}.lock`;
+function isLockStale(): boolean {
+  try {
+    const lock = JSON.parse(readFileSync(LOCK_PATH, 'utf-8'));
+    // Check if the owning process is still alive
+    try { process.kill(lock.pid, 0); return false; } catch { /* process dead */ }
+    return true;
+  } catch { return true; }
+}
+
+function acquireLock(): boolean {
+  try {
+    writeFileSync(LOCK_PATH, JSON.stringify({ pid: process.pid, ts: Date.now() }), { flag: 'wx' });
+    return true;
+  } catch (err: any) {
+    if (err.code === 'EEXIST') {
+      if (isLockStale()) {
+        // Dead process — safe to remove and retry once
+        try { unlinkSync(LOCK_PATH); } catch { /* someone else cleaned it */ }
+        try {
+          writeFileSync(LOCK_PATH, JSON.stringify({ pid: process.pid, ts: Date.now() }), { flag: 'wx' });
+          return true;
+        } catch { /* another process won the race — fall through */ }
+      }
+      console.error(`Queue lock held by another process (${LOCK_PATH}). Exiting.`);
+      return false;
+    }
+    throw err;
+  }
+}
+
+function releaseLock(): void {
+  try {
+    const lock = JSON.parse(readFileSync(LOCK_PATH, 'utf-8'));
+    if (lock.pid === process.pid) unlinkSync(LOCK_PATH);
+  } catch { /* already released or not our lock */ }
+}
 
 interface QueueItem {
   ticker: string;
@@ -120,16 +157,8 @@ async function runInitialMax(item: QueueItem, maxCostOverride?: number): Promise
 }
 
 function verifyResearchOutput(ticker: string): boolean {
-  const atomsDir = path.join(PROJECT_ROOT, 'data/knowledge/atoms');
-  if (!fs.existsSync(atomsDir)) return false;
-  const prefix = ticker.toLowerCase();
-  for (const dir of fs.readdirSync(atomsDir)) {
-    const full = path.join(atomsDir, dir);
-    if (fs.statSync(full).isDirectory()) {
-      if (fs.readdirSync(full).some(f => f.startsWith(prefix))) return true;
-    }
-  }
-  return false;
+  const mainFile = path.join(PROJECT_ROOT, 'data', 'companies', ticker, `${ticker}_Initial_MAX.md`);
+  return fs.existsSync(mainFile) && fs.statSync(mainFile).size > 1000;
 }
 
 async function main() {
@@ -155,7 +184,17 @@ async function main() {
     return;
   }
 
-  const queue = loadQueue();
+  if (!acquireLock()) {
+    process.exit(1);
+  }
+
+  let queue: QueueData;
+  try {
+    queue = loadQueue();
+  } catch (err) {
+    releaseLock();
+    throw err;
+  }
 
   console.log('╔══════════════════════════════════════╗');
   console.log('║     Research Queue Runner             ║');
@@ -165,6 +204,7 @@ async function main() {
 
   const target = findTarget(queue, forceTicker);
   if (!target) {
+    releaseLock();
     console.log('\nNo pending items in queue. Run "npm run queue-gen" to refresh.');
     return;
   }
@@ -177,54 +217,59 @@ async function main() {
   console.log(`  Max cost: $${maxCost ?? target.max_cost}`);
 
   if (dryRun) {
+    releaseLock();
     console.log('\n[DRY RUN] Would execute Initial MAX for', target.ticker);
     return;
   }
 
-  // Mark as running
-  target.status = 'running';
-  saveQueue(queue);
+  try {
+    // Mark as running
+    target.status = 'running';
+    saveQueue(queue);
 
-  const startTime = Date.now();
-  const result = await runInitialMax(target, maxCost);
-  const durationSec = Math.round((Date.now() - startTime) / 1000);
+    const startTime = Date.now();
+    const result = await runInitialMax(target, maxCost);
+    const durationSec = Math.round((Date.now() - startTime) / 1000);
 
-  if (result.success) {
-    // Verify actual output was produced
-    if (!verifyResearchOutput(target.ticker)) {
-      target.status = 'failed';
-      target.error = 'No research output produced';
-      console.error(`\n✗ ${target.ticker} exited OK but produced no research files`);
+    if (result.success) {
+      // Verify actual output was produced
+      if (!verifyResearchOutput(target.ticker)) {
+        target.status = 'failed';
+        target.error = 'No research output produced';
+        console.error(`\n✗ ${target.ticker} exited OK but produced no research files`);
+      } else {
+        target.status = 'completed';
+        target.completed_date = new Date().toISOString().slice(0, 10);
+        delete target.error;
+        console.log(`\n✓ ${target.ticker} completed successfully`);
+      }
     } else {
-      target.status = 'completed';
-      target.completed_date = new Date().toISOString().slice(0, 10);
-      delete target.error;
-      console.log(`\n✓ ${target.ticker} completed successfully`);
+      target.status = 'failed';
+      target.error = result.error;
+      console.error(`\n✗ ${target.ticker} failed: ${result.error}`);
     }
-  } else {
-    target.status = 'failed';
-    target.error = result.error;
-    console.error(`\n✗ ${target.ticker} failed: ${result.error}`);
+
+    // Write trace entry
+    appendTrace({
+      ts: new Date().toISOString(),
+      ticker: target.ticker,
+      phase: 'queue-run',
+      round: 0,
+      model: 'mixed',
+      durationSec,
+      inputTokens: 0,
+      outputTokens: 0,
+      costUsd: 0,
+      filesWritten: 0,
+      scoreChange: target.status === 'completed' ? 'done' : 'failed',
+      agentExitCode: result.success ? 0 : 1,
+    });
+
+    saveQueue(queue);
+    console.log(`\nQueue updated: ${queue.pending} pending remaining`);
+  } finally {
+    releaseLock();
   }
-
-  // Write trace entry
-  appendTrace({
-    ts: new Date().toISOString(),
-    ticker: target.ticker,
-    phase: 'queue-run',
-    round: 0,
-    model: 'mixed',
-    durationSec,
-    inputTokens: 0,
-    outputTokens: 0,
-    costUsd: 0,
-    filesWritten: 0,
-    scoreChange: target.status === 'completed' ? 'done' : 'failed',
-    agentExitCode: result.success ? 0 : 1,
-  });
-
-  saveQueue(queue);
-  console.log(`\nQueue updated: ${queue.pending} pending remaining`);
 }
 
 main().catch((err) => {

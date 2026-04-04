@@ -113,6 +113,12 @@ async function retryWithBackoff<T>(fn: () => Promise<T>, maxRetries = 3): Promis
   throw new Error('Unreachable');
 }
 
+// ── Atomic counter for temp file naming (avoids collisions under parallel calls) ──
+let _geminiTmpCounter = 0;
+function nextGeminiTmpId(): string {
+  return `${process.pid}-${Date.now()}-${++_geminiTmpCounter}`;
+}
+
 // ── Main chat function ──
 
 export async function chat(
@@ -396,7 +402,28 @@ export async function runClaudeAgent(
         return;
       }
 
-      if (code !== 0 && !stdout.trim()) {
+      if (code !== 0) {
+        // Only accept partial output if it parses as valid JSON with expected shape
+        const trimmed = stdout.trim();
+        if (trimmed) {
+          try {
+            const parsed = JSON.parse(trimmed);
+            const resultStr = typeof parsed.result === 'string' && parsed.result.length > 0 ? parsed.result : null;
+            const contentStr = typeof parsed.content === 'string' && parsed.content.length > 0 ? parsed.content : null;
+            const contentBlocks = Array.isArray(parsed.content) && parsed.content.length > 0 ? parsed.content : null;
+            if (resultStr !== null || contentStr !== null || contentBlocks !== null) {
+              const durationSec = Math.round((Date.now() - startTime) / 1000);
+              resolve({
+                result: resultStr ?? contentStr ?? JSON.stringify(contentBlocks),
+                costUsd: parsed.total_cost_usd ?? 0,
+                inputTokens: parsed.input_tokens ?? parsed.usage?.input_tokens ?? 0,
+                outputTokens: parsed.output_tokens ?? parsed.usage?.output_tokens ?? 0,
+                durationSec,
+              });
+              return;
+            }
+          } catch { /* not valid JSON, fall through to reject */ }
+        }
         reject(new Error(`Claude agent exited with code ${code}`));
         return;
       }
@@ -404,7 +431,11 @@ export async function runClaudeAgent(
       const durationSec = Math.round((Date.now() - startTime) / 1000);
       let parsed: any;
       try { parsed = JSON.parse(stdout); } catch {
-        resolve({ result: stdout.trim(), costUsd: 0, inputTokens: 0, outputTokens: 0, durationSec });
+        // Non-JSON output: estimate cost from character count (4 chars ≈ 1 token)
+        const estInputTokens = Math.ceil(fullPrompt.length / 4);
+        const estOutputTokens = Math.ceil(stdout.length / 4);
+        const estCostUsd = estimateCostUsd(options?.model ?? MODELS.CLAUDE, estInputTokens, estOutputTokens);
+        resolve({ result: stdout.trim(), costUsd: estCostUsd, inputTokens: estInputTokens, outputTokens: estOutputTokens, durationSec });
         return;
       }
 
@@ -452,7 +483,7 @@ export async function runGeminiAgent(
   const fullPrompt = `${systemPrompt}\n\n---\n\n${taskPrompt}`;
 
   // Write prompt to temp file (avoids stdin pipe limits for large prompts)
-  const tmpFile = path.join(os.tmpdir(), `gemini-agent-${process.pid}-${Date.now()}.txt`);
+  const tmpFile = path.join(os.tmpdir(), `gemini-agent-${nextGeminiTmpId()}.txt`);
   fs.writeFileSync(tmpFile, fullPrompt, 'utf-8');
 
   const cliArgs = [
@@ -518,7 +549,31 @@ export async function runGeminiAgent(
       const stdout = Buffer.concat(stdoutChunks).toString('utf-8');
 
       // Fallback to Claude on failure
-      if ((code !== 0 && !stdout.trim()) || (timedOut && !stdout.trim())) {
+      if (code !== 0 || (timedOut && !stdout.trim())) {
+        // Only accept partial output on non-zero exit if it parses as valid JSON with expected shape
+        if (code !== 0 && stdout.trim()) {
+          try {
+            const parsed = JSON.parse(stdout.trim());
+            const resultStr = typeof parsed.result === 'string' && parsed.result.length > 0 ? parsed.result : null;
+            const contentStr = typeof parsed.content === 'string' && parsed.content.length > 0 ? parsed.content : null;
+            const contentBlocks = Array.isArray(parsed.content) && parsed.content.length > 0 ? parsed.content : null;
+            if (resultStr !== null || contentStr !== null || contentBlocks !== null) {
+              const outputChars = stdout.length;
+              const estOutputTokens = Math.round(outputChars / 2);
+              const estInputTokens = Math.round(fullPrompt.length / 2);
+              const estCost = estimateCostUsd(model, estInputTokens, estOutputTokens);
+              resolve({
+                result: resultStr ?? contentStr ?? JSON.stringify(contentBlocks),
+                costUsd: estCost,
+                inputTokens: estInputTokens,
+                outputTokens: estOutputTokens,
+                durationSec,
+                usedFallback: false,
+              });
+              return;
+            }
+          } catch { /* not valid JSON, fall through to fallback */ }
+        }
         console.log(`  [gemini-agent] Failed (code=${code}, timeout=${timedOut}), falling back to Claude`);
         runClaudeAgent(systemPrompt, taskPrompt, { model: 'sonnet', softTimeoutMs: options?.softTimeoutMs })
           .then(r => resolve({ ...r, usedFallback: true })).catch(reject);

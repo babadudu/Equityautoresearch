@@ -19,6 +19,38 @@ export interface SearchResult {
 
 export const NINJA_BASE = 'https://api.api-ninjas.com/v1';
 
+/**
+ * fetch() wrapper with AbortSignal timeout and exponential-backoff retry.
+ * Retries on network errors and 5xx responses; does not retry 4xx.
+ */
+async function fetchWithRetry(
+  url: string,
+  init: RequestInit = {},
+  retries = 2,
+  timeoutMs = 15000,
+): Promise<Response> {
+  const callerSignal = init.signal as AbortSignal | undefined;
+  let lastErr: unknown;
+  for (let attempt = 0; attempt <= retries; attempt++) {
+    const timeoutSignal = AbortSignal.timeout(timeoutMs);
+    // Compose caller cancellation signal with per-attempt timeout
+    const signal = callerSignal
+      ? AbortSignal.any([callerSignal, timeoutSignal])
+      : timeoutSignal;
+    try {
+      const res = await fetch(url, { ...init, signal });
+      if (res.ok || (res.status >= 400 && res.status < 500)) return res;
+      lastErr = new Error(`HTTP ${res.status}`);
+    } catch (err: any) {
+      lastErr = err;
+      // Don't retry if the caller explicitly cancelled
+      if (err?.name === 'AbortError' && callerSignal?.aborted) throw err;
+    }
+    if (attempt < retries) await new Promise(r => setTimeout(r, 500 * 2 ** attempt));
+  }
+  throw lastErr;
+}
+
 export async function webSearch(query: string, count = 5): Promise<string> {
   const num = Math.min(count, 10);
   const braveKey = process.env.BRAVE_SEARCH_API_KEY ?? '';
@@ -27,7 +59,7 @@ export async function webSearch(query: string, count = 5): Promise<string> {
       const url = new URL('https://api.search.brave.com/res/v1/web/search');
       url.searchParams.set('q', query);
       url.searchParams.set('count', String(num));
-      const res = await fetch(url.toString(), {
+      const res = await fetchWithRetry(url.toString(), {
         headers: { Accept: 'application/json', 'X-Subscription-Token': braveKey },
       });
       if (res.ok) {
@@ -42,7 +74,7 @@ export async function webSearch(query: string, count = 5): Promise<string> {
   // DuckDuckGo fallback
   try {
     const ddgUrl = `https://lite.duckduckgo.com/lite/?q=${encodeURIComponent(query)}`;
-    const res = await fetch(ddgUrl, {
+    const res = await fetchWithRetry(ddgUrl, {
       headers: {
         Accept: 'text/html',
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; rv:109.0) Gecko/20100101 Firefox/115.0',
@@ -70,7 +102,7 @@ export async function webSearch(query: string, count = 5): Promise<string> {
 
 export async function fetchUrl(url: string): Promise<string> {
   try {
-    const res = await fetch(url, {
+    const res = await fetchWithRetry(url, {
       headers: {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; rv:109.0) Gecko/20100101 Firefox/115.0',
         Accept: 'text/html,text/plain',
@@ -145,7 +177,7 @@ export async function callNinjaApi(action: string, args: Record<string, unknown>
       u.searchParams.set('year', String(y));
       u.searchParams.set('quarter', '4');
       try {
-        const res = await fetch(u.toString(), { headers: { 'X-Api-Key': key } });
+        const res = await fetchWithRetry(u.toString(), { headers: { 'X-Api-Key': key } });
         const data = res.ok ? await res.json() : null;
         results.push({ year: y, data });
       } catch (e: any) {
@@ -166,7 +198,7 @@ export async function callNinjaApi(action: string, args: Record<string, unknown>
   const url = new URL(NINJA_BASE + p);
   Object.entries(params).forEach(([k, v]) => { if (v !== undefined && v !== '') url.searchParams.set(k, String(v)); });
   try {
-    const res = await fetch(url.toString(), { headers: { 'X-Api-Key': key } });
+    const res = await fetchWithRetry(url.toString(), { headers: { 'X-Api-Key': key } });
     if (!res.ok) {
       const text = await res.text();
       if (res.status === 402 || res.status === 403) return JSON.stringify({ error: '此端點為 API Ninjas Premium 限定' });

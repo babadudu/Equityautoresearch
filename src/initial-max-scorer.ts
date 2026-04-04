@@ -56,6 +56,7 @@ export interface InitialMaxScore {
   rubricVersion?: string;
   scorerStatus?: 'full' | 'llm_partial_failure';
   scorerPartialFailure?: boolean;
+  scoringCostUsd?: number;
 }
 
 interface GapItem {
@@ -79,6 +80,7 @@ export interface ExtendedScore {
   sustainability?: DimensionScore;
   contrarian?: DimensionScore;
   extendedTotal: number;
+  scoringCostUsd?: number;
 }
 
 const EXTENDED_SECTIONS = ['6.1', '6.2', '6.3', '7.1', '7.2', '7.3', '8.1', '8.2', '8.3', '8.4'];
@@ -361,20 +363,11 @@ function checkInternalConsistency(ticker: string, mainContent: string): string[]
     }
   }
 
-  // 5. Geographic revenue sums check (±5% tolerance)
-  const geoTable = mainContent.match(/地理.*營收[\s\S]*?\|[\s\S]*?\n\n/m);
-  if (geoTable) {
-    const numbers = geoTable[0].match(/[\d,]+\.?\d*/g)?.map(n => parseFloat(n.replace(/,/g, ''))) ?? [];
-    if (numbers.length >= 3) {
-      const maxNum = Math.max(...numbers);
-      const sumOfRest = numbers.filter(n => n !== maxNum).reduce((a, b) => a + b, 0);
-      if (sumOfRest > 0 && Math.abs(sumOfRest - maxNum) / maxNum > 0.05) {
-        // Only flag if the max number looks like a total (similar magnitude to sum)
-        if (sumOfRest / maxNum > 0.5 && sumOfRest / maxNum < 2) {
-          issues.push(`Geographic revenue components may not sum to total (sum: ${sumOfRest.toFixed(0)}, total: ${maxNum.toFixed(0)})`);
-        }
-      }
-    }
+  // 5. Geographic revenue section presence check (section 1.4)
+  // Find the ## 1.4 heading and measure content until the next heading
+  const section14Match = mainContent.match(/##\s*1\.4[\s\S]*?(?=\n##\s|\n#\s|$)/);
+  if (!section14Match || section14Match[0].length < 200) {
+    issues.push('Geographic revenue section missing or incomplete (expected section 1.4 with >200 chars)');
   }
 
   return issues;
@@ -552,7 +545,7 @@ const RAW_MAX = 63;
 const CANONICAL_CRITERIA_KEYS: Record<Dimension, string[]> = {
   環境: ['TAM趨勢', '市場結構', '監管政策', '技術趨勢'],
   生意: ['財務歷史', '商業模式', '五力分析', 'DCF投資論文'],
-  組織: ['組織執行力', '地理分部', '運營效率'],
+  組織: ['組織文化', '地理分部', '運營效率'],
   人: ['格局觀哲學', '繼任風險', '道德操守'],
   論點: ['非共識觀點', '內部一致性', '可行動性'],
 };
@@ -578,9 +571,9 @@ async function scoreDimension(
   sectionContent: string,
   ticker: string,
   model: string,
-): Promise<{ subCriteria: Record<string, number>; total: number; gaps: string[] } | null> {
+): Promise<{ subCriteria: Record<string, number>; total: number; gaps: string[]; costUsd: number } | null> {
   if (sectionContent.trim().length < 50) {
-    return { subCriteria: {}, total: 0, gaps: [`${dimension}: 內容不足，無法評分`] };
+    return { subCriteria: {}, total: 0, gaps: [`${dimension}: 內容不足，無法評分`], costUsd: 0 };
   }
 
   const systemPrompt = DIMENSION_PROMPTS[dimension];
@@ -634,6 +627,7 @@ ${sectionContent}`;
       subCriteria: normalized,
       total: typeof total === 'number' ? total : computedTotal,
       gaps: Array.isArray(gaps) ? gaps : [],
+      costUsd: response.usage.costUsd,
     };
   } catch (err: any) {
     console.error(`  [scorer] ${dimension} LLM error: ${err.message}`);
@@ -668,16 +662,18 @@ async function llmScoreStructured(
   totalVariance: number;
   perDimensionVariance: Record<string, number>;
   scorerPartialFailure: boolean;
+  scoringCostUsd: number;
 } | null> {
   const dimensions: Record<string, { score: number; criteria: Record<string, number>; gaps: string[] }> = {};
   const rawCalls: ScoringEvent['rawCalls'] = [];
   const perDimensionVariance: Record<string, number> = {};
   let anySuccess = false;
   let scorerPartialFailure = false;
+  let scoringCostUsd = 0;
 
   for (const dim of ALL_DIMENSIONS) {
     const sectionContent = extractDimensionContent(mainContent, dim);
-    const callResults: Array<{ subCriteria: Record<string, number>; total: number; gaps: string[] }> = [];
+    const callResults: Array<{ subCriteria: Record<string, number>; total: number; gaps: string[]; costUsd: number }> = [];
 
     // 3 calls per dimension with retry on failure (max SCORER_MAX_RETRIES per call)
     for (let i = 0; i < SCORER_NUM_CALLS; i++) {
@@ -690,20 +686,31 @@ async function llmScoreStructured(
         }
       }
       if (result) {
+        scoringCostUsd += result.costUsd;
         callResults.push(result);
         rawCalls.push({ dimension: dim, callIndex: i, subCriteria: result.subCriteria, total: result.total });
       }
     }
 
-    // Require ≥2 valid calls; flag partial failure if only 1
+    // Require ≥2 valid calls; if only 1 succeeded, retry once
     if (callResults.length === 0) {
       dimensions[dim] = { score: 0, criteria: {}, gaps: [`${dim}: LLM 評分失敗`] };
       perDimensionVariance[dim] = 0;
       continue;
     }
     if (callResults.length < 2) {
-      scorerPartialFailure = true;
-      console.log(`  [scorer] ⚠ ${dim}: only ${callResults.length} valid call(s) — flagging scorer_partial_failure`);
+      console.log(`  [scorer] ⚠ ${dim}: only ${callResults.length} valid call(s) — retrying once...`);
+      const retryResult = await scoreDimension(dim, sectionContent, ticker, model);
+      if (retryResult) {
+        scoringCostUsd += retryResult.costUsd;
+        callResults.push(retryResult);
+        rawCalls.push({ dimension: dim, callIndex: SCORER_NUM_CALLS, subCriteria: retryResult.subCriteria, total: retryResult.total });
+        console.log(`  [scorer] ${dim}: retry succeeded (${callResults.length} valid calls)`);
+      }
+      if (callResults.length < 2) {
+        scorerPartialFailure = true;
+        console.log(`  [scorer] ⚠ ${dim}: still only ${callResults.length} valid call(s) after retry — applying 0.85x confidence penalty`);
+      }
     }
 
     anySuccess = true;
@@ -715,7 +722,15 @@ async function llmScoreStructured(
       const values = callResults.map(r => r.subCriteria[key] ?? 0);
       medianCriteria[key] = median(values);
     }
-    const medianTotal = Object.values(medianCriteria).reduce((a, b) => a + b, 0);
+    let medianTotal = Object.values(medianCriteria).reduce((a, b) => a + b, 0);
+
+    // Apply confidence penalty if < 2 valid calls after retry
+    if (callResults.length < 2) {
+      medianTotal = Math.round(medianTotal * 0.85);
+      for (const key of Object.keys(medianCriteria)) {
+        medianCriteria[key] = Math.round(medianCriteria[key] * 0.85);
+      }
+    }
 
     // Collect all gaps (deduplicated)
     const allGaps = [...new Set(callResults.flatMap(r => r.gaps))];
@@ -740,6 +755,7 @@ async function llmScoreStructured(
     totalVariance,
     perDimensionVariance,
     scorerPartialFailure,
+    scoringCostUsd,
   };
 }
 
@@ -755,9 +771,9 @@ async function pairwiseCalibrate(
   model: string,
   futuContent: string,
   futuRefScore: number,
-): Promise<number> {
+): Promise<{ adjustment: number; costUsd: number }> {
   const refContent = extractDimensionContent(futuContent, dimension).slice(0, 10000);
-  if (refContent.length < 100) return 0;
+  if (refContent.length < 100) return { adjustment: 0, costUsd: 0 };
 
   const refScore = futuRefScore;
 
@@ -786,24 +802,24 @@ ${candidateContent.slice(0, 5000)}
       { model, maxTokens: 1024, thinkingBudget: SCORER_THINKING_BUDGET, backend: 'nadirclaw', ...(NADIRCLAW_MODELS.ECO ? { model: NADIRCLAW_MODELS.ECO } : {}) },
     );
 
-    if (!response.content) return 0;
+    if (!response.content) return { adjustment: 0, costUsd: response.usage.costUsd };
     let jsonStr = response.content.trim();
     const fenceMatch = jsonStr.match(/```(?:json)?\s*\n?([\s\S]*?)```/);
     if (fenceMatch) jsonStr = fenceMatch[1].trim();
     const start = jsonStr.indexOf('{');
-    if (start === -1) return 0;
+    if (start === -1) return { adjustment: 0, costUsd: response.usage.costUsd };
     let depth = 0, end = -1;
     for (let i = start; i < jsonStr.length; i++) {
       if (jsonStr[i] === '{') depth++;
       else if (jsonStr[i] === '}') { depth--; if (depth === 0) { end = i; break; } }
     }
-    if (end === -1) return 0;
+    if (end === -1) return { adjustment: 0, costUsd: response.usage.costUsd };
 
     const parsed = JSON.parse(jsonStr.slice(start, end + 1));
     const adj = parsed.adjustment ?? 0;
-    return Math.max(-1, Math.min(1, adj));
+    return { adjustment: Math.max(-1, Math.min(1, adj)), costUsd: response.usage.costUsd };
   } catch {
-    return 0;
+    return { adjustment: 0, costUsd: 0 };
   }
 }
 
@@ -847,6 +863,9 @@ function buildGapsJson(score: InitialMaxScore, round: number, ticker?: string): 
   }
 
   // 組織維度 (17pts)
+  if ((score.組織.criteria?.['組織文化'] ?? 0) < 3) {
+    gaps.push({ dimension: '組織', item: '組織文化與激勵（薪酬結構+員工評分+人才保留）', current: score.組織.criteria?.['組織文化'] ?? 0, target: '4分', shortfall: 4 - (score.組織.criteria?.['組織文化'] ?? 0), priority: priority++ });
+  }
   if ((score.組織.criteria?.['地理分部'] ?? 0) < 3) {
     gaps.push({ dimension: '組織', item: '地理/業務分部收入(年報出處+URL)', current: score.組織.criteria?.['地理分部'] ?? 0, target: '4分', shortfall: 4 - (score.組織.criteria?.['地理分部'] ?? 0), priority: priority++ });
   }
@@ -914,6 +933,7 @@ export async function scoreCompanyResearch(
   let perDimensionVariance: Record<string, number> = {};
   let totalVariance = 0;
   let pairwiseAdjustments: Record<string, number> = {};
+  let scoringCostUsd = 0;
 
   if (structural.score < 10) {
     // Very incomplete report — skip LLM
@@ -928,6 +948,7 @@ export async function scoreCompanyResearch(
       rawCalls = llmResult.rawCalls;
       totalVariance = llmResult.totalVariance;
       perDimensionVariance = llmResult.perDimensionVariance;
+      scoringCostUsd += llmResult.scoringCostUsd;
       if (llmResult.scorerPartialFailure) scorerStatus = 'llm_partial_failure';
 
       // Phase 1.5: Pairwise calibration — read FUTU reference once
@@ -940,7 +961,8 @@ export async function scoreCompanyResearch(
         if (!futuContent) break;
         const dimContent = extractDimensionContent(mainContent, dim);
         const futuRefScore = Math.round(rawMaxMap[dim] * 0.85);
-        const adj = await pairwiseCalibrate(dim, dimContent, dimensionResults[dim].score, rawMaxMap[dim], model, futuContent, futuRefScore);
+        const { adjustment: adj, costUsd: calibCost } = await pairwiseCalibrate(dim, dimContent, dimensionResults[dim].score, rawMaxMap[dim], model, futuContent, futuRefScore);
+        scoringCostUsd += calibCost;
         if (adj !== 0) {
           // Apply adjustment as additive term on dimension total, not by mutating sub-criteria
           dimensionResults[dim].score = Math.max(0, dimensionResults[dim].score + adj);
@@ -1005,6 +1027,7 @@ export async function scoreCompanyResearch(
     rubricVersion,
     scorerStatus,
     scorerPartialFailure: scorerStatus === 'llm_partial_failure',
+    scoringCostUsd,
   };
 
   // Add section coverage gaps to 環境 (since it's the first dimension)
@@ -1057,8 +1080,9 @@ export async function scoreCompanyResearch(
         failed: structural.details.filter(d => d.startsWith('Consistency')).length,
         details: structural.details,
       },
-      costUsd: 0, // filled by caller if needed
+      costUsd: scoringCostUsd,
       reportLengthChars: mainContent.length,
+      scorerVersion: 2,
     };
     appendScoringEvent(event);
   } catch (err: any) {
@@ -1148,6 +1172,7 @@ async function llmExtendedScore(
       sustainability: { score: parsed.sustainability?.score ?? 0, max: 15, criteria: parsed.sustainability?.criteria, gaps: parsed.sustainability?.gaps ?? [] },
       contrarian: { score: Math.min(parsed.contrarian?.score ?? 0, 15), max: 15, criteria: parsed.contrarian?.criteria, gaps: parsed.contrarian?.gaps ?? [] },
       extendedTotal: parsed.extendedTotal ?? ((parsed.geopolitical?.score ?? 0) + (parsed.sustainability?.score ?? 0) + (parsed.contrarian?.score ?? 0)),
+      scoringCostUsd: response.usage.costUsd,
     };
   } catch (err: any) {
     console.error('Extended LLM scorer error:', err.message);
@@ -1226,6 +1251,7 @@ export async function scoreExtendedResearch(
     sustainability: { score: h.sustainability, max: 15, gaps: h.sustainability < 10 ? ['需補充環境永續分析'] : [] },
     contrarian: { score: h.contrarian, max: 15, gaps: h.contrarian < 10 ? ['需補充正反論辯與投資論點失效條件(8.4)'] : [] },
     extendedTotal: h.geopolitical + h.sustainability + h.contrarian,
+    scoringCostUsd: 0,
   };
 }
 

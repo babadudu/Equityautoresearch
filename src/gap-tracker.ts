@@ -11,6 +11,23 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const PROJECT_ROOT = path.resolve(__dirname, '..');
 const GAP_DIFFICULTY_PATH = path.join(PROJECT_ROOT, 'data', 'scoring', 'gap_difficulty.jsonl');
 
+/**
+ * Normalize each segment of a combined gap key (dimension|item) for comparison.
+ * Mirrors the per-segment normalization in normalizeGapKey() in initial-max-runner.ts
+ * so that historical keys stored before normalization was applied still match new ones.
+ */
+function normalizeStoredGapKey(key: string): string {
+  const normalizeSegment = (s: string) =>
+    s.trim()
+      .replace(/[\u3000\u3001\u3002\uff0c\uff0e\uff1a\uff1b\uff01\uff1f\u300a\u300b\u300c\u300d\u300e\u300f]/g, '')
+      .replace(/\s+/g, ' ')
+      .trim()
+      .slice(0, 40);
+  // Keys are stored as "dimension|item"; normalize each segment independently.
+  const parts = key.split('|');
+  return parts.map(normalizeSegment).join('|');
+}
+
 export interface GapAttempt {
   ticker: string;
   round: number;
@@ -48,8 +65,9 @@ export function readGapAttempts(ticker?: string): GapAttempt[] {
 
 /** Resolution rate for a specific gap key across all companies */
 export function gapResolutionRate(gapKey: string): number {
+  const normalizedKey = normalizeStoredGapKey(gapKey);
   const all = readGapAttempts();
-  const matching = all.filter(a => a.gapKey === gapKey);
+  const matching = all.filter(a => normalizeStoredGapKey(a.gapKey) === normalizedKey);
   if (matching.length === 0) return 0.5; // unknown = assume 50%
   return matching.filter(a => a.resolved).length / matching.length;
 }
@@ -69,8 +87,9 @@ export function getMaxAttemptsForGap(gapKey: string): number {
 
 /** Count attempts for a specific ticker + gap key combination */
 export function countAttempts(ticker: string, gapKey: string): number {
+  const normalizedKey = normalizeStoredGapKey(gapKey);
   const attempts = readGapAttempts(ticker);
-  return attempts.filter(a => a.gapKey === gapKey).length;
+  return attempts.filter(a => normalizeStoredGapKey(a.gapKey) === normalizedKey).length;
 }
 
 /** Pre-loaded gap data for batch operations (avoids re-reading JSONL N times) */
@@ -88,12 +107,14 @@ export function loadGapAttempts(ticker: string): LoadedGapData {
 
 /** Count attempts using pre-loaded data */
 export function countAttemptsFromLoaded(data: LoadedGapData, gapKey: string): number {
-  return data.byTicker.filter(a => a.gapKey === gapKey).length;
+  const normalizedKey = normalizeStoredGapKey(gapKey);
+  return data.byTicker.filter(a => normalizeStoredGapKey(a.gapKey) === normalizedKey).length;
 }
 
 /** Resolution rate using pre-loaded data */
 export function gapResolutionRateFromLoaded(data: LoadedGapData, gapKey: string): number {
-  const matching = data.all.filter(a => a.gapKey === gapKey);
+  const normalizedKey = normalizeStoredGapKey(gapKey);
+  const matching = data.all.filter(a => normalizeStoredGapKey(a.gapKey) === normalizedKey);
   if (matching.length === 0) return 0.5;
   return matching.filter(a => a.resolved).length / matching.length;
 }
@@ -108,7 +129,8 @@ export function getMaxAttemptsFromLoaded(data: LoadedGapData, gapKey: string): n
 
 /** Global retirement: gap has ≥N attempts across ≥M tickers with 0% resolution */
 export function isGloballyRetired(data: LoadedGapData, gapKey: string): boolean {
-  const matching = data.all.filter(a => a.gapKey === gapKey);
+  const normalizedKey = normalizeStoredGapKey(gapKey);
+  const matching = data.all.filter(a => normalizeStoredGapKey(a.gapKey) === normalizedKey);
   if (matching.length < GLOBAL_RETIRE_MIN_ATTEMPTS) return false;
   const distinctTickers = new Set(matching.map(a => a.ticker));
   if (distinctTickers.size < GLOBAL_RETIRE_MIN_TICKERS) return false;

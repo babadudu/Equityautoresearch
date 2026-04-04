@@ -19,7 +19,7 @@
  */
 import fs from 'fs';
 import path from 'path';
-import { execSync } from 'child_process';
+import { execSync, spawnSync } from 'child_process';
 import { fileURLToPath } from 'url';
 import Anthropic from '@anthropic-ai/sdk';
 import { chat, runClaudeAgent, runGeminiAgent, type ToolUse, type AnthropicTool, type ChatResult } from './llm.js';
@@ -47,6 +47,22 @@ const PROJECT_ROOT = path.resolve(__dirname, '..');
 const DEFAULT_MODEL = MODELS.CLAUDE;  // Used for polish phase (Claude); gap-fill uses MODELS.GEMINI
 const DEFAULT_MAX_ROUNDS = 15;
 const PASS_THRESHOLD = SCORER_PASS_THRESHOLD;  // 85, from config
+
+/**
+ * Normalize a gap key so the same conceptual gap maps to the same string
+ * across rounds, regardless of minor LLM text variation.
+ * Strips leading/trailing whitespace, removes CJK punctuation, and caps at 40 chars.
+ */
+function normalizeGapKey(dimension: string, item: string): string {
+  const normalize = (s: string) =>
+    s.trim()
+      // Strip common CJK punctuation that LLMs sometimes add/omit
+      .replace(/[\u3000\u3001\u3002\uff0c\uff0e\uff1a\uff1b\uff01\uff1f\u300a\u300b\u300c\u300d\u300e\u300f]/g, '')
+      .replace(/\s+/g, ' ')
+      .trim()
+      .slice(0, 40);
+  return `${normalize(dimension)}|${normalize(item)}`;
+}
 
 const POLISH_PHASE_SYSTEM = `# Initial MAX 主檔整理輪
 
@@ -163,11 +179,20 @@ function gitShortHash(): string {
 
 function gitCommit(message: string): string {
   try {
-    exec('git add -A data/companies/');
-    exec(`git commit -m "${message.replace(/"/g, "'")}"`);
+    const addResult = spawnSync('git', ['add', 'data/companies/', 'data/knowledge/'], { cwd: PROJECT_ROOT });
+    if (addResult.status !== 0) {
+      console.warn(`[gitCommit] git add failed (status ${addResult.status}): ${addResult.stderr?.toString().trim()}`);
+      return '';
+    }
+    const commitResult = spawnSync('git', ['commit', '-m', message], { cwd: PROJECT_ROOT });
+    if (commitResult.status !== 0) {
+      console.warn(`[gitCommit] git commit failed (status ${commitResult.status}): ${commitResult.stderr?.toString().trim()}`);
+      return '';
+    }
     return gitShortHash();
-  } catch {
-    return gitShortHash();
+  } catch (err: any) {
+    console.warn(`[gitCommit] exception: ${err?.message}`);
+    return '';
   }
 }
 
@@ -543,6 +568,7 @@ async function main() {
   // Baseline score
   console.log('\n═══ Baseline Scoring ═══');
   const { score: baselineScore, gaps: baselineGaps } = await scoreCompanyResearch(ticker, 0, scoringModel);
+  costTracker.totalCostUsd += baselineScore.scoringCostUsd ?? 0;
   const baselineResult: RoundResult = {
     round: 0,
     commit: gitShortHash(),
@@ -593,7 +619,7 @@ async function main() {
       const preFilterCount = gaps.gaps.length;
       let globalRetiredCount = 0;
       gaps.gaps = gaps.gaps.filter(g => {
-        const key = `${g.dimension}|${g.item}`;
+        const key = normalizeGapKey(g.dimension, g.item);
         // Global retirement: universally unsolvable across tickers
         if (isGloballyRetired(gapData, key)) {
           globalRetiredCount++;
@@ -629,7 +655,7 @@ async function main() {
       }
 
       console.log(`Running gap-fill agent... (cost so far: $${costTracker.totalCostUsd.toFixed(2)})`);
-      const prevGapKeys = new Set(gaps.gaps.map(g => `${g.dimension}|${g.item}`));
+      const prevGapKeys = new Set(gaps.gaps.map(g => normalizeGapKey(g.dimension, g.item)));
       const agentResponse = await runGapFillAgent(ticker, gaps, skillContent, programPrompt, round, model, investorNote, 'gap_fill', costTracker);
 
       // Parse agent summary
@@ -646,6 +672,7 @@ async function main() {
       // Score new state
       console.log('Scoring...');
       let { score: newScore, gaps: newGaps } = await scoreCompanyResearch(ticker, round, scoringModel);
+      costTracker.totalCostUsd += newScore.scoringCostUsd ?? 0;
       let delta = newScore.total - bestScore;
 
       // Rollback protection: if score regressed, check for scorer partial failure
@@ -653,6 +680,7 @@ async function main() {
         if (newScore.scorerPartialFailure) {
           console.log(`[rollback] Score regressed ${bestScore}→${newScore.total} with scorer_partial_failure — re-scoring once...`);
           const rescore = await scoreCompanyResearch(ticker, round, scoringModel);
+          costTracker.totalCostUsd += rescore.score.scoringCostUsd ?? 0;
           if (rescore.score.total >= bestScore) {
             newScore = rescore.score;
             newGaps = rescore.gaps;
@@ -671,37 +699,47 @@ async function main() {
           description = `[rollback] ${description}`;
         }
       }
+      // Only commit if we kept the changes (not rolled back)
+      const wasRolledBack = description.startsWith('[rollback]');
+
+      // F8: After rollback, restore newScore so that delta, TSV history, plateau detection,
+      // and prevScore for the next round all reflect the pre-rollback (best) score.
+      if (wasRolledBack) {
+        newScore = { ...newScore, total: bestScore };
+        delta = 0;
+      }
+
       console.log(`Score: ${newScore.total}/100 (${delta >= 0 ? '+' : ''}${delta} from best ${bestScore})`);
 
       // Clean up backup
       if (fs.existsSync(bakPath)) fs.unlinkSync(bakPath);
 
       // Persist gap attempts to gap-tracker (cross-company learning)
-      const newGapKeys = new Set(newGaps.gaps.map(g => `${g.dimension}|${g.item}`));
-      for (const key of prevGapKeys) {
-        const resolved = !newGapKeys.has(key);
-        appendGapAttempt({
-          ticker,
-          round,
-          timestamp: new Date().toISOString(),
-          gapKey: key,
-          scoreBefore: prevScore,
-          scoreAfter: newScore.total,
-          resolved,
-          costUsd: costTracker.totalCostUsd - roundStartCost,
-          remedy: description.slice(0, 200),
-        });
-        if (!resolved) {
-          const attempts = countAttempts(ticker, key);
-          const maxAttempts = getMaxAttemptsForGap(key);
-          if (attempts >= maxAttempts) {
-            console.log(`[round-cap] Retiring gap: ${key} after ${attempts} attempts (max: ${maxAttempts})`);
+      // Skip when rolled back — scores reflect pre-rollback state and would record misleading data
+      if (!wasRolledBack) {
+        const newGapKeys = new Set(newGaps.gaps.map(g => normalizeGapKey(g.dimension, g.item)));
+        for (const key of prevGapKeys) {
+          const resolved = !newGapKeys.has(key);
+          appendGapAttempt({
+            ticker,
+            round,
+            timestamp: new Date().toISOString(),
+            gapKey: key,
+            scoreBefore: prevScore,
+            scoreAfter: newScore.total,
+            resolved,
+            costUsd: costTracker.totalCostUsd - roundStartCost,
+            remedy: description.slice(0, 200),
+          });
+          if (!resolved) {
+            const attempts = countAttempts(ticker, key);
+            const maxAttempts = getMaxAttemptsForGap(key);
+            if (attempts >= maxAttempts) {
+              console.log(`[round-cap] Retiring gap: ${key} after ${attempts} attempts (max: ${maxAttempts})`);
+            }
           }
         }
       }
-
-      // Only commit if we kept the changes (not rolled back)
-      const wasRolledBack = description.startsWith('[rollback]');
       const commitMsg = wasRolledBack
         ? `initial-max r${round}: rollback — score stayed ${bestScore}/100`
         : `initial-max r${round}: ${description.slice(0, 60)} — score ${newScore.total}/100`;
@@ -815,6 +853,7 @@ async function main() {
       console.log(`Polish summary: ${polishDesc}`);
       console.log('Scoring after polish...');
       const { score: afterPolish } = await scoreCompanyResearch(ticker, polishRoundId, scoringModel);
+      costTracker.totalCostUsd += afterPolish.scoringCostUsd ?? 0;
       console.log(`Score after polish: ${afterPolish.total}/100`);
 
       // Rollback if polish degraded the score
@@ -981,6 +1020,7 @@ Write section 8.2 now. Output ONLY the Markdown for that section (including the 
       try {
         console.log(`\nExtended round ${extRound}/${extMaxRounds} (cost: $${costTracker.totalCostUsd.toFixed(2)})`);
         const extScore = await scoreExtendedResearch(ticker, 100 + extRound, scoringModel);
+        costTracker.totalCostUsd += extScore.scoringCostUsd ?? 0;
         console.log(`Extended score: ${extScore.extendedTotal}/45 (geo:${extScore.geopolitical?.score ?? 0} sus:${extScore.sustainability?.score ?? 0} con:${extScore.contrarian?.score ?? 0})`);
 
         if (extScore.extendedTotal >= 35) {
@@ -1037,6 +1077,7 @@ Write section 8.2 now. Output ONLY the Markdown for that section (including the 
 
     // Final extended score
     const finalExtScore = await scoreExtendedResearch(ticker, 999, scoringModel);
+    costTracker.totalCostUsd += finalExtScore.scoringCostUsd ?? 0;
     console.log(`\nFinal extended score: ${finalExtScore.extendedTotal}/45`);
     const commitHash = gitCommit(`initial-max extended-final: score ${finalExtScore.extendedTotal}/45`);
   } else if (!extended) {

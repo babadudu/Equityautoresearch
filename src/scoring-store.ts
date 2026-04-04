@@ -45,6 +45,7 @@ export interface ScoringEvent {
   };
   costUsd: number;
   reportLengthChars: number;
+  scorerVersion?: number;
 }
 
 function ensureDir(): void {
