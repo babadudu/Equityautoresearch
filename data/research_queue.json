@@ -124,10 +124,11 @@
       "signal": null,
       "signal_date": null,
       "last_report_date": null,
-      "status": "pending",
+      "status": "failed",
       "why": "Consumer Staples holding (2.9% of portfolio). no documented thesis.",
       "max_cost": 200,
-      "score": 29
+      "score": 29,
+      "error": "No research output produced"
     },
     {
       "ticker": "CDNS",
