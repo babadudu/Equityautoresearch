@@ -1,7 +1,7 @@
 {
   "last_updated": "2026-03-22",
   "total_items": 36,
-  "pending": 27,
+  "pending": 26,
   "completed": 8,
   "queue": [
     {
@@ -138,10 +138,11 @@
       "signal": null,
       "signal_date": null,
       "last_report_date": null,
-      "status": "pending",
+      "status": "failed",
       "why": "Semiconductor holding (2.3% of portfolio). no documented thesis.",
       "max_cost": 200,
-      "score": 23.2
+      "score": 23.2,
+      "error": "No research output produced"
     },
     {
       "ticker": "WM",
