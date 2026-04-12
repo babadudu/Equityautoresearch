@@ -1,7 +1,7 @@
 {
   "last_updated": "2026-03-22",
   "total_items": 36,
-  "pending": 26,
+  "pending": 25,
   "completed": 8,
   "queue": [
     {
@@ -152,10 +152,11 @@
       "signal": "BUY",
       "signal_date": "2026-03-09",
       "last_report_date": null,
-      "status": "pending",
+      "status": "failed",
       "why": "Industrial holding (1.1% of portfolio). +101% unrealized gain. no documented thesis. BUY signal on 2026-03-09 at $246.05.",
       "max_cost": 200,
-      "score": 15.7
+      "score": 15.7,
+      "error": "No research output produced"
     },
     {
       "ticker": "CF",
