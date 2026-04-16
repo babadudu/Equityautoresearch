@@ -1,7 +1,7 @@
 {
   "last_updated": "2026-03-22",
   "total_items": 36,
-  "pending": 25,
+  "pending": 24,
   "completed": 8,
   "queue": [
     {
@@ -166,10 +166,11 @@
       "signal": "STRONG_BUY",
       "signal_date": "2026-03-09",
       "last_report_date": null,
-      "status": "pending",
+      "status": "failed",
       "why": "STRONG_BUY signal on 2026-03-09 at $115.78.",
       "max_cost": 200,
-      "score": 10
+      "score": 10,
+      "error": "No research output produced"
     },
     {
       "ticker": "GLW",
