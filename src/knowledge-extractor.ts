@@ -14,7 +14,7 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { chat } from './llm.js';
-import { MODELS, NADIRCLAW_MODELS } from './config.js';
+import { MODELS, OLLAMA_MODELS } from './config.js';
 import { dispatchToGemini } from './gemini-dispatch.js';
 // Note: We use findFullSectionRange() locally instead of findSectionRange() from markdown-utils,
 // because the latter stops at sub-headings (###) within a section.
@@ -499,7 +499,7 @@ async function extractKnowledge(
         const response = await chat(
           'You are a precise knowledge extraction system. Return only valid JSON arrays.',
           [{ role: 'user', content: quotePrompt }],
-          { model: NADIRCLAW_MODELS.ECO, backend: 'nadirclaw', maxTokens: 16384 },
+          { model: OLLAMA_MODELS.SMALL, backend: 'ollama', maxTokens: 16384 },
         );
 
         const text = response.content ?? '';

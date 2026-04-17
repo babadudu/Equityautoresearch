@@ -8,7 +8,7 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import Anthropic from '@anthropic-ai/sdk';
-import { estimateCostUsd, MODELS, NADIRCLAW_URL, NADIRCLAW_HEALTH_URL } from './config.js';
+import { estimateCostUsd, MODELS, OLLAMA_URL, OLLAMA_HEALTH_URL } from './config.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -58,16 +58,16 @@ if (USE_CLAUDE_CLI) {
 const client = ANTHROPIC_KEY ? new Anthropic({ apiKey: ANTHROPIC_KEY }) : null;
 const OPENROUTER_URL = 'https://openrouter.ai/api/v1/chat/completions';
 
-// ── Nadirclaw health check (awaited before first chat call) ──
+// ── Ollama health check (awaited before first chat call) ──
 
-let nadirclawAvailable = false;
-const nadirclawReady: Promise<void> = (async () => {
+let ollamaAvailable = false;
+const ollamaReady: Promise<void> = (async () => {
   try {
-    const res = await fetch(NADIRCLAW_HEALTH_URL, { signal: AbortSignal.timeout(10000) });
-    nadirclawAvailable = res.ok;
-    if (nadirclawAvailable) console.log('[llm] Nadirclaw proxy available at localhost:4100');
+    const res = await fetch(OLLAMA_HEALTH_URL, { signal: AbortSignal.timeout(10000) });
+    ollamaAvailable = res.ok;
+    if (ollamaAvailable) console.log('[llm] Ollama available at localhost:11434');
   } catch {
-    console.log('[llm] Nadirclaw proxy not available — will use Claude backend for all calls');
+    console.log('[llm] Ollama not available — will use Claude backend for all calls');
   }
 })();
 
@@ -126,7 +126,7 @@ export async function chat(
   messages: Anthropic.MessageParam[],
   options?: {
     model?: string;
-    backend?: 'nadirclaw' | 'claude' | 'auto';
+    backend?: 'ollama' | 'claude' | 'auto';
     tools?: AnthropicTool[];
     toolChoice?: { type: 'auto' | 'any' | 'none' };
     maxTokens?: number;
@@ -136,18 +136,18 @@ export async function chat(
   const model = options?.model ?? MODELS.CLAUDE;
 
   // Ensure health check has completed before routing
-  await nadirclawReady;
+  await ollamaReady;
 
-  // Route to nadirclaw when explicitly requested and available (no tool support)
-  if (options?.backend === 'nadirclaw' && !options?.tools?.length) {
-    if (nadirclawAvailable) {
+  // Route to Ollama when explicitly requested and available (no tool support)
+  if (options?.backend === 'ollama' && !options?.tools?.length) {
+    if (ollamaAvailable) {
       try {
-        return await chatViaNadirclaw(system, messages, model, options);
+        return await chatViaOllama(system, messages, model, options);
       } catch (err: any) {
-        console.log(`  [llm] Nadirclaw failed (${err.message}), falling back to Claude`);
+        console.log(`  [llm] Ollama failed (${err.message}), falling back to Claude`);
       }
     } else {
-      console.log('  [llm] Nadirclaw not available, falling back to Claude');
+      console.log('  [llm] Ollama not available, falling back to Claude');
     }
   }
 
@@ -609,14 +609,14 @@ export async function runGeminiAgent(
   });
 }
 
-/** Nadirclaw local proxy — OpenAI-compatible format, no auth needed */
-async function chatViaNadirclaw(
+/** Ollama local proxy — OpenAI-compatible format, no auth needed */
+async function chatViaOllama(
   system: string,
   messages: Anthropic.MessageParam[],
   _model: string,
   options?: { model?: string; maxTokens?: number },
 ): Promise<ChatResult> {
-  const nadirModel = options?.model ?? 'premium';
+  const nadirModel = options?.model ?? 'qwen3.5:35b-a3b';
 
   // Convert Anthropic messages to OpenAI format
   const oaiMessages: any[] = [{ role: 'system', content: system }];
@@ -641,7 +641,7 @@ async function chatViaNadirclaw(
   };
 
   const doFetch = async () => {
-    const res = await fetch(NADIRCLAW_URL, {
+    const res = await fetch(OLLAMA_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       signal: AbortSignal.timeout(5 * 60 * 1000), // 5 min timeout for local inference
@@ -649,7 +649,7 @@ async function chatViaNadirclaw(
     });
     if (!res.ok) {
       const errText = await res.text();
-      const err = new Error(`Nadirclaw ${res.status}: ${errText.slice(0, 500)}`);
+      const err = new Error(`Ollama ${res.status}: ${errText.slice(0, 500)}`);
       (err as any).status = res.status;
       throw err;
     }

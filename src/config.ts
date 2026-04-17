@@ -5,13 +5,12 @@ export const MODELS = {
   GEMINI: 'gemini-3.1-pro-preview',     // Gap-fill research (grounded search)
 } as const;
 
-/** Nadirclaw local LLM proxy (LiteLLM → Ollama) */
-export const NADIRCLAW_URL = 'http://localhost:4100/v1/chat/completions';
-export const NADIRCLAW_HEALTH_URL = 'http://localhost:4100/health';
-export const NADIRCLAW_MODELS = {
-  PREMIUM: 'premium',   // qwen3.5:35b-a3b
-  ECO: 'eco',           // qwen3.5:9b
-  AUTO: 'auto',         // smart routing
+/** Ollama local LLM (OpenAI-compatible) */
+export const OLLAMA_URL = 'http://localhost:11434/v1/chat/completions';
+export const OLLAMA_HEALTH_URL = 'http://localhost:11434/api/tags';
+export const OLLAMA_MODELS = {
+  LARGE: 'qwen3.5:35b-a3b',
+  SMALL: 'qwen3.5:9b',
 } as const;
 
 /** Schedule window for automated pipeline runs (0 = midnight, 15 = 3pm) */
@@ -24,7 +23,7 @@ export const CAPACITY_GATE_PCT = 20;
 export const COST_PER_1M: Record<string, { input: number; output: number }> = {
   [MODELS.CLAUDE]: { input: 15, output: 75 },
   [MODELS.GEMINI]: { input: 2, output: 12 },
-  'nadirclaw-local': { input: 0, output: 0 },
+  'ollama-local': { input: 0, output: 0 },
 };
 
 export const DEFAULT_MAX_COST_USD = 200;
