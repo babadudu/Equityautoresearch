@@ -1,7 +1,7 @@
 {
   "last_updated": "2026-03-22",
   "total_items": 36,
-  "pending": 23,
+  "pending": 22,
   "completed": 8,
   "queue": [
     {
@@ -194,10 +194,11 @@
       "signal": null,
       "signal_date": null,
       "last_report_date": null,
-      "status": "pending",
+      "status": "failed",
       "why": "Blue Chip Core holding (1.0% of portfolio). no documented thesis.",
       "max_cost": 200,
-      "score": 9.7
+      "score": 9.7,
+      "error": "No research output produced"
     },
     {
       "ticker": "HD",
