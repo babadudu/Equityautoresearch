@@ -1,7 +1,7 @@
 {
   "last_updated": "2026-03-22",
   "total_items": 36,
-  "pending": 22,
+  "pending": 21,
   "completed": 8,
   "queue": [
     {
@@ -208,10 +208,11 @@
       "signal": null,
       "signal_date": null,
       "last_report_date": null,
-      "status": "pending",
+      "status": "failed",
       "why": "Consumer Disc holding (0.9% of portfolio). no documented thesis.",
       "max_cost": 200,
-      "score": 9.4
+      "score": 9.4,
+      "error": "No research output produced"
     },
     {
       "ticker": "DAL",

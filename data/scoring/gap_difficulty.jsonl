@@ -191,3 +191,25 @@
 {"ticker":"V","round":2,"timestamp":"2026-04-25T09:21:41.499Z","gapKey":"論點|DCF假設與財務預測內部一致性","scoreBefore":0,"scoreAfter":0,"resolved":false,"costUsd":0.8056809999999999,"remedy":"round 2 gap-fill"}
 {"ticker":"V","round":2,"timestamp":"2026-04-25T09:21:41.501Z","gapKey":"論點|投資結論可行動性（價格目標+催化劑+時間框架）","scoreBefore":0,"scoreAfter":0,"resolved":false,"costUsd":0.8056809999999999,"remedy":"round 2 gap-fill"}
 {"ticker":"V","round":2,"timestamp":"2026-04-25T09:21:41.503Z","gapKey":"生意|DCF模型+三情境+IRR拆分+敏感度矩陣","scoreBefore":0,"scoreAfter":0,"resolved":false,"costUsd":0.8056809999999999,"remedy":"round 2 gap-fill"}
+{"ticker":"HD","round":1,"timestamp":"2026-04-27T09:11:33.521Z","gapKey":"環境|無研究資料","scoreBefore":0,"scoreAfter":0,"resolved":false,"costUsd":1.1726535,"remedy":"round 1 gap-fill"}
+{"ticker":"HD","round":1,"timestamp":"2026-04-27T09:11:33.526Z","gapKey":"生意|財務歷史完整度","scoreBefore":0,"scoreAfter":0,"resolved":false,"costUsd":1.1726535,"remedy":"round 1 gap-fill"}
+{"ticker":"HD","round":1,"timestamp":"2026-04-27T09:11:33.529Z","gapKey":"生意|商業模式深度（CEO引言涵蓋≥3時期+策略演進）","scoreBefore":0,"scoreAfter":0,"resolved":false,"costUsd":1.1726535,"remedy":"round 1 gap-fill"}
+{"ticker":"HD","round":1,"timestamp":"2026-04-27T09:11:33.531Z","gapKey":"生意|五力分析+護城河量化","scoreBefore":0,"scoreAfter":0,"resolved":false,"costUsd":1.1726535,"remedy":"round 1 gap-fill"}
+{"ticker":"HD","round":1,"timestamp":"2026-04-27T09:11:33.533Z","gapKey":"人|CEO格局觀與商業哲學","scoreBefore":0,"scoreAfter":0,"resolved":false,"costUsd":1.1726535,"remedy":"round 1 gap-fill"}
+{"ticker":"HD","round":1,"timestamp":"2026-04-27T09:11:33.534Z","gapKey":"人|繼任風險CEO年齡≥2位次世代領導人板凳深度評級","scoreBefore":0,"scoreAfter":0,"resolved":false,"costUsd":1.1726535,"remedy":"round 1 gap-fill"}
+{"ticker":"HD","round":1,"timestamp":"2026-04-27T09:11:33.535Z","gapKey":"組織|ROIC趨勢/Operating Leverage","scoreBefore":0,"scoreAfter":0,"resolved":false,"costUsd":1.1726535,"remedy":"round 1 gap-fill"}
+{"ticker":"HD","round":1,"timestamp":"2026-04-27T09:11:33.536Z","gapKey":"論點|非共識觀點/Variant Perception","scoreBefore":0,"scoreAfter":0,"resolved":false,"costUsd":1.1726535,"remedy":"round 1 gap-fill"}
+{"ticker":"HD","round":1,"timestamp":"2026-04-27T09:11:33.537Z","gapKey":"論點|DCF假設與財務預測內部一致性","scoreBefore":0,"scoreAfter":0,"resolved":false,"costUsd":1.1726535,"remedy":"round 1 gap-fill"}
+{"ticker":"HD","round":1,"timestamp":"2026-04-27T09:11:33.538Z","gapKey":"論點|投資結論可行動性（價格目標+催化劑+時間框架）","scoreBefore":0,"scoreAfter":0,"resolved":false,"costUsd":1.1726535,"remedy":"round 1 gap-fill"}
+{"ticker":"HD","round":1,"timestamp":"2026-04-27T09:11:33.539Z","gapKey":"生意|DCF模型+三情境+IRR拆分+敏感度矩陣","scoreBefore":0,"scoreAfter":0,"resolved":false,"costUsd":1.1726535,"remedy":"round 1 gap-fill"}
+{"ticker":"HD","round":2,"timestamp":"2026-04-27T09:13:42.950Z","gapKey":"環境|無研究資料","scoreBefore":0,"scoreAfter":0,"resolved":false,"costUsd":0.9802249999999999,"remedy":"round 2 gap-fill"}
+{"ticker":"HD","round":2,"timestamp":"2026-04-27T09:13:42.951Z","gapKey":"生意|財務歷史完整度","scoreBefore":0,"scoreAfter":0,"resolved":false,"costUsd":0.9802249999999999,"remedy":"round 2 gap-fill"}
+{"ticker":"HD","round":2,"timestamp":"2026-04-27T09:13:42.953Z","gapKey":"生意|商業模式深度（CEO引言涵蓋≥3時期+策略演進）","scoreBefore":0,"scoreAfter":0,"resolved":false,"costUsd":0.9802249999999999,"remedy":"round 2 gap-fill"}
+{"ticker":"HD","round":2,"timestamp":"2026-04-27T09:13:42.955Z","gapKey":"生意|五力分析+護城河量化","scoreBefore":0,"scoreAfter":0,"resolved":false,"costUsd":0.9802249999999999,"remedy":"round 2 gap-fill"}
+{"ticker":"HD","round":2,"timestamp":"2026-04-27T09:13:42.956Z","gapKey":"人|CEO格局觀與商業哲學","scoreBefore":0,"scoreAfter":0,"resolved":false,"costUsd":0.9802249999999999,"remedy":"round 2 gap-fill"}
+{"ticker":"HD","round":2,"timestamp":"2026-04-27T09:13:42.958Z","gapKey":"人|繼任風險CEO年齡≥2位次世代領導人板凳深度評級","scoreBefore":0,"scoreAfter":0,"resolved":false,"costUsd":0.9802249999999999,"remedy":"round 2 gap-fill"}
+{"ticker":"HD","round":2,"timestamp":"2026-04-27T09:13:42.960Z","gapKey":"組織|ROIC趨勢/Operating Leverage","scoreBefore":0,"scoreAfter":0,"resolved":false,"costUsd":0.9802249999999999,"remedy":"round 2 gap-fill"}
+{"ticker":"HD","round":2,"timestamp":"2026-04-27T09:13:42.961Z","gapKey":"論點|非共識觀點/Variant Perception","scoreBefore":0,"scoreAfter":0,"resolved":false,"costUsd":0.9802249999999999,"remedy":"round 2 gap-fill"}
+{"ticker":"HD","round":2,"timestamp":"2026-04-27T09:13:42.962Z","gapKey":"論點|DCF假設與財務預測內部一致性","scoreBefore":0,"scoreAfter":0,"resolved":false,"costUsd":0.9802249999999999,"remedy":"round 2 gap-fill"}
+{"ticker":"HD","round":2,"timestamp":"2026-04-27T09:13:42.964Z","gapKey":"論點|投資結論可行動性（價格目標+催化劑+時間框架）","scoreBefore":0,"scoreAfter":0,"resolved":false,"costUsd":0.9802249999999999,"remedy":"round 2 gap-fill"}
+{"ticker":"HD","round":2,"timestamp":"2026-04-27T09:13:42.965Z","gapKey":"生意|DCF模型+三情境+IRR拆分+敏感度矩陣","scoreBefore":0,"scoreAfter":0,"resolved":false,"costUsd":0.9802249999999999,"remedy":"round 2 gap-fill"}
