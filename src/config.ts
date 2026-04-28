@@ -1,3 +1,7 @@
+import fs from 'fs';
+import os from 'os';
+import path from 'path';
+
 /** Model constants and cost tracking for Anthropic SDK */
 
 export const MODELS = {
@@ -5,13 +9,24 @@ export const MODELS = {
   GEMINI: 'gemini-3.1-pro-preview',     // Gap-fill research (grounded search)
 } as const;
 
-/** Ollama local LLM (OpenAI-compatible) */
-export const OLLAMA_URL = 'http://localhost:11434/v1/chat/completions';
-export const OLLAMA_HEALTH_URL = 'http://localhost:11434/api/tags';
-export const OLLAMA_MODELS = {
-  LARGE: 'qwen3.5:35b-a3b',
-  SMALL: 'qwen3.5:9b',
-} as const;
+/** Local MLX server — active model read from supervisor-config.json at startup */
+function _loadSupervisorConfig(): { baseUrl: string; model: string } {
+  const confPath = process.env.SUPERVISOR_CONFIG
+    ?? path.join(os.homedir(), 'dev/projects/automation/supervisor-config.json');
+  try {
+    const cfg = JSON.parse(fs.readFileSync(confPath, 'utf-8'));
+    const profile = cfg.profiles[cfg.active_profile];
+    return { baseUrl: profile.base_url as string, model: profile.model as string };
+  } catch {
+    return { baseUrl: 'http://127.0.0.1:8080/v1', model: 'majentik/Qwen3.6-35B-A3B-RotorQuant-MLX-4bit' };
+  }
+}
+
+const _sup = _loadSupervisorConfig();
+export const LOCAL_BASE_URL = _sup.baseUrl;
+export const LOCAL_MODEL = _sup.model;
+export const LOCAL_COMPLETIONS_URL = `${LOCAL_BASE_URL}/chat/completions`;
+export const LOCAL_HEALTH_URL = `${LOCAL_BASE_URL}/models`;
 
 /** Schedule window for automated pipeline runs (0 = midnight, 15 = 3pm) */
 export const SCHEDULE_WINDOW = { startHour: 0, endHour: 15 };
@@ -23,7 +38,7 @@ export const CAPACITY_GATE_PCT = 20;
 export const COST_PER_1M: Record<string, { input: number; output: number }> = {
   [MODELS.CLAUDE]: { input: 15, output: 75 },
   [MODELS.GEMINI]: { input: 2, output: 12 },
-  'ollama-local': { input: 0, output: 0 },
+  'mlx-local': { input: 0, output: 0 },
 };
 
 export const DEFAULT_MAX_COST_USD = 200;

@@ -14,7 +14,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import { chat } from './llm.js';
 import {
-  MODELS, OLLAMA_MODELS, SCORER_NUM_CALLS, STRUCTURAL_MAX, QUALITY_MAX,
+  MODELS, SCORER_NUM_CALLS, STRUCTURAL_MAX, QUALITY_MAX,
   PASS_THRESHOLD, STRUCTURAL_PASS_MIN, QUALITY_PASS_MIN,
   SCORER_THINKING_BUDGET, SCORER_MAX_RETRIES,
 } from './config.js';
@@ -799,7 +799,7 @@ ${candidateContent.slice(0, 5000)}
     const response = await chat(
       '你是投資研究品質校準員。比較候選報告與參考報告的品質差異。',
       [{ role: 'user', content: prompt }],
-      { model, maxTokens: 1024, thinkingBudget: SCORER_THINKING_BUDGET, backend: 'ollama', ...(OLLAMA_MODELS.SMALL ? { model: OLLAMA_MODELS.SMALL } : {}) },
+      { maxTokens: 1024, thinkingBudget: SCORER_THINKING_BUDGET, backend: 'mlx' },
     );
 
     if (!response.content) return { adjustment: 0, costUsd: response.usage.costUsd };

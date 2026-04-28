@@ -8,7 +8,7 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import Anthropic from '@anthropic-ai/sdk';
-import { estimateCostUsd, MODELS, OLLAMA_URL, OLLAMA_HEALTH_URL } from './config.js';
+import { estimateCostUsd, MODELS, LOCAL_COMPLETIONS_URL, LOCAL_HEALTH_URL, LOCAL_MODEL } from './config.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -58,16 +58,16 @@ if (USE_CLAUDE_CLI) {
 const client = ANTHROPIC_KEY ? new Anthropic({ apiKey: ANTHROPIC_KEY }) : null;
 const OPENROUTER_URL = 'https://openrouter.ai/api/v1/chat/completions';
 
-// ── Ollama health check (awaited before first chat call) ──
+// ── MLX health check (awaited before first chat call) ──
 
-let ollamaAvailable = false;
-const ollamaReady: Promise<void> = (async () => {
+let mlxAvailable = false;
+const mlxReady: Promise<void> = (async () => {
   try {
-    const res = await fetch(OLLAMA_HEALTH_URL, { signal: AbortSignal.timeout(10000) });
-    ollamaAvailable = res.ok;
-    if (ollamaAvailable) console.log('[llm] Ollama available at localhost:11434');
+    const res = await fetch(LOCAL_HEALTH_URL, { signal: AbortSignal.timeout(10000) });
+    mlxAvailable = res.ok;
+    if (mlxAvailable) console.log(`[llm] MLX available at ${LOCAL_HEALTH_URL}`);
   } catch {
-    console.log('[llm] Ollama not available — will use Claude backend for all calls');
+    console.log('[llm] MLX not available — will use Claude backend for all calls');
   }
 })();
 
@@ -126,7 +126,7 @@ export async function chat(
   messages: Anthropic.MessageParam[],
   options?: {
     model?: string;
-    backend?: 'ollama' | 'claude' | 'auto';
+    backend?: 'mlx' | 'claude' | 'auto';
     tools?: AnthropicTool[];
     toolChoice?: { type: 'auto' | 'any' | 'none' };
     maxTokens?: number;
@@ -136,18 +136,18 @@ export async function chat(
   const model = options?.model ?? MODELS.CLAUDE;
 
   // Ensure health check has completed before routing
-  await ollamaReady;
+  await mlxReady;
 
-  // Route to Ollama when explicitly requested and available (no tool support)
-  if (options?.backend === 'ollama' && !options?.tools?.length) {
-    if (ollamaAvailable) {
+  // Route to MLX when explicitly requested and available (no tool support)
+  if (options?.backend === 'mlx' && !options?.tools?.length) {
+    if (mlxAvailable) {
       try {
-        return await chatViaOllama(system, messages, model, options);
+        return await chatViaMlx(system, messages, model, options);
       } catch (err: any) {
-        console.log(`  [llm] Ollama failed (${err.message}), falling back to Claude`);
+        console.log(`  [llm] MLX failed (${err.message}), falling back to Claude`);
       }
     } else {
-      console.log('  [llm] Ollama not available, falling back to Claude');
+      console.log('  [llm] MLX not available, falling back to Claude');
     }
   }
 
@@ -609,14 +609,14 @@ export async function runGeminiAgent(
   });
 }
 
-/** Ollama local proxy — OpenAI-compatible format, no auth needed */
-async function chatViaOllama(
+/** MLX local proxy — OpenAI-compatible format, supervisor-managed model */
+async function chatViaMlx(
   system: string,
   messages: Anthropic.MessageParam[],
   _model: string,
   options?: { model?: string; maxTokens?: number },
 ): Promise<ChatResult> {
-  const nadirModel = options?.model ?? 'qwen3.5:35b-a3b';
+  const mlxModel = options?.model ?? LOCAL_MODEL;
 
   // Convert Anthropic messages to OpenAI format
   const oaiMessages: any[] = [{ role: 'system', content: system }];
@@ -633,15 +633,16 @@ async function chatViaOllama(
   const wantsJson = /json/i.test(system);
 
   const body: Record<string, unknown> = {
-    model: nadirModel,
+    model: mlxModel,
     messages: oaiMessages,
     max_tokens: options?.maxTokens ?? 16384,
     stream: false,
+    chat_template_kwargs: { enable_thinking: false },
     ...(wantsJson ? { response_format: { type: 'json_object' } } : {}),
   };
 
   const doFetch = async () => {
-    const res = await fetch(OLLAMA_URL, {
+    const res = await fetch(LOCAL_COMPLETIONS_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       signal: AbortSignal.timeout(5 * 60 * 1000), // 5 min timeout for local inference
@@ -649,7 +650,7 @@ async function chatViaOllama(
     });
     if (!res.ok) {
       const errText = await res.text();
-      const err = new Error(`Ollama ${res.status}: ${errText.slice(0, 500)}`);
+      const err = new Error(`MLX ${res.status}: ${errText.slice(0, 500)}`);
       (err as any).status = res.status;
       throw err;
     }
