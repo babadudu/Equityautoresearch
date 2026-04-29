@@ -537,6 +537,78 @@ const DIMENSION_PROMPTS: Record<Dimension, string> = {
 {"非共識觀點": 數字, "內部一致性": 數字, "可行動性": 數字, "total": 數字, "evidence": ["..."], "gaps": ["..."]}`,
 };
 
+// Dimensions confirmed calibrated for MLX (median gap ≤ 1 vs Claude in 3×median bake-off).
+// 環境: Δ=0, 人: Δ=-1, 論點: Δ=+1 with structured CoT prompt.
+// 生意 and 組織 not yet tested — remain on Claude.
+const MLX_ROUTED_DIMENSIONS = new Set<Dimension>(['環境', '人', '論點']);
+
+// Prompt overrides for MLX — only dimensions where the standard prompt isn't calibrated.
+// 論點 needs checklist-gate + few-shot + structured CoT to prevent actionability inflation.
+const MLX_DIMENSION_PROMPT_OVERRIDES: Partial<Record<Dimension, string>> = {
+  論點: `你是投資研究品質評審。請評估以下研究報告的**投資論點品質**。
+
+## 評分標準（滿分 9 分）
+
+### 非共識觀點 / Variant Perception (0-3)
+0 = 無明確投資論點
+1 = 有buy/sell建議但無差異化觀點（僅重述基本面）
+2 = 識別出市場可能錯誤，但論據不充分
+3 = 清晰variant perception：市場共識是X，我們認為Y因為Z（需有數據+邏輯鏈）
+
+### 內部一致性 (0-3)
+0 = 明顯矛盾
+1 = 部分一致，有1-2個矛盾
+2 = 大致一致，偶有小矛盾
+3 = 完全一致：DCF假設↔財務預測↔TAM分析↔競爭地位形成完整邏輯鏈
+
+### 可行動性 (0-3) — 逐項核查後再評分
+評分前請先逐一確認以下5項是否**明確出現**於報告中（不得推斷或從估值隱含）：
+□ A. 明確的 BUY / SELL / HOLD 文字建議（不接受「隱含買入信號」或估值低估等替代說法）
+□ B. 具體價格目標（數字）
+□ C. 明確時間框架（如「12個月」「2026年底前」）
+□ D. ≥3個具體催化劑
+□ E. 明確的風險觸發條件
+
+評分規則：
+- 3分：A+B+C+D+E 全部明確出現
+- 2分：缺少A（無明確buy/sell/hold），但B+C+D+E均有；或有A但缺D或E
+- 1分：僅有buy/sell但無價格目標；或多項缺失
+- 0分：無結論
+
+**關鍵**：若找不到「BUY」「SELL」「HOLD」「買入」「賣出」「持有」等明確評級字樣，可行動性最高給2分。
+
+## 評分程序（必須依序完成）
+
+### 步驟 1：內部一致性枚舉（評分前完成）
+請先列出以下項目，再評分：
+- DCF估值區間 vs P/E/EV-EBITDA多元估值 → 兩者是否收斂或矛盾？
+- 報告的IRR/回報率 vs 尾部風險/失效情境 → 概率加權是否一致？
+- 牛市情境 vs 熊市情境 → 是否共用同一分析師立場，或僅中性並列？
+
+### 步驟 2：非共識觀點枚舉（評分前完成）
+請先列出以下項目，再評分：
+- 報告明確陳述的市場共識是什麼？
+- 分析師主張與共識的差異點是什麼？
+- 該差異主張是否有數據支撐，還是僅為斷言？
+
+### 步驟 3：根據枚舉結果評分，每個維度必須引用步驟1/2中的具體項目
+
+## 輸出格式（純 JSON，需含enumeration和checklist）
+{
+  "enumeration": {
+    "consistency": {"dcf_vs_multiples": "...", "irr_vs_tail_risk": "...", "bull_bear_stance": "..."},
+    "variant_perception": {"stated_consensus": "...", "analyst_diff": "...", "data_backed": "yes/no + reason"}
+  },
+  "checklist": {"A_explicit_rating": true/false, "B_price_target": true/false, "C_timeframe": true/false, "D_catalysts_3plus": true/false, "E_risk_triggers": true/false},
+  "非共識觀點": 數字,
+  "內部一致性": 數字,
+  "可行動性": 數字,
+  "total": 數字,
+  "evidence": ["..."],
+  "gaps": ["..."]
+}`,
+};
+
 // Quality score mapping: LLM raw → quality points (normalized to 60 total)
 // Raw totals: 環境 12 + 生意 18 + 組織 12 + 人 12 + 論點 9 = 63 raw max
 const RAW_MAX = 63;
@@ -576,7 +648,10 @@ async function scoreDimension(
     return { subCriteria: {}, total: 0, gaps: [`${dimension}: 內容不足，無法評分`], costUsd: 0 };
   }
 
-  const systemPrompt = DIMENSION_PROMPTS[dimension];
+  const useMlx = MLX_ROUTED_DIMENSIONS.has(dimension);
+  const systemPrompt = useMlx
+    ? (MLX_DIMENSION_PROMPT_OVERRIDES[dimension] ?? DIMENSION_PROMPTS[dimension])
+    : DIMENSION_PROMPTS[dimension];
   const userMessage = `請評分以下 ${ticker} 研究報告的「${dimension}」維度：
 
 ${sectionContent}`;
@@ -585,7 +660,9 @@ ${sectionContent}`;
     const response = await chat(
       systemPrompt,
       [{ role: 'user', content: userMessage }],
-      { model, maxTokens: 4096, thinkingBudget: SCORER_THINKING_BUDGET },
+      useMlx
+        ? { maxTokens: 3072, backend: 'mlx' as const }
+        : { model, maxTokens: 4096, thinkingBudget: SCORER_THINKING_BUDGET },
     );
 
     if (!response.content) return null;
@@ -603,7 +680,10 @@ ${sectionContent}`;
     }
     if (end === -1) return null;
 
-    const parsed = JSON.parse(jsonStr.slice(start, end + 1));
+    // Sanitize CJK fullwidth punctuation that MLX models sometimes emit inside JSON values.
+    const CJK_PUNCT: Record<string, string> = { '。': '.', '，': ',', '：': ':', '；': ';', '！': '!', '？': '?' };
+    const candidate = jsonStr.slice(start, end + 1).replace(/[。，：；！？]/g, c => CJK_PUNCT[c] ?? c);
+    const parsed = JSON.parse(candidate);
     const { total, evidence, gaps, ...subCriteria } = parsed;
 
     // Normalize keys to canonical names (LLM may return abbreviations)
