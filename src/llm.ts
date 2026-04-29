@@ -138,8 +138,8 @@ export async function chat(
   // Ensure health check has completed before routing
   await mlxReady;
 
-  // Route to MLX when explicitly requested and available (no tool support)
-  if (options?.backend === 'mlx' && !options?.tools?.length) {
+  // Route to MLX when explicitly requested and available (tool-calling supported)
+  if (options?.backend === 'mlx') {
     if (mlxAvailable) {
       try {
         return await chatViaMlx(system, messages, model, options);
@@ -614,7 +614,7 @@ async function chatViaMlx(
   system: string,
   messages: Anthropic.MessageParam[],
   _model: string,
-  options?: { model?: string; maxTokens?: number },
+  options?: { model?: string; maxTokens?: number; tools?: AnthropicTool[]; toolChoice?: { type: 'auto' | 'any' | 'none' } },
 ): Promise<ChatResult> {
   const mlxModel = options?.model ?? LOCAL_MODEL;
 
@@ -629,8 +629,14 @@ async function chatViaMlx(
     }
   }
 
-  // Request JSON output when system prompt mentions JSON
-  const wantsJson = /json/i.test(system);
+  // Convert Anthropic tools → OpenAI format
+  const oaiTools = (options?.tools ?? []).map(t => ({
+    type: 'function',
+    function: { name: t.name, description: t.description, parameters: t.input_schema },
+  }));
+
+  // Request JSON output when system prompt mentions JSON (only when no tools — mutually exclusive)
+  const wantsJson = oaiTools.length === 0 && /json/i.test(system);
 
   const body: Record<string, unknown> = {
     model: mlxModel,
@@ -639,6 +645,7 @@ async function chatViaMlx(
     stream: false,
     chat_template_kwargs: { enable_thinking: false },
     ...(wantsJson ? { response_format: { type: 'json_object' } } : {}),
+    ...(oaiTools.length ? { tools: oaiTools, tool_choice: options?.toolChoice?.type ?? 'auto' } : {}),
   };
 
   const doFetch = async () => {
@@ -660,9 +667,19 @@ async function chatViaMlx(
   const data = await retryWithBackoff(doFetch);
   const choice = data.choices?.[0];
 
+  // Parse tool_calls (MLX may return empty id — use synthetic fallback)
+  const oaiToolCalls: any[] = choice?.message?.tool_calls ?? [];
+  const toolUses: ToolUse[] = oaiToolCalls.map((tc: any, i: number) => ({
+    id: tc.id || `call_${i}`,
+    name: tc.function.name,
+    input: typeof tc.function.arguments === 'string'
+      ? JSON.parse(tc.function.arguments)
+      : tc.function.arguments,
+  }));
+
   return {
     content: choice?.message?.content ?? null,
-    toolUses: [],
+    toolUses,
     usage: {
       inputTokens: data.usage?.prompt_tokens ?? 0,
       outputTokens: data.usage?.completion_tokens ?? 0,
