@@ -537,10 +537,10 @@ const DIMENSION_PROMPTS: Record<Dimension, string> = {
 {"非共識觀點": 數字, "內部一致性": 數字, "可行動性": 數字, "total": 數字, "evidence": ["..."], "gaps": ["..."]}`,
 };
 
-// Dimensions confirmed calibrated for MLX (median gap ≤ 1 vs Claude in 3×median bake-off).
-// 環境: Δ=0, 人: Δ=-1, 論點: Δ=+1 with structured CoT prompt.
-// 生意 and 組織 not yet tested — remain on Claude.
-const MLX_ROUTED_DIMENSIONS = new Set<Dimension>(['環境', '人', '論點']);
+// All 5 dimensions confirmed calibrated for MLX (median gap ≤ 1 vs Claude in 3×median bake-off):
+// 環境: Δ=0, 生意: Δ=0, 組織: Δ=-1, 人: Δ=-1, 論點: Δ=+1 (with structured CoT prompt).
+// scoreDimension() routes ALL dimensions to MLX; only 論點 needs a different prompt.
+const MLX_ROUTED_DIMENSIONS = new Set<Dimension>(['環境', '生意', '組織', '人', '論點']);
 
 // Prompt overrides for MLX — only dimensions where the standard prompt isn't calibrated.
 // 論點 needs checklist-gate + few-shot + structured CoT to prevent actionability inflation.
