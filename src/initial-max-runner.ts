@@ -41,6 +41,7 @@ import { appendGapAttempt, countAttempts, getMaxAttemptsForGap, loadGapAttempts,
 import { findSimilarSearch, appendSearchEntry } from './search-log.js';
 import { getScoringReadback } from './scoring-store.js';
 import { appendTrace } from './run-trace.js';
+import { syncIntelligencePaths } from './intelligence-sync.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const PROJECT_ROOT = path.resolve(__dirname, '..');
@@ -1110,6 +1111,12 @@ Write section 8.2 now. Output ONLY the Markdown for that section (including the 
   console.log(`Status: ${finalScore >= PASS_THRESHOLD ? '✓ PASSED' : '✗ NOT YET (more rounds needed)'}`);
   console.log(`Results: ${tsvPath}`);
   cleanupTickerScoreAndGapsFiles(ticker);
+  if (!scoreOnly) {
+    const tickerDir = path.join(PROJECT_ROOT, 'data', 'companies', ticker);
+    if (fs.existsSync(tickerDir)) {
+      syncIntelligencePaths([tickerDir]);
+    }
+  }
 }
 
 main().catch((err) => {

@@ -19,6 +19,7 @@ import { dispatchToGemini } from './gemini-dispatch.js';
 // Note: We use findFullSectionRange() locally instead of findSectionRange() from markdown-utils,
 // because the latter stops at sub-headings (###) within a section.
 import { rebuildIndex } from './knowledge-index.js';
+import { syncIntelligencePaths } from './intelligence-sync.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const PROJECT_ROOT = path.resolve(__dirname, '..');
@@ -233,7 +234,13 @@ Return ONLY the JSON array. No other text.`;
 }
 
 /** Write a single atom to disk. */
-function writeAtom(atom: AtomOutput, ticker: string, sourceReport: string, sourceSections: string[]): string {
+function writeAtom(
+  atom: AtomOutput,
+  ticker: string,
+  sourceReport: string,
+  sourceSections: string[],
+  changedPaths?: Set<string>,
+): string {
   const dir = path.join(ATOMS_DIR, atom.archetype);
   if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
 
@@ -278,17 +285,24 @@ function writeAtom(atom: AtomOutput, ticker: string, sourceReport: string, sourc
       // Write as a conflict variant instead
       const conflictPath = filePath.replace('.md', `_conflict_${today.replace(/-/g, '')}.md`);
       fs.writeFileSync(conflictPath, frontmatter + atom.body);
+      changedPaths?.add(conflictPath);
       return conflictPath;
     }
   }
 
   fs.writeFileSync(filePath, frontmatter + atom.body);
+  changedPaths?.add(filePath);
   return filePath;
 }
 
 /** Multi-call extraction: one LLM call per section group (original 8-call pipeline). */
 async function extractMultiCall(
-  lines: string[], ticker: string, taxonomy: string, dryRun: boolean, sourceReport: string,
+  lines: string[],
+  ticker: string,
+  taxonomy: string,
+  dryRun: boolean,
+  sourceReport: string,
+  changedPaths: Set<string>,
 ): Promise<number> {
   let atomCount = 0;
   for (const mapping of SECTION_ARCHETYPE_MAP) {
@@ -334,7 +348,7 @@ async function extractMultiCall(
           console.log(`    [skip] Invalid atom (missing id or body)`);
           continue;
         }
-        const filePath = writeAtom(atom, ticker, sourceReport, mapping.sections);
+        const filePath = writeAtom(atom, ticker, sourceReport, mapping.sections, changedPaths);
         console.log(`    [wrote] ${atom.id} → ${path.relative(PROJECT_ROOT, filePath)}`);
         atomCount++;
       }
@@ -347,7 +361,12 @@ async function extractMultiCall(
 
 /** Single-call extraction: full report in one Gemini call (with Claude fallback). */
 function extractSingleCall(
-  ticker: string, reportPath: string, taxonomy: string, dryRun: boolean, sourceReport: string,
+  ticker: string,
+  reportPath: string,
+  taxonomy: string,
+  dryRun: boolean,
+  sourceReport: string,
+  changedPaths: Set<string>,
 ): { atomCount: number; usedFallback: boolean; model: string } {
   if (dryRun) {
     console.log(`  [dry-run] Would extract all atoms in single Gemini call from ${reportPath}`);
@@ -408,7 +427,7 @@ function extractSingleCall(
       continue;
     }
     const sourceSections = Array.isArray(raw.source_sections) ? raw.source_sections : ['all'];
-    const filePath = writeAtom(atom, ticker, sourceReport, sourceSections);
+    const filePath = writeAtom(atom, ticker, sourceReport, sourceSections, changedPaths);
     console.log(`    [wrote] ${atom.id} → ${path.relative(PROJECT_ROOT, filePath)}`);
     atomCount++;
   }
@@ -430,6 +449,7 @@ async function extractKnowledge(
   const lines = reportContent.split('\n');
   const taxonomy = fs.readFileSync(TAXONOMY_PATH, 'utf-8');
   const sourceReport = `data/companies/${ticker}/${ticker}_Initial_MAX.md`;
+  const changedPaths = new Set<string>();
 
   let totalAtoms = 0;
 
@@ -437,11 +457,11 @@ async function extractKnowledge(
     console.log('  [quotes-only] Skipping section extraction');
   } else if (backend === 'gemini') {
     console.log(`\n  [extract] Single-call extraction (${(fs.statSync(reportPath).size / 1024).toFixed(0)} KB report)`);
-    const result = extractSingleCall(ticker, reportPath, taxonomy, dryRun, sourceReport);
+    const result = extractSingleCall(ticker, reportPath, taxonomy, dryRun, sourceReport, changedPaths);
     totalAtoms = result.atomCount;
     if (!dryRun) console.log(`  [model] ${result.model}${result.usedFallback ? ' (fallback)' : ''}`);
   } else {
-    totalAtoms = await extractMultiCall(lines, ticker, taxonomy, dryRun, sourceReport);
+    totalAtoms = await extractMultiCall(lines, ticker, taxonomy, dryRun, sourceReport, changedPaths);
   }
 
   // Special-case: extract quotes per person (chunked to avoid timeout)
@@ -452,6 +472,7 @@ async function extractKnowledge(
   const staleQuotesPath = path.join(ATOMS_DIR, 'quotes', `${ticker.toLowerCase()}-leadership-quotes.md`);
   if (fs.existsSync(staleQuotesPath)) {
     fs.unlinkSync(staleQuotesPath);
+    changedPaths.add(staleQuotesPath);
     console.log(`    [cleanup] Removed ${ticker.toLowerCase()}-leadership-quotes.md (replaced by per-person atoms)`);
   }
 
@@ -513,7 +534,7 @@ async function extractKnowledge(
             if (chunks.length > 1 && !atom.id.includes(`-part-${ci + 1}`)) {
               atom.id = `${atom.id}-part-${ci + 1}`;
             }
-            const filePath = writeAtom(atom, ticker, sourceReport, ['all']);
+            const filePath = writeAtom(atom, ticker, sourceReport, ['all'], changedPaths);
             console.log(`    [wrote] ${atom.id} → ${path.relative(PROJECT_ROOT, filePath)}`);
             totalAtoms++;
           }
@@ -525,10 +546,11 @@ async function extractKnowledge(
   }
 
   // Rebuild index
-  if (!dryRun && totalAtoms > 0) {
+  if (!dryRun && changedPaths.size > 0) {
     console.log('\n  Rebuilding index...');
     const index = rebuildIndex();
     console.log(`  Index: ${index.atom_count} atoms, ${Object.keys(index.by_archetype).length} archetypes`);
+    syncIntelligencePaths([...changedPaths]);
   }
 
   console.log(`\n  Extraction complete: ${totalAtoms} atoms created`);
