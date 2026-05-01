@@ -381,9 +381,9 @@ function checkInternalConsistency(ticker: string, mainContent: string): string[]
 // ── Dimension-specific anchored rubric prompts (Phase 1.4) ──
 
 const DIMENSION_PROMPTS: Record<Dimension, string> = {
-  環境: `你是投資研究品質評審。請評估以下**環境**（產業與市場）分析的品質。
+  環境: `你是投資研究品質評審，同時扮演三位專家角色。請評估以下**環境**（產業與市場）分析的品質。
 
-## 評分標準（滿分 12 分，對應環境維度 LLM 部分）
+## 評分標準（滿分 12 分）
 
 ### TAM 與產業趨勢 (0-3)
 0 = 完全未提及
@@ -395,7 +395,7 @@ const DIMENSION_PROMPTS: Record<Dimension, string> = {
 0 = 完全未提及
 1 = 提及「競爭激烈」等泛泛描述
 2 = 有市佔率數據+主要玩家（例："Top 3 players hold 70%"）
-3 = 集中度分析+進入障礙+歷史演變（例：HHI 趨勢、護城河量化）
+3 = 集中度分析+進入障礙+歷史演變（例：HHI趨勢、護城河量化）
 
 ### 監管/政策環境 (0-3)
 0 = 完全未提及
@@ -409,16 +409,41 @@ const DIMENSION_PROMPTS: Record<Dimension, string> = {
 2 = 趨勢+數據支撐
 3 = 採用曲線+需求拆分+技術演進路線圖
 
-## 評分方法
-1. 列出每個子標準的**具體證據**（直接引用報告原文）
-2. 引用**出處**（報告中的 URL 或來源）
-3. 對照上述錨點，判斷最接近的等級
-4. 給出分數
+## 專家審議（評分前必須完成）
+
+**股票分析師視角（near-term catalysts, TAM momentum）：**
+- 報告識別的TAM動能是否有12-24個月可見的催化劑支撐（客戶擴產決策、法規時程、技術節點）？
+- TAM是否有加速跡象（AI需求拉動、新應用滲透）或減速風險（客戶庫存調整、替代技術）？
+- 監管時間軸是否具體到影響未來2年EPS的程度？
+
+**價值投資人視角（market structure, moat durability）：**
+- 市場結構是趨於整合（護城河加深）還是分裂（護城河侵蝕）？報告是否有數據支撐此判斷？
+- 競爭優勢是結構性的（規模/專利/轉換成本）還是周期性的（供需缺口）？報告是否區分了兩者？
+- TAM框架是否識別哪些市場份額是「可防禦的」而非短暫的？
+
+**風險偏好顧問視角（asymmetric upside, unpriced optionality）：**
+- 如果TAM預測低估，2倍上行情境是什麼？報告是否觸及此上行空間？
+- 最壞監管情境是否已充分定價，或市場是否低估了「監管利好」的可能性？
+- 報告是否識別了市場尚未計入的新興機會（新地理、新應用、平台擴張）？
+
+## 評分程序
+1. 完成上述三位專家的分析視角
+2. 針對每個子標準，從報告中引用具體文字作為証據
+3. 對照錨點給分，不得僅憑報告篇幅長短評分
 
 ## 輸出格式（純 JSON，不加 code fence）
-{"TAM趨勢": 數字, "市場結構": 數字, "監管政策": 數字, "技術趨勢": 數字, "total": 數字, "evidence": ["..."], "gaps": ["..."]}`,
+{
+  "expert_panel": {"stock_analyst": "...", "value_investor": "...", "risk_advisor": "..."},
+  "TAM趨勢": 數字,
+  "市場結構": 數字,
+  "監管政策": 數字,
+  "技術趨勢": 數字,
+  "total": 數字,
+  "evidence": ["..."],
+  "gaps": ["..."]
+}`,
 
-  生意: `你是投資研究品質評審。請評估以下**生意**（商業模式與財務）分析的品質。
+  生意: `你是投資研究品質評審，同時扮演三位專家角色。請評估以下**生意**（商業模式與財務）分析的品質。
 
 ## 評分標準（滿分 18 分）
 
@@ -441,21 +466,53 @@ const DIMENSION_PROMPTS: Record<Dimension, string> = {
 ### 競爭護城河 (0-5)
 0 = 未分析
 1 = 僅列護城河類型
-2 = Five Forces 部分完成（3/5）
-3 = Five Forces 5a-5e 完整+管理層引言佐證
+2 = Five Forces部分完成（3/5）
+3 = Five Forces 5a-5e完整+管理層引言佐證
 4 = 上述+護城河量化（轉換成本/規模效應/品牌溢價數據）
 5 = 五力完整+內部邏輯一致+管理層引言佐證護城河觀點
 
-### DCF 估值品質 (0-3)
-0 = 無 DCF/估值
-1 = 僅 P/E 或單一方法
-2 = ≥2方法+WACC+情境表（但缺敏感度或 IRR）
+### DCF估值品質 (0-3)
+0 = 無DCF/估值
+1 = 僅P/E或單一方法
+2 = ≥2方法+WACC+情境表（但缺敏感度或IRR）
 3 = ≥3方法+WACC分解+三情境+IRR+3×3敏感度+合理性檢查
 
-## 輸出格式（純 JSON）
-{"財務歷史": 數字, "商業模式": 數字, "五力分析": 數字, "DCF投資論文": 數字, "total": 數字, "evidence": ["..."], "gaps": ["..."]}`,
+## 專家審議（評分前必須完成）
 
-  組織: `你是投資研究品質評審。請評估以下**組織**（結構與運營）分析的品質。
+**價值投資人視角（primary — moat durability, ROIC, capital allocation）：**
+- ROIC vs WACC的多年趨勢：報告是否顯示ROIC持續高於WACC？有多少年數據？
+- 資本配置紀律：FCF轉換率如何？管理層在繁榮期是否控制擴張，或為增長過度燒錢？
+- 護城河有多持久？是技術領先（可能被顛覆）還是規模/轉換成本（更耐久）？五力分析是否量化了護城河強度？
+
+**股票分析師視角（near-term earnings quality, consensus gap）：**
+- 報告的收入/利潤率軌跡是否優於市場共識預期？有無具體數據支撐EPS驚喜的可能性？
+- 商業模式的收入可見度如何（合約比例、backlog、重複性收入占比）？
+- 估值倍數是否有擴張或收縮的理由（ROIC改善→PE重估、護城河侵蝕→估值折讓）？
+
+**風險偏好顧問視角（asymmetric upside, optionality）：**
+- 如果護城河比市場認知的更持久，DCF牛市情境的IRR是否吸引人（>15%）？
+- 報告是否識別了市場尚未定價的期權價值（新地理擴張、鄰近市場進入、技術授權）？
+- 相對於潛在報酬，熊市IRR的下行不對稱性是否支持建倉？
+
+## 評分程序
+1. 完成上述三位專家的分析視角
+2. 枚舉：DCF估值區間 vs 多元估值法（P/E、EV/EBITDA）是否收斂或矛盾
+3. 針對每個子標準，從報告中引用具體文字作為証據
+4. 對照錨點給分
+
+## 輸出格式（純 JSON，不加 code fence）
+{
+  "expert_panel": {"stock_analyst": "...", "value_investor": "...", "risk_advisor": "..."},
+  "財務歷史": 數字,
+  "商業模式": 數字,
+  "五力分析": 數字,
+  "DCF投資論文": 數字,
+  "total": 數字,
+  "evidence": ["..."],
+  "gaps": ["..."]
+}`,
+
+  組織: `你是投資研究品質評審，同時扮演三位專家角色。請評估以下**組織**（結構與運營）分析的品質。
 
 ## 評分標準（滿分 12 分）
 
@@ -476,29 +533,59 @@ const DIMENSION_PROMPTS: Record<Dimension, string> = {
 ### 運營效率 (0-4)
 0 = 未提及
 1 = 提及利潤率
-2 = ROIC 計算或 Operating Leverage 分析
-3 = ROIC 多年趨勢+同業比較+出處
+2 = ROIC計算或Operating Leverage分析
+3 = ROIC多年趨勢+同業比較+出處
 4 = ROIC+OL+費用率拆解+效率改善驅動因素分析
 
-## 輸出格式（純 JSON）
-{"地理分部": 數字, "組織文化": 數字, "運營效率": 數字, "total": 數字, "evidence": ["..."], "gaps": ["..."]}`,
+## 專家審議（評分前必須完成）
 
-  人: `你是投資研究品質評審。請評估以下**人**（管理層）分析的品質。
+**價值投資人視角（primary — incentive alignment, ROIC trend, culture as moat）：**
+- 激勵機制是否與長期股東利益對齊（薪酬結構vs EPS dilution、回購時機）？報告有無具體數據？
+- 過去5年ROIC趨勢如何？是改善（良好資本配置）還是稀釋（增長過快消耗資本）？
+- 文化是否是可持續的護城河（人才密度、創新機制），還是企業公關說詞？報告有無逆勢決策的例子？
+
+**股票分析師視角（geographic mix, efficiency catalysts）：**
+- 哪些地理市場正在加速，哪些在放緩？地理組合變化對整體利潤率的近期影響如何？
+- 費用率趨勢（R&D/SG&A占比）是否改善？有無重組或效率提升的近期催化劑？
+- 地理擴張或收縮是否可能引發管理層指引修正（正面或負面的EPS修正）？
+
+**風險偏好顧問視角（hidden value, asymmetric efficiency gains）：**
+- 報告是否識別了市場尚未充分定價的細分部門或地理區域的隱藏價值？
+- 如果運營效率改善加速（費用率下降1-2個百分點），對EPS的槓桿效應有多大？
+- 文化和激勵結構是否支持在市場低谷時的逆勢擴張（恰恰是創造長期價值的時機）？
+
+## 評分程序
+1. 完成上述三位專家的分析視角
+2. 針對每個子標準，從報告中引用具體文字作為証據
+3. 對照錨點給分，不得因報告內容豐富而系統性高估
+
+## 輸出格式（純 JSON，不加 code fence）
+{
+  "expert_panel": {"stock_analyst": "...", "value_investor": "...", "risk_advisor": "..."},
+  "地理分部": 數字,
+  "組織文化": 數字,
+  "運營效率": 數字,
+  "total": 數字,
+  "evidence": ["..."],
+  "gaps": ["..."]
+}`,
+
+  人: `你是投資研究品質評審，同時扮演三位專家角色。請評估以下**人**（管理層）分析的品質。
 
 ## 評分標準（滿分 12 分）
 
 ### CEO格局觀與商業哲學 (0-4)
 0 = 未提及
-1 = 僅列 CEO 姓名與背景
+1 = 僅列CEO姓名與背景
 2 = 有哲學描述但無引言佐證
 3 = 多年敘事+引言（5+則）+出處+拐點分析
 4 = 從學經歷起完整敘事+每時期引言+成功失敗反思+第一性原理邏輯
 
 ### 繼任風險與板凳深度 (0-4)
 0 = 完全未提及
-1 = 僅提 CEO 年齡
+1 = 僅提CEO年齡
 2 = CEO年齡+任期+籠統繼任描述
-3 = CEO 年齡+≥2位次世代領導人剖析（背景、強項）+板凳評級
+3 = CEO年齡+≥2位次世代領導人剖析（背景、強項）+板凳評級
 4 = 上述+繼任計畫揭露+歷史繼任案例+出處
 
 ### 道德操守與價值創造 (0-4)
@@ -508,33 +595,97 @@ const DIMENSION_PROMPTS: Record<Dimension, string> = {
 3 = 多個案例+出處+管理層引言
 4 = 價值觀驅動決策+長期案例+與財務表現連結
 
-## 輸出格式（純 JSON）
-{"格局觀哲學": 數字, "繼任風險": 數字, "道德操守": 數字, "total": 數字, "evidence": ["..."], "gaps": ["..."]}`,
+## 專家審議（評分前必須完成）
 
-  論點: `你是投資研究品質評審。請評估以下研究報告的**投資論點品質**。
+**價值投資人視角（primary — capital allocation across cycles, intellectual honesty）：**
+- 管理層在完整市場週期（繁榮與蕭條）中的資本配置決策如何？有無高峰期收購失誤或谷底錯失機會？
+- CEO的哲學表述是否體現第一性原理（具體、可操作），還是含糊的「客戶第一」？報告引用了哪些決策作為哲學佐證？
+- 管理層是否誠實面對失敗和挑戰（過度自信的管理層更可能過度擴張）？
 
-## 評分標準（滿分 9 分 — LLM 部分）
+**股票分析師視角（guidance track record, succession as catalyst）：**
+- 管理層過去的指引準確度如何？有無長期高估或低估業績的規律（影響市場對指引的折扣）？
+- 繼任風險是否是短期（1-2年）的投資催化劑或風險？繼任者的風格是否已知？
+- 治理風險（關聯交易、獨立董事比例、薪酬透明度）是否影響近期估值？
+
+**風險偏好顧問視角（visionary premium, succession as re-rating opportunity）：**
+- 如果創辦人/願景型CEO角色被市場折讓，繼任後的策略重整是否可能帶來估值重評？
+- 管理層的逆勢擴張歷史（衰退期加大研發、逆向收購）是否代表長期複利加速的特質？
+- 這位管理層是否有超出財務模型能捕捉的「執行力期權」（進入新市場能力、行業生態整合力）？
+
+## 評分程序
+1. 完成上述三位專家的分析視角
+2. 針對每個子標準，從報告中引用具體文字作為証據
+3. 對照錨點給分
+
+## 輸出格式（純 JSON，不加 code fence）
+{
+  "expert_panel": {"stock_analyst": "...", "value_investor": "...", "risk_advisor": "..."},
+  "格局觀哲學": 數字,
+  "繼任風險": 數字,
+  "道德操守": 數字,
+  "total": 數字,
+  "evidence": ["..."],
+  "gaps": ["..."]
+}`,
+
+  論點: `你是投資研究品質評審，同時扮演三位專家角色。請評估以下研究報告的**投資論點品質**。
+
+## 評分標準（滿分 9 分）
 
 ### 非共識觀點 / Variant Perception (0-3)
 0 = 無明確投資論點
-1 = 有 buy/sell 建議但無差異化觀點
-2 = 識別出市場可能錯誤之處，但論據不充分
-3 = 清晰的 variant perception：市場共識是X，我們認為Y因為Z（有數據+邏輯鏈）
+1 = 有buy/sell建議但無差異化觀點（僅重述基本面）
+2 = 識別出市場可能錯誤，但論據不充分
+3 = 清晰variant perception：市場共識是X，我們認為Y因為Z（需有數據+邏輯鏈）
 
 ### 內部一致性 (0-3)
-0 = 明顯矛盾（如 DCF 假設與財務預測不一致）
-1 = 部分一致，有 1-2 個矛盾
+0 = 明顯矛盾
+1 = 部分一致，有1-2個矛盾
 2 = 大致一致，偶有小矛盾
-3 = 完全一致：DCF假設↔財務預測↔TAM分析↔競爭地位 形成完整邏輯鏈
+3 = 完全一致：DCF假設↔財務預測↔TAM分析↔競爭地位形成完整邏輯鏈
 
-### 可行動性 (0-3)
-0 = 無結論
-1 = 有 buy/sell 但無價格目標或時間框架
-2 = 有價格目標+部分催化劑
-3 = 明確 buy/sell/hold + 價格目標 + 時間框架 + ≥3個催化劑 + 風險觸發條件
+### 可行動性 (0-3) — 逐項核查後再評分
+評分前請確認以下5項是否**明確出現**於報告中（不得推斷或從估值隱含）：
+□ A. 明確的 BUY / SELL / HOLD 文字建議
+□ B. 具體價格目標（數字）
+□ C. 明確時間框架
+□ D. ≥3個具體催化劑
+□ E. 明確的風險觸發條件
+若找不到「BUY」「SELL」「HOLD」「買入」「賣出」「持有」等明確評級字樣，可行動性最高給2分。
 
-## 輸出格式（純 JSON）
-{"非共識觀點": 數字, "內部一致性": 數字, "可行動性": 數字, "total": 數字, "evidence": ["..."], "gaps": ["..."]}`,
+## 專家審議（評分前必須完成）
+
+**股票分析師視角（catalyst actionability, failure hypothesis）：**
+- 催化劑是否具體到可在12-24個月內驗證（有時間點和可測量的成功標準）？
+- 失效觸發條件是否夠具體（「若xxx發生即改變立場」vs「若市場惡化」）？
+- 投資評級（BUY/SELL/HOLD）是否有明確文字表達，還是僅有估值區間暗示？
+
+**價值投資人視角（thesis durability, analytical consistency）：**
+- 投資論點是否在2-3年持有期內仍然成立（考慮競爭動態和產業週期）？
+- 分析框架是否前後一致（估值假設是否與競爭地位分析邏輯對齊）？
+- DCF假設（WACC、終值成長率）是否與財務歷史和護城河強度一致？
+
+**風險偏好顧問視角（scenario probability, IRR adequacy）：**
+- 情境概率加權是否合理（牛市情境占比是否反映真實概率而非樂觀偏差）？
+- 基準IRR是否充分補償風險（相對於無風險利率+股票風險溢價+個股風險）？
+- 報告是否識別了未充分定價的上行尾部（技術突破、地緣政治加持）或下行尾部（黑天鵝）？
+
+## 評分程序
+1. 完成上述三位專家的分析視角
+2. 枚舉內部一致性：DCF假設vs多元估值是否收斂？IRR vs概率加權回報是否一致？
+3. 枚舉非共識觀點：市場共識是什麼？分析師差異點是什麼？是否有數據支撐？
+4. 根據枚舉結果給分，每個維度必須引用具體証據
+
+## 輸出格式（純 JSON，不加 code fence）
+{
+  "expert_panel": {"stock_analyst": "...", "value_investor": "...", "risk_advisor": "..."},
+  "非共識觀點": 數字,
+  "內部一致性": 數字,
+  "可行動性": 數字,
+  "total": 數字,
+  "evidence": ["..."],
+  "gaps": ["..."]
+}`,
 };
 
 // All 5 dimensions confirmed calibrated for MLX (median gap ≤ 1 vs Claude in 3×median bake-off):
@@ -543,9 +694,9 @@ const DIMENSION_PROMPTS: Record<Dimension, string> = {
 const MLX_ROUTED_DIMENSIONS = new Set<Dimension>(['環境', '生意', '組織', '人', '論點']);
 
 // Prompt overrides for MLX — only dimensions where the standard prompt isn't calibrated.
-// 論點 needs checklist-gate + few-shot + structured CoT to prevent actionability inflation.
+// 論點 needs checklist-gate + few-shot + expert panel + structured CoT to prevent actionability inflation.
 const MLX_DIMENSION_PROMPT_OVERRIDES: Partial<Record<Dimension, string>> = {
-  論點: `你是投資研究品質評審。請評估以下研究報告的**投資論點品質**。
+  論點: `你是投資研究品質評審，同時扮演三位專家角色。請評估以下研究報告的**投資論點品質**。
 
 ## 評分標準（滿分 9 分）
 
@@ -577,6 +728,32 @@ const MLX_DIMENSION_PROMPT_OVERRIDES: Partial<Record<Dimension, string>> = {
 
 **關鍵**：若找不到「BUY」「SELL」「HOLD」「買入」「賣出」「持有」等明確評級字樣，可行動性最高給2分。
 
+## 反例示範（勿重蹈）
+
+輸入片段：「公允價值區間 NT$9,500-11,700，中位數 NT$10,800。概率加權IRR約10%。
+提供7個失效觸發條件。N2量產、CoWoS擴產為主要催化劑。」
+
+錯誤評分：{"可行動性": 3, ...}
+正確評分：{"可行動性": 2, ...}
+理由：估值區間≠明確BUY建議；IRR≠投資評級；無「買入/BUY/HOLD」字樣→A項缺失→最高2分。
+
+## 專家審議（評分前必須完成）
+
+**股票分析師視角（catalyst actionability, failure hypothesis）：**
+- 催化劑是否具體到可在12-24個月內驗證（有時間點和可測量的成功標準）？
+- 失效觸發條件是否夠具體（「若xxx發生即改變立場」vs「若市場惡化」）？
+- 投資評級（BUY/SELL/HOLD）是否有明確文字表達，還是僅有估值區間暗示？
+
+**價值投資人視角（thesis durability, analytical consistency）：**
+- 投資論點是否在2-3年持有期內仍然成立（考慮競爭動態和產業週期）？
+- 分析框架是否前後一致（估值假設是否與競爭地位分析邏輯對齊）？
+- DCF假設（WACC、終值成長率）是否與財務歷史和護城河強度一致？
+
+**風險偏好顧問視角（scenario probability, IRR adequacy）：**
+- 情境概率加權是否合理（牛市情境占比是否反映真實概率而非樂觀偏差）？
+- 基準IRR是否充分補償風險（相對於無風險利率+股票風險溢價+個股風險）？
+- 報告是否識別了未充分定價的上行尾部（技術突破、地緣政治加持）或下行尾部（黑天鵝）？
+
 ## 評分程序（必須依序完成）
 
 ### 步驟 1：內部一致性枚舉（評分前完成）
@@ -589,17 +766,18 @@ const MLX_DIMENSION_PROMPT_OVERRIDES: Partial<Record<Dimension, string>> = {
 請先列出以下項目，再評分：
 - 報告明確陳述的市場共識是什麼？
 - 分析師主張與共識的差異點是什麼？
-- 該差異主張是否有數據支撐，還是僅為斷言？
+- 該差異主張是否有數據支撐，還是僅為斷言？（請回答"yes + 數據引用"或"no + 理由"）
 
-### 步驟 3：根據枚舉結果評分，每個維度必須引用步驟1/2中的具體項目
+### 步驟 3：根據枚舉結果評分，每個維度必須引用步驟中的具體項目
 
-## 輸出格式（純 JSON，需含enumeration和checklist）
+## 輸出格式（純 JSON，不加 code fence）
 {
+  "expert_panel": {"stock_analyst": "...", "value_investor": "...", "risk_advisor": "..."},
   "enumeration": {
     "consistency": {"dcf_vs_multiples": "...", "irr_vs_tail_risk": "...", "bull_bear_stance": "..."},
     "variant_perception": {"stated_consensus": "...", "analyst_diff": "...", "data_backed": "yes/no + reason"}
   },
-  "checklist": {"A_explicit_rating": true/false, "B_price_target": true/false, "C_timeframe": true/false, "D_catalysts_3plus": true/false, "E_risk_triggers": true/false},
+  "checklist": {"A_explicit_rating": true, "B_price_target": true, "C_timeframe": true, "D_catalysts_3plus": true, "E_risk_triggers": true},
   "非共識觀點": 數字,
   "內部一致性": 數字,
   "可行動性": 數字,
@@ -608,6 +786,25 @@ const MLX_DIMENSION_PROMPT_OVERRIDES: Partial<Record<Dimension, string>> = {
   "gaps": ["..."]
 }`,
 };
+
+function scorerBackendIntent(dimension: Dimension): 'mlx' | 'remote' {
+  return MLX_ROUTED_DIMENSIONS.has(dimension) ? 'mlx' : 'remote';
+}
+
+function effectiveDimensionPrompt(dimension: Dimension): string {
+  return scorerBackendIntent(dimension) === 'mlx'
+    ? (MLX_DIMENSION_PROMPT_OVERRIDES[dimension] ?? DIMENSION_PROMPTS[dimension])
+    : DIMENSION_PROMPTS[dimension];
+}
+
+function effectiveRubricSet(): Record<Dimension, string> {
+  return Object.fromEntries(
+    ALL_DIMENSIONS.map(dim => [
+      dim,
+      `backend:${scorerBackendIntent(dim)}\n${effectiveDimensionPrompt(dim)}`,
+    ]),
+  ) as Record<Dimension, string>;
+}
 
 // Quality score mapping: LLM raw → quality points (normalized to 60 total)
 // Raw totals: 環境 12 + 生意 18 + 組織 12 + 人 12 + 論點 9 = 63 raw max
@@ -643,15 +840,13 @@ async function scoreDimension(
   sectionContent: string,
   ticker: string,
   model: string,
-): Promise<{ subCriteria: Record<string, number>; total: number; gaps: string[]; costUsd: number } | null> {
+): Promise<{ subCriteria: Record<string, number>; total: number; gaps: string[]; costUsd: number; backend: string; model: string } | null> {
   if (sectionContent.trim().length < 50) {
-    return { subCriteria: {}, total: 0, gaps: [`${dimension}: 內容不足，無法評分`], costUsd: 0 };
+    return { subCriteria: {}, total: 0, gaps: [`${dimension}: 內容不足，無法評分`], costUsd: 0, backend: 'skipped', model: 'none' };
   }
 
-  const useMlx = MLX_ROUTED_DIMENSIONS.has(dimension);
-  const systemPrompt = useMlx
-    ? (MLX_DIMENSION_PROMPT_OVERRIDES[dimension] ?? DIMENSION_PROMPTS[dimension])
-    : DIMENSION_PROMPTS[dimension];
+  const useMlx = scorerBackendIntent(dimension) === 'mlx';
+  const systemPrompt = effectiveDimensionPrompt(dimension);
   const userMessage = `請評分以下 ${ticker} 研究報告的「${dimension}」維度：
 
 ${sectionContent}`;
@@ -661,7 +856,7 @@ ${sectionContent}`;
       systemPrompt,
       [{ role: 'user', content: userMessage }],
       useMlx
-        ? { maxTokens: 3072, backend: 'mlx' as const }
+        ? { maxTokens: 4096, backend: 'mlx' as const }
         : { model, maxTokens: 4096, thinkingBudget: SCORER_THINKING_BUDGET },
     );
 
@@ -708,6 +903,8 @@ ${sectionContent}`;
       total: typeof total === 'number' ? total : computedTotal,
       gaps: Array.isArray(gaps) ? gaps : [],
       costUsd: response.usage.costUsd,
+      backend: response.backend ?? (useMlx ? 'mlx' : 'unknown'),
+      model: response.model ?? (useMlx ? 'mlx-local' : model),
     };
   } catch (err: any) {
     console.error(`  [scorer] ${dimension} LLM error: ${err.message}`);
@@ -741,19 +938,23 @@ async function llmScoreStructured(
   totalRaw: number;
   totalVariance: number;
   perDimensionVariance: Record<string, number>;
+  backendByDimension: Record<string, string>;
+  modelByDimension: Record<string, string>;
   scorerPartialFailure: boolean;
   scoringCostUsd: number;
 } | null> {
   const dimensions: Record<string, { score: number; criteria: Record<string, number>; gaps: string[] }> = {};
   const rawCalls: ScoringEvent['rawCalls'] = [];
   const perDimensionVariance: Record<string, number> = {};
+  const backendByDimension: Record<string, string> = {};
+  const modelByDimension: Record<string, string> = {};
   let anySuccess = false;
   let scorerPartialFailure = false;
   let scoringCostUsd = 0;
 
   for (const dim of ALL_DIMENSIONS) {
     const sectionContent = extractDimensionContent(mainContent, dim);
-    const callResults: Array<{ subCriteria: Record<string, number>; total: number; gaps: string[]; costUsd: number }> = [];
+    const callResults: Array<{ subCriteria: Record<string, number>; total: number; gaps: string[]; costUsd: number; backend: string; model: string }> = [];
 
     // 3 calls per dimension with retry on failure (max SCORER_MAX_RETRIES per call)
     for (let i = 0; i < SCORER_NUM_CALLS; i++) {
@@ -768,7 +969,7 @@ async function llmScoreStructured(
       if (result) {
         scoringCostUsd += result.costUsd;
         callResults.push(result);
-        rawCalls.push({ dimension: dim, callIndex: i, subCriteria: result.subCriteria, total: result.total });
+        rawCalls.push({ dimension: dim, callIndex: i, backend: result.backend, model: result.model, subCriteria: result.subCriteria, total: result.total });
       }
     }
 
@@ -784,7 +985,7 @@ async function llmScoreStructured(
       if (retryResult) {
         scoringCostUsd += retryResult.costUsd;
         callResults.push(retryResult);
-        rawCalls.push({ dimension: dim, callIndex: SCORER_NUM_CALLS, subCriteria: retryResult.subCriteria, total: retryResult.total });
+        rawCalls.push({ dimension: dim, callIndex: SCORER_NUM_CALLS, backend: retryResult.backend, model: retryResult.model, subCriteria: retryResult.subCriteria, total: retryResult.total });
         console.log(`  [scorer] ${dim}: retry succeeded (${callResults.length} valid calls)`);
       }
       if (callResults.length < 2) {
@@ -818,6 +1019,8 @@ async function llmScoreStructured(
     // Variance tracking
     const totals = callResults.map(r => r.total);
     perDimensionVariance[dim] = variance(totals);
+    backendByDimension[dim] = [...new Set(callResults.map(r => r.backend))].join('+');
+    modelByDimension[dim] = [...new Set(callResults.map(r => r.model))].join('+');
 
     dimensions[dim] = { score: medianTotal, criteria: medianCriteria, gaps: allGaps };
     console.log(`  [scorer] ${dim}: ${medianTotal} (calls: ${totals.join(',')} var: ${perDimensionVariance[dim].toFixed(2)})`);
@@ -834,6 +1037,8 @@ async function llmScoreStructured(
     totalRaw,
     totalVariance,
     perDimensionVariance,
+    backendByDimension,
+    modelByDimension,
     scorerPartialFailure,
     scoringCostUsd,
   };
@@ -983,8 +1188,8 @@ export async function scoreCompanyResearch(
   const mainContent = readMainFile(ticker);
   const dir = getCompanyDir(ticker);
 
-  // Compute rubric version hash
-  const rubricVersion = hashRubricSet(DIMENSION_PROMPTS);
+  // Compute hash from the prompts and route decisions the scorer actually uses.
+  const rubricVersion = hashRubricSet(effectiveRubricSet());
 
   if (reportContent.trim().length < 100) {
     console.log(`[scorer] No research files found for ${ticker}, using zero score`);
@@ -1011,6 +1216,8 @@ export async function scoreCompanyResearch(
   let dimensionResults: Record<Dimension, { score: number; criteria: Record<string, number>; gaps: string[] }> | null = null;
   let rawCalls: ScoringEvent['rawCalls'] = [];
   let perDimensionVariance: Record<string, number> = {};
+  let backendByDimension: Record<string, string> = {};
+  let modelByDimension: Record<string, string> = {};
   let totalVariance = 0;
   let pairwiseAdjustments: Record<string, number> = {};
   let scoringCostUsd = 0;
@@ -1028,6 +1235,8 @@ export async function scoreCompanyResearch(
       rawCalls = llmResult.rawCalls;
       totalVariance = llmResult.totalVariance;
       perDimensionVariance = llmResult.perDimensionVariance;
+      backendByDimension = llmResult.backendByDimension;
+      modelByDimension = llmResult.modelByDimension;
       scoringCostUsd += llmResult.scoringCostUsd;
       if (llmResult.scorerPartialFailure) scorerStatus = 'llm_partial_failure';
 
@@ -1139,6 +1348,8 @@ export async function scoreCompanyResearch(
       timestamp: new Date().toISOString(),
       rubricVersion,
       model,
+      backendByDimension,
+      modelByDimension,
       rawCalls,
       finalScore: {
         環境: score.環境.score,

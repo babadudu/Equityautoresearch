@@ -16,10 +16,15 @@ export interface ScoringEvent {
   round: number;
   timestamp: string;
   rubricVersion: string;
+  /** Requested scorer model. Historical events used `model` for this field. */
   model: string;
+  backendByDimension?: Record<string, string>;
+  modelByDimension?: Record<string, string>;
   rawCalls: Array<{
     dimension: string;
     callIndex: number;
+    backend?: string;
+    model?: string;
     subCriteria: Record<string, number>;
     total: number;
   }>;

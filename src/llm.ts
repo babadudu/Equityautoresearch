@@ -89,6 +89,8 @@ export interface ChatResult {
   content: string | null;
   toolUses: ToolUse[];
   usage: { inputTokens: number; outputTokens: number; costUsd: number };
+  backend?: 'mlx' | 'claude-cli' | 'anthropic' | 'openrouter';
+  model?: string;
 }
 
 // ── Retry logic ──
@@ -200,6 +202,8 @@ export async function chat(
   return {
     content: textContent,
     toolUses,
+    backend: 'anthropic',
+    model,
     usage: {
       inputTokens,
       outputTokens,
@@ -290,7 +294,7 @@ async function chatViaClaude(
 
       let parsed: any;
       try { parsed = JSON.parse(stdout); } catch {
-        resolve({ content: stdout.trim(), toolUses: [], usage: { inputTokens: 0, outputTokens: 0, costUsd: 0 } });
+        resolve({ content: stdout.trim(), toolUses: [], backend: 'claude-cli', model: modelAlias, usage: { inputTokens: 0, outputTokens: 0, costUsd: 0 } });
         return;
       }
 
@@ -301,6 +305,8 @@ async function chatViaClaude(
       resolve({
         content: responseText,
         toolUses: [],
+        backend: 'claude-cli',
+        model: modelAlias,
         usage: {
           inputTokens: usage.input_tokens ?? 0,
           outputTokens: usage.output_tokens ?? 0,
@@ -680,6 +686,8 @@ async function chatViaMlx(
   return {
     content: choice?.message?.content ?? null,
     toolUses,
+    backend: 'mlx',
+    model: mlxModel,
     usage: {
       inputTokens: data.usage?.prompt_tokens ?? 0,
       outputTokens: data.usage?.completion_tokens ?? 0,
@@ -785,6 +793,8 @@ async function chatViaOpenRouter(
       name: tc.function.name,
       input: JSON.parse(tc.function.arguments || '{}'),
     })),
+    backend: 'openrouter',
+    model: orModel,
     usage: {
       inputTokens: data.usage?.prompt_tokens ?? 0,
       outputTokens: data.usage?.completion_tokens ?? 0,
