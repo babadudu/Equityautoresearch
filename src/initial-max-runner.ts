@@ -24,7 +24,7 @@ import { fileURLToPath } from 'url';
 import Anthropic from '@anthropic-ai/sdk';
 import { chat, runClaudeAgent, runGeminiAgent, type ToolUse, type AnthropicTool, type ChatResult } from './llm.js';
 import {
-  MODELS, DEFAULT_MAX_COST_USD, estimateCostUsd, PASS_THRESHOLD as SCORER_PASS_THRESHOLD,
+  MODELS, LOCAL_MODEL, DEFAULT_MAX_COST_USD, estimateCostUsd, PASS_THRESHOLD as SCORER_PASS_THRESHOLD,
   PLATEAU_ROUNDS, MICRO_ROUND_THRESHOLD, MICRO_ROUND_GAP_COUNT,
 } from './config.js';
 import { scoreCompanyResearch, scoreExtendedResearch, type InitialMaxScore, type InitialMaxGaps, type ExtendedScore } from './initial-max-scorer.js';
@@ -45,7 +45,7 @@ import { syncIntelligencePaths } from './intelligence-sync.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const PROJECT_ROOT = path.resolve(__dirname, '..');
-const DEFAULT_MODEL = MODELS.CLAUDE;  // Used for polish phase (Claude); gap-fill uses MODELS.GEMINI
+const DEFAULT_MODEL = LOCAL_MODEL;  // Gap-fill: MLX local. Polish hardcodes MODELS.CLAUDE at call site.
 const DEFAULT_MAX_ROUNDS = 15;
 const PASS_THRESHOLD = SCORER_PASS_THRESHOLD;  // 85, from config
 
@@ -329,7 +329,8 @@ ${topGaps}
   }
 
   // ── CLI agent path (Gemini for gap-fill, Claude for polish) ──
-  if (USE_CLAUDE_CLI) {
+  // MLX local model bypasses CLI and uses the API tool loop below.
+  if (USE_CLAUDE_CLI && model !== LOCAL_MODEL) {
     const cliSystemPrompt = systemContent
       .replace(/write_research_section\([^)]*\)/g, 'Write tool')
       .replace(/read_research_file\([^)]*\)/g, 'Read tool')
@@ -388,7 +389,7 @@ ${userContent}`;
   let finalResponse = '';
 
   for (let toolRound = 0; toolRound < MAX_TOOL_ROUNDS; toolRound++) {
-    const response = await chat(systemContent, messages, { model, tools, maxTokens: 16384 });
+    const response = await chat(systemContent, messages, { model, backend: model === LOCAL_MODEL ? 'mlx' : undefined, tools, maxTokens: 16384 });
 
     if (costTracker) costTracker.totalCostUsd += response.usage.costUsd;
 

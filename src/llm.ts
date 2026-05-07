@@ -624,14 +624,42 @@ async function chatViaMlx(
 ): Promise<ChatResult> {
   const mlxModel = options?.model ?? LOCAL_MODEL;
 
-  // Convert Anthropic messages to OpenAI format
+  // Convert Anthropic messages to OpenAI format (multi-turn tool-calling)
   const oaiMessages: any[] = [{ role: 'system', content: system }];
   for (const msg of messages) {
     if (typeof msg.content === 'string') {
       oaiMessages.push({ role: msg.role, content: msg.content });
-    } else if (Array.isArray(msg.content)) {
-      const text = (msg.content as any[]).map((b: any) => typeof b === 'string' ? b : b.text ?? '').join('');
-      oaiMessages.push({ role: msg.role, content: text });
+      continue;
+    }
+    const blocks = msg.content as any[];
+    if (msg.role === 'assistant') {
+      const text = blocks.filter((b: any) => b.type === 'text').map((b: any) => b.text ?? '').join('');
+      const toolCalls = blocks
+        .filter((b: any) => b.type === 'tool_use')
+        .map((b: any, i: number) => ({
+          id: b.id ?? `call_${i}`,
+          type: 'function' as const,
+          function: { name: b.name, arguments: JSON.stringify(b.input) },
+        }));
+      const oaiMsg: any = { role: 'assistant', content: text || null };
+      if (toolCalls.length) oaiMsg.tool_calls = toolCalls;
+      oaiMessages.push(oaiMsg);
+    } else if (msg.role === 'user') {
+      const toolResults = blocks.filter((b: any) => b.type === 'tool_result');
+      const textBlocks = blocks.filter((b: any) => b.type === 'text');
+      for (const tr of toolResults) {
+        oaiMessages.push({
+          role: 'tool',
+          tool_call_id: tr.tool_use_id,
+          content: typeof tr.content === 'string' ? tr.content
+            : Array.isArray(tr.content) ? (tr.content as any[]).map((c: any) => c.text ?? '').join('')
+            : String(tr.content ?? ''),
+        });
+      }
+      if (textBlocks.length) {
+        const text = textBlocks.map((b: any) => b.text ?? '').join('');
+        if (text) oaiMessages.push({ role: 'user', content: text });
+      }
     }
   }
 
