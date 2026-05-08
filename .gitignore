@@ -6,3 +6,8 @@ node_modules/
 results/*.tsv
 data/companies/*/
 !data/companies/.gitkeep
+# Polish audit: snapshots are local-only, JSONL is committable
+data/audit/*/
+!data/audit/polish-log.jsonl
+# Daily git-failure logs (referenced by initial-max-runner gitCommit hygiene)
+logs/git-failures-*.log

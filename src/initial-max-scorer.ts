@@ -27,8 +27,8 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const PROJECT_ROOT = path.resolve(__dirname, '..');
 
 /** Required subsections (1.1–4.2) — all must have substantive content to pass */
-const REQUIRED_SECTIONS = ['1.1', '1.2', '1.3', '1.4', '2.1', '2.2', '2.3', '2.4', '2.5', '3.1', '3.2', '3.3', '4.1', '4.2'];
-const MIN_SECTION_CHARS = 80;
+export const REQUIRED_SECTIONS = ['1.1', '1.2', '1.3', '1.4', '2.1', '2.2', '2.3', '2.4', '2.5', '3.1', '3.2', '3.3', '4.1', '4.2'];
+export const MIN_SECTION_CHARS = 80;
 
 // ── New dimension weights (Phase 2.1) ──
 const WEIGHTS = { 環境: 18, 生意: 30, 組織: 17, 人: 20, 論點: 15 } as const;

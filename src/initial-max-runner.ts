@@ -28,7 +28,7 @@ import {
   MODELS, LOCAL_MODEL, DEFAULT_MAX_COST_USD, estimateCostUsd, PASS_THRESHOLD as SCORER_PASS_THRESHOLD,
   PLATEAU_ROUNDS, MICRO_ROUND_THRESHOLD, MICRO_ROUND_GAP_COUNT,
 } from './config.js';
-import { scoreCompanyResearch, scoreExtendedResearch, type InitialMaxScore, type InitialMaxGaps, type ExtendedScore } from './initial-max-scorer.js';
+import { scoreCompanyResearch, scoreExtendedResearch, REQUIRED_SECTIONS, type InitialMaxScore, type InitialMaxGaps, type ExtendedScore } from './initial-max-scorer.js';
 import { webSearch, fetchUrl, callNinjaApi, queryCompaniesDb, searchDataForCompany, readProjectFile } from './api-tools.js';
 import { queryKnowledgeBaseJson } from './knowledge-retrieval.js';
 import { extractKnowledge } from './knowledge-extractor.js';
@@ -46,7 +46,7 @@ import { syncIntelligencePaths } from './intelligence-sync.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const PROJECT_ROOT = path.resolve(__dirname, '..');
-const DEFAULT_MODEL = MODELS.CLAUDE;  // Gap-fill routes to Gemini CLI; polish hardcodes MODELS.CLAUDE. MLX handles scoring only.
+const DEFAULT_MODEL = LOCAL_MODEL || MODELS.CLAUDE;  // gap-fill → MLX by default; polish hardcodes MODELS.CLAUDE at its call site
 const DEFAULT_MAX_ROUNDS = 15;
 const PASS_THRESHOLD = SCORER_PASS_THRESHOLD;  // 85, from config
 
@@ -179,23 +179,199 @@ function gitShortHash(): string {
   }
 }
 
+function logGitFailure(stage: 'add' | 'commit', message: string, stderr: string, status: number): void {
+  try {
+    const logsDir = path.join(PROJECT_ROOT, 'logs');
+    if (!fs.existsSync(logsDir)) fs.mkdirSync(logsDir, { recursive: true });
+    const date = new Date().toISOString().slice(0, 10).replace(/-/g, '');
+    const logPath = path.join(logsDir, `git-failures-${date}.log`);
+    const ts = new Date().toISOString();
+    const stagedDiff = (() => {
+      try { return execSync('git diff --cached --stat', { cwd: PROJECT_ROOT, encoding: 'utf-8', timeout: 10_000 }); }
+      catch { return '(diff unavailable)'; }
+    })();
+    const status_porcelain = (() => {
+      try { return execSync('git status --porcelain', { cwd: PROJECT_ROOT, encoding: 'utf-8', timeout: 10_000 }); }
+      catch { return '(status unavailable)'; }
+    })();
+    const entry = `\n=== ${ts} stage=${stage} status=${status} ===\nmessage: ${message}\nstderr: ${stderr}\n--- staged stat ---\n${stagedDiff}\n--- working tree ---\n${status_porcelain}\n`;
+    fs.appendFileSync(logPath, entry);
+    appendTrace({
+      ts, ticker: '', phase: 'git-commit', round: 0, model: '',
+      durationSec: 0, inputTokens: 0, outputTokens: 0, costUsd: 0,
+      filesWritten: 0, scoreChange: '', agentExitCode: status,
+      status: 'failed', error: `git ${stage} status=${status}: ${stderr.slice(0, 200)}`,
+    });
+  } catch {}
+}
+
 function gitCommit(message: string): string {
   try {
-    const addResult = spawnSync('git', ['add', 'data/companies/', 'data/knowledge/'], { cwd: PROJECT_ROOT });
+    const addResult = spawnSync('git', ['add', 'data/companies/', 'data/knowledge/', 'data/audit/'], { cwd: PROJECT_ROOT });
     if (addResult.status !== 0) {
-      console.warn(`[gitCommit] git add failed (status ${addResult.status}): ${addResult.stderr?.toString().trim()}`);
+      const stderr = addResult.stderr?.toString().trim() ?? '';
+      console.warn(`[gitCommit] git add failed (status ${addResult.status}): ${stderr}`);
+      logGitFailure('add', message, stderr, addResult.status ?? -1);
       return '';
     }
     const commitResult = spawnSync('git', ['commit', '-m', message], { cwd: PROJECT_ROOT });
     if (commitResult.status !== 0) {
-      console.warn(`[gitCommit] git commit failed (status ${commitResult.status}): ${commitResult.stderr?.toString().trim()}`);
+      const stderr = commitResult.stderr?.toString().trim() ?? '';
+      console.warn(`[gitCommit] git commit failed (status ${commitResult.status}): ${stderr}`);
+      logGitFailure('commit', message, stderr, commitResult.status ?? -1);
       return '';
     }
     return gitShortHash();
   } catch (err: any) {
     console.warn(`[gitCommit] exception: ${err?.message}`);
+    logGitFailure('commit', message, err?.message ?? 'unknown', -1);
     return '';
   }
+}
+
+/**
+ * Write an empty research skeleton with all REQUIRED_SECTIONS headings present.
+ * This lets the structural scorer find every required heading on day one,
+ * making baseline structural non-zero and gap-fill rounds productive.
+ */
+function writeSkeletonReport(mainPath: string, ticker: string): void {
+  const dir = path.dirname(mainPath);
+  if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+  const titles: Record<string, string> = {
+    '1.1': 'Macro Environment',
+    '1.2': 'Industry Structure',
+    '1.3': 'Competitive Dynamics',
+    '1.4': 'Regulatory & Geopolitical',
+    '2.1': 'Business Model',
+    '2.2': 'Products / Services',
+    '2.3': 'Revenue & Profitability',
+    '2.4': 'Capital Allocation',
+    '2.5': 'Moat & Competitive Position',
+    '3.1': 'Organizational Structure',
+    '3.2': 'Operating Performance',
+    '3.3': 'Risk Management',
+    '4.1': 'Leadership & Track Record',
+    '4.2': 'Culture & Incentives',
+  };
+  const placeholder = (n: string, t: string) => `### ${n} ${t}\n\nTODO: gap-fill round will populate this section. Placeholder line so the structural scorer registers the heading; this paragraph will be fully replaced before completion validation passes.\n\n`;
+  const body = [
+    `# ${ticker} Initial MAX Research`,
+    '',
+    '## Executive Summary',
+    '',
+    'TODO: gap-fill round will populate executive summary.',
+    '',
+    '## 1. 環境 (Macro & Industry)',
+    '',
+    placeholder('1.1', titles['1.1']!),
+    placeholder('1.2', titles['1.2']!),
+    placeholder('1.3', titles['1.3']!),
+    placeholder('1.4', titles['1.4']!),
+    '## 2. 生意 (Business)',
+    '',
+    placeholder('2.1', titles['2.1']!),
+    placeholder('2.2', titles['2.2']!),
+    placeholder('2.3', titles['2.3']!),
+    placeholder('2.4', titles['2.4']!),
+    placeholder('2.5', titles['2.5']!),
+    '## 3. 組織 (Organization)',
+    '',
+    placeholder('3.1', titles['3.1']!),
+    placeholder('3.2', titles['3.2']!),
+    placeholder('3.3', titles['3.3']!),
+    '## 4. 人 (People)',
+    '',
+    placeholder('4.1', titles['4.1']!),
+    placeholder('4.2', titles['4.2']!),
+    '## 論點 (Investment Thesis)',
+    '',
+    'TODO: rating + scenarios will go here.',
+    '',
+  ].join('\n');
+  // Sanity: every REQUIRED_SECTION must appear as a numbered heading
+  for (const sec of REQUIRED_SECTIONS) {
+    if (!body.includes(`### ${sec} `)) {
+      throw new Error(`writeSkeletonReport: skeleton missing required section ${sec}`);
+    }
+  }
+  fs.writeFileSync(mainPath, body);
+  console.log(`[skeleton] wrote ${body.length} bytes to ${path.relative(PROJECT_ROOT, mainPath)} with all ${REQUIRED_SECTIONS.length} required headings`);
+}
+
+/**
+ * Classify a round-failure error message into one of the actionable crash classes.
+ * Used by the same-class crash-streak abort logic.
+ */
+function classifyCrash(message: string): 'claude-cli-timeout' | 'mlx-fetch-failed' | 'tool-timeout' | 'other' {
+  const m = message.toLowerCase();
+  if (m.includes('claude cli chat timed out') || m.includes('claude-chat] timeout')) return 'claude-cli-timeout';
+  if (m.includes('mlx failed') || m.includes('fetch failed') || m.includes('mlx idle timeout')) return 'mlx-fetch-failed';
+  if (m.includes('tool') && m.includes('timeout')) return 'tool-timeout';
+  return 'other';
+}
+
+/**
+ * Snapshot a file before/after polish, append an audit JSONL row, decide rollback.
+ * Returns { rollback: bool, reason: string } so the caller can act on rollback.
+ */
+function recordPolishAudit(args: {
+  ticker: string;
+  round: number;
+  preBakPath: string;
+  postPath: string;
+  preScore: { structural: number; quality: number; total: number };
+  postScore: { structural: number; quality: number; total: number };
+}): { rollback: boolean; reason: string } {
+  const { ticker, round, preBakPath, postPath, preScore, postScore } = args;
+  const auditDir = path.join(PROJECT_ROOT, 'data', 'audit', ticker);
+  if (!fs.existsSync(auditDir)) fs.mkdirSync(auditDir, { recursive: true });
+  const ts = new Date().toISOString().replace(/[:.]/g, '-');
+  const preSnap = path.join(auditDir, `${ts}.pre.md`);
+  const postSnap = path.join(auditDir, `${ts}.post.md`);
+  try { fs.copyFileSync(preBakPath, preSnap); } catch {}
+  try { fs.copyFileSync(postPath, postSnap); } catch {}
+
+  const preSize = fs.existsSync(preSnap) ? fs.statSync(preSnap).size : 0;
+  const postSize = fs.existsSync(postSnap) ? fs.statSync(postSnap).size : 0;
+
+  let diffAdded = 0;
+  let diffRemoved = 0;
+  try {
+    const diffOut = execSync(`diff -u "${preSnap}" "${postSnap}" || true`, { encoding: 'utf-8', timeout: 30_000 });
+    for (const line of diffOut.split('\n')) {
+      if (/^\+[^+]/.test(line)) diffAdded++;
+      else if (/^-[^-]/.test(line)) diffRemoved++;
+    }
+  } catch {}
+
+  const dStruct = postScore.structural - preScore.structural;
+  const dQual = postScore.quality - preScore.quality;
+  const dTotal = postScore.total - preScore.total;
+
+  let rollback = false;
+  let reason = '';
+  if (dTotal < 0) { rollback = true; reason = 'delta_total'; }
+  else if (dStruct < -5) { rollback = true; reason = 'delta_structural'; }
+  else if (dQual < -5) { rollback = true; reason = 'delta_quality'; }
+  else if (preSize > 0 && postSize < 0.7 * preSize) { rollback = true; reason = 'post_size_shrank'; }
+
+  const row = {
+    ts: new Date().toISOString(),
+    ticker, round,
+    pre_size: preSize, post_size: postSize,
+    pre_structural: preScore.structural, post_structural: postScore.structural,
+    pre_quality: preScore.quality, post_quality: postScore.quality,
+    pre_total: preScore.total, post_total: postScore.total,
+    delta_structural: dStruct, delta_quality: dQual, delta_total: dTotal,
+    rolled_back: rollback, rollback_reason: reason,
+    diff_lines_added: diffAdded, diff_lines_removed: diffRemoved,
+    pre_path: path.relative(PROJECT_ROOT, preSnap),
+    post_path: path.relative(PROJECT_ROOT, postSnap),
+  };
+  const jsonlPath = path.join(PROJECT_ROOT, 'data', 'audit', 'polish-log.jsonl');
+  if (!fs.existsSync(path.dirname(jsonlPath))) fs.mkdirSync(path.dirname(jsonlPath), { recursive: true });
+  fs.appendFileSync(jsonlPath, JSON.stringify(row) + '\n');
+  return { rollback, reason };
 }
 
 /** Delete all initial_max_gaps_*.json and initial_max_score_*.json in the ticker directory (cleanup after run to avoid accumulation). */
@@ -592,6 +768,14 @@ async function main() {
   const skillContent = fs.readFileSync(skillPath, 'utf-8');
   const programPrompt = fs.existsSync(programPath) ? fs.readFileSync(programPath, 'utf-8') : '';
 
+  // Skeleton-first: ensure the main report has all REQUIRED_SECTIONS headings
+  // before baseline scoring. Without this, structural=0 on first run and the loop
+  // wastes rounds on a non-existent file (V incident 2026-05-08).
+  const skeletonMainPath = path.join(PROJECT_ROOT, 'data', 'companies', ticker, `${ticker}_Initial_MAX.md`);
+  if (!fs.existsSync(skeletonMainPath) || fs.statSync(skeletonMainPath).size < 500) {
+    writeSkeletonReport(skeletonMainPath, ticker);
+  }
+
   // Baseline score
   console.log('\n═══ Baseline Scoring ═══');
   const { score: baselineScore, gaps: baselineGaps } = await scoreCompanyResearch(ticker, 0, scoringModel);
@@ -625,6 +809,10 @@ async function main() {
   let prevScore = baselineScore.total;
   let bestScore = baselineScore.total;
   let plateauCount = 0;
+  // Same-class crash-streak abort: count consecutive crashes with the SAME failure class
+  // (e.g. 3 consecutive 'claude-cli-timeout' aborts the ticker; mixed classes do not).
+  let crashStreak = 0;
+  let lastCrashClass = '';
   // Gap attempts now tracked persistently via gap-tracker.ts (cross-company learning)
 
   for (let round = 1; round <= maxRounds && !baselineScore.passThreshold; round++) {
@@ -632,6 +820,21 @@ async function main() {
     const roundStart = Date.now();
     const roundStartCost = costTracker.totalCostUsd;
     const roundScoreBefore = prevScore;
+    const mainSizeAtRoundStart = fs.existsSync(skeletonMainPath) ? fs.statSync(skeletonMainPath).size : 0;
+
+    // No-main-file abort: if after round 2+ the main file is missing or too small,
+    // gap-fill is broken; bail out instead of burning remaining rounds.
+    if (round >= 2 && (!fs.existsSync(skeletonMainPath) || fs.statSync(skeletonMainPath).size < 1500)) {
+      const sz = fs.existsSync(skeletonMainPath) ? fs.statSync(skeletonMainPath).size : 0;
+      console.error(`[runner] No main report after round ${round - 1} (size=${sz}); aborting ticker`);
+      appendTrace({
+        ts: new Date().toISOString(), ticker, phase: 'gap-fill', round,
+        model, durationSec: 0, inputTokens: 0, outputTokens: 0, costUsd: 0,
+        filesWritten: 0, scoreChange: 'abort', agentExitCode: 2,
+        status: 'failed', error: `aborted_no_main_file size=${sz}`,
+      });
+      process.exit(2);
+    }
 
     try {
       // Get latest gaps (from previous round)
@@ -802,6 +1005,17 @@ async function main() {
         plateauCount++;
       }
 
+      // Reset crash-streak on any productive signal: score gain OR substantive main-file growth
+      const mainSizeAfter = fs.existsSync(skeletonMainPath) ? fs.statSync(skeletonMainPath).size : 0;
+      const grewMain = mainSizeAfter - mainSizeAtRoundStart >= 1000;
+      if (newScore.total > roundScoreBefore || grewMain) {
+        if (crashStreak > 0) {
+          console.log(`[crash-streak] reset (score ${roundScoreBefore}→${newScore.total}, main +${mainSizeAfter - mainSizeAtRoundStart}B)`);
+        }
+        crashStreak = 0;
+        lastCrashClass = '';
+      }
+
       const elapsedSec = Math.round((Date.now() - roundStart) / 1000);
       console.log(`Round ${round} done in ${elapsedSec}s`);
       const filesAfterRound = countCompanyResearchFiles(ticker);
@@ -865,6 +1079,9 @@ async function main() {
 
     } catch (err: any) {
       console.error(`Round ${round} CRASH: ${err.message}`);
+      const cls = classifyCrash(err.message ?? '');
+      crashStreak = (cls === lastCrashClass) ? crashStreak + 1 : 1;
+      lastCrashClass = cls;
       appendTrace({
         ts: new Date().toISOString(),
         ticker,
@@ -882,13 +1099,24 @@ async function main() {
         scoreBefore: prevScore,
         bestScore,
         error: err.message,
+        metadata: { crashClass: cls, crashStreak },
       });
       const result: RoundResult = {
         round, commit: gitShortHash(), score: prevScore, status: 'crash',
-        description: err.message.slice(0, 100), timestamp: new Date().toISOString(),
+        description: `[${cls}] ${err.message?.slice(0, 100) ?? ''}`, timestamp: new Date().toISOString(),
       };
       history.push(result);
       appendTsv(tsvPath, result);
+      if (crashStreak >= 3 && (cls === 'claude-cli-timeout' || cls === 'mlx-fetch-failed')) {
+        console.error(`[crash-streak] ${crashStreak} consecutive ${cls} crashes — aborting ticker`);
+        appendTrace({
+          ts: new Date().toISOString(), ticker, phase: 'gap-fill', round,
+          model, durationSec: 0, inputTokens: 0, outputTokens: 0, costUsd: 0,
+          filesWritten: 0, scoreChange: 'abort', agentExitCode: 3,
+          status: 'failed', error: `crash_streak class=${cls} streak=${crashStreak}`,
+        });
+        process.exit(3);
+      }
     }
   }
 
@@ -902,6 +1130,26 @@ async function main() {
       // Snapshot before polish for rollback protection
       const polishBakPath = mainFilePath + '.polish-bak';
       fs.copyFileSync(mainFilePath, polishBakPath);
+
+      // Pre-polish score (use the latest in-history total — polish is editing the same artifact
+      // that produced bestScore, so re-scoring would just duplicate the most-recent gap-fill score).
+      const lastHistoryRow = history[history.length - 1];
+      const prePolishScore = {
+        structural: 0, quality: 0,
+        total: lastHistoryRow?.score ?? bestScore,
+      };
+      // Read structural/quality from the most recent score JSON if available
+      try {
+        const scoreFiles = fs.readdirSync(path.join(PROJECT_ROOT, 'data', 'companies', ticker))
+          .filter(f => /^initial_max_score_\d+\.json$/.test(f))
+          .sort((a, b) => (parseInt(b.match(/\d+/)![0]) - parseInt(a.match(/\d+/)![0])));
+        if (scoreFiles.length > 0) {
+          const latest = JSON.parse(fs.readFileSync(path.join(PROJECT_ROOT, 'data', 'companies', ticker, scoreFiles[0]!), 'utf-8'));
+          prePolishScore.structural = latest.structural ?? 0;
+          prePolishScore.quality = latest.quality ?? 0;
+          prePolishScore.total = latest.total ?? prePolishScore.total;
+        }
+      } catch {}
 
       const polishGaps: InitialMaxGaps = { round: polishRoundId, score: prevScore, gaps: [] };
       const polishResp = await runGapFillAgent(
@@ -925,13 +1173,21 @@ async function main() {
       console.log('Scoring after polish...');
       const { score: afterPolish } = await scoreCompanyResearch(ticker, polishRoundId, scoringModel);
       costTracker.totalCostUsd += afterPolish.scoringCostUsd ?? 0;
-      console.log(`Score after polish: ${afterPolish.total}/100`);
+      console.log(`Score after polish: ${afterPolish.total}/100 (structural=${afterPolish.structural} quality=${afterPolish.quality})`);
 
-      // Rollback if polish degraded the score
-      if (afterPolish.total < bestScore) {
-        console.log(`[rollback] Polish degraded score ${bestScore}→${afterPolish.total} — restoring from backup`);
+      // Audit + multi-gate rollback (delta_total < 0 OR delta_structural < -5 OR delta_quality < -5 OR shrink > 30%)
+      const audit = recordPolishAudit({
+        ticker, round: polishRoundId,
+        preBakPath: polishBakPath,
+        postPath: mainFilePath,
+        preScore: prePolishScore,
+        postScore: { structural: afterPolish.structural, quality: afterPolish.quality, total: afterPolish.total },
+      });
+
+      if (audit.rollback) {
+        console.log(`[rollback] Polish gate '${audit.reason}' tripped (pre=${prePolishScore.total} post=${afterPolish.total} struct=${prePolishScore.structural}→${afterPolish.structural} qual=${prePolishScore.quality}→${afterPolish.quality}) — restoring backup`);
         fs.copyFileSync(polishBakPath, mainFilePath);
-        polishDesc = `[rollback] ${polishDesc}`;
+        polishDesc = `[rollback:${audit.reason}] ${polishDesc}`;
         history.push({
           round: polishRoundId,
           commit: gitShortHash(),
