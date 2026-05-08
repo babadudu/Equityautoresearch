@@ -1,8 +1,8 @@
 {
   "last_updated": "2026-03-22",
   "total_items": 36,
-  "pending": 21,
-  "completed": 8,
+  "pending": 20,
+  "completed": 9,
   "queue": [
     {
       "ticker": "EBAY",
@@ -124,10 +124,11 @@
       "signal": null,
       "signal_date": null,
       "last_report_date": null,
-      "status": "pending",
+      "status": "completed",
       "why": "Consumer Staples holding (2.9% of portfolio). no documented thesis.",
       "max_cost": 200,
-      "score": 60
+      "score": 60,
+      "completed_date": "2026-05-07"
     },
     {
       "ticker": "CDNS",
@@ -137,11 +138,12 @@
       "signal": null,
       "signal_date": null,
       "last_report_date": null,
-      "status": "failed",
+      "status": "completed",
       "why": "Semiconductor holding (2.3% of portfolio). no documented thesis.",
       "max_cost": 200,
       "score": 23.2,
-      "error": "No research output produced"
+      "rubric_score": 90,
+      "completed_date": "2026-05-07"
     },
     {
       "ticker": "WM",
@@ -155,7 +157,7 @@
       "why": "Industrial holding (1.1% of portfolio). +101% unrealized gain. no documented thesis. BUY signal on 2026-03-09 at $246.05.",
       "max_cost": 200,
       "score": 15.7,
-      "error": "No research output produced"
+      "completed_date": "2026-05-07"
     },
     {
       "ticker": "CF",
@@ -221,10 +223,11 @@
       "signal": null,
       "signal_date": null,
       "last_report_date": null,
-      "status": "pending",
+      "status": "failed",
       "why": "Cyclical holding (0.8% of portfolio). no documented thesis.",
       "max_cost": 200,
-      "score": 7.7
+      "score": 7.7,
+      "error": "Process exited with code 143"
     },
     {
       "ticker": "NFLX",

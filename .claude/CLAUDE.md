@@ -36,3 +36,9 @@ TypeScript/Node.js, Anthropic SDK, Gemini CLI, MLX (local inference via supervis
 - **Gap-fill routes to MLX by default (`DEFAULT_MODEL = LOCAL_MODEL`).** Polish hardcodes `MODELS.CLAUDE` at its call site (`initial-max-runner.ts:843`). Override with `--model claude-opus-4-6-20250219` to force Claude for gap-fill. MLX bypasses the `USE_CLAUDE_CLI` gate — it falls through to the API tool loop in `runGapFillAgent`.
 
 - **`chatViaMlx` handles multi-turn tool-calling.** Tool-use/tool-result blocks in Anthropic message history are converted to OpenAI `tool_calls` / `role: 'tool'` format. The conversion lives at `src/llm.ts:627-670`.
+
+- **Research pipeline monitoring.** Background `npm run initial-max` output files are often 0 bytes under the RTK proxy. Reliable monitoring: (1) `ps aux | grep tsx` — process alive; (2) `ls -la data/companies/TICKER/` — file size growth; (3) watch for `initial_max_score_N.json` files appearing to track completed rounds; (4) `ps aux | grep "claude -p"` — shows the active gap-fill/polish subprocess.
+
+- **Polish round is "round 16" in history.jsonl.** When a gap-fill round scores ≥85 (`passThreshold: true`), the runner enters a polish step internally labeled round 16 in `data/scoring/history.jsonl`. Polish typically gains +2–3 points (CDNS: 88→90). Final score = polish round score, not the pass-threshold round.
+
+- **Rubric scorer rejects "Monitor/Accumulate" as a rating.** The 論點 dimension requires an explicit `BUY`, `SELL`, or `HOLD` text. Hybrid/conditional recommendations ("Monitor/Accumulate on Weakness") score 0 on the actionability sub-criterion. Always close this gap with: explicit rating + probability-weighted Bull/Base/Bear scenario table (with an Expected row) + quantified upgrade/downgrade triggers.
