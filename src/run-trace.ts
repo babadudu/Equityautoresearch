@@ -22,8 +22,23 @@ export interface TraceEntry {
   filesWritten: number;
   scoreChange: string;
   agentExitCode: number;
+  status?: 'started' | 'completed' | 'failed' | 'skipped' | 'blocked';
+  backend?: string;
+  scorerStatus?: string;
+  structural?: number;
+  quality?: number;
+  scoreBefore?: number;
+  scoreAfter?: number;
+  bestScore?: number;
+  gapsRemaining?: number;
+  toolCalls?: number;
+  searchCalls?: number;
+  error?: string;
+  metadata?: Record<string, unknown>;
 }
 
 export function appendTrace(entry: TraceEntry): void {
+  const dir = path.dirname(TRACE_PATH);
+  if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
   fs.appendFileSync(TRACE_PATH, JSON.stringify(entry) + '\n');
 }

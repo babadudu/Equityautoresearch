@@ -150,10 +150,10 @@ export function cleanTicker(t: string): string {
 
 export async function callNinjaApi(action: string, args: Record<string, unknown>): Promise<string> {
   const key = process.env.NINJA_API_KEY ?? '';
-  if (!key || key === 'REPLACE_ME') return JSON.stringify({ error: 'NINJA_API_KEY 未設定（請在專案根目錄 .env 設定）' });
+  if (!key || key === 'REPLACE_ME') return JSON.stringify({ error: 'NINJA_API_KEY not set (add it to .env in project root)' });
   const ticker = cleanTicker(String(args.ticker ?? ''));
   if (['stockprice', 'earnings', 'earningstranscript', 'sec', 'earnings_historical'].includes(action) && !ticker && !args.cik) {
-    return JSON.stringify({ error: `${action} 需要 ticker（或 cik）` });
+    return JSON.stringify({ error: `${action} requires ticker (or cik)` });
   }
   const params: Record<string, string | number> = {};
   if (ticker) params['ticker'] = ticker;
@@ -194,14 +194,14 @@ export async function callNinjaApi(action: string, args: Record<string, unknown>
     sec: '/sec',
   };
   const p = pathMap[action];
-  if (!p) return JSON.stringify({ error: `action 須為: stockprice, earnings, earningstranscript, sec, earnings_historical` });
+  if (!p) return JSON.stringify({ error: `action must be one of: stockprice, earnings, earningstranscript, sec, earnings_historical` });
   const url = new URL(NINJA_BASE + p);
   Object.entries(params).forEach(([k, v]) => { if (v !== undefined && v !== '') url.searchParams.set(k, String(v)); });
   try {
     const res = await fetchWithRetry(url.toString(), { headers: { 'X-Api-Key': key } });
     if (!res.ok) {
       const text = await res.text();
-      if (res.status === 402 || res.status === 403) return JSON.stringify({ error: '此端點為 API Ninjas Premium 限定' });
+      if (res.status === 402 || res.status === 403) return JSON.stringify({ error: 'This endpoint requires API Ninjas Premium' });
       return JSON.stringify({ error: `API ${res.status}: ${text.slice(0, 200)}` });
     }
     const data = await res.json();
@@ -301,7 +301,7 @@ export function searchDataForCompany(ticker: string): string {
     ceo: ceoName || undefined,
     keywords_used: keywords,
     matches,
-    message: matches.length ? '可用 read_project_file(path) 讀取上述 path 的完整內容' : '未找到與該公司/CEO 相關的 data 內容',
+    message: matches.length ? 'Use read_project_file(path) to load the full content of any path above' : 'No data content found related to this company/CEO',
   });
 }
 
@@ -309,11 +309,11 @@ export function searchDataForCompany(ticker: string): string {
 export function readProjectFile(relativePath: string): string {
   const normalized = path.normalize(relativePath).replace(/\\/g, '/');
   if (!normalized.startsWith('data/') || normalized.includes('..')) {
-    return JSON.stringify({ error: 'path 必須以 data/ 開頭且不得含 ..' });
+    return JSON.stringify({ error: 'path must start with data/ and must not contain ..' });
   }
   const ext = path.extname(normalized).toLowerCase();
   if (!['.md', '.txt', '.json'].includes(ext)) {
-    return JSON.stringify({ error: '僅支援 .md / .txt / .json' });
+    return JSON.stringify({ error: 'Only .md / .txt / .json files are supported' });
   }
   const fullPath = path.join(PROJECT_ROOT, normalized);
   if (!fs.existsSync(fullPath) || !fs.statSync(fullPath).isFile()) {

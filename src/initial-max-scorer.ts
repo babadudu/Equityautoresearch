@@ -3,7 +3,8 @@
  *
  * Two-channel scoring: structural (heuristic, 0-37) + quality (LLM, 0-60).
  * 5 dimensions: 環境(18), 生意(30), 組織(17), 人(20), 論點(15).
- * Per-dimension LLM calls × 3 with median for variance reduction.
+ * Per-dimension LLM calls: remote uses 3-call median; MLX uses deterministic
+ * single-pass by default (set SCORER_MLX_SINGLE_PASS=0 to restore median).
  * Reference-anchored pairwise calibration vs FUTU report.
  *
  * Usage (standalone):
@@ -20,11 +21,12 @@ import {
 } from './config.js';
 import { hashRubricSet } from './rubric-versions.js';
 import { appendScoringEvent, type ScoringEvent } from './scoring-store.js';
+import { appendTrace } from './run-trace.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const PROJECT_ROOT = path.resolve(__dirname, '..');
 
-/** 主檔必備子節（1.1～4.2），每節皆須有實質內容才達標 */
+/** Required subsections (1.1–4.2) — all must have substantive content to pass */
 const REQUIRED_SECTIONS = ['1.1', '1.2', '1.3', '1.4', '2.1', '2.2', '2.3', '2.4', '2.5', '3.1', '3.2', '3.3', '4.1', '4.2'];
 const MIN_SECTION_CHARS = 80;
 
@@ -54,6 +56,8 @@ export interface InitialMaxScore {
   passThreshold: boolean;
   round: number;
   rubricVersion?: string;
+  structuralBreakdown?: Record<string, number>;
+  structuralDetails?: string[];
   scorerStatus?: 'full' | 'llm_partial_failure';
   scorerPartialFailure?: boolean;
   scoringCostUsd?: number;
@@ -140,7 +144,7 @@ function readResearchFiles(ticker: string): string {
   return collected.join('');
 }
 
-/** 檢查主檔是否每個必備子節（1.1～4.2）皆有實質內容 */
+/** Check whether every required subsection (1.1–4.2) has substantive content */
 function checkAllSectionsCovered(mainContent: string): { allCovered: boolean; missing: string[] } {
   const missing: string[] = [];
   for (const id of REQUIRED_SECTIONS) {
@@ -179,11 +183,17 @@ function extractSectionContent(mainContent: string, sectionIds: string[]): strin
   return extracted.join('\n\n');
 }
 
+function extractIntroContent(mainContent: string): string {
+  const firstNumberedSection = mainContent.search(/^##\s*1\.1\b/m);
+  const intro = firstNumberedSection >= 0 ? mainContent.slice(0, firstNumberedSection) : mainContent;
+  return intro.slice(0, 20000);
+}
+
 function extractDimensionContent(mainContent: string, dimension: Dimension): string {
   const sectionMap: Record<Dimension, string[]> = {
     環境: ['1.1', '1.2', '1.3', '1.4'],
     生意: ['2.1', '2.2', '2.3', '2.4', '2.5'],
-    組織: ['3.1', '3.2', '3.3'],
+    組織: ['1.4', '3.1', '3.2', '3.3'],
     人: ['4.1', '4.2'],
     論點: ['2.5', '8.1', '8.2', '8.3', '8.4'],
   };
@@ -192,8 +202,14 @@ function extractDimensionContent(mainContent: string, dimension: Dimension): str
 
   // For 生意, also include executive summary
   if (dimension === '生意') {
-    const execMatch = mainContent.match(/^#\s+Executive Summary[\s\S]*?(?=\n#\s)/m);
-    if (execMatch) content = execMatch[0].slice(0, 3000) + '\n\n' + content;
+    content = extractIntroContent(mainContent).slice(0, 5000) + '\n\n' + content;
+  }
+
+  // For 論點, the actionable recommendation and variant perception often live
+  // before numbered sections, not in 8.x. Include that opening block so the
+  // scorer evaluates the thesis text the gap-filler actually edits.
+  if (dimension === '論點') {
+    content = extractIntroContent(mainContent).slice(0, 12000) + '\n\n' + content;
   }
 
   // For 人, include interview table if present
@@ -328,8 +344,15 @@ function checkInternalConsistency(ticker: string, mainContent: string): string[]
   // 1. DCF WACC matches stated WACC in assumptions
   const section25 = mainContent.match(/##\s*2\.5[\s\S]*?(?=\n#\s|\n##\s[^2]|$)/);
   if (section25) {
-    const waccMatches = section25[0].match(/WACC[^0-9]*(\d+\.?\d*)%/gi) ?? [];
-    const waccValues = waccMatches.map(m => parseFloat(m.match(/(\d+\.?\d*)/)?.[1] ?? '0'));
+    const waccValues = section25[0]
+      .split(/\r?\n/)
+      .filter(line => /WACC|加權平均|折現率/i.test(line))
+      .filter(line => !/敏感度|sensitivity|\\\s*WACC|\bvs\.?\s*WACC|terminal growth\s*\\?\s*WACC|at WACC|implied WACC|closer to market/i.test(line))
+      .flatMap(line => {
+        const explicit = line.match(/(?:WACC|加權平均資本成本|折現率)[^\d\n]*(\d+(?:\.\d+)?)%/i);
+        if (explicit) return [parseFloat(explicit[1])];
+        return [];
+      });
     const uniqueWaccs = [...new Set(waccValues.filter(v => v > 0))];
     if (uniqueWaccs.length > 1) {
       issues.push(`Inconsistent WACC values: ${uniqueWaccs.join('%, ')}%`);
@@ -354,7 +377,7 @@ function checkInternalConsistency(ticker: string, mainContent: string): string[]
   const transcriptsDir = path.join(getCompanyDir(ticker), 'transcripts');
   if (fs.existsSync(transcriptsDir)) {
     const actualFiles = fs.readdirSync(transcriptsDir).filter(f => f.endsWith('.md') || f.endsWith('.txt'));
-    const mentionedMatch = mainContent.match(/(\d+)\s*(?:篇|則|interviews?|transcripts?)/i);
+    const mentionedMatch = mainContent.match(/(?:^|[^\d])(\d{1,2})\s*(?:篇|則|interviews?|transcripts?)/i);
     if (mentionedMatch) {
       const mentioned = parseInt(mentionedMatch[1]);
       if (Math.abs(mentioned - actualFiles.length) > 3) {
@@ -381,308 +404,308 @@ function checkInternalConsistency(ticker: string, mainContent: string): string[]
 // ── Dimension-specific anchored rubric prompts (Phase 1.4) ──
 
 const DIMENSION_PROMPTS: Record<Dimension, string> = {
-  環境: `你是投資研究品質評審，同時扮演三位專家角色。請評估以下**環境**（產業與市場）分析的品質。
+  環境: `You are an investment research quality reviewer playing three expert roles simultaneously. Evaluate the quality of the **Environment** (industry & market) analysis below.
 
-## 評分標準（滿分 12 分）
+## Scoring Criteria (max 12 pts)
 
-### TAM 與產業趨勢 (0-3)
-0 = 完全未提及
-1 = 僅提及（例："TAM is large"）
-2 = 有數據但無出處（例："TAM $500B"）
-3 = 多源佐證+時間序列（例：3個不同來源的TAM估計，含成長率拆分+URL）
+### TAM & Industry Trend (0-3)
+0 = Not mentioned at all
+1 = Mentioned only vaguely (e.g., "TAM is large")
+2 = Data present but no source (e.g., "TAM $500B")
+3 = Multi-source evidence + time series (e.g., 3 different TAM estimates with growth breakdown + URLs)
 
-### 市場結構分析 (0-3)
-0 = 完全未提及
-1 = 提及「競爭激烈」等泛泛描述
-2 = 有市佔率數據+主要玩家（例："Top 3 players hold 70%"）
-3 = 集中度分析+進入障礙+歷史演變（例：HHI趨勢、護城河量化）
+### Market Structure Analysis (0-3)
+0 = Not mentioned at all
+1 = Generic description only (e.g., "highly competitive")
+2 = Market share data + named players (e.g., "Top 3 players hold 70%")
+3 = Concentration analysis + barriers to entry + historical evolution (e.g., HHI trend, moat quantification)
 
-### 監管/政策環境 (0-3)
-0 = 完全未提及
-1 = 僅列法規名稱
-2 = 法規+影響分析（例："CHIPS Act provides $52B, benefiting X"）
-3 = 監管矩陣：機會+風險+時間軸+管理層引言對政策的回應
+### Regulatory/Policy Environment (0-3)
+0 = Not mentioned at all
+1 = Regulation names listed only
+2 = Regulation + impact analysis (e.g., "CHIPS Act provides $52B, benefiting X")
+3 = Regulatory matrix: opportunities + risks + timeline + management quotes responding to policy
 
-### 技術與需求趨勢 (0-3)
-0 = 完全未提及
-1 = 僅列趨勢名稱
-2 = 趨勢+數據支撐
-3 = 採用曲線+需求拆分+技術演進路線圖
+### Technology & Demand Trends (0-3)
+0 = Not mentioned at all
+1 = Trend names listed only
+2 = Trends + data support
+3 = Adoption curve + demand breakdown + technology roadmap
 
-## 專家審議（評分前必須完成）
+## Expert Panel (complete before scoring)
 
-**股票分析師視角（near-term catalysts, TAM momentum）：**
-- 報告識別的TAM動能是否有12-24個月可見的催化劑支撐（客戶擴產決策、法規時程、技術節點）？
-- TAM是否有加速跡象（AI需求拉動、新應用滲透）或減速風險（客戶庫存調整、替代技術）？
-- 監管時間軸是否具體到影響未來2年EPS的程度？
+**Stock Analyst perspective (near-term catalysts, TAM momentum):**
+- Does the TAM momentum identified have visible 12-24 month catalysts (customer capex decisions, regulatory timelines, technology nodes)?
+- Are there acceleration signs (AI demand pull, new application penetration) or deceleration risks (customer inventory correction, substitute technologies)?
+- Is the regulatory timeline specific enough to affect EPS over the next 2 years?
 
-**價值投資人視角（market structure, moat durability）：**
-- 市場結構是趨於整合（護城河加深）還是分裂（護城河侵蝕）？報告是否有數據支撐此判斷？
-- 競爭優勢是結構性的（規模/專利/轉換成本）還是周期性的（供需缺口）？報告是否區分了兩者？
-- TAM框架是否識別哪些市場份額是「可防禦的」而非短暫的？
+**Value Investor perspective (market structure, moat durability):**
+- Is the market structure trending toward consolidation (deepening moat) or fragmentation (moat erosion)? Does the report have data supporting this?
+- Is the competitive advantage structural (scale/IP/switching costs) or cyclical (supply-demand gap)? Does the report distinguish between the two?
+- Does the TAM framework identify which market share is "defensible" vs. transient?
 
-**風險偏好顧問視角（asymmetric upside, unpriced optionality）：**
-- 如果TAM預測低估，2倍上行情境是什麼？報告是否觸及此上行空間？
-- 最壞監管情境是否已充分定價，或市場是否低估了「監管利好」的可能性？
-- 報告是否識別了市場尚未計入的新興機會（新地理、新應用、平台擴張）？
+**Risk Advisor perspective (asymmetric upside, unpriced optionality):**
+- If TAM forecasts are underestimated, what is the 2x upside scenario? Does the report touch on this?
+- Is the worst-case regulatory scenario already priced in, or is the market underestimating the probability of a regulatory tailwind?
+- Does the report identify emerging opportunities not yet priced in (new geographies, new applications, platform expansion)?
 
-## 評分程序
-1. 完成上述三位專家的分析視角
-2. 針對每個子標準，從報告中引用具體文字作為証據
-3. 對照錨點給分，不得僅憑報告篇幅長短評分
+## Scoring Procedure
+1. Complete the three expert perspectives above
+2. For each sub-criterion, cite specific text from the report as evidence
+3. Score against the anchors — do not score based solely on report length
 
-## 輸出格式（純 JSON，不加 code fence）
+## Output Format (pure JSON, no code fence)
 {
   "expert_panel": {"stock_analyst": "...", "value_investor": "...", "risk_advisor": "..."},
-  "TAM趨勢": 數字,
-  "市場結構": 數字,
-  "監管政策": 數字,
-  "技術趨勢": 數字,
-  "total": 數字,
+  "TAM趨勢": number,
+  "市場結構": number,
+  "監管政策": number,
+  "技術趨勢": number,
+  "total": number,
   "evidence": ["..."],
   "gaps": ["..."]
 }`,
 
-  生意: `你是投資研究品質評審，同時扮演三位專家角色。請評估以下**生意**（商業模式與財務）分析的品質。
+  生意: `You are an investment research quality reviewer playing three expert roles simultaneously. Evaluate the quality of the **Business** (business model & financials) analysis below.
 
-## 評分標準（滿分 18 分）
+## Scoring Criteria (max 18 pts)
 
-### 財務歷史完整度 (0-5)
-0 = 無財務數據
-1 = <5年數據、僅營收
-2 = 5-7年、含基本損益
-3 = 8-10年、含毛利/營業利益/EPS、轉折點說明
-4 = 10+年完整表格+出處URL
-5 = 10+年+轉折點深度敘事+管理層引言佐證
+### Financial History Completeness (0-5)
+0 = No financial data
+1 = <5 years, revenue only
+2 = 5-7 years, basic P&L
+3 = 8-10 years with gross margin/operating income/EPS, inflection point notes
+4 = 10+ years full table + source URLs
+5 = 10+ years + deep inflection narrative + management quote support
 
-### 商業模式深度 (0-5)
-0 = 未描述
-1 = 泛泛描述（"SaaS model"）
-2 = 收入拆分+基本模式說明
-3 = 收入拆分+unit economics+管理層引言（10+則）
-4 = 上述+策略引言涵蓋≥3個時期+出處URL
-5 = 綜合分析：底層驅動+策略演進+交叉驗證
+### Business Model Depth (0-5)
+0 = Not described
+1 = Generic description only (e.g., "SaaS model")
+2 = Revenue breakdown + basic model explanation
+3 = Revenue breakdown + unit economics + management quotes (10+ quotes)
+4 = Above + strategic quotes covering ≥3 time periods + source URLs
+5 = Integrated analysis: underlying drivers + strategic evolution + cross-validation
 
-### 競爭護城河 (0-5)
-0 = 未分析
-1 = 僅列護城河類型
-2 = Five Forces部分完成（3/5）
-3 = Five Forces 5a-5e完整+管理層引言佐證
-4 = 上述+護城河量化（轉換成本/規模效應/品牌溢價數據）
-5 = 五力完整+內部邏輯一致+管理層引言佐證護城河觀點
+### Competitive Moat (0-5)
+0 = Not analyzed
+1 = Moat types listed only
+2 = Five Forces partially complete (3/5)
+3 = Five Forces 5a-5e complete + management quote support
+4 = Above + moat quantification (switching cost/scale effect/brand premium data)
+5 = Full Five Forces + internal logic consistency + management quotes supporting moat view
 
-### DCF估值品質 (0-3)
-0 = 無DCF/估值
-1 = 僅P/E或單一方法
-2 = ≥2方法+WACC+情境表（但缺敏感度或IRR）
-3 = ≥3方法+WACC分解+三情境+IRR+3×3敏感度+合理性檢查
+### DCF Valuation Quality (0-3)
+0 = No DCF/valuation
+1 = P/E only or single method
+2 = ≥2 methods + WACC + scenario table (but missing sensitivity or IRR)
+3 = ≥3 methods + WACC decomposition + 3-scenario table + IRR + 3×3 sensitivity + sanity check
 
-## 專家審議（評分前必須完成）
+## Expert Panel (complete before scoring)
 
-**價值投資人視角（primary — moat durability, ROIC, capital allocation）：**
-- ROIC vs WACC的多年趨勢：報告是否顯示ROIC持續高於WACC？有多少年數據？
-- 資本配置紀律：FCF轉換率如何？管理層在繁榮期是否控制擴張，或為增長過度燒錢？
-- 護城河有多持久？是技術領先（可能被顛覆）還是規模/轉換成本（更耐久）？五力分析是否量化了護城河強度？
+**Value Investor perspective (primary — moat durability, ROIC, capital allocation):**
+- Multi-year ROIC vs WACC trend: does the report show ROIC consistently above WACC? How many years of data?
+- Capital allocation discipline: what is the FCF conversion rate? Did management control expansion during boom years, or burn cash for growth?
+- How durable is the moat? Is it technology leadership (disruptable) or scale/switching costs (more durable)? Does the Five Forces analysis quantify moat strength?
 
-**股票分析師視角（near-term earnings quality, consensus gap）：**
-- 報告的收入/利潤率軌跡是否優於市場共識預期？有無具體數據支撐EPS驚喜的可能性？
-- 商業模式的收入可見度如何（合約比例、backlog、重複性收入占比）？
-- 估值倍數是否有擴張或收縮的理由（ROIC改善→PE重估、護城河侵蝕→估值折讓）？
+**Stock Analyst perspective (near-term earnings quality, consensus gap):**
+- Does the revenue/margin trajectory beat market consensus expectations? Is there data supporting potential EPS upside?
+- How visible is revenue (contract backlog percentage, recurring revenue mix)?
+- Is there a thesis for multiple expansion or contraction (ROIC improvement → P/E re-rating, moat erosion → valuation discount)?
 
-**風險偏好顧問視角（asymmetric upside, optionality）：**
-- 如果護城河比市場認知的更持久，DCF牛市情境的IRR是否吸引人（>15%）？
-- 報告是否識別了市場尚未定價的期權價值（新地理擴張、鄰近市場進入、技術授權）？
-- 相對於潛在報酬，熊市IRR的下行不對稱性是否支持建倉？
+**Risk Advisor perspective (asymmetric upside, optionality):**
+- If the moat is more durable than the market believes, is the bull-case DCF IRR attractive (>15%)?
+- Does the report identify option value not yet priced in (new geographies, adjacent market entry, technology licensing)?
+- Does the bear-case IRR downside asymmetry support position building relative to potential returns?
 
-## 評分程序
-1. 完成上述三位專家的分析視角
-2. 枚舉：DCF估值區間 vs 多元估值法（P/E、EV/EBITDA）是否收斂或矛盾
-3. 針對每個子標準，從報告中引用具體文字作為証據
-4. 對照錨點給分
+## Scoring Procedure
+1. Complete the three expert perspectives above
+2. Enumerate: does the DCF valuation range converge or conflict with multi-method valuation (P/E, EV/EBITDA)?
+3. For each sub-criterion, cite specific text from the report as evidence
+4. Score against the anchors
 
-## 輸出格式（純 JSON，不加 code fence）
+## Output Format (pure JSON, no code fence)
 {
   "expert_panel": {"stock_analyst": "...", "value_investor": "...", "risk_advisor": "..."},
-  "財務歷史": 數字,
-  "商業模式": 數字,
-  "五力分析": 數字,
-  "DCF投資論文": 數字,
-  "total": 數字,
+  "財務歷史": number,
+  "商業模式": number,
+  "五力分析": number,
+  "DCF投資論文": number,
+  "total": number,
   "evidence": ["..."],
   "gaps": ["..."]
 }`,
 
-  組織: `你是投資研究品質評審，同時扮演三位專家角色。請評估以下**組織**（結構與運營）分析的品質。
+  組織: `You are an investment research quality reviewer playing three expert roles simultaneously. Evaluate the quality of the **Organization** (structure & operations) analysis below.
 
-## 評分標準（滿分 12 分）
+## Scoring Criteria (max 12 pts)
 
-### 地理/業務分部 (0-4)
-0 = 未提及
-1 = 僅列主要市場
-2 = 有數據但無出處（例："北美佔60%"）
-3 = 含年報/法說出處+URL+多年數據
-4 = 多年分部數據+出處URL+趨勢分析+管理層引言佐證
+### Geographic/Business Segments (0-4)
+0 = Not mentioned
+1 = Major markets listed only
+2 = Data present but no source (e.g., "North America is 60%")
+3 = Annual report/earnings call source + URL + multi-year data
+4 = Multi-year segment data + source URLs + trend analysis + management quote support
 
-### 組織文化與激勵 (0-4)
-0 = 未提及
-1 = 泛泛描述（"創新文化"）
-2 = 有具體機制（股權激勵計畫說明）
-3 = 機制+案例+管理層引言
-4 = 機制+案例+逆勢擴張決策+人才策略+出處
+### Organizational Culture & Incentives (0-4)
+0 = Not mentioned
+1 = Generic description only (e.g., "innovative culture")
+2 = Specific mechanisms described (equity incentive plan details)
+3 = Mechanisms + case examples + management quotes
+4 = Mechanisms + case examples + counter-cyclical expansion decisions + talent strategy + sources
 
-### 運營效率 (0-4)
-0 = 未提及
-1 = 提及利潤率
-2 = ROIC計算或Operating Leverage分析
-3 = ROIC多年趨勢+同業比較+出處
-4 = ROIC+OL+費用率拆解+效率改善驅動因素分析
+### Operational Efficiency (0-4)
+0 = Not mentioned
+1 = Margin mentioned only
+2 = ROIC calculation or Operating Leverage analysis
+3 = Multi-year ROIC trend + peer comparison + sources
+4 = ROIC + OL + expense ratio breakdown + efficiency improvement driver analysis
 
-## 專家審議（評分前必須完成）
+## Expert Panel (complete before scoring)
 
-**價值投資人視角（primary — incentive alignment, ROIC trend, culture as moat）：**
-- 激勵機制是否與長期股東利益對齊（薪酬結構vs EPS dilution、回購時機）？報告有無具體數據？
-- 過去5年ROIC趨勢如何？是改善（良好資本配置）還是稀釋（增長過快消耗資本）？
-- 文化是否是可持續的護城河（人才密度、創新機制），還是企業公關說詞？報告有無逆勢決策的例子？
+**Value Investor perspective (primary — incentive alignment, ROIC trend, culture as moat):**
+- Are incentive mechanisms aligned with long-term shareholder interests (compensation structure vs EPS dilution, buyback timing)? Does the report have specific data?
+- What is the 5-year ROIC trend? Improving (good capital allocation) or diluting (growing too fast consuming capital)?
+- Is culture a sustainable moat (talent density, innovation mechanisms) or corporate PR? Does the report have examples of counter-cyclical decisions?
 
-**股票分析師視角（geographic mix, efficiency catalysts）：**
-- 哪些地理市場正在加速，哪些在放緩？地理組合變化對整體利潤率的近期影響如何？
-- 費用率趨勢（R&D/SG&A占比）是否改善？有無重組或效率提升的近期催化劑？
-- 地理擴張或收縮是否可能引發管理層指引修正（正面或負面的EPS修正）？
+**Stock Analyst perspective (geographic mix, efficiency catalysts):**
+- Which geographies are accelerating, which are slowing? What is the near-term margin impact of the geographic mix shift?
+- Is the expense ratio trend (R&D/SG&A as % of revenue) improving? Are there near-term restructuring or efficiency catalysts?
+- Could geographic expansion or contraction trigger management guidance revision (positive or negative EPS revision)?
 
-**風險偏好顧問視角（hidden value, asymmetric efficiency gains）：**
-- 報告是否識別了市場尚未充分定價的細分部門或地理區域的隱藏價值？
-- 如果運營效率改善加速（費用率下降1-2個百分點），對EPS的槓桿效應有多大？
-- 文化和激勵結構是否支持在市場低谷時的逆勢擴張（恰恰是創造長期價值的時機）？
+**Risk Advisor perspective (hidden value, asymmetric efficiency gains):**
+- Does the report identify hidden value in sub-segments or geographies not yet fully priced by the market?
+- If operational efficiency improvement accelerates (expense ratio down 1-2 percentage points), what is the EPS leverage?
+- Does the culture and incentive structure support counter-cyclical expansion at market troughs (exactly when long-term value is created)?
 
-## 評分程序
-1. 完成上述三位專家的分析視角
-2. 針對每個子標準，從報告中引用具體文字作為証據
-3. 對照錨點給分，不得因報告內容豐富而系統性高估
+## Scoring Procedure
+1. Complete the three expert perspectives above
+2. For each sub-criterion, cite specific text from the report as evidence
+3. Score against the anchors — do not systematically over-score because the report is lengthy
 
-## 輸出格式（純 JSON，不加 code fence）
+## Output Format (pure JSON, no code fence)
 {
   "expert_panel": {"stock_analyst": "...", "value_investor": "...", "risk_advisor": "..."},
-  "地理分部": 數字,
-  "組織文化": 數字,
-  "運營效率": 數字,
-  "total": 數字,
+  "地理分部": number,
+  "組織文化": number,
+  "運營效率": number,
+  "total": number,
   "evidence": ["..."],
   "gaps": ["..."]
 }`,
 
-  人: `你是投資研究品質評審，同時扮演三位專家角色。請評估以下**人**（管理層）分析的品質。
+  人: `You are an investment research quality reviewer playing three expert roles simultaneously. Evaluate the quality of the **People** (management team) analysis below.
 
-## 評分標準（滿分 12 分）
+## Scoring Criteria (max 12 pts)
 
-### CEO格局觀與商業哲學 (0-4)
-0 = 未提及
-1 = 僅列CEO姓名與背景
-2 = 有哲學描述但無引言佐證
-3 = 多年敘事+引言（5+則）+出處+拐點分析
-4 = 從學經歷起完整敘事+每時期引言+成功失敗反思+第一性原理邏輯
+### CEO Philosophy & Business Vision (0-4)
+0 = Not mentioned
+1 = CEO name and background listed only
+2 = Philosophy described but no quotes as evidence
+3 = Multi-year narrative + quotes (5+) + sources + inflection point analysis
+4 = Full narrative from education onwards + per-period quotes + success/failure reflection + first-principles logic
 
-### 繼任風險與板凳深度 (0-4)
-0 = 完全未提及
-1 = 僅提CEO年齡
-2 = CEO年齡+任期+籠統繼任描述
-3 = CEO年齡+≥2位次世代領導人剖析（背景、強項）+板凳評級
-4 = 上述+繼任計畫揭露+歷史繼任案例+出處
+### Succession Risk & Bench Depth (0-4)
+0 = Not mentioned at all
+1 = CEO age mentioned only
+2 = CEO age + tenure + vague succession description
+3 = CEO age + ≥2 next-generation leaders profiled (background, strengths) + bench rating
+4 = Above + succession plan disclosure + historical succession cases + sources
 
-### 道德操守與價值創造 (0-4)
-0 = 未提及
-1 = 泛泛描述（"誠信經營"）
-2 = 有具體案例
-3 = 多個案例+出處+管理層引言
-4 = 價值觀驅動決策+長期案例+與財務表現連結
+### Ethics & Value Creation (0-4)
+0 = Not mentioned
+1 = Generic description only (e.g., "integrity-driven")
+2 = Specific case examples present
+3 = Multiple cases + sources + management quotes
+4 = Values-driven decisions + long-term cases + link to financial performance
 
-## 專家審議（評分前必須完成）
+## Expert Panel (complete before scoring)
 
-**價值投資人視角（primary — capital allocation across cycles, intellectual honesty）：**
-- 管理層在完整市場週期（繁榮與蕭條）中的資本配置決策如何？有無高峰期收購失誤或谷底錯失機會？
-- CEO的哲學表述是否體現第一性原理（具體、可操作），還是含糊的「客戶第一」？報告引用了哪些決策作為哲學佐證？
-- 管理層是否誠實面對失敗和挑戰（過度自信的管理層更可能過度擴張）？
+**Value Investor perspective (primary — capital allocation across cycles, intellectual honesty):**
+- How did management allocate capital across a full market cycle (boom and bust)? Were there peak-cycle acquisition mistakes or trough-cycle missed opportunities?
+- Does the CEO's philosophy reflect first principles (specific, actionable) or vague "customer first" platitudes? Which decisions does the report cite as philosophical evidence?
+- Does management honestly confront failures and challenges (overconfident management is more likely to over-expand)?
 
-**股票分析師視角（guidance track record, succession as catalyst）：**
-- 管理層過去的指引準確度如何？有無長期高估或低估業績的規律（影響市場對指引的折扣）？
-- 繼任風險是否是短期（1-2年）的投資催化劑或風險？繼任者的風格是否已知？
-- 治理風險（關聯交易、獨立董事比例、薪酬透明度）是否影響近期估值？
+**Stock Analyst perspective (guidance track record, succession as catalyst):**
+- How accurate has management guidance been historically? Is there a pattern of systematic over- or under-estimation (affecting market guidance discount)?
+- Is succession risk a near-term (1-2 year) investment catalyst or risk? Is the successor's style known?
+- Does governance risk (related-party transactions, independent director ratio, compensation transparency) affect near-term valuation?
 
-**風險偏好顧問視角（visionary premium, succession as re-rating opportunity）：**
-- 如果創辦人/願景型CEO角色被市場折讓，繼任後的策略重整是否可能帶來估值重評？
-- 管理層的逆勢擴張歷史（衰退期加大研發、逆向收購）是否代表長期複利加速的特質？
-- 這位管理層是否有超出財務模型能捕捉的「執行力期權」（進入新市場能力、行業生態整合力）？
+**Risk Advisor perspective (visionary premium, succession as re-rating opportunity):**
+- If the founder/visionary CEO role is discounted by the market, could post-succession strategy repositioning trigger a valuation re-rating?
+- Does management's counter-cyclical expansion history (increasing R&D during downturns, contrarian acquisitions) represent a long-term compounding acceleration trait?
+- Does this management team have "execution optionality" beyond what financial models capture (ability to enter new markets, ecosystem integration)?
 
-## 評分程序
-1. 完成上述三位專家的分析視角
-2. 針對每個子標準，從報告中引用具體文字作為証據
-3. 對照錨點給分
+## Scoring Procedure
+1. Complete the three expert perspectives above
+2. For each sub-criterion, cite specific text from the report as evidence
+3. Score against the anchors
 
-## 輸出格式（純 JSON，不加 code fence）
+## Output Format (pure JSON, no code fence)
 {
   "expert_panel": {"stock_analyst": "...", "value_investor": "...", "risk_advisor": "..."},
-  "格局觀哲學": 數字,
-  "繼任風險": 數字,
-  "道德操守": 數字,
-  "total": 數字,
+  "格局觀哲學": number,
+  "繼任風險": number,
+  "道德操守": number,
+  "total": number,
   "evidence": ["..."],
   "gaps": ["..."]
 }`,
 
-  論點: `你是投資研究品質評審，同時扮演三位專家角色。請評估以下研究報告的**投資論點品質**。
+  論點: `You are an investment research quality reviewer playing three expert roles simultaneously. Evaluate the **Investment Thesis quality** of the research report below.
 
-## 評分標準（滿分 9 分）
+## Scoring Criteria (max 9 pts)
 
-### 非共識觀點 / Variant Perception (0-3)
-0 = 無明確投資論點
-1 = 有buy/sell建議但無差異化觀點（僅重述基本面）
-2 = 識別出市場可能錯誤，但論據不充分
-3 = 清晰variant perception：市場共識是X，我們認為Y因為Z（需有數據+邏輯鏈）
+### Variant Perception / Non-Consensus View (0-3)
+0 = No clear investment thesis
+1 = Buy/sell recommendation but no differentiated view (just restates fundamentals)
+2 = Identifies where the market may be wrong, but argument is insufficient
+3 = Clear variant perception: market consensus is X, we believe Y because Z (requires data + logic chain)
 
-### 內部一致性 (0-3)
-0 = 明顯矛盾
-1 = 部分一致，有1-2個矛盾
-2 = 大致一致，偶有小矛盾
-3 = 完全一致：DCF假設↔財務預測↔TAM分析↔競爭地位形成完整邏輯鏈
+### Internal Consistency (0-3)
+0 = Obvious contradictions
+1 = Partially consistent, 1-2 contradictions
+2 = Generally consistent, occasional minor contradictions
+3 = Fully consistent: DCF assumptions ↔ financial forecasts ↔ TAM analysis ↔ competitive position form a complete logic chain
 
-### 可行動性 (0-3) — 逐項核查後再評分
-評分前請確認以下5項是否**明確出現**於報告中（不得推斷或從估值隱含）：
-□ A. 明確的 BUY / SELL / HOLD 文字建議
-□ B. 具體價格目標（數字）
-□ C. 明確時間框架
-□ D. ≥3個具體催化劑
-□ E. 明確的風險觸發條件
-若找不到「BUY」「SELL」「HOLD」「買入」「賣出」「持有」等明確評級字樣，可行動性最高給2分。
+### Actionability (0-3) — verify each item before scoring
+Before scoring, confirm whether the following 5 items **explicitly appear** in the report (do not infer or imply from valuation):
+□ A. Explicit BUY / SELL / HOLD text recommendation
+□ B. Specific price target (number)
+□ C. Explicit time horizon
+□ D. ≥3 specific catalysts
+□ E. Explicit risk trigger conditions
+If "BUY", "SELL", or "HOLD" (or equivalent) cannot be found as explicit text, actionability max is 2.
 
-## 專家審議（評分前必須完成）
+## Expert Panel (complete before scoring)
 
-**股票分析師視角（catalyst actionability, failure hypothesis）：**
-- 催化劑是否具體到可在12-24個月內驗證（有時間點和可測量的成功標準）？
-- 失效觸發條件是否夠具體（「若xxx發生即改變立場」vs「若市場惡化」）？
-- 投資評級（BUY/SELL/HOLD）是否有明確文字表達，還是僅有估值區間暗示？
+**Stock Analyst perspective (catalyst actionability, failure hypothesis):**
+- Are catalysts specific enough to verify within 12-24 months (with time points and measurable success criteria)?
+- Are failure trigger conditions specific enough ("if X happens, change stance" vs. "if market deteriorates")?
+- Is the investment rating (BUY/SELL/HOLD) explicitly stated in text, or only implied by a valuation range?
 
-**價值投資人視角（thesis durability, analytical consistency）：**
-- 投資論點是否在2-3年持有期內仍然成立（考慮競爭動態和產業週期）？
-- 分析框架是否前後一致（估值假設是否與競爭地位分析邏輯對齊）？
-- DCF假設（WACC、終值成長率）是否與財務歷史和護城河強度一致？
+**Value Investor perspective (thesis durability, analytical consistency):**
+- Does the investment thesis hold over a 2-3 year holding period (considering competitive dynamics and industry cycle)?
+- Is the analytical framework internally consistent (do valuation assumptions align with competitive position analysis)?
+- Are DCF assumptions (WACC, terminal growth rate) consistent with financial history and moat strength?
 
-**風險偏好顧問視角（scenario probability, IRR adequacy）：**
-- 情境概率加權是否合理（牛市情境占比是否反映真實概率而非樂觀偏差）？
-- 基準IRR是否充分補償風險（相對於無風險利率+股票風險溢價+個股風險）？
-- 報告是否識別了未充分定價的上行尾部（技術突破、地緣政治加持）或下行尾部（黑天鵝）？
+**Risk Advisor perspective (scenario probability, IRR adequacy):**
+- Is the scenario probability weighting reasonable (does the bull-case allocation reflect true probability rather than optimistic bias)?
+- Does the base-case IRR adequately compensate for risk (relative to risk-free rate + equity risk premium + idiosyncratic risk)?
+- Does the report identify unpriced upside tail (technology breakthrough, geopolitical tailwind) or downside tail (black swan)?
 
-## 評分程序
-1. 完成上述三位專家的分析視角
-2. 枚舉內部一致性：DCF假設vs多元估值是否收斂？IRR vs概率加權回報是否一致？
-3. 枚舉非共識觀點：市場共識是什麼？分析師差異點是什麼？是否有數據支撐？
-4. 根據枚舉結果給分，每個維度必須引用具體証據
+## Scoring Procedure
+1. Complete the three expert perspectives above
+2. Enumerate internal consistency: do DCF assumptions converge or conflict with multi-method valuation? Is IRR consistent with probability-weighted returns?
+3. Enumerate variant perception: what is the stated market consensus? What is the analyst's differentiated view? Is it data-backed?
+4. Score based on enumeration — each dimension must cite specific evidence
 
-## 輸出格式（純 JSON，不加 code fence）
+## Output Format (pure JSON, no code fence)
 {
   "expert_panel": {"stock_analyst": "...", "value_investor": "...", "risk_advisor": "..."},
-  "非共識觀點": 數字,
-  "內部一致性": 數字,
-  "可行動性": 數字,
-  "total": 數字,
+  "非共識觀點": number,
+  "內部一致性": number,
+  "可行動性": number,
+  "total": number,
   "evidence": ["..."],
   "gaps": ["..."]
 }`,
@@ -696,81 +719,81 @@ const MLX_ROUTED_DIMENSIONS = new Set<Dimension>(['環境', '生意', '組織', 
 // Prompt overrides for MLX — only dimensions where the standard prompt isn't calibrated.
 // 論點 needs checklist-gate + few-shot + expert panel + structured CoT to prevent actionability inflation.
 const MLX_DIMENSION_PROMPT_OVERRIDES: Partial<Record<Dimension, string>> = {
-  論點: `你是投資研究品質評審，同時扮演三位專家角色。請評估以下研究報告的**投資論點品質**。
+  論點: `You are an investment research quality reviewer playing three expert roles simultaneously. Evaluate the **Investment Thesis quality** of the research report below.
 
-## 評分標準（滿分 9 分）
+## Scoring Criteria (max 9 pts)
 
-### 非共識觀點 / Variant Perception (0-3)
-0 = 無明確投資論點
-1 = 有buy/sell建議但無差異化觀點（僅重述基本面）
-2 = 識別出市場可能錯誤，但論據不充分
-3 = 清晰variant perception：市場共識是X，我們認為Y因為Z（需有數據+邏輯鏈）
+### Variant Perception / Non-Consensus View (0-3)
+0 = No clear investment thesis
+1 = Buy/sell recommendation but no differentiated view (just restates fundamentals)
+2 = Identifies where the market may be wrong, but argument is insufficient
+3 = Clear variant perception: market consensus is X, we believe Y because Z (requires data + logic chain)
 
-### 內部一致性 (0-3)
-0 = 明顯矛盾
-1 = 部分一致，有1-2個矛盾
-2 = 大致一致，偶有小矛盾
-3 = 完全一致：DCF假設↔財務預測↔TAM分析↔競爭地位形成完整邏輯鏈
+### Internal Consistency (0-3)
+0 = Obvious contradictions
+1 = Partially consistent, 1-2 contradictions
+2 = Generally consistent, occasional minor contradictions
+3 = Fully consistent: DCF assumptions ↔ financial forecasts ↔ TAM analysis ↔ competitive position form a complete logic chain
 
-### 可行動性 (0-3) — 逐項核查後再評分
-評分前請先逐一確認以下5項是否**明確出現**於報告中（不得推斷或從估值隱含）：
-□ A. 明確的 BUY / SELL / HOLD 文字建議（不接受「隱含買入信號」或估值低估等替代說法）
-□ B. 具體價格目標（數字）
-□ C. 明確時間框架（如「12個月」「2026年底前」）
-□ D. ≥3個具體催化劑
-□ E. 明確的風險觸發條件
+### Actionability (0-3) — verify each item before scoring
+Before scoring, confirm one by one whether the following 5 items **explicitly appear** in the report (do not infer or imply from valuation):
+□ A. Explicit BUY / SELL / HOLD text recommendation (do not accept "implied buy signal" or "undervaluation" as substitutes)
+□ B. Specific price target (number)
+□ C. Explicit time horizon (e.g., "12 months", "by end of 2026")
+□ D. ≥3 specific catalysts
+□ E. Explicit risk trigger conditions
 
-評分規則：
-- 3分：A+B+C+D+E 全部明確出現
-- 2分：缺少A（無明確buy/sell/hold），但B+C+D+E均有；或有A但缺D或E
-- 1分：僅有buy/sell但無價格目標；或多項缺失
-- 0分：無結論
+Scoring rules:
+- 3: A+B+C+D+E all explicitly present
+- 2: Missing A (no explicit buy/sell/hold) but B+C+D+E all present; or has A but missing D or E
+- 1: Has buy/sell only but no price target; or multiple items missing
+- 0: No conclusion
 
-**關鍵**：若找不到「BUY」「SELL」「HOLD」「買入」「賣出」「持有」等明確評級字樣，可行動性最高給2分。
+**Key**: If "BUY", "SELL", or "HOLD" (or equivalent) cannot be found as explicit text, actionability max is 2.
 
-## 反例示範（勿重蹈）
+## Counter-Example (do not repeat this mistake)
 
-輸入片段：「公允價值區間 NT$9,500-11,700，中位數 NT$10,800。概率加權IRR約10%。
-提供7個失效觸發條件。N2量產、CoWoS擴產為主要催化劑。」
+Input excerpt: "Fair value range $9,500–$11,700, median $10,800. Probability-weighted IRR ~10%.
+7 kill-switch conditions provided. N2 production ramp and CoWoS expansion are primary catalysts."
 
-錯誤評分：{"可行動性": 3, ...}
-正確評分：{"可行動性": 2, ...}
-理由：估值區間≠明確BUY建議；IRR≠投資評級；無「買入/BUY/HOLD」字樣→A項缺失→最高2分。
+Wrong score: {"可行動性": 3, ...}
+Correct score: {"可行動性": 2, ...}
+Reason: valuation range ≠ explicit BUY recommendation; IRR ≠ investment rating; no "BUY/SELL/HOLD" text → Item A missing → max 2.
 
-## 專家審議（評分前必須完成）
+## Expert Panel (complete before scoring)
 
-**股票分析師視角（catalyst actionability, failure hypothesis）：**
-- 催化劑是否具體到可在12-24個月內驗證（有時間點和可測量的成功標準）？
-- 失效觸發條件是否夠具體（「若xxx發生即改變立場」vs「若市場惡化」）？
-- 投資評級（BUY/SELL/HOLD）是否有明確文字表達，還是僅有估值區間暗示？
+**Stock Analyst perspective (catalyst actionability, failure hypothesis):**
+- Are catalysts specific enough to verify within 12-24 months (with time points and measurable success criteria)?
+- Are failure trigger conditions specific enough ("if X happens, change stance" vs. "if market deteriorates")?
+- Is the investment rating (BUY/SELL/HOLD) explicitly stated in text, or only implied by a valuation range?
 
-**價值投資人視角（thesis durability, analytical consistency）：**
-- 投資論點是否在2-3年持有期內仍然成立（考慮競爭動態和產業週期）？
-- 分析框架是否前後一致（估值假設是否與競爭地位分析邏輯對齊）？
-- DCF假設（WACC、終值成長率）是否與財務歷史和護城河強度一致？
+**Value Investor perspective (thesis durability, analytical consistency):**
+- Does the investment thesis hold over a 2-3 year holding period (considering competitive dynamics and industry cycle)?
+- Is the analytical framework internally consistent (do valuation assumptions align with competitive position analysis)?
+- Are DCF assumptions (WACC, terminal growth rate) consistent with financial history and moat strength?
 
-**風險偏好顧問視角（scenario probability, IRR adequacy）：**
-- 情境概率加權是否合理（牛市情境占比是否反映真實概率而非樂觀偏差）？
-- 基準IRR是否充分補償風險（相對於無風險利率+股票風險溢價+個股風險）？
-- 報告是否識別了未充分定價的上行尾部（技術突破、地緣政治加持）或下行尾部（黑天鵝）？
+**Risk Advisor perspective (scenario probability, IRR adequacy):**
+- Is the scenario probability weighting reasonable (does the bull-case allocation reflect true probability rather than optimistic bias)?
+- Does the base-case IRR adequately compensate for risk (relative to risk-free rate + equity risk premium + idiosyncratic risk)?
+- Does the report identify unpriced upside tail (technology breakthrough, geopolitical tailwind) or downside tail (black swan)?
 
-## 評分程序（必須依序完成）
+## Scoring Procedure (complete in order)
 
-### 步驟 1：內部一致性枚舉（評分前完成）
-請先列出以下項目，再評分：
-- DCF估值區間 vs P/E/EV-EBITDA多元估值 → 兩者是否收斂或矛盾？
-- 報告的IRR/回報率 vs 尾部風險/失效情境 → 概率加權是否一致？
-- 牛市情境 vs 熊市情境 → 是否共用同一分析師立場，或僅中性並列？
+### Step 1: Enumerate internal consistency (before scoring)
+List the following first, then score:
+- DCF valuation range vs P/E/EV-EBITDA multi-method → do they converge or contradict?
+- Report IRR/return vs tail risk/failure scenarios → is probability weighting consistent?
+- Bull scenario vs bear scenario → do they share the same analyst stance, or are they just neutrally juxtaposed?
 
-### 步驟 2：非共識觀點枚舉（評分前完成）
-請先列出以下項目，再評分：
-- 報告明確陳述的市場共識是什麼？
-- 分析師主張與共識的差異點是什麼？
-- 該差異主張是否有數據支撐，還是僅為斷言？（請回答"yes + 數據引用"或"no + 理由"）
+### Step 2: Enumerate variant perception (before scoring)
+List the following first, then score:
+- What market consensus does the report explicitly state?
+- What is the analyst's differentiated view vs consensus?
+- Is that differentiated claim data-backed or just assertion? (answer "yes + data citation" or "no + reason")
 
-### 步驟 3：根據枚舉結果評分，每個維度必須引用步驟中的具體項目
+### Step 3: Score based on enumeration — each dimension must cite specific items from the steps above
 
-## 輸出格式（純 JSON，不加 code fence）
+## Output Format (pure JSON, no code fence)
 {
   "expert_panel": {"stock_analyst": "...", "value_investor": "...", "risk_advisor": "..."},
   "enumeration": {
@@ -778,10 +801,10 @@ const MLX_DIMENSION_PROMPT_OVERRIDES: Partial<Record<Dimension, string>> = {
     "variant_perception": {"stated_consensus": "...", "analyst_diff": "...", "data_backed": "yes/no + reason"}
   },
   "checklist": {"A_explicit_rating": true, "B_price_target": true, "C_timeframe": true, "D_catalysts_3plus": true, "E_risk_triggers": true},
-  "非共識觀點": 數字,
-  "內部一致性": 數字,
-  "可行動性": 數字,
-  "total": 數字,
+  "非共識觀點": number,
+  "內部一致性": number,
+  "可行動性": number,
+  "total": number,
   "evidence": ["..."],
   "gaps": ["..."]
 }`,
@@ -834,6 +857,24 @@ function findCanonicalKey(returnedKey: string, canonicalKeys: string[]): string 
   return returnedKey; // fallback to original
 }
 
+function looseParseDimensionJson(jsonText: string, dimension: Dimension): any | null {
+  const canonicalKeys = CANONICAL_CRITERIA_KEYS[dimension] ?? [];
+  const parsed: Record<string, number | string[]> = {};
+  for (const key of canonicalKeys) {
+    const escaped = key.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const match = jsonText.match(new RegExp(`["']?${escaped}["']?\\s*[:：]\\s*(\\d+(?:\\.\\d+)?)`));
+    if (match) parsed[key] = Number(match[1]);
+  }
+  const numericKeys = Object.keys(parsed);
+  if (numericKeys.length === 0) return null;
+  const totalMatch = jsonText.match(/["']?total["']?\s*[:：]\s*(\d+(?:\.\d+)?)/i);
+  parsed.total = totalMatch
+    ? Number(totalMatch[1])
+    : numericKeys.reduce((sum, key) => sum + Number(parsed[key] ?? 0), 0);
+  parsed.gaps = [];
+  return parsed;
+}
+
 /** Call LLM for one dimension, return sub-criteria scores */
 async function scoreDimension(
   dimension: Dimension,
@@ -842,7 +883,7 @@ async function scoreDimension(
   model: string,
 ): Promise<{ subCriteria: Record<string, number>; total: number; gaps: string[]; costUsd: number; backend: string; model: string } | null> {
   if (sectionContent.trim().length < 50) {
-    return { subCriteria: {}, total: 0, gaps: [`${dimension}: 內容不足，無法評分`], costUsd: 0, backend: 'skipped', model: 'none' };
+    return { subCriteria: {}, total: 0, gaps: [`${dimension}: content too short to score`], costUsd: 0, backend: 'skipped', model: 'none' };
   }
 
   const useMlx = scorerBackendIntent(dimension) === 'mlx';
@@ -878,7 +919,14 @@ ${sectionContent}`;
     // Sanitize CJK fullwidth punctuation that MLX models sometimes emit inside JSON values.
     const CJK_PUNCT: Record<string, string> = { '。': '.', '，': ',', '：': ':', '；': ';', '！': '!', '？': '?' };
     const candidate = jsonStr.slice(start, end + 1).replace(/[。，：；！？]/g, c => CJK_PUNCT[c] ?? c);
-    const parsed = JSON.parse(candidate);
+    let parsed: any;
+    try {
+      parsed = JSON.parse(candidate);
+    } catch (parseErr: any) {
+      parsed = looseParseDimensionJson(candidate, dimension);
+      if (!parsed) throw parseErr;
+      console.log(`  [scorer] ${dimension}: recovered scores from malformed MLX JSON`);
+    }
     const { total, evidence, gaps, ...subCriteria } = parsed;
 
     // Normalize keys to canonical names (LLM may return abbreviations)
@@ -927,7 +975,12 @@ function variance(nums: number[]): number {
   return nums.reduce((a, b) => a + (b - mean) ** 2, 0) / (nums.length - 1);
 }
 
-/** Phase 1.2: Score all dimensions with 3-call median */
+function scorerTargetCalls(dimension: Dimension): number {
+  if (scorerBackendIntent(dimension) !== 'mlx') return SCORER_NUM_CALLS;
+  return process.env.SCORER_MLX_SINGLE_PASS === '0' ? SCORER_NUM_CALLS : 1;
+}
+
+/** Phase 1.2: Score all dimensions with adaptive median/single-pass */
 async function llmScoreStructured(
   ticker: string,
   mainContent: string,
@@ -956,8 +1009,12 @@ async function llmScoreStructured(
     const sectionContent = extractDimensionContent(mainContent, dim);
     const callResults: Array<{ subCriteria: Record<string, number>; total: number; gaps: string[]; costUsd: number; backend: string; model: string }> = [];
 
-    // 3 calls per dimension with retry on failure (max SCORER_MAX_RETRIES per call)
-    for (let i = 0; i < SCORER_NUM_CALLS; i++) {
+    const targetCalls = scorerTargetCalls(dim);
+    const minValidCalls = targetCalls >= 2 ? 2 : 1;
+
+    // Remote: 3 calls per dimension with median. MLX: single deterministic call
+    // by default; retry still protects malformed JSON or transient server errors.
+    for (let i = 0; i < targetCalls; i++) {
       let result: Awaited<ReturnType<typeof scoreDimension>> = null;
       for (let retry = 0; retry <= SCORER_MAX_RETRIES; retry++) {
         result = await scoreDimension(dim, sectionContent, ticker, model);
@@ -973,22 +1030,22 @@ async function llmScoreStructured(
       }
     }
 
-    // Require ≥2 valid calls; if only 1 succeeded, retry once
+    // Require enough valid calls for the chosen scoring mode.
     if (callResults.length === 0) {
       dimensions[dim] = { score: 0, criteria: {}, gaps: [`${dim}: LLM 評分失敗`] };
       perDimensionVariance[dim] = 0;
       continue;
     }
-    if (callResults.length < 2) {
+    if (callResults.length < minValidCalls) {
       console.log(`  [scorer] ⚠ ${dim}: only ${callResults.length} valid call(s) — retrying once...`);
       const retryResult = await scoreDimension(dim, sectionContent, ticker, model);
       if (retryResult) {
         scoringCostUsd += retryResult.costUsd;
         callResults.push(retryResult);
-        rawCalls.push({ dimension: dim, callIndex: SCORER_NUM_CALLS, backend: retryResult.backend, model: retryResult.model, subCriteria: retryResult.subCriteria, total: retryResult.total });
+        rawCalls.push({ dimension: dim, callIndex: targetCalls, backend: retryResult.backend, model: retryResult.model, subCriteria: retryResult.subCriteria, total: retryResult.total });
         console.log(`  [scorer] ${dim}: retry succeeded (${callResults.length} valid calls)`);
       }
-      if (callResults.length < 2) {
+      if (callResults.length < minValidCalls) {
         scorerPartialFailure = true;
         console.log(`  [scorer] ⚠ ${dim}: still only ${callResults.length} valid call(s) after retry — applying 0.85x confidence penalty`);
       }
@@ -1005,8 +1062,8 @@ async function llmScoreStructured(
     }
     let medianTotal = Object.values(medianCriteria).reduce((a, b) => a + b, 0);
 
-    // Apply confidence penalty if < 2 valid calls after retry
-    if (callResults.length < 2) {
+    // Apply confidence penalty if the selected mode did not reach enough valid calls.
+    if (callResults.length < minValidCalls) {
       medianTotal = Math.round(medianTotal * 0.85);
       for (const key of Object.keys(medianCriteria)) {
         medianCriteria[key] = Math.round(medianCriteria[key] * 0.85);
@@ -1113,58 +1170,122 @@ ${candidateContent.slice(0, 5000)}
 function buildGapsJson(score: InitialMaxScore, round: number, ticker?: string): InitialMaxGaps {
   const gaps: GapItem[] = [];
   let priority = 1;
+  const seen = new Set<string>();
+
+  const pushGap = (gap: Omit<GapItem, 'priority'>) => {
+    const key = `${gap.dimension}|${gap.item}`;
+    if (seen.has(key)) return;
+    seen.add(key);
+    gaps.push({ ...gap, priority: priority++ });
+  };
+
+  // Structural gates are pass blockers even when LLM dimensions look decent.
+  if (score.structural < STRUCTURAL_PASS_MIN) {
+    const b = score.structuralBreakdown ?? {};
+    const structuralShortfall = STRUCTURAL_PASS_MIN - score.structural;
+    if ((b.interview_count ?? 0) < 4) {
+      pushGap({
+        dimension: '結構',
+        item: '保存足量 transcripts/*.md（至少 10 份訪談/法說逐字稿，並在主文引用）',
+        current: b.interview_count ?? 0,
+        target: 'interview_count ≥4/6',
+        shortfall: structuralShortfall,
+      });
+    }
+    if ((b.url_citations ?? 0) < 5) {
+      pushGap({
+        dimension: '結構',
+        item: '補足主報告 URL citations（每個新增數據/引言附 clickable source）',
+        current: b.url_citations ?? 0,
+        target: 'url_citations ≥5/6',
+        shortfall: structuralShortfall,
+      });
+    }
+    if ((b.quotes ?? 0) < 4) {
+      pushGap({
+        dimension: '結構',
+        item: '增加可歸因直接引言並分散到各章節（CEO/COO/CFO/監管/客戶）',
+        current: b.quotes ?? 0,
+        target: 'quotes ≥4/4',
+        shortfall: structuralShortfall,
+      });
+    }
+    if ((b.dcf_structure ?? 0) < 6) {
+      pushGap({
+        dimension: '結構',
+        item: '補齊 DCF 結構：WACC 分解、三情境、IRR、WACC × terminal growth 3x3 敏感度',
+        current: b.dcf_structure ?? 0,
+        target: 'dcf_structure 6/6',
+        shortfall: structuralShortfall,
+      });
+    }
+  }
 
   // 論點維度 (15pts) — new dimension
   if ((score.論點.criteria?.['非共識觀點'] ?? 0) < 2) {
-    gaps.push({ dimension: '論點', item: '非共識觀點/Variant Perception', current: score.論點.criteria?.['非共識觀點'] ?? 0, target: '3分', shortfall: 3 - (score.論點.criteria?.['非共識觀點'] ?? 0), priority: priority++ });
+    pushGap({ dimension: '論點', item: '非共識觀點/Variant Perception', current: score.論點.criteria?.['非共識觀點'] ?? 0, target: '3分', shortfall: 3 - (score.論點.criteria?.['非共識觀點'] ?? 0) });
   }
   if ((score.論點.criteria?.['內部一致性'] ?? 0) < 2) {
-    gaps.push({ dimension: '論點', item: 'DCF假設與財務預測內部一致性', current: score.論點.criteria?.['內部一致性'] ?? 0, target: '3分', shortfall: 3 - (score.論點.criteria?.['內部一致性'] ?? 0), priority: priority++ });
+    pushGap({ dimension: '論點', item: 'DCF假設與財務預測內部一致性', current: score.論點.criteria?.['內部一致性'] ?? 0, target: '3分', shortfall: 3 - (score.論點.criteria?.['內部一致性'] ?? 0) });
   }
   if ((score.論點.criteria?.['可行動性'] ?? 0) < 2) {
-    gaps.push({ dimension: '論點', item: '投資結論可行動性（價格目標+催化劑+時間框架）', current: score.論點.criteria?.['可行動性'] ?? 0, target: '3分', shortfall: 3 - (score.論點.criteria?.['可行動性'] ?? 0), priority: priority++ });
+    pushGap({ dimension: '論點', item: '投資結論可行動性（價格目標+催化劑+時間框架）', current: score.論點.criteria?.['可行動性'] ?? 0, target: '3分', shortfall: 3 - (score.論點.criteria?.['可行動性'] ?? 0) });
   }
 
   // 人維度 (20pts)
   if ((score.人.criteria?.['格局觀哲學'] ?? 0) < 3) {
-    gaps.push({ dimension: '人', item: 'CEO格局觀與商業哲學', current: score.人.criteria?.['格局觀哲學'] ?? 0, target: '4分', shortfall: 4 - (score.人.criteria?.['格局觀哲學'] ?? 0), priority: priority++ });
+    pushGap({ dimension: '人', item: 'CEO格局觀與商業哲學', current: score.人.criteria?.['格局觀哲學'] ?? 0, target: '4分', shortfall: 4 - (score.人.criteria?.['格局觀哲學'] ?? 0) });
   }
   if ((score.人.criteria?.['繼任風險'] ?? 0) < 3) {
-    gaps.push({ dimension: '人', item: '繼任風險：CEO年齡、≥2位次世代領導人、板凳深度評級', current: score.人.criteria?.['繼任風險'] ?? 0, target: '4分', shortfall: 4 - (score.人.criteria?.['繼任風險'] ?? 0), priority: priority++ });
+    pushGap({ dimension: '人', item: '繼任風險：CEO年齡、≥2位次世代領導人、板凳深度評級', current: score.人.criteria?.['繼任風險'] ?? 0, target: '4分', shortfall: 4 - (score.人.criteria?.['繼任風險'] ?? 0) });
   }
 
   // 生意維度 (30pts)
   if ((score.生意.criteria?.['財務歷史'] ?? 0) < 4) {
-    gaps.push({ dimension: '生意', item: '財務歷史完整度', current: score.生意.criteria?.['財務歷史'] ?? 0, target: '5分', shortfall: 5 - (score.生意.criteria?.['財務歷史'] ?? 0), priority: priority++ });
+    pushGap({ dimension: '生意', item: '財務歷史完整度', current: score.生意.criteria?.['財務歷史'] ?? 0, target: '5分', shortfall: 5 - (score.生意.criteria?.['財務歷史'] ?? 0) });
   }
   if ((score.生意.criteria?.['商業模式'] ?? 0) < 4) {
-    gaps.push({ dimension: '生意', item: '商業模式深度（CEO引言涵蓋≥3時期+策略演進）', current: score.生意.criteria?.['商業模式'] ?? 0, target: '5分', shortfall: 5 - (score.生意.criteria?.['商業模式'] ?? 0), priority: priority++ });
+    pushGap({ dimension: '生意', item: '商業模式深度（CEO引言涵蓋≥3時期+策略演進）', current: score.生意.criteria?.['商業模式'] ?? 0, target: '5分', shortfall: 5 - (score.生意.criteria?.['商業模式'] ?? 0) });
   }
   if ((score.生意.criteria?.['五力分析'] ?? 0) < 4) {
-    gaps.push({ dimension: '生意', item: '五力分析+護城河量化', current: score.生意.criteria?.['五力分析'] ?? 0, target: '5分', shortfall: 5 - (score.生意.criteria?.['五力分析'] ?? 0), priority: priority++ });
+    pushGap({ dimension: '生意', item: '五力分析+護城河量化', current: score.生意.criteria?.['五力分析'] ?? 0, target: '5分', shortfall: 5 - (score.生意.criteria?.['五力分析'] ?? 0) });
   }
   if ((score.生意.criteria?.['DCF投資論文'] ?? 0) < 2) {
-    gaps.push({ dimension: '生意', item: 'DCF模型+三情境+IRR拆分+敏感度矩陣', current: score.生意.criteria?.['DCF投資論文'] ?? 0, target: '3分', shortfall: 3 - (score.生意.criteria?.['DCF投資論文'] ?? 0), priority: priority++ });
+    pushGap({ dimension: '生意', item: 'DCF模型+三情境+IRR拆分+敏感度矩陣', current: score.生意.criteria?.['DCF投資論文'] ?? 0, target: '3分', shortfall: 3 - (score.生意.criteria?.['DCF投資論文'] ?? 0) });
   }
 
   // 組織維度 (17pts)
   if ((score.組織.criteria?.['組織文化'] ?? 0) < 3) {
-    gaps.push({ dimension: '組織', item: '組織文化與激勵（薪酬結構+員工評分+人才保留）', current: score.組織.criteria?.['組織文化'] ?? 0, target: '4分', shortfall: 4 - (score.組織.criteria?.['組織文化'] ?? 0), priority: priority++ });
+    pushGap({ dimension: '組織', item: '組織文化與激勵（薪酬結構+員工評分+人才保留）', current: score.組織.criteria?.['組織文化'] ?? 0, target: '4分', shortfall: 4 - (score.組織.criteria?.['組織文化'] ?? 0) });
   }
   if ((score.組織.criteria?.['地理分部'] ?? 0) < 3) {
-    gaps.push({ dimension: '組織', item: '地理/業務分部收入(年報出處+URL)', current: score.組織.criteria?.['地理分部'] ?? 0, target: '4分', shortfall: 4 - (score.組織.criteria?.['地理分部'] ?? 0), priority: priority++ });
+    pushGap({ dimension: '組織', item: '地理/業務分部收入(年報出處+URL)', current: score.組織.criteria?.['地理分部'] ?? 0, target: '4分', shortfall: 4 - (score.組織.criteria?.['地理分部'] ?? 0) });
   }
   if ((score.組織.criteria?.['運營效率'] ?? 0) < 3) {
-    gaps.push({ dimension: '組織', item: 'ROIC趨勢/Operating Leverage', current: score.組織.criteria?.['運營效率'] ?? 0, target: '4分', shortfall: 4 - (score.組織.criteria?.['運營效率'] ?? 0), priority: priority++ });
+    pushGap({ dimension: '組織', item: 'ROIC趨勢/Operating Leverage', current: score.組織.criteria?.['運營效率'] ?? 0, target: '4分', shortfall: 4 - (score.組織.criteria?.['運營效率'] ?? 0) });
   }
 
   // 環境維度 (18pts)
   if (score.環境.score < 14) {
     for (const gap of score.環境.gaps) {
-      gaps.push({ dimension: '環境', item: gap, current: 0, target: '完整', shortfall: 18 - score.環境.score, priority: priority++ });
+      pushGap({ dimension: '環境', item: gap, current: 0, target: '完整', shortfall: 18 - score.環境.score });
     }
     if (score.環境.gaps.length === 0) {
-      gaps.push({ dimension: '環境', item: '需補充市場結構/監管/技術趨勢分析', current: score.環境.score, target: '18', shortfall: 18 - score.環境.score, priority: priority++ });
+      pushGap({ dimension: '環境', item: '需補充市場結構/監管/技術趨勢分析', current: score.環境.score, target: '18', shortfall: 18 - score.環境.score });
+    }
+  }
+
+  if (score.quality < QUALITY_PASS_MIN) {
+    for (const dim of ALL_DIMENSIONS) {
+      for (const gap of score[dim].gaps.slice(0, 2)) {
+        pushGap({
+          dimension: dim,
+          item: gap,
+          current: score[dim].score,
+          target: `${score[dim].max}`,
+          shortfall: QUALITY_PASS_MIN - score.quality,
+        });
+      }
     }
   }
 
@@ -1184,6 +1305,7 @@ export async function scoreCompanyResearch(
   round = 0,
   model: string = MODELS.CLAUDE,
 ): Promise<{ score: InitialMaxScore; gaps: InitialMaxGaps }> {
+  const scoringStartedAt = Date.now();
   const reportContent = readResearchFiles(ticker);
   const mainContent = readMainFile(ticker);
   const dir = getCompanyDir(ticker);
@@ -1203,7 +1325,28 @@ export async function scoreCompanyResearch(
       structural: 0, quality: 0, total: 0,
       passThreshold: false, round, rubricVersion,
     };
-    return { score, gaps: buildGapsJson(score, round, ticker) };
+    const gaps = buildGapsJson(score, round, ticker);
+    appendTrace({
+      ts: new Date().toISOString(),
+      ticker,
+      phase: 'scoring',
+      round,
+      model,
+      durationSec: Math.round((Date.now() - scoringStartedAt) / 1000),
+      inputTokens: 0,
+      outputTokens: 0,
+      costUsd: 0,
+      filesWritten: 0,
+      scoreChange: '0',
+      agentExitCode: 0,
+      status: 'completed',
+      scorerStatus: 'no_research_files',
+      structural: 0,
+      quality: 0,
+      scoreAfter: 0,
+      gapsRemaining: gaps.gaps.length,
+    });
+    return { score, gaps };
   }
 
   // ── Channel A: Structural score (deterministic) ──
@@ -1227,7 +1370,7 @@ export async function scoreCompanyResearch(
     console.log(`[scorer] Structural < 10, skipping LLM scorer`);
     scorerStatus = 'llm_partial_failure';
   } else {
-    console.log(`[scorer] Running structured LLM scorer (${model}) for ${ticker}...`);
+    console.log(`[scorer] Running structured LLM scorer (MLX→fallback:${model}) for ${ticker}...`);
     const llmResult = await llmScoreStructured(ticker, mainContent, model);
 
     if (llmResult) {
@@ -1314,6 +1457,8 @@ export async function scoreCompanyResearch(
     passThreshold,
     round,
     rubricVersion,
+    structuralBreakdown: structural.breakdown,
+    structuralDetails: structural.details,
     scorerStatus,
     scorerPartialFailure: scorerStatus === 'llm_partial_failure',
     scoringCostUsd,
@@ -1378,6 +1523,38 @@ export async function scoreCompanyResearch(
     appendScoringEvent(event);
   } catch (err: any) {
     console.error(`[scorer] Failed to append scoring event: ${err.message}`);
+  }
+
+  try {
+    appendTrace({
+      ts: new Date().toISOString(),
+      ticker,
+      phase: 'scoring',
+      round,
+      model,
+      durationSec: Math.round((Date.now() - scoringStartedAt) / 1000),
+      inputTokens: 0,
+      outputTokens: 0,
+      costUsd: scoringCostUsd,
+      filesWritten: 2,
+      scoreChange: String(total),
+      agentExitCode: 0,
+      status: score.passThreshold ? 'completed' : 'blocked',
+      backend: Object.values(backendByDimension).filter(Boolean).join('+') || undefined,
+      scorerStatus,
+      structural: structural.score,
+      quality: qualityScore,
+      scoreAfter: total,
+      gapsRemaining: gaps.gaps.length,
+      metadata: {
+        backendByDimension,
+        modelByDimension,
+        variance: totalVariance,
+        consistencyIssues: structural.details.filter(d => d.startsWith('Consistency')),
+      },
+    });
+  } catch (err: any) {
+    console.error(`[scorer] Failed to append trace: ${err.message}`);
   }
 
   return { score, gaps };
@@ -1580,7 +1757,10 @@ async function main() {
   console.log(`  組織 (${WEIGHTS.組織}pts): ${score.組織.score}`);
   console.log(`  人   (${WEIGHTS.人}pts): ${score.人.score}`);
   console.log(`  論點 (${WEIGHTS.論點}pts): ${score.論點.score}`);
-  console.log(`  達標 (≥${PASS_THRESHOLD}): ${score.passThreshold ? '✓ YES' : '✗ NO'}`);
+  console.log(
+    `  達標 (total≥${PASS_THRESHOLD}, structural≥${STRUCTURAL_PASS_MIN}, quality≥${QUALITY_PASS_MIN}): `
+    + `${score.passThreshold ? '✓ YES' : '✗ NO'}`,
+  );
   if (score.rubricVersion) console.log(`  Rubric: ${score.rubricVersion}`);
   if (score.環境.gaps.length) console.log('\n環境缺口:', score.環境.gaps.join('; '));
   if (score.生意.gaps.length) console.log('生意缺口:', score.生意.gaps.join('; '));

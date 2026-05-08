@@ -2,20 +2,21 @@
 /**
  * Initial MAX Runner
  *
- * 以四維框架（環境→生意→組織→人）為評分基準，對公司研究報告進行
- * 迭代深度補研究，直到品質達標（≥85/100）、plateau（3輪同分）或用完 maxRounds。
+ * Scores a company research report against the four-dimension framework
+ * (Environment→Business→Organization→People) and iteratively fills gaps
+ * until quality passes (≥85/100), plateaus (3 rounds same score), or maxRounds is reached.
  *
- * 核心差異 vs skill-optimizer.ts：
- *  - 研究內容是加法，不做 git reset on discard
- *  - 每輪 gap-fill agent 直接寫檔案（web_search + fetch_url + write_research_section）
- *  - 使用 google/gemini-3.1-pro-preview 模型
+ * Key differences vs skill-optimizer.ts:
+ *  - Research is additive — no git reset on discard
+ *  - Each round gap-fill agent writes files directly (web_search + fetch_url + write_research_section)
+ *  - Uses google/gemini-3.1-pro-preview model for gap-fill
  *
  * Usage:
  *   npx tsx src/initial-max-runner.ts --ticker NVDA
  *   npx tsx src/initial-max-runner.ts --ticker FUTU --score-only
  *   npx tsx src/initial-max-runner.ts --ticker GOOG --max-rounds 5 --tag test
  *   npx tsx src/initial-max-runner.ts --ticker MU --model minimax/minimax-m2.7
- *   npx tsx src/initial-max-runner.ts --ticker NVDA --skip-polish   # 略過結束後的順稿整理輪
+ *   npx tsx src/initial-max-runner.ts --ticker NVDA --skip-polish   # skip final polish round
  */
 import fs from 'fs';
 import path from 'path';
@@ -45,7 +46,7 @@ import { syncIntelligencePaths } from './intelligence-sync.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const PROJECT_ROOT = path.resolve(__dirname, '..');
-const DEFAULT_MODEL = LOCAL_MODEL;  // Gap-fill: MLX local. Polish hardcodes MODELS.CLAUDE at call site.
+const DEFAULT_MODEL = MODELS.CLAUDE;  // Gap-fill routes to Gemini CLI; polish hardcodes MODELS.CLAUDE. MLX handles scoring only.
 const DEFAULT_MAX_ROUNDS = 15;
 const PASS_THRESHOLD = SCORER_PASS_THRESHOLD;  // 85, from config
 
@@ -65,88 +66,88 @@ function normalizeGapKey(dimension: string, item: string): string {
   return `${normalize(dimension)}|${normalize(item)}`;
 }
 
-const POLISH_PHASE_SYSTEM = `# Initial MAX 主檔整理輪
+const POLISH_PHASE_SYSTEM = `# Initial MAX Polish Round
 
-你是投研 Markdown 主檔的**編輯**（非研究員）。你**只有**兩個工具：讀取主檔、寫入主檔。
+You are an **editor** of the investment research Markdown report (not a researcher). You have **only two tools**: read the report, write the report.
 
-**絕對禁止**：任何新研究——不可網搜、不可 fetch URL、不可 Ninja API、不可 search_data_for_company、不可 read_project_file。只能依 user 訊息內已附的主檔全文，以及必要時 \`read_research_file\` 補齊截斷部分，做**編輯與重排**。
+**Strictly prohibited**: any new research — no web search, no fetch URL, no Ninja API, no search_data_for_company, no read_project_file. Work only from the full report text attached in the user message, and if needed use \`read_research_file\` to fill in truncated sections. Do **editing and reorganization** only.
 
-**目標**：（1）**順稿**：敘事連貫、段落銜接自然；（2）**格式**：# / ## / ### 層級一致，表格合法可讀，列表統一；（3）**去重**：刪除重複段落、重複表格或重複論點；（4）**保留事實**：數字、出處、管理層引言與**既有超連結**原則上保留；可修錯字、標點、明顯語病，**不可捏造新事實或新數字**。**連結**：勿刪除正文中的來源 URL；若某處僅文字「來源：年報」而同段或鄰近已有 URL，可改為 Markdown 連結格式（不新增新 URL）。
+**Goals**: (1) **Prose flow**: narrative coherence, natural paragraph transitions; (2) **Formatting**: consistent # / ## / ### heading levels, valid readable tables, uniform lists; (3) **Deduplication**: remove repeated paragraphs, duplicate tables, or repeated arguments; (4) **Preserve facts**: numbers, sources, management quotes, and **existing hyperlinks** must be preserved; fix typos, punctuation, obvious grammar errors — **do not fabricate new facts or numbers**. **Links**: do not delete source URLs from the body; if a location only has text like "Source: Annual Report" but a nearby URL exists, reformat as a Markdown link (do not add new URLs).
 
-**寫入策略**：優先對各小節使用 \`replace_section\`——輸出**整節**順過稿（**含該節標題行**），等於**整節重寫／修正**，而非只在節尾堆字。僅在確有必要時用 \`insert_into_section\`。**禁止 append**。若開頭大段（如 IRR、結論）無法用數字錨點替換、且你已完整掌握全文，可謹慎使用 \`overwrite\` 一次寫回整檔（須零遺漏）。
+**Write strategy**: prefer \`replace_section\` for each subsection — output the **full polished section** (**including the section heading line**), equivalent to a full section rewrite/edit, not just appending to the end. Use \`insert_into_section\` only when strictly necessary. **Append is prohibited**. For leading sections (e.g., IRR, Executive Summary) that cannot be replaced by numeric anchor, use \`overwrite\` cautiously only when you have the complete file content with zero omissions.
 
-**整理輪額外必檢項目**（來自專家評審）：
-1. **零重複引言**：掃描全文，若同一段 CEO/管理層引言出現 2 次以上，合併至最佳出處位置，其餘刪除。目標：全文零重複引言。
-2. **移除自評計分表**：若報告內含「評分表」或「scorecard」等自我評分區段，**刪除整段**（由外部系統評分）。
-3. **IRR 與風險概率一致性**：若報告推薦 IRR > 15% 但同時引用高衝突概率，須在結論或 8.3 明確和解此矛盾。
-4. **Executive Summary 檢查**：報告開頭是否有獨立的 Executive Summary（1 頁，含投資論點、估值、前 3 大風險）？若無，須建立。
-5. **當前股價 vs 公允價值**：確認報告明確陳述「目前股價 X，公允價值 Y，安全邊際 Z%」。`;
+**Polish round mandatory checklist** (from expert review):
+1. **Zero duplicate quotes**: scan the full report — if the same CEO/management quote appears ≥2 times, consolidate to the best location and delete the rest. Goal: zero duplicate quotes.
+2. **Remove self-scoring tables**: if the report contains a "scorecard" or self-evaluation section, **delete the entire block** (external system handles scoring).
+3. **IRR vs risk probability consistency**: if the report recommends IRR > 15% but cites high conflict probability, explicitly reconcile this contradiction in the conclusion or section 8.3.
+4. **Executive Summary check**: does the report begin with a standalone Executive Summary (1 page, containing investment thesis, valuation, top 3 risks)? If not, create one.
+5. **Current price vs fair value**: confirm the report explicitly states "Current price X, fair value Y, margin of safety Z%".`;
 
-const EXTENDED_PHASE_SYSTEM = `# Initial MAX 延伸分析：地緣政治 / 環境永續 / 正反論辯
+const EXTENDED_PHASE_SYSTEM = `# Initial MAX Extended Analysis: Geopolitical / ESG / Bull vs Bear
 
-你是一位頂尖的跨領域分析師，專長涵蓋地緣政治、環境科學與投資分析。你的任務是對一家公司進行**延伸分析**，補充核心投研報告。
+You are a top cross-disciplinary analyst with expertise spanning geopolitics, environmental science, and investment analysis. Your task is to conduct **extended analysis** on a company, supplementing the core investment research report.
 
-## 你的角色
+## Your Role
 
-- 你**不是**在做傳統財務分析（那已完成），而是在補充**政治、環境、正反辯論**三個維度
-- 你會收到當前主檔全文（已有四維框架研究）和延伸維度缺口清單
-- 你的產出必須**客觀、不偏頗、有數據支撐**——雙方不滿意代表成功
+- You are **NOT** doing traditional financial analysis (that is already done) — you are supplementing with **geopolitical, environmental, and contrarian debate** dimensions
+- You will receive the full current report (with four-dimension framework research) and the extended dimension gap list
+- Your output must be **objective, unbiased, and data-supported** — if both sides are dissatisfied, you have succeeded
 
-## 不偏頗方法論（CRITICAL）
+## Impartiality Methodology (CRITICAL)
 
-1. **學術風格**：每個論點用 "According to [source], X. However, [source] argues Y" 格式
-2. **數據對照**：每個主張必須附可驗證的數據+出處URL
-3. **不下結論**：報告陳述事實與各方立場，不做「我們認為」的判斷
-4. **時效性**：優先使用 2024-2026 年的數據，歷史數據用於趨勢分析
-5. **多元來源**：每個論點至少引用 2 個不同立場的來源
+1. **Academic style**: format each argument as "According to [source], X. However, [source] argues Y"
+2. **Data-paired claims**: every assertion must include verifiable data + source URL
+3. **No conclusions**: report facts and all sides' positions — do not make "we believe" judgments
+4. **Recency**: prioritize 2024–2026 data; historical data for trend analysis only
+5. **Diverse sources**: each argument must cite ≥2 sources from different perspectives
 
-## 延伸維度結構
+## Extended Dimension Structure
 
-### 六、地緣政治分析
-- 6.1 地緣政治地位與影響：公司對所在國/地區的戰略重要性（如矽盾理論）
-  - **矽盾論述須承擔舉證責任**：經濟互賴歷史上多次未能阻止戰爭（如一戰），不可預設有效
-  - **軍事能力缺口**：PLA 兩棲運力評估、台灣自身防禦投資（刺蝟戰略、反艦飛彈、義務兵役延長）
-  - **「毀滅條款」威懾**：晶圓廠入侵時可被癱瘓的報導須納入
-  - **台灣民主治理**作為護城河的一部分須分析
-- 6.2 國際關係與供應鏈風險：盟友關係、供應鏈集中度、脫鉤風險
-  - **日本 2022 年國安戰略修訂**須作為主要來源（防衛預算倍增）
-- 6.3 政策/制裁/貿易風險：具體政策（CHIPS Act、出口管制、關稅等）
-  - **CHIPS Act 雙面性**：既是機會（補貼），也是對護城河的系統性侵蝕——必須明確建模兩面
-  - **競爭對手成功情境**：Intel 18A 若成功須建模（90%→70-75% 先進製程份額變化）
-  - **衝突概率須具名來源**：不可引用匿名「某諮詢公司」；CFR Tier I 指危機升級非軍事行動，須區別
+### VI. Geopolitical Analysis
+- 6.1 Geopolitical position & influence: company's strategic importance to its country/region (e.g., silicon shield theory)
+  - **Silicon shield claims bear burden of proof**: economic interdependence has historically failed to prevent wars (e.g., WWI) — do not assume effectiveness
+  - **Military capability gap**: PLA amphibious capacity assessment, Taiwan's own defense investment (hedgehog strategy, anti-ship missiles, conscription extension)
+  - **"Scorched earth" deterrence**: reports that fabs could be disabled during an invasion must be included
+  - **Taiwan's democratic governance** as part of the moat must be analyzed
+- 6.2 International relations & supply chain risk: alliance relationships, supply chain concentration, decoupling risk
+  - **Japan's 2022 National Security Strategy revision** must be a primary source (defense budget doubling)
+- 6.3 Policy/sanctions/trade risk: specific policies (CHIPS Act, export controls, tariffs, etc.)
+  - **CHIPS Act duality**: both opportunity (subsidies) and systematic erosion of the moat — must explicitly model both sides
+  - **Competitor success scenario**: model Intel 18A success (90%→70-75% advanced node share shift)
+  - **Conflict probability requires named sources**: do not cite anonymous "consulting firm"; CFR Tier I refers to crisis escalation not military action — distinguish clearly
 
-### 七、環境永續分析
-- 7.1 能源與資源消耗：電力、水、土地用量（具體數字+佔比+出處）
-  - **能源「淨正面」聲稱**須標注為公司自報，未經第三方生命週期分析驗證
-  - **複合風險迴路**：公司成長 → 能源脆弱性加劇 → 封鎖情境惡化 → 地緣風險上升，須明確描述
-- 7.2 環境爭議與ESG：爭議事件、環保團體立場、ESG評級
-  - **水資源**須包含具體乾旱案例（農民影響、S&P 信用風險連結）
-- 7.3 氣候風險與轉型：碳排路徑、RE100承諾、轉型成本估算
+### VII. ESG & Sustainability Analysis
+- 7.1 Energy & resource consumption: electricity, water, land usage (specific numbers + % of national/regional total + sources)
+  - **"Net positive" energy claims** must be flagged as company self-reported, unverified by third-party lifecycle analysis
+  - **Compound risk loop**: company growth → energy vulnerability increases → blockade scenario worsens → geopolitical risk rises — describe this feedback loop explicitly
+- 7.2 Environmental controversy & ESG: controversy events, environmental group positions, ESG rating comparisons
+  - **Water resources** must include specific drought case details (farmer impacts, S&P credit risk link)
+- 7.3 Climate risk & transition: carbon pathway, RE100 commitment, transition cost estimates
 
-### 八、正反論辯
-- 8.1 Bull Case：最強多頭論點（至少 5 個，各有數據支撐）
-- 8.2 Bear Case：最強空頭論點（至少 5 個，各有數據支撐）
-  - **Bull/Bear 篇幅對等**：Bull 論述字數不得超過 Bear 論述 1.5 倍
-- 8.3 關鍵爭議與數據對比：雙方核心分歧的並列對照表
-  - **IRR 與風險概率矛盾必須和解**：若 IRR > 15% 但衝突概率高，此矛盾須量化討論
-  - **概率加權預期報酬**：須附 Bull/Base/Bear 概率加權 IRR（如 25%/50%/25%）
-- 8.4 投資論點失效條件（What Would Change Our Mind?）
-  - 寫入 \`## 8.4 投資論點失效條件（What Would Change Our Mind?）\`
-  - ≥5 個觸發條件，涵蓋五大領域：**競爭**、**需求**、**地緣政治**、**財務**、**技術**
-  - 每個觸發條件格式：「若 [指標] 在 [時間框架] 內突破 [門檻值]，透過 [監測來源] 追蹤，則 [對投資論點的影響]」
-  - **必須具體、可證偽、有時限**——禁止模糊條件如「若競爭加劇」；須改為「若 Intel 18A 良率達 80% 且量產（2026H2 前），則先進製程市占由 90% 降至 70-75%」
-  - 每個觸發條件須附可驗證的數據來源或監測方式
+### VIII. Bull vs Bear
+- 8.1 Bull Case: strongest long arguments (≥5, each with data support)
+- 8.2 Bear Case: strongest short arguments (≥5, each with data support)
+  - **Bull/Bear length parity**: Bull argument word count must not exceed Bear argument by more than 1.5×
+- 8.3 Key disputes & data comparison: side-by-side table of both sides' core disagreements
+  - **IRR vs risk probability contradiction must be reconciled**: if IRR > 15% but conflict probability is high, quantify and discuss this contradiction
+  - **Probability-weighted expected return**: include Bull/Base/Bear probability-weighted IRR (e.g., 25%/50%/25%)
+- 8.4 Thesis invalidation conditions (What Would Change Our Mind?)
+  - Write to \`## 8.4 Thesis Invalidation Conditions (What Would Change Our Mind?)\`
+  - ≥5 trigger conditions covering five domains: **Competition**, **Demand**, **Geopolitics**, **Financials**, **Technology**
+  - Each trigger format: "If [metric] crosses [threshold] within [timeframe], tracked via [monitoring source], then [impact on investment thesis]"
+  - **Must be specific, falsifiable, and time-bounded** — prohibit vague conditions like "if competition intensifies"; replace with "if Intel 18A yield reaches 80% and enters mass production (before 2026H2), advanced node share shifts from 90% to 70-75%"
+  - Each trigger must include a verifiable data source or monitoring method
 
-## 搜尋預算
+## Search Budget
 
-每輪最多 12 次 web_search。建議分配：
-- 地緣政治：2-3 次（"{TICKER} geopolitical risk", "{COUNTRY} strategic importance")
-- 環境永續：2-3 次（"{TICKER} electricity water ESG", "{TICKER} carbon emissions")
-- 正反論辯：2 次（"{TICKER} bull case bear case analysis 2025")
+Max 12 web_search calls per round. Suggested allocation:
+- Geopolitical: 2-3 calls ("{TICKER} geopolitical risk", "{COUNTRY} strategic importance")
+- ESG: 2-3 calls ("{TICKER} electricity water ESG", "{TICKER} carbon emissions")
+- Bull vs Bear: 2 calls ("{TICKER} bull case bear case analysis 2025")
 
-## 輸出格式
+## Output Format
 
-工具完成後輸出 JSON：
+After tool calls complete, output JSON:
 {"description": "added geopolitical silicon shield analysis, environmental electricity data...", "files_written": ["{TICKER}_Initial_MAX.md"], "dimensions_addressed": ["geopolitical", "sustainability", "contrarian"]}`;
 
 // ── CLI args ──
@@ -197,7 +198,7 @@ function gitCommit(message: string): string {
   }
 }
 
-/** 刪除該 ticker 目錄下所有 initial_max_gaps_*.json 與 initial_max_score_*.json（跑完後清理，避免累積）。 */
+/** Delete all initial_max_gaps_*.json and initial_max_score_*.json in the ticker directory (cleanup after run to avoid accumulation). */
 function cleanupTickerScoreAndGapsFiles(ticker: string): void {
   const dir = path.join(PROJECT_ROOT, 'data', 'companies', ticker);
   if (!fs.existsSync(dir)) return;
@@ -212,6 +213,24 @@ function cleanupTickerScoreAndGapsFiles(ticker: string): void {
       }
     } catch (_) {}
   }
+}
+
+function countCompanyResearchFiles(ticker: string): number {
+  const dir = path.join(PROJECT_ROOT, 'data', 'companies', ticker);
+  if (!fs.existsSync(dir)) return 0;
+  let count = 0;
+  const walk = (current: string) => {
+    for (const entry of fs.readdirSync(current, { withFileTypes: true })) {
+      const full = path.join(current, entry.name);
+      if (entry.isDirectory()) {
+        walk(full);
+      } else if (entry.isFile() && !entry.name.endsWith('.bak')) {
+        count++;
+      }
+    }
+  };
+  walk(dir);
+  return count;
 }
 
 // ── TSV result tracking ──
@@ -236,7 +255,9 @@ function appendTsv(tsvPath: string, r: RoundResult): void {
 
 // ── Gap-fill mini agent ──
 
-const USE_CLAUDE_CLI = process.env.USE_CLAUDE_CLI === '1';
+const _ANTHROPIC_KEY = process.env.ANTHROPIC_API_KEY ?? '';
+const _OPENROUTER_KEY = process.env.OPENROUTER_API_KEY ?? '';
+const USE_CLAUDE_CLI = process.env.USE_CLAUDE_CLI === '1' || (!_ANTHROPIC_KEY && !_OPENROUTER_KEY);
 
 async function runGapFillAgent(
   ticker: string,
@@ -255,28 +276,28 @@ async function runGapFillAgent(
   const tools = phase === 'polish' ? POLISH_TOOLS : GAP_FILL_TOOLS;
 
   const topGaps = gaps.gaps.slice(0, 5).map((g: (typeof gaps.gaps)[number], i: number) =>
-    `${i + 1}. 【${g.dimension}】${g.item}：現況 ${g.current}，目標 ${g.target}，缺 ${g.shortfall} 分`,
+    `${i + 1}. [${g.dimension}] ${g.item}: current ${g.current}, target ${g.target}, gap ${g.shortfall} pts`,
   ).join('\n');
 
   const investorSection = investorNote && investorNote.trim().length > 0
-    ? `\n\n### 投資人關注重點（為什麼想看這家公司）\n${investorNote.trim()}`
+    ? `\n\n### Investor Focus (why we are researching this company)\n${investorNote.trim()}`
     : '';
 
   let taskMessage: string;
   if (phase === 'polish') {
-    taskMessage = `## ${ticker} Initial MAX **整理輪**（順稿／格式／去重，${today}）
+    taskMessage = `## ${ticker} Initial MAX **Polish Round** (prose flow / formatting / deduplication, ${today})
 
-**背景**：研究迭代已停止。本輪**只做編輯**，不網搜、不 API、不抓新訪談。主檔全文見本訊息末尾。
+**Context**: Research iteration has stopped. This round does **editing only** — no web search, no API, no new interviews. Full report is attached at the end of this message.
 
-### 必做
-1. **順稿**：段落銜接自然、刪除重複論點與重複表格／列表。
-2. **格式**：標題層級一致、表格合法、列表統一、空白行適度。
-3. **修正**：錯字、標點、明顯語病；**保留**數字、出處、引言與連結；不新增事實。
-4. **寫入**：優先對需整理的小節使用 \`replace_section\`（整節輸出＝**可完全改寫該節**，含標題）。**禁止 append**。
+### Required tasks
+1. **Prose flow**: natural paragraph transitions, remove repeated arguments and duplicate tables/lists.
+2. **Formatting**: consistent heading levels, valid tables, uniform lists, appropriate spacing.
+3. **Corrections**: typos, punctuation, obvious grammar issues; **preserve** numbers, sources, quotes, and links; do not add new facts.
+4. **Write**: prefer \`replace_section\` for sections needing polish (full section output = **can fully rewrite the section**, including heading). **Append is prohibited**.
 
-若主檔在訊息內被截斷，用 \`read_research_file\` 讀 \`${mainFile}\`。
+If the report is truncated in this message, use \`read_research_file\` to read \`${mainFile}\`.
 
-**輸出格式**（工具完成後）：
+**Output format** (after all tool calls):
 {"description": "polished 1.1–2.3, fixed ## headings, deduped 4.1", "files_written": ["${mainFile}"], "interviews_added": 0, "dimensions_addressed": ["polish"]}`;
   } else {
     // Phase 3.4: TSV read-back — inject scoring history
@@ -284,35 +305,35 @@ async function runGapFillAgent(
     const readback = getScoringReadback(ticker);
     if (readback) {
       const persistentGapStr = readback.persistentGaps.length > 0
-        ? readback.persistentGaps.map(g => `  - ${g.gap} (解決率: ${(g.resolutionRate * 100).toFixed(0)}%)`).join('\n')
-        : '  （無）';
-      historySection = `\n\n### 歷史研究記錄
-- 過去最佳分數：${readback.bestScore}/100
-- 成功解決的缺口：${readback.resolvedGaps.length > 0 ? readback.resolvedGaps.join('、') : '（無）'}
-- 多次未解決的缺口：
+        ? readback.persistentGaps.map(g => `  - ${g.gap} (resolution rate: ${(g.resolutionRate * 100).toFixed(0)}%)`).join('\n')
+        : '  (none)';
+      historySection = `\n\n### Research History
+- Best score so far: ${readback.bestScore}/100
+- Successfully resolved gaps: ${readback.resolvedGaps.length > 0 ? readback.resolvedGaps.join(', ') : '(none)'}
+- Repeatedly unresolved gaps:
 ${persistentGapStr}`;
     }
 
-    taskMessage = `## ${ticker} 研究缺口補充任務（第 ${round} 輪，${today}）
+    taskMessage = `## ${ticker} Research Gap-Fill Task (Round ${round}, ${today})
 
-**當前分數**：${gaps.score}/100（目標 **≥${PASS_THRESHOLD}/100**，結構分≥34 + 品質分≥51、2.5 DCF 必達）${historySection}
+**Current score**: ${gaps.score}/100 (target **≥${PASS_THRESHOLD}/100**, structural≥34 + quality≥51, section 2.5 DCF required)${historySection}
 
-### 優先缺口（依缺分高低排列）：
+### Priority gaps (ordered by score deficit):
 ${topGaps}
 
-### 任務指示：
-- **主檔對照**：本訊息**末尾已附**當前 \`${mainFile}\` 全文（或前 ${INITIAL_MAX_MAIN_IN_USER_CHARS.toLocaleString()} 字元）。**撰寫前務必對照**：只補缺口，**勿重複**既有段落、表格、已引用之訪談與數字。
-- **整節修正與重寫**：優先 \`replace_section\`——對該小節輸出**整節**內容（含標題），可**刪冗、改寫、重排、合併**舊文與新補資料成順稿；**不是**只能往節尾插入。僅在確實要附加在節尾時才用 \`insert_into_section\`。
-- **工具依需求呼叫，勿每輪固定全叫**：僅在**本輪要補的缺口**需要時才呼叫。例如：要補「人」或 CEO 原話時再 \`search_data_for_company\` 或 \`read_project_file\`；要補財報時再 \`ninja_api(earnings_historical)\`。主檔已附於本訊息時**不必**為了對照而再 \`read_research_file\`；若訊息內主檔被截斷或需二次確認再呼叫。勿每輪一開頭就呼叫 list_company_files、query_companies_db、search_data_for_company。
-1. 依**優先缺口**決定本輪補哪 1～2 個維度；缺財報→ninja_api(earnings_historical)；缺法說→ninja_api(earningstranscript) 或 fetch_url；缺管理層原話→可 search_data_for_company 再 read_project_file 摘錄。
-2. web_search 最多 12 次，留給真正需要搜尋的缺口。
-3. 寫入主檔 \`${mainFile}\` 時：對照文末全文後，以 \`replace_section\`（整節重寫／修正）為主，\`insert_into_section\` 為輔；禁止 append 堆文末。
-4. **資料來源連結（本輪必守）**：凡本輪新增／改寫的數據、表格註、監管與市場敘述、訪談與財報引用，**須附可點擊 \`https://\` 連結**（Markdown 連結或裸 URL）；**禁止**只寫「10-K」「年報」「某機構報告」等名稱而無 URL。訪談用原文 URL；年報用 SEC／IR 文件連結；已下載逐字稿可連 \`transcripts/檔名\`。
-5. 地理/業務分部須標年報或法說出處（含連結）；每子點至少 5 則管理層原話（引號+出處+日期+訪談／逐字稿 **URL**）。
-6. 完成後輸出 JSON summary（見下方格式）${investorSection}
+### Instructions:
+- **Compare against report**: the current \`${mainFile}\` full text (or first ${INITIAL_MAX_MAIN_IN_USER_CHARS.toLocaleString()} chars) is **attached at the end of this message**. **Always check before writing**: only fill gaps, **do not repeat** existing paragraphs, tables, cited interviews, or numbers.
+- **Full-section rewrite**: prefer \`replace_section\` — output the **full section** (including heading), you can **trim, rewrite, reorganize, merge** old and new content into polished prose; this is NOT append-only. Use \`insert_into_section\` only when truly appending to the section end.
+- **Call tools only when needed**: only call tools when the **gap being filled this round** requires it. Example: to fill "People" or CEO quotes, use \`search_data_for_company\` or \`read_project_file\`; to fill financials, use \`ninja_api(earnings_historical)\`. When the report is attached in this message, **do not** call \`read_research_file\` just to compare — only call it if the message was truncated or you need to re-verify. Do not start every round by calling list_company_files, query_companies_db, or search_data_for_company.
+1. Based on the **priority gaps**, decide which 1–2 dimensions to fill this round. Missing financials → ninja_api(earnings_historical); missing earnings call → ninja_api(earningstranscript) or fetch_url; missing management quotes → search_data_for_company then read_project_file to extract. **For every interview or earnings call transcript obtained, you MUST use \`write_research_section\` to save the transcript as a standalone file \`transcripts/[source]-[date].md\` (mode=append)** — do not only embed quotes in the main report without saving the file.
+2. web_search max 12 calls per round — reserve for gaps that truly need searching.
+3. When writing to \`${mainFile}\`: after comparing against the full text, use \`replace_section\` (full section rewrite/edit) as primary, \`insert_into_section\` as secondary; never append to the end of the file.
+4. **Source links (required this round)**: every piece of data, table note, regulatory/market statement, interview, or financial citation that is new or rewritten this round **must include a clickable \`https://\` link** (Markdown link or bare URL); **prohibited**: writing only "10-K", "Annual Report", "Research firm" without a URL. Interviews: use original article URL; annual reports: use SEC/IR document link; downloaded transcripts: link to \`transcripts/filename\`.
+5. Geographic/business segments must cite annual report or earnings call source (with link); each subsection must have ≥5 direct management quotes (in quotes + source + date + interview/transcript **URL**).
+6. After completion, output JSON summary (see format below)${investorSection}
 
-**輸出格式**（在所有工具呼叫完成後）：
-{"description": "filled X interviews, added geographic revenue from 10-K, ...", "files_written": ["${mainFile}", "transcripts/..."], "interviews_added": 數字, "dimensions_addressed": [...]}`;
+**Output format** (after all tool calls are complete):
+{"description": "filled X interviews, added geographic revenue from 10-K, ...", "files_written": ["${mainFile}", "transcripts/..."], "interviews_added": number, "dimensions_addressed": [...]}`;
   }
 
   const userContent = taskMessage + buildMainFileFullAttachment(ticker);
@@ -323,9 +344,9 @@ ${topGaps}
   if (phase === 'polish') {
     systemContent = POLISH_PHASE_SYSTEM;
   } else {
-    const skillTrimmed = skillContent.length > MAX_SKILL_CHARS ? skillContent.slice(0, MAX_SKILL_CHARS) + '\n\n...(SKILL 後段省略，依章節結構與工具說明操作)' : skillContent;
-    const programTrimmed = programPrompt.length > MAX_PROGRAM_CHARS ? programPrompt.slice(0, MAX_PROGRAM_CHARS) + '\n\n...(其餘見 SKILL)' : programPrompt;
-    systemContent = `${programTrimmed}\n\n---\n\n## 研究 SKILL 指引\n\n${skillTrimmed}`;
+    const skillTrimmed = skillContent.length > MAX_SKILL_CHARS ? skillContent.slice(0, MAX_SKILL_CHARS) + '\n\n...(SKILL truncated — follow section structure and tool descriptions above)' : skillContent;
+    const programTrimmed = programPrompt.length > MAX_PROGRAM_CHARS ? programPrompt.slice(0, MAX_PROGRAM_CHARS) + '\n\n...(see SKILL for remainder)' : programPrompt;
+    systemContent = `${programTrimmed}\n\n---\n\n## Research SKILL Reference\n\n${skillTrimmed}`;
   }
 
   // ── CLI agent path (Gemini for gap-fill, Claude for polish) ──
@@ -417,7 +438,7 @@ ${userContent}`;
         case 'web_search': {
           const query = String(args.query ?? '');
           if (searchCalls >= MAX_SEARCH) {
-            result = JSON.stringify({ error: `搜尋預算耗盡（最多${MAX_SEARCH}次）` });
+            result = JSON.stringify({ error: `Search budget exhausted (max ${MAX_SEARCH} calls)` });
           } else {
             // Phase 3.3: Search dedup — check if similar query already tried
             const cached = findSimilarSearch(ticker, query);
@@ -500,7 +521,7 @@ ${userContent}`;
         tc.name === 'read_research_file' ? READ_RESEARCH_FILE_MAX_CHARS + 4096 : 12000;
       const contentToPush =
         result.length > maxToolChars
-          ? result.slice(0, maxToolChars) + '\n\n...(內容已截斷，僅顯示前 ' + maxToolChars + ' 字元)'
+          ? result.slice(0, maxToolChars) + '\n\n...(content truncated, showing first ' + maxToolChars + ' chars)'
           : result;
       toolResults.push({ type: 'tool_result', tool_use_id: tc.id, content: contentToPush });
     }
@@ -530,6 +551,7 @@ async function main() {
   const model = args.model ?? DEFAULT_MODEL;
   const scoringModel = args['scoring-model'] ?? MODELS.CLAUDE;
   const investorNote = args.why ?? args.note ?? '';
+  const resetGapHistory = args['reset-gap-history'] === 'true' || /\bretry\b/i.test(investorNote);
   const tag = args.tag ?? new Date().toISOString().slice(5, 10).replace('-', '');
   const maxCost = parseFloat(args['max-cost'] ?? String(DEFAULT_MAX_COST_USD));
   const costTracker = { totalCostUsd: 0 };
@@ -545,6 +567,9 @@ async function main() {
   console.log(`Max cost:   $${maxCost}`);
   if (investorNote) {
     console.log(`Why:        ${investorNote}`);
+  }
+  if (resetGapHistory) {
+    console.log('Gap caps:   ignoring historical gap attempts for this retry run');
   }
   console.log(`Tag:        initial-max-${ticker}-${tag}`);
   console.log();
@@ -606,6 +631,7 @@ async function main() {
     console.log(`\n═══ Round ${round}/${maxRounds} (current: ${prevScore}/100) ═══`);
     const roundStart = Date.now();
     const roundStartCost = costTracker.totalCostUsd;
+    const roundScoreBefore = prevScore;
 
     try {
       // Get latest gaps (from previous round)
@@ -614,27 +640,38 @@ async function main() {
       if (fs.existsSync(gapsPath)) {
         gaps = JSON.parse(fs.readFileSync(gapsPath, 'utf-8'));
       }
+      const mainFilePathForRound = path.join(PROJECT_ROOT, 'data', 'companies', ticker, `${ticker}_Initial_MAX.md`);
 
-      // Filter out gap items using persistent gap-tracker (adaptive + global retirement)
-      // Load all gap data once to avoid O(N) file reads per gap
-      const gapData = loadGapAttempts(ticker);
-      const preFilterCount = gaps.gaps.length;
-      let globalRetiredCount = 0;
-      gaps.gaps = gaps.gaps.filter(g => {
-        const key = normalizeGapKey(g.dimension, g.item);
-        // Global retirement: universally unsolvable across tickers
-        if (isGloballyRetired(gapData, key)) {
-          globalRetiredCount++;
-          return false;
-        }
-        // Per-ticker adaptive retirement
-        const attempts = countAttemptsFromLoaded(gapData, key);
-        const maxAttempts = getMaxAttemptsFromLoaded(gapData, key);
-        return attempts < maxAttempts;
-      });
-      const retired = preFilterCount - gaps.gaps.length;
-      if (globalRetiredCount > 0) console.log(`[global-retire] Retired ${globalRetiredCount} gap(s) — universally unsolvable across tickers`);
-      if (retired > globalRetiredCount) console.log(`[round-cap] Retired ${retired - globalRetiredCount} gap(s) via adaptive threshold`);
+      // Filter out gap items using persistent gap-tracker (adaptive + global retirement).
+      // Do not apply historical retirement before a real report exists: retry tasks
+      // need a clean chance to create the base report even if older attempts failed.
+      const hasMainFileForRound = fs.existsSync(mainFilePathForRound)
+        && fs.statSync(mainFilePathForRound).size > 1000;
+      if (resetGapHistory) {
+        console.log('[round-cap] Skipping historical gap retirement — retry run');
+      } else if (prevScore < 10 && !hasMainFileForRound) {
+        console.log('[round-cap] Skipping historical gap retirement — no substantive report exists yet');
+      } else {
+        // Load all gap data once to avoid O(N) file reads per gap
+        const gapData = loadGapAttempts(ticker);
+        const preFilterCount = gaps.gaps.length;
+        let globalRetiredCount = 0;
+        gaps.gaps = gaps.gaps.filter(g => {
+          const key = normalizeGapKey(g.dimension, g.item);
+          // Global retirement: universally unsolvable across tickers
+          if (isGloballyRetired(gapData, key)) {
+            globalRetiredCount++;
+            return false;
+          }
+          // Per-ticker adaptive retirement
+          const attempts = countAttemptsFromLoaded(gapData, key);
+          const maxAttempts = getMaxAttemptsFromLoaded(gapData, key);
+          return attempts < maxAttempts;
+        });
+        const retired = preFilterCount - gaps.gaps.length;
+        if (globalRetiredCount > 0) console.log(`[global-retire] Retired ${globalRetiredCount} gap(s) — universally unsolvable across tickers`);
+        if (retired > globalRetiredCount) console.log(`[round-cap] Retired ${retired - globalRetiredCount} gap(s) via adaptive threshold`);
+      }
 
       if (gaps.gaps.length === 0) {
         console.log('[round-cap] All remaining gaps have been retired — stopping core loop');
@@ -650,8 +687,8 @@ async function main() {
       }
 
       // Snapshot main file before agent modifies it (for rollback protection)
-      const mainFilePathForRound = path.join(PROJECT_ROOT, 'data', 'companies', ticker, `${ticker}_Initial_MAX.md`);
       const bakPath = mainFilePathForRound + '.bak';
+      const filesBeforeRound = countCompanyResearchFiles(ticker);
       if (fs.existsSync(mainFilePathForRound)) {
         fs.copyFileSync(mainFilePathForRound, bakPath);
       }
@@ -765,6 +802,39 @@ async function main() {
         plateauCount++;
       }
 
+      const elapsedSec = Math.round((Date.now() - roundStart) / 1000);
+      console.log(`Round ${round} done in ${elapsedSec}s`);
+      const filesAfterRound = countCompanyResearchFiles(ticker);
+
+      // Trace entry for observability
+      appendTrace({
+        ts: new Date().toISOString(),
+        ticker,
+        phase: 'gap-fill',
+        round,
+        model,
+        durationSec: elapsedSec,
+        inputTokens: 0,
+        outputTokens: 0,
+        costUsd: costTracker.totalCostUsd - roundStartCost,
+        filesWritten: Math.max(0, filesAfterRound - filesBeforeRound),
+        scoreChange: `${delta >= 0 ? '+' : ''}${delta}`,
+        agentExitCode: 0,
+        status: wasRolledBack ? 'blocked' : 'completed',
+        scorerStatus: newScore.scorerStatus,
+        structural: newScore.structural,
+        quality: newScore.quality,
+        scoreBefore: roundScoreBefore,
+        scoreAfter: newScore.total,
+        bestScore,
+        gapsRemaining: newGaps.gaps.length,
+        metadata: {
+          rolledBack: wasRolledBack,
+          description,
+          plateauCount,
+        },
+      });
+
       prevScore = newScore.total;
 
       // Stop conditions
@@ -793,27 +863,26 @@ async function main() {
         }
       }
 
-      const elapsedSec = Math.round((Date.now() - roundStart) / 1000);
-      console.log(`Round ${round} done in ${elapsedSec}s`);
-
-      // Trace entry for observability
+    } catch (err: any) {
+      console.error(`Round ${round} CRASH: ${err.message}`);
       appendTrace({
         ts: new Date().toISOString(),
         ticker,
         phase: 'gap-fill',
         round,
         model,
-        durationSec: elapsedSec,
+        durationSec: Math.round((Date.now() - roundStart) / 1000),
         inputTokens: 0,
         outputTokens: 0,
         costUsd: costTracker.totalCostUsd - roundStartCost,
         filesWritten: 0,
-        scoreChange: `${delta >= 0 ? '+' : ''}${delta}`,
-        agentExitCode: 0,
+        scoreChange: 'crash',
+        agentExitCode: 1,
+        status: 'failed',
+        scoreBefore: prevScore,
+        bestScore,
+        error: err.message,
       });
-
-    } catch (err: any) {
-      console.error(`Round ${round} CRASH: ${err.message}`);
       const result: RoundResult = {
         round, commit: gitShortHash(), score: prevScore, status: 'crash',
         description: err.message.slice(0, 100), timestamp: new Date().toISOString(),
@@ -828,7 +897,7 @@ async function main() {
   const ranAtLeastOneResearchRound = history.some((h) => h.round >= 1);
 
   if (!skipPolish && fs.existsSync(mainFilePath) && ranAtLeastOneResearchRound) {
-    console.log('\n═══ Polish pass（主檔順稿／格式整理，無新研究）═══');
+    console.log('\n═══ Polish pass (prose flow / formatting, no new research) ═══');
     try {
       // Snapshot before polish for rollback protection
       const polishBakPath = mainFilePath + '.polish-bak';
@@ -902,9 +971,9 @@ async function main() {
       appendTsv(tsvPath, crashResult);
     }
   } else if (skipPolish && ranAtLeastOneResearchRound) {
-    console.log('\n（略過整理輪：--skip-polish）');
+    console.log('\n(Skipping polish round: --skip-polish)');
   } else if (!skipPolish && ranAtLeastOneResearchRound && !fs.existsSync(mainFilePath)) {
-    console.log('\n（略過整理輪：主檔不存在）');
+    console.log('\n(Skipping polish round: main report file does not exist)');
   }
 
   // ── Adversarial contrarian phase ──
@@ -927,7 +996,7 @@ async function main() {
 - Assume your audience is deeply skeptical and short the stock
 - Every claim must be falsifiable with specific metrics
 - Use 2024-2026 data only
-- Output: pure Markdown for section "## 8.1 Bull Case（投資論點）"
+- Output: pure Markdown for section "## 8.1 Bull Case"
 
 ## Current report context (abbreviated):
 ${mainContent.slice(0, 20000)}
@@ -941,7 +1010,7 @@ Write section 8.1 now. Output ONLY the Markdown for that section (including the 
 - Assume your audience wants to buy and you must convince them NOT to
 - Every claim must be falsifiable with specific metrics
 - Use 2024-2026 data only
-- Output: pure Markdown for section "## 8.2 Bear Case（反面論點）"
+- Output: pure Markdown for section "## 8.2 Bear Case"
 
 ## Current report context (abbreviated):
 ${mainContent.slice(0, 20000)}
@@ -1012,7 +1081,7 @@ Write section 8.2 now. Output ONLY the Markdown for that section (including the 
 
   // ── Extended pass (geopolitical, sustainability, contrarian) ──
   if (extended && fs.existsSync(mainFilePath)) {
-    console.log('\n═══ Extended Analysis Pass（地緣政治 / 環境永續 / 正反論辯）═══');
+    console.log('\n═══ Extended Analysis Pass (Geopolitical / ESG / Bull vs Bear) ═══');
     const extMaxRounds = 5;
     for (let extRound = 1; extRound <= extMaxRounds; extRound++) {
       if (costTracker.totalCostUsd >= maxCost) {
@@ -1035,13 +1104,13 @@ Write section 8.2 now. Output ONLY the Markdown for that section (including the 
           round: 100 + extRound,
           score: extScore.extendedTotal,
           gaps: [
-            ...(extScore.geopolitical && extScore.geopolitical.score < 12 ? extScore.geopolitical.gaps.map(g => ({ dimension: '地緣政治', item: g, current: extScore.geopolitical!.score, target: '15', shortfall: 15 - extScore.geopolitical!.score, priority: 1 })) : []),
-            ...(extScore.sustainability && extScore.sustainability.score < 12 ? extScore.sustainability.gaps.map(g => ({ dimension: '環境永續', item: g, current: extScore.sustainability!.score, target: '15', shortfall: 15 - extScore.sustainability!.score, priority: 2 })) : []),
-            ...(extScore.contrarian && extScore.contrarian.score < 12 ? extScore.contrarian.gaps.map(g => ({ dimension: '正反論辯', item: g, current: extScore.contrarian!.score, target: '15', shortfall: 15 - extScore.contrarian!.score, priority: 3 })) : []),
+            ...(extScore.geopolitical && extScore.geopolitical.score < 12 ? extScore.geopolitical.gaps.map(g => ({ dimension: 'Geopolitical', item: g, current: extScore.geopolitical!.score, target: '15', shortfall: 15 - extScore.geopolitical!.score, priority: 1 })) : []),
+            ...(extScore.sustainability && extScore.sustainability.score < 12 ? extScore.sustainability.gaps.map(g => ({ dimension: 'ESG', item: g, current: extScore.sustainability!.score, target: '15', shortfall: 15 - extScore.sustainability!.score, priority: 2 })) : []),
+            ...(extScore.contrarian && extScore.contrarian.score < 12 ? extScore.contrarian.gaps.map(g => ({ dimension: 'Bull vs Bear', item: g, current: extScore.contrarian!.score, target: '15', shortfall: 15 - extScore.contrarian!.score, priority: 3 })) : []),
           ],
         };
         if (extGaps.gaps.length === 0) {
-          extGaps.gaps.push({ dimension: '延伸分析', item: '補充地緣政治/環境永續/正反論辯分析', current: extScore.extendedTotal, target: '35+', shortfall: 35 - extScore.extendedTotal, priority: 1 });
+          extGaps.gaps.push({ dimension: 'Extended Analysis', item: 'Add geopolitical/ESG/bull-vs-bear analysis', current: extScore.extendedTotal, target: '35+', shortfall: 35 - extScore.extendedTotal, priority: 1 });
         }
 
         const extResp = await runGapFillAgent(
@@ -1083,7 +1152,7 @@ Write section 8.2 now. Output ONLY the Markdown for that section (including the 
     console.log(`\nFinal extended score: ${finalExtScore.extendedTotal}/45`);
     const commitHash = gitCommit(`initial-max extended-final: score ${finalExtScore.extendedTotal}/45`);
   } else if (!extended) {
-    console.log('\n（未啟用延伸分析，使用 --extended 啟用）');
+    console.log('\n(Extended analysis not enabled — use --extended to activate)');
   }
 
   // Knowledge extraction (post-pipeline)

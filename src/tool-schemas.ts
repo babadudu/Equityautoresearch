@@ -10,23 +10,23 @@ import { READ_RESEARCH_FILE_MAX_CHARS } from './markdown-utils.js';
 export const GAP_FILL_TOOLS: AnthropicTool[] = [
   {
     name: 'web_search',
-    description: '搜尋網頁。最多 12 次/輪。',
+    description: 'Search the web. Max 12 calls per round.',
     input_schema: {
       type: 'object',
       properties: {
-        query: { type: 'string', description: '搜尋關鍵詞' },
-        count: { type: 'number', description: '結果數量（預設 5，最多 10）' },
+        query: { type: 'string', description: 'Search query string' },
+        count: { type: 'number', description: 'Number of results (default 5, max 10)' },
       },
       required: ['query'],
     },
   },
   {
     name: 'fetch_url',
-    description: '抓取 URL 完整內容（適合下載逐字稿、年報頁面）。',
+    description: 'Fetch the full content of a URL (suitable for downloading transcripts, annual report pages).',
     input_schema: {
       type: 'object',
       properties: {
-        url: { type: 'string', description: '要抓取的 URL' },
+        url: { type: 'string', description: 'URL to fetch' },
       },
       required: ['url'],
     },
@@ -34,107 +34,107 @@ export const GAP_FILL_TOOLS: AnthropicTool[] = [
   {
     name: 'write_research_section',
     description:
-      '寫入公司研究檔案。**主檔**：優先 **replace_section**＝整節**重寫／修正**（可刪冗、改寫句子、重排段落、合併重複），內文須含該小節標題；**不是**只能插入——若舊節需大改，直接 replace 整節。必要時才用 insert_into_section 接在節尾。禁止 append 堆文末。',
+      'Write to a company research file. For the **main report**: prefer **replace_section** = full section **rewrite/edit** (can trim, rewrite sentences, reorganize paragraphs, merge duplicates); content must include the section heading. This is NOT append-only — if the existing section needs major revision, replace the whole section. Use insert_into_section only when appending to the end of a section is truly needed. Never use append mode on the main report.',
     input_schema: {
       type: 'object',
       properties: {
-        ticker: { type: 'string', description: '公司 ticker（大寫）' },
-        filename: { type: 'string', description: '主檔為 {TICKER}_Initial_MAX.md；或 transcripts/xxx.md' },
-        content: { type: 'string', description: '要寫入的 Markdown。replace_section 時為整節順過後內文（含小節標題），具可讀性、段落連貫。' },
-        mode: { type: 'string', enum: ['append', 'overwrite', 'insert_into_section', 'replace_section'], description: '主檔：replace_section=整節替換並順稿；insert_into_section=插在節尾。transcripts=append。整份重寫=overwrite' },
-        section_anchor: { type: 'string', description: 'mode 為 insert_into_section 或 replace_section 時必填：1.1, 1.2, 2.1, 2.2, 2.3, 2.4, 2.5, 3.1, 3.2, 3.3, 4.1, 4.2, 6.1, 6.2, 6.3, 7.1, 7.2, 7.3, 8.1, 8.2, 8.3' },
+        ticker: { type: 'string', description: 'Company ticker (uppercase)' },
+        filename: { type: 'string', description: 'Main report: {TICKER}_Initial_MAX.md; or transcripts/xxx.md' },
+        content: { type: 'string', description: 'Markdown content to write. For replace_section: full polished section content including the section heading, in readable narrative form.' },
+        mode: { type: 'string', enum: ['append', 'overwrite', 'insert_into_section', 'replace_section'], description: 'Main report: replace_section=replace entire section with polished content; insert_into_section=append to section end. transcripts=append. Full rewrite=overwrite.' },
+        section_anchor: { type: 'string', description: 'Required when mode is insert_into_section or replace_section: 1.1, 1.2, 2.1, 2.2, 2.3, 2.4, 2.5, 3.1, 3.2, 3.3, 4.1, 4.2, 6.1, 6.2, 6.3, 7.1, 7.2, 7.3, 8.1, 8.2, 8.3' },
       },
       required: ['ticker', 'filename', 'content'],
     },
   },
   {
     name: 'read_research_file',
-    description: `讀取現有研究檔案內容（最多約 ${READ_RESEARCH_FILE_MAX_CHARS.toLocaleString()} 字元；超長會標 truncated）。每輪 user 訊息通常已附主檔全文，僅在需重新對照或截斷補讀時呼叫。`,
+    description: `Read the content of an existing research file (up to ~${READ_RESEARCH_FILE_MAX_CHARS.toLocaleString()} chars; longer files are truncated). The main report is usually already attached in the user message — only call this when you need to re-read or the message was truncated.`,
     input_schema: {
       type: 'object',
       properties: {
         ticker: { type: 'string' },
-        filename: { type: 'string', description: '檔案名稱' },
+        filename: { type: 'string', description: 'Filename to read' },
       },
       required: ['ticker', 'filename'],
     },
   },
   {
     name: 'list_company_files',
-    description: '列出該公司在 data/companies/{TICKER}/ 下已有檔案與 transcripts 清單，判斷缺什麼再補充。',
+    description: 'List all existing files and transcripts under data/companies/{TICKER}/ to decide what is missing before adding content.',
     input_schema: {
       type: 'object',
       properties: {
-        ticker: { type: 'string', description: '公司 ticker（大寫）' },
+        ticker: { type: 'string', description: 'Company ticker (uppercase)' },
       },
       required: ['ticker'],
     },
   },
   {
     name: 'query_companies_db',
-    description: '查詢 data/database/companies_database.json 中該 ticker 的條目（公司名、CEO、產業、財務摘要等）。',
+    description: 'Query the entry for a ticker in data/database/companies_database.json (company name, CEO, industry, financial summary, etc.).',
     input_schema: {
       type: 'object',
       properties: {
-        ticker: { type: 'string', description: '公司 ticker（大寫）' },
+        ticker: { type: 'string', description: 'Company ticker (uppercase)' },
       },
       required: ['ticker'],
     },
   },
   {
     name: 'ninja_api',
-    description: '呼叫 API Ninjas：財報(earnings/earnings_historical)、法說逐字稿(earningstranscript)、股價(stockprice)、SEC(sec)。需 NINJA_API_KEY。',
+    description: 'Call API Ninjas: financials (earnings/earnings_historical), earnings call transcripts (earningstranscript), stock price (stockprice), SEC filings (sec). Requires NINJA_API_KEY.',
     input_schema: {
       type: 'object',
       properties: {
-        action: { type: 'string', enum: ['stockprice', 'earnings', 'earnings_historical', 'earningstranscript', 'sec'], description: 'earnings=單年季, earnings_historical=多年財報, earningstranscript=法說逐字稿' },
+        action: { type: 'string', enum: ['stockprice', 'earnings', 'earnings_historical', 'earningstranscript', 'sec'], description: 'earnings=single quarter, earnings_historical=multi-year financials, earningstranscript=earnings call transcript' },
         ticker: { type: 'string' },
-        year: { type: 'number', description: 'earnings/earningstranscript 用' },
-        quarter: { type: 'number', description: 'earnings/earningstranscript 用' },
-        period_fy: { type: 'boolean', description: 'earnings 時 true=全年' },
-        start_year: { type: 'number', description: 'earnings_historical 起始年' },
-        end_year: { type: 'number', description: 'earnings_historical 結束年' },
-        filing: { type: 'string', description: 'sec 用，如 10-K, 10-Q' },
-        limit: { type: 'number', description: 'sec 筆數' },
+        year: { type: 'number', description: 'For earnings/earningstranscript' },
+        quarter: { type: 'number', description: 'For earnings/earningstranscript' },
+        period_fy: { type: 'boolean', description: 'For earnings: true = full year' },
+        start_year: { type: 'number', description: 'For earnings_historical: start year' },
+        end_year: { type: 'number', description: 'For earnings_historical: end year' },
+        filing: { type: 'string', description: 'For sec: e.g. 10-K, 10-Q' },
+        limit: { type: 'number', description: 'For sec: number of filings to return' },
       },
       required: ['action', 'ticker'],
     },
   },
   {
     name: 'search_data_for_company',
-    description: '在 data/ 下搜尋與該公司相關的內容：what-happened 訪談、meeting-minutes、Knowledge 等，依 ticker/公司名/CEO 匹配。回傳匹配的 path 與 snippet，再用 read_project_file 讀取。',
+    description: 'Search data/ for content related to a company: what-happened interviews, meeting-minutes, Knowledge files — matched by ticker/company name/CEO. Returns matching paths and snippets; use read_project_file to load full content.',
     input_schema: {
       type: 'object',
       properties: {
-        ticker: { type: 'string', description: '公司 ticker（大寫）' },
+        ticker: { type: 'string', description: 'Company ticker (uppercase)' },
       },
       required: ['ticker'],
     },
   },
   {
     name: 'read_project_file',
-    description: '讀取 data/ 下任意檔案。path 為相對專案根目錄，例如 data/content/what-happened/20260215_AminVahdat_Google.md。僅支援 .md/.txt/.json。',
+    description: 'Read any file under data/. Path is relative to project root, e.g. data/content/what-happened/20260215_AminVahdat_Google.md. Supports .md/.txt/.json only.',
     input_schema: {
       type: 'object',
       properties: {
-        path: { type: 'string', description: '相對專案根目錄之路徑，須以 data/ 開頭' },
+        path: { type: 'string', description: 'Path relative to project root, must start with data/' },
       },
       required: ['path'],
     },
   },
   {
     name: 'query_knowledge_base',
-    description: '查詢知識庫（data/knowledge/atoms/）：依公司、人物、產業、archetype、tag 或全文搜尋可重用的知識原子。回傳排名結果含 id、snippet、quality。',
+    description: 'Query the knowledge base (data/knowledge/atoms/): search reusable knowledge atoms by company, person, industry, archetype, tag, or full-text. Returns ranked results with id, snippet, and quality score.',
     input_schema: {
       type: 'object',
       properties: {
-        query: { type: 'string', description: '全文搜尋關鍵詞（空格分隔）' },
-        company: { type: 'string', description: '公司 ticker（大寫）' },
-        person: { type: 'string', description: '人名（部分匹配）' },
-        archetype: { type: 'string', enum: ['company-profile', 'leadership', 'quotes', 'competitive-landscape', 'industry', 'financial-snapshot', 'geopolitical', 'esg', 'supply-chain', 'technology'], description: '知識類型' },
-        industry: { type: 'string', description: '產業標籤' },
-        tag: { type: 'string', description: '主題標籤' },
-        limit: { type: 'number', description: '回傳數量上限（預設 10）' },
+        query: { type: 'string', description: 'Full-text search keywords (space-separated)' },
+        company: { type: 'string', description: 'Company ticker (uppercase)' },
+        person: { type: 'string', description: 'Person name (partial match)' },
+        archetype: { type: 'string', enum: ['company-profile', 'leadership', 'quotes', 'competitive-landscape', 'industry', 'financial-snapshot', 'geopolitical', 'esg', 'supply-chain', 'technology'], description: 'Knowledge atom type' },
+        industry: { type: 'string', description: 'Industry tag' },
+        tag: { type: 'string', description: 'Topic tag' },
+        limit: { type: 'number', description: 'Max results to return (default 10)' },
       },
       required: [],
     },
@@ -146,27 +146,27 @@ export const POLISH_TOOLS: AnthropicTool[] = [
   {
     name: 'write_research_section',
     description:
-      '【整理輪】寫入 Initial MAX 主檔（檔名形如 NVDA_Initial_MAX.md）。優先 replace_section：整節**重寫**為順稿（刪重、改寫、重排），content 須含該節 Markdown 標題。必要時 overwrite 整檔（須已掌握全文、零遺漏）。禁止 append。',
+      '[Polish round] Write to the Initial MAX main report (filename like NVDA_Initial_MAX.md). Prefer replace_section: rewrite the full section as polished prose (trim duplicates, rewrite, reorganize); content must include the section Markdown heading. Use overwrite for the full file only if you have the complete content with zero omissions. Never append.',
     input_schema: {
       type: 'object',
       properties: {
-        ticker: { type: 'string', description: '公司 ticker（大寫）' },
-        filename: { type: 'string', description: '主檔檔名：{TICKER}_Initial_MAX.md' },
-        content: { type: 'string', description: 'replace_section 時為整節完整 Markdown（含標題）；overwrite 時為整檔全文' },
-        mode: { type: 'string', enum: ['overwrite', 'insert_into_section', 'replace_section'], description: '整理輪：replace_section 為主；必要時 overwrite 整檔' },
-        section_anchor: { type: 'string', description: 'replace_section / insert_into_section 時必填：1.1, 2.3 等' },
+        ticker: { type: 'string', description: 'Company ticker (uppercase)' },
+        filename: { type: 'string', description: 'Main report filename: {TICKER}_Initial_MAX.md' },
+        content: { type: 'string', description: 'For replace_section: full section Markdown including heading; for overwrite: complete file content' },
+        mode: { type: 'string', enum: ['overwrite', 'insert_into_section', 'replace_section'], description: 'Polish round: replace_section preferred; overwrite for full file when necessary' },
+        section_anchor: { type: 'string', description: 'Required for replace_section / insert_into_section: e.g. 1.1, 2.3' },
       },
       required: ['ticker', 'filename', 'content', 'mode'],
     },
   },
   {
     name: 'read_research_file',
-    description: `【整理輪】讀取主檔以補齊 user 訊息截斷（最多約 ${READ_RESEARCH_FILE_MAX_CHARS.toLocaleString()} 字元）。`,
+    description: `[Polish round] Read the main report to fill gaps where the user message was truncated (up to ~${READ_RESEARCH_FILE_MAX_CHARS.toLocaleString()} chars).`,
     input_schema: {
       type: 'object',
       properties: {
         ticker: { type: 'string' },
-        filename: { type: 'string', description: '檔案名稱' },
+        filename: { type: 'string', description: 'Filename to read' },
       },
       required: ['ticker', 'filename'],
     },

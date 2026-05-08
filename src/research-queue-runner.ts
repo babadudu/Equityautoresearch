@@ -211,7 +211,7 @@ async function main() {
 
   console.log(`\nNext target:`);
   console.log(`  Ticker:   ${target.ticker} (#${target.priority})`);
-  console.log(`  Score:    ${target.score}`);
+  console.log(`  Priority score: ${target.score}`);
   console.log(`  Reason:   ${target.reason}`);
   console.log(`  Why:      ${target.why}`);
   console.log(`  Max cost: $${maxCost ?? target.max_cost}`);

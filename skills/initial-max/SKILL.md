@@ -1,363 +1,364 @@
 ---
 name: initial-max
-description: 以 FUTU 為 100 分標竿，依四維框架「環境→生意→組織→人」對新標的進行迭代深度研究，直到品質達標（≥95/100，且各維度達最低分、2.5 DCF 必達）或用完 20 輪。觸發：「initial MAX [TICKER]」「深度initial [TICKER]」「/initial-max [TICKER]」。
+description: Using FUTU as the 100-point benchmark, conduct iterative deep research on a new target across the four-dimension framework "Environment→Business→Organization→People" until quality meets the bar (≥95/100, each dimension meets its minimum, 2.5 DCF mandatory) or 20 rounds are exhausted. Triggers: "initial MAX [TICKER]", "deep initial [TICKER]", "/initial-max [TICKER]".
 ---
 
-# Initial MAX Skill（四維框架深度迭代研究）
+# Initial MAX Skill (Four-Dimension Framework Deep Iterative Research)
 
-**目的**：對一個標的執行超深度投資研究，品質標竿為 FUTU_LATEST_REPORT.md（100 分）。以四維投資框架「環境→生意→組織→人」為評分維度，每輪補充缺口研究，直到總分 **≥95/100** 且**各維度達最低分**（環境≥16、生意≥30、組織≥16、人≥20）、**2.5 DCF 估值為必達**，或達 20 輪上限。
-
----
-
-## 使用時機
-
-| 觸發用語 | 動作 |
-|----------|------|
-| `/initial-max [TICKER]` | 對指定標的執行 Initial MAX 完整流程 |
-| `深度initial [TICKER]` | 同上 |
-| `initial MAX [TICKER]` | 同上 |
-| `score-only [TICKER]` | 只對現有研究打分，不補充 |
+**Purpose**: Execute ultra-deep investment research on a target, benchmarked against FUTU_LATEST_REPORT.md (100 points). The four-dimension investment framework "Environment→Business→Organization→People" defines the scoring dimensions. Each round fills research gaps until the total score is **≥95/100** with **each dimension meeting its minimum** (Environment≥16, Business≥30, Organization≥16, People≥20), **2.5 DCF valuation is mandatory**, or 20 rounds are reached.
 
 ---
 
-## 可用工具
+## When to Use
 
-你可以使用以下工具執行研究：
-- **list_company_files**（Runner 模式）：列出該公司目錄下已有檔案與 transcripts，再決定補什麼
-- **query_companies_db**（Runner 模式）：查 `data/database/companies_database.json` 中該 ticker 條目（公司名、CEO、產業、財務摘要）
-- **search_data_for_company**（Runner 模式）：在 **data/** 下搜尋與該公司/CEO 相關內容（**what-happened** 訪談、meeting-minutes、Knowledge 等），回傳匹配的 path 與 snippet；可再用 **read_project_file(path)** 讀取完整內容，摘錄管理層原話寫入主檔
-- **ninja_api**（Runner 模式）：呼叫 API Ninjas 取財報（earnings / earnings_historical）、法說逐字稿（earningstranscript）、股價、SEC；需 NINJA_API_KEY（設於專案根目錄 `.env`）
-- **web_search**：搜尋網頁（最多 5 次）
-- **fetch_url**：抓取指定 URL 的完整內容（逐字稿、年報頁面等）
-- **Write**：寫入或附加內容到公司研究檔案（單一主檔或既有檔案）
+| Trigger | Action |
+|---------|--------|
+| `/initial-max [TICKER]` | Run the full Initial MAX flow for the specified target |
+| `deep initial [TICKER]` | Same as above |
+| `initial MAX [TICKER]` | Same as above |
+| `score-only [TICKER]` | Score existing research only, no gap-fill |
 
 ---
 
-## 產出格式：單一主檔 + FUTU 風格完整報告
+## Available Tools
 
-**所有 Initial MAX 研究內容一律寫入單一主檔**，且產出品質以 **FUTU_LATEST_REPORT.md** 為標竿：**可讀的投資報告**（有論點、有敘事、可從頭讀到尾），**不是**條列式檢查表或大綱。
+The following tools are available for research:
+- **list_company_files** (Runner mode): List existing files and transcripts under the company directory before deciding what to supplement
+- **query_companies_db** (Runner mode): Query the `data/database/companies_database.json` entry for the ticker (company name, CEO, industry, financial summary)
+- **search_data_for_company** (Runner mode): Search under **data/** for content related to the company/CEO (**what-happened** interviews, meeting-minutes, Knowledge, etc.), returning matching paths and snippets; then use **read_project_file(path)** to read full content and extract management quotes for the master file
+- **ninja_api** (Runner mode): Call API Ninjas for financials (earnings / earnings_historical), earnings call transcripts (earningstranscript), stock prices, SEC filings; requires NINJA_API_KEY (set in project root `.env`)
+- **web_search**: Search the web (up to 5 times)
+- **fetch_url**: Fetch the full content of a specified URL (transcripts, annual report pages, etc.)
+- **Write**: Write or append content to company research files (single master file or existing files)
 
-### 主檔路徑與章節結構
+---
 
-- **主檔路徑**：`data/companies/{TICKER}/{TICKER}_Initial_MAX.md`
-- **章節結構**（**開頭為 IRR 模型與結論**，接著四維框架；**每個子節（1.1～4.2）都必須有覆蓋，缺一不可**；每章需有段落敘事；每個子點至少引述 5 則管理層原話，見下方「產出品質與完整性」）：
+## Output Format: Single Master File + FUTU-Style Complete Report
+
+**All Initial MAX research content must be written into a single master file**, and output quality is benchmarked against **FUTU_LATEST_REPORT.md**: a **readable investment report** (with thesis, narrative, readable from start to finish) — **not** a bulleted checklist or outline.
+
+### Master File Path and Section Structure
+
+- **Master file path**: `data/companies/{TICKER}/{TICKER}_Initial_MAX.md`
+- **Section structure** (**opens with IRR Model & Executive Summary**, followed by the four-dimension framework; **every sub-section (1.1–4.2) must have coverage, none may be missing**; each chapter requires narrative paragraphs; each sub-point must cite at least 5 direct management quotes — see "Output Quality & Completeness" below):
 
 ```markdown
-# {TICKER} Initial MAX 深度研究（四維框架）
+# {TICKER} Initial MAX Deep Research (Four-Dimension Framework)
 
-## IRR 模型與關鍵假設
-   （結果：情境分析表（樂觀/合理/保守）+ 關鍵假設條列（營收成長、淨利率、P/E、回購率等）；可與 2.5 節同步或自 2.5 摘要，讀者一打開即見估值結論與假設）
+## IRR Model & Key Assumptions
+   (Result: scenario analysis table (optimistic/base/conservative) + key assumptions list (revenue growth, net margin, P/E, buyback rate, etc.); may sync with or summarize from section 2.5; reader sees valuation conclusions and assumptions at a glance upon opening)
 
-## 結論總結
-   （1–2 段：投資論點、關鍵機會與風險、估值結論與建議；可引用後文論據，但本節須獨立可讀）
+## Executive Summary
+   (1–2 paragraphs: investment thesis, key opportunities and risks, valuation conclusion and recommendation; may reference later sections but this section must be independently readable)
 
-## KEY QUESTION（公司想要做什麼？如何做到？管理層怎麼想？）
-## 評分總表
-# 一、環境
-   ## 1.1 TAM 與產業成長趨勢（段落+表+出處）
-   ## 1.2 市場結構與監管（競爭格局、法規風險、政策機會；段落+表）
-   ## 1.3 技術與需求趨勢（科技採用或需求轉變論述）
-   ## 1.4 地理分部與／或部門別營收（年報/法說出處；表+可選簡短敘事）
-# 二、生意
-   ## 2.1 十年財務與轉折點（表+轉折點說明段落）
-   ## 2.2 我們的業務（分項說明文：每條業務線 1–3 段+數據+管理層原話）
-   ## 2.3 商業模式與單位經濟（收入拆分表+unit economics+>20 CEO 直引言鑲入敘事）
-   ## 2.4 五力與護城河（5a–5e 每力 1 段話+具體公司名+CEO 護城河引言）
-   ## 2.5 多指標估值與 DCF（≥3 種估值方法：P/E + EV/EBITDA + P/FCF，各附當前 vs 5 年均 vs 同業；匯總公允價值區間。完整 DCF：情境分析表+三表+預估營收拆解+假設與證據，直接寫入主檔，不外聯。數值合理性：WACC 8-14%（含地緣溢價）、終端成長率 < WACC、P/E 10-40x 為合理區間；超出須有明確理由。）
-# 三、組織
-   ## 3.1 組織文化與激勵機制（人才策略、股權激勵、逆勢案例；段落+出處）
-   ## 3.2 運營效率（ROIC/Operating Leverage；段落+數據）
-   ## 3.3 市場滲透率（≥2 市場或部門，若有；表+出處）
-# 四、人
-   ## 4.1 CEO/創業家（故事線：出身、為何進這行、關鍵決策、與誰學；敘事中鑲入格局觀與道德引言。**繼任風險**：CEO 年齡與任期、≥2 位次世代領導人（SVP/EVP 級：背景、任期、強項）、板凳深度評級：高/中/低 + 理由、繼任計畫揭露狀態）
-   ## 4.2 公開訪談清單（表：序號|標題|日期|核心洞見；逐字稿存 transcripts/）
-# 五、評分表（四維細項與說明）
+## KEY QUESTION (What does the company want to do? How will it get there? What does management think?)
+## Scorecard
+# I. Environment
+   ## 1.1 TAM & Industry Growth Trends (paragraph + table + source)
+   ## 1.2 Market Structure & Regulation (competitive landscape, regulatory risks, policy opportunities; paragraph + table)
+   ## 1.3 Technology & Demand Trends (technology adoption or demand-shift narrative)
+   ## 1.4 Geographic Segments and/or Revenue by Segment (annual report/earnings call source; table + optional brief narrative)
+# II. Business
+   ## 2.1 Ten-Year Financials & Inflection Points (table + inflection point narrative paragraphs)
+   ## 2.2 Our Business (per-line narrative: 1–3 paragraphs + data + management quotes per business line)
+   ## 2.3 Business Model & Unit Economics (revenue breakdown table + unit economics + >20 direct CEO quotes embedded in narrative)
+   ## 2.4 Five Forces & Moat (5a–5e, 1 paragraph per force with specific company names + CEO moat quote)
+   ## 2.5 Multi-Method Valuation & DCF (≥3 valuation methods: P/E + EV/EBITDA + P/FCF, each with current vs. 5-year avg vs. peers; aggregate fair value range. Full DCF: scenario table + three statements + estimated revenue breakdown + assumptions and evidence, written directly into master file, no external links. Reasonableness: WACC 8–14% (including geopolitical premium), terminal growth rate < WACC, P/E 10–40x is reasonable; anything outside must have explicit justification.)
+# III. Organization
+   ## 3.1 Organizational Culture & Incentives (talent strategy, equity incentives, counter-cyclical hiring cases; paragraph + source)
+   ## 3.2 Operational Efficiency (ROIC/Operating Leverage; paragraph + data)
+   ## 3.3 Market Penetration (≥2 markets or segments if applicable; table + source)
+# IV. People
+   ## 4.1 CEO/Founder (narrative arc: background, why they entered the industry, key decisions, who they learned from; embed worldview and integrity quotes in narrative. **Succession risk**: CEO age and tenure, ≥2 next-generation leaders (SVP/EVP level: background, tenure, strengths), bench depth rating: High/Medium/Low + rationale, succession plan disclosure status)
+   ## 4.2 Public Interview List (table: #|Title|Date|Core Insights; transcripts stored in transcripts/)
+# V. Scorecard (four-dimension line items with explanations)
 ```
 
-- **開頭順序**：主檔**最上方**須依序為 **IRR 模型與關鍵假設**（情境分析表 + 關鍵假設）、**結論總結**（1–2 段），接下來才是 KEY QUESTION、評分總表、一、環境 … 五、評分表。讀者一打開即可先看到估值結論與投資論點，再進入細節。
-- **地理分部與部門別營收**：組織維度之「地理/業務分部收入」可為 **(1) 地理分部**（地區營收，如 Americas/EMEA/APAC）、**(2) 部門別營收**（segment，如 Google Services / Google Cloud / Other Bets），或**(3) 兩者皆有**。數字均須來自年報或法說並標出處，且**出處須含可點擊連結**（見下「資料來源連結」）；另需 ≥2 市場滲透率或 ≥2 部門占比等可驗證指標。
-- **資料來源連結（每輪必守）**：凡**新增或改寫**之數據、表格註腳、市場/監管/同業敘述、訪談與財報引用，**不可只寫來源名稱**（例如僅「10-K 2024」「McKinsey 報告」）；須附 **可點擊的 `https://`（或 `http://`）連結**，Markdown 格式如 `[說明](URL)` 或在括號內直接貼 URL。訪談／逐字稿＝原始文章、影片、官方 PDF 之 URL；年報／10-K／20-F＝SEC EDGAR、公司 IR 文件或官方 PDF 連結；法說＝逐字稿或錄音網址；本 repo 已下載逐字稿可連到 `transcripts/檔名.md`（相對路徑）。若確無公開 URL（極少見），須註明原因並給**次佳可查證連結**（如新聞稿、監管公告、交易所披露）。
-- **每輪補充：對應小節 + 順稿可讀**：寫入主檔時須 (1) 放在對應小節內（**replace_section** 或 **insert_into_section** + section_anchor）；(2) **具可讀性**：優先用 **replace_section** 產出整節順過後版本——可**整節重寫／刪冗／改寫**（合併既有與新內容、段落連貫），**不是**只能往節尾插入；若用 insert_into_section，補充段落須與前文銜接。勿在文末堆疊；勿產出零散列點或重複小節標題。
-- **Automated Runner**：`initial-max-runner.ts` 在研究輪停止後會自動多跑一輪 **整理輪**（僅順稿、格式、去重，無網搜／API）；`--skip-polish` 可略過。
-- **DCF 兩處**：**(1) 開頭「IRR 模型與關鍵假設」**：放結果情境分析表 + 關鍵假設條列（精簡，與 2.5 一致或自 2.5 摘要）；**(2) 二、生意 → 2.5 DCF 估值**：完整內容（情境分析表 + 三表 + 預估營收拆解 + 假設與證據）直接寫入主檔，不外聯。可另產出 `dcf_valuation_YYYYMMDD.md` 存檔。
-- **例外**：`dcf_config.json`、`transcripts/` 下逐字稿仍為獨立檔案。
-- **既有標的**：若該標的已有 `initial_*.md` 分散檔，可先合併成一份 `{TICKER}_Initial_MAX.md` 並改寫為敘事報告後，後續 Round 只更新主檔。
+- **Opening order**: The master file **top** must present in sequence: **IRR Model & Key Assumptions** (scenario table + key assumptions), **Executive Summary** (1–2 paragraphs), followed by KEY QUESTION, Scorecard, I. Environment … V. Scorecard. The reader sees valuation conclusions and investment thesis at a glance before diving into details.
+- **Geographic segments and revenue by segment**: The Organization dimension's "geographic/segment revenue" may be **(1) geographic segments** (regional revenue, e.g. Americas/EMEA/APAC), **(2) revenue by segment** (e.g. Google Services / Google Cloud / Other Bets), or **(3) both**. All figures must come from annual reports or earnings calls with source citations, and **sources must include clickable links** (see "Data Source Links" below); at least ≥2 market penetration rates or ≥2 segment shares as verifiable metrics are required.
+- **Data source links (required every round)**: For any **newly added or rewritten** data, table footnotes, market/regulatory/peer narratives, interview and earnings citations — **do not write source name only** (e.g. just "10-K 2024" or "McKinsey report"); must attach a **clickable `https://` (or `http://`) link** in Markdown format such as `[description](URL)` or directly paste the URL in parentheses. Interviews/transcripts = URL of the original article, video, or official PDF; annual reports/10-K/20-F = SEC EDGAR, company IR page, or official PDF link; earnings calls = transcript or recording URL; transcripts already downloaded in this repo may link to `transcripts/filename.md` (relative path). If no public URL exists (very rare), state the reason and provide a **next-best verifiable link** (e.g. press release, regulatory filing, exchange disclosure).
+- **Per-round gap-fill: corresponding sub-section + readable prose**: When writing to the master file, (1) place content in the corresponding sub-section (**replace_section** or **insert_into_section** + section_anchor); (2) **ensure readability**: prefer **replace_section** to produce the full revised section — can **rewrite/cut redundancy/revise** (merge existing and new content, cohesive paragraphs), **not** just append to the section end; if using insert_into_section, supplemental paragraphs must connect to prior text. Do not pile content at the file end; do not produce scattered bullets or duplicate sub-section headings.
+- **Automated Runner**: `initial-max-runner.ts` automatically runs one additional **polish round** (prose cleanup, formatting, dedup only — no web search/API) after research rounds conclude; `--skip-polish` to bypass.
+- **DCF in two places**: **(1) Opening "IRR Model & Key Assumptions"**: place result scenario table + key assumptions list (condensed, consistent with or summarized from 2.5); **(2) II. Business → 2.5 DCF Valuation**: full content (scenario table + three statements + estimated revenue breakdown + assumptions and evidence) written directly into the master file, no external links. A separate `dcf_valuation_YYYYMMDD.md` archive may also be produced.
+- **Exceptions**: `dcf_config.json` and transcripts under `transcripts/` remain as independent files.
+- **Existing targets**: If the target already has scattered `initial_*.md` files, they may first be merged into a single `{TICKER}_Initial_MAX.md` and rewritten as a narrative report; subsequent rounds update only the master file.
 
-### 產出品質與完整性（必達）
+### Output Quality & Completeness (Mandatory)
 
-對標 **FUTU_LATEST_REPORT.md**，以下為必達要求，缺一則視為未完整：
+Benchmarked against **FUTU_LATEST_REPORT.md**, the following are mandatory requirements — missing any one renders the output incomplete:
 
-1. **開頭必備**：主檔最上方須有 **IRR 模型與關鍵假設**（結果情境分析表 + 關鍵假設條列）與 **結論總結**（1–2 段：投資論點、關鍵機會與風險、估值結論）；接下來才是 KEY QUESTION 與既有章節。
-2. **開場**：有 **KEY QUESTION**（例如：這家公司想要做什麼？如何做到？管理層怎麼想？），並以 1–2 段點出論點或使命/願景/定位（可引用 CEO 原話）。
-3. **敘事優先與可讀性**：各章除表格外，須有**連續段落**說明「為什麼、發生什麼、管理層怎麼說」；CEO/經營層引言須**鑲入敘事**（例如「李華表示：『…』」），勿僅以編號列點。每小節須**順過**：段落連貫、讀起來像一篇文章，補充時優先用 replace_section 產出整節順過後版本。
-4. **生意→我們的業務**：仿 FUTU「我們的業務」，每條主要業務線（或部門）須有 **1–3 段說明文**（在做什麼、為何重要、關鍵數據）+ 管理層原話（出處+日期）；不可僅有收入拆分一表。
-5. **人→CEO 故事線**：CEO/創業家須有**故事線**（出身、為何進入這一行、關鍵決策、與誰學/受誰影響），在敘事中帶出格局觀與道德操守引言；訪談清單表保留，但格局觀/道德不得只有 bullet 列表而無前後文。
-6. **環境**：TAM、市場結構、監管、技術趨勢均須有**簡短論述**（至少 1 段或要點+出處），非僅表格或單行。
-7. **五力**：5a–5e 每力須**至少 1 段話**（競爭態勢、具體公司名）+ 至少 1 句 CEO 護城河/差異化引言並標出處。
-8. **地理/部門別**：地理分部或部門別營收須有**表格**且**每數字標年報或法說出處**（含**可點擊文件／網頁連結**，見「資料來源連結」）；可視需要加 1–2 句敘事（例如各區或各部門策略重點）。
-9. **每個子點至少 5 則管理層原話**：主檔內**每一個子點**（1.1～4.1）皆須引述管理層**直接**原話（須以引號「…」或 "…" 包住，附出處+日期）；**該子點內至少 5 則**，建議 7 則以上；鑲入敘事呈現。**嚴格**：間接描述或無引號不計入則數；無出處或無日期之引言不計。4.2 訪談清單為表可例外；2.5 DCF 可至少 1–2 則。
-10. **嚴格計分規則**：**無出處的數字**（TAM、市占、營收、地理分部等）一律不計分；**出處僅有文字、無可點擊連結**（在公開可得 URL 的情況下）視為驗證性不足，應補上連結。**非直接引述**（未用引號標示的管理層語句）不計入「管理層原話」則數；任一子點少於 5 則合格原話，該子點視為未達標並扣分。
-11. **每個子節必覆蓋**：1.1、1.2、1.3、1.4、2.1、2.2、2.3、2.4、2.5、3.1、3.2、3.3、4.1、4.2 每一節都必須有實質內容，缺一則不達標。
-12. **環境須從最早開始**：產業與環境研究須從**該產業的起源或「現代形態」的起點**開始論述。例如：研究廣告業則從現代廣告誕生、產業化起點開始；研究雲端則從雲端服務商業化起點開始。TAM、市場結構、監管、技術趨勢均須有時間縱深，非僅當下快照。
-13. **創業家/經營層須從頭開始**：4.1 CEO/創業家須含**學經歷**（教育、早期職涯）、**重要拐點**（關鍵決策、轉折點）、**重要成就**（各階段里程碑）、**每個時期的訪談**（不同年代/階段的公開訪談與原話）、**成功與失敗的檢討與反思**（管理層自己的回顧與學習）。故事線須按時間軸從最早鋪陳，非僅近期摘要。
-14. **完整性檢查**：每輪結束自問：若有人只讀這一份主檔、不讀其他檔案，能否理解「這家公司在做什麼、為什麼有競爭力、管理層是誰、風險與機會在哪」？若否，須補敘事或段落直至可讀。
-
----
-
-## 四維評分框架（100 分）
-
-### 環境 (20 pts)
-| 評分項目 | 滿分 | 合格標準 |
-|----------|------|---------|
-| TAM & 產業成長趨勢 | 5 | 有市場規模數字 + CAGR + 出處 |
-| 市場結構 | 5 | 競爭格局（集中/碎片）+ 主要玩家市占 |
-| 監管/政策環境 | 5 | 主要法規風險 + 政策機會 |
-| 技術與需求趨勢 | 5 | 科技採用曲線或需求轉變論述 |
-
-### 生意 (35 pts)
-| 評分項目 | 滿分 | 合格標準 |
-|----------|------|---------|
-| 財務歷史完整度 | 10 | ≥10 年表格；含毛利、營業利益、EPS；至少一個轉折點說明 |
-| 商業模式深度 | 10 | 收入拆分表 + unit economics + **≥25 個 CEO 直引言**（須引號+出處+日期） |
-| 競爭護城河（Five Forces） | 10 | 5a-5e 標題齊全 + 技術差異化段落 + CEO 護城河引言 |
-| 多指標估值 | 5 | **≥3 種估值方法**（P/E + EV/EBITDA + P/FCF 為最低要求），各附當前 vs 5 年平均 vs 同業比較；匯總公允價值區間（加權或三角交叉驗證）。**WACC 分解**（Rf + ERP × β + 台灣地緣溢價，逐項列出）+ 三情境表 + IRR 拆分（成長+估值+回購）+ **3×3 敏感度矩陣**（營收成長 vs WACC）；僅用單一估值方法（如只有 P/E）者扣分；缺 WACC 分解或敏感度矩陣者不得滿分 |
-
-### 組織 (20 pts)
-| 評分項目 | 滿分 | 合格標準 |
-|----------|------|---------|
-| 地理/業務分部收入 | 8 | **地理分部**（地區營收）或 **部門別營收**（segment，如事業部/產品線），或兩者皆有；來自年報或法說（標出處頁碼/日期）；≥2 市場滲透率或 ≥2 部門占比 |
-| 組織文化與激勵機制 | 6 | 人才策略 + 股權激勵 + 逆勢擴張案例 |
-| 運營效率（ROIC / Operating Leverage） | 6 | ROIC 計算 or 毛利率/費用率趨勢分析 |
-
-### 人 (25 pts)
-| 評分項目 | 滿分 | 合格標準 |
-|----------|------|---------|
-| CEO 格局觀與商業哲學 | 5 | 多年關鍵決策的第一性原理說明 |
-| 繼任風險與板凳深度 | 5 | CEO 年齡與任期明確標示；≥2 位次世代領導人（SVP/EVP 級，含背景、任期、強項）；板凳深度評級：高/中/低 + 理由；繼任計畫揭露狀態 |
-| 道德操守與價值創造驅動力 | 5 | 具體案例或引言佐證（非泛泛描述） |
-| 公開訪談 ≥25 篇 + 逐字稿已下載 | 10 | URL 數量 min(count/25, 1.0)×10；逐字稿存 transcripts/ |
-
-### 延伸分析維度 (45 pts, --extended 模式)
-
-| 維度 | 滿分 | 子項 |
-|------|------|------|
-| 地緣政治分析 | 15 | 6.1 地緣地位(5) + 6.2 國際關係(5) + 6.3 政策風險(5) |
-| 環境永續分析 | 15 | 7.1 能源消耗(5) + 7.2 環境爭議(5) + 7.3 氣候轉型(5) |
-| 正反論辯 | 20 | 8.1 Bull Case(5) + 8.2 Bear Case(5) + 8.3 數據對比(5) + 8.4 投資論點失效條件(5) |
-
-**不偏頗方法論**：
-- 學術風格，引用格式："According to [source], X. However, [source] argues Y"
-- 每個主張附可驗證數據+出處URL
-- 不做結論判斷——陳述事實與各方立場
-- 優先使用 2024-2026 年數據
-- 每個論點至少 2 個不同立場的來源
-- **成功標準：雙方都不滿意 = 客觀中立**
-
-### 延伸分析品質標準（來自專家評審）
-
-#### 地緣政治 (§6) — 來自 Brookings + RAND 評審
-- **矽盾論述須承擔舉證責任**：經濟互賴在歷史上多次未能阻止戰爭（如一戰），不可預設有效
-- **軍事能力缺口必須涵蓋**：PLA 兩棲運力評估、台灣自身防禦投資（刺蝟戰略、反艦飛彈、義務兵役延長）
-- **衝突概率引用須具名來源**：不可引用「某諮詢公司」等匿名來源；CFR Tier I 指危機升級非軍事行動，須標注區別
-- **「毀滅條款」威懾**：TSMC 晶圓廠在入侵時可被癱瘓（EUV 設備破壞）的報導須納入
-- **日本 2022 年國安戰略修訂**須作為主要來源，包含防衛預算倍增
-- **CHIPS Act 雙面性**：既是 TSMC 機會（補貼），也是對 TSMC 護城河的系統性侵蝕——必須明確建模
-- **競爭對手成功情境**：Intel 18A 若成功的情境必須建模（即使 TSMC 仍居主導，90%→70-75% 改變敘事）
-- **台灣民主治理**：台灣的法治與智財保護是 TSMC 繁榮的原因之一，須納入分析
-
-#### 環境永續 (§7) — 來自 RAND 評審
-- **能源「淨正面」聲稱**：TSMC 自報的 6.39x 能源乘數須標注為未經第三方驗證的生命週期分析，或標記為待驗證
-- **複合風險迴路**：TSMC 成長 → 台灣能源脆弱性加劇 → 封鎖情境惡化 → 地緣風險上升——此反饋迴路須明確描述
-- **水資源數據**須包含 2021 年乾旱案例細節（農民影響、S&P 信用風險連結）
-
-#### 正反論辯 (§8) — 來自 McKinsey + RAND 評審
-- **Bull/Bear 篇幅對等**：全文 Bull 論述不得超過 Bear 論述 1.5 倍字數
-- **IRR 與風險概率矛盾必須和解**：若報告 IRR 18% 但封鎖概率 60%，此矛盾必須在 8.3 明確量化討論
-- **概率加權預期報酬**：須附 Bull/Base/Bear 概率加權 IRR（如 25%/50%/25%）
-- **零重複引言**：全報告不得有重複 CEO 引言（整理輪必檢項目）
-
-#### 報告結構（來自 McKinsey 評審）
-- **報告開頭須有 Executive Summary（1 頁）**：投資論點、關鍵指標、估值、前 3 大風險、建議——IC 成員可只讀此頁
-- **自評計分表須移除**：不可在報告內自我評分（由外部評分系統負責）
-- **當前股價 vs 內在價值**：須明確陳述「目前股價 X，我們的公允價值 Y，安全邊際 Z%」
+1. **Required opening**: The master file top must have **IRR Model & Key Assumptions** (result scenario table + key assumptions list) and **Executive Summary** (1–2 paragraphs: investment thesis, key opportunities and risks, valuation conclusion); followed by KEY QUESTION and the existing chapters.
+2. **Opening**: Has a **KEY QUESTION** (e.g. What does the company want to do? How will it get there? What does management think?), with 1–2 paragraphs stating the thesis or mission/vision/positioning (may quote CEO directly).
+3. **Narrative-first and readability**: Each chapter, beyond tables, must have **continuous paragraphs** explaining "why, what happened, what management said"; CEO/management quotes must be **embedded in narrative** (e.g. "Li Hua stated: '…'"), not merely numbered bullets. Each sub-section must be **polished**: cohesive paragraphs, reads like an article; prefer replace_section when supplementing to produce the full revised section.
+4. **Business→Our Business**: Modeled on FUTU's "Our Business" — each major business line (or segment) must have **1–3 explanatory paragraphs** (what it does, why it matters, key data) + management quotes embedded in narrative (source + date); a revenue breakdown table alone is insufficient.
+5. **People→CEO narrative arc**: CEO/Founder must have a **narrative arc** (background, why they entered the industry, key decisions, who they learned from/who influenced them), weaving in worldview and integrity quotes; the interview list table is retained, but worldview/integrity may not consist only of a bullet list without surrounding prose.
+6. **Environment**: TAM, market structure, regulation, and technology trends must each have **brief commentary** (at least 1 paragraph or key points + source), not just tables or single lines.
+7. **Five Forces**: 5a–5e each force must have **at least 1 paragraph** (competitive dynamics, specific company names) + at least 1 CEO moat/differentiation quote with source citation; presented as narrative paragraphs, not just bullets.
+8. **Geographic/segment**: Geographic segments or revenue by segment must have a **table** with **each figure citing annual report or earnings call source** (including **clickable document/page link** — see "Data Source Links"); may add 1–2 sentences of narrative (e.g. strategic priorities per region or segment).
+9. **At least 5 direct management quotes per sub-point**: Every **sub-point** (1.1–4.1) in the master file must cite direct management quotes (must be enclosed in quotation marks「…」or "…" with source + date); **at least 5 per sub-point**, 7 or more recommended; embedded in narrative. **Strict**: indirect descriptions or unquoted statements do not count; quotes without source or date do not count. Section 4.2 (interview table) may be exempt; 2.5 DCF may have as few as 1–2.
+10. **Strict scoring rules**: **Figures without source** (TAM, market share, revenue, geographic segments, etc.) are never counted for points; **source with text only, no clickable link** (when a public URL is available) is considered insufficiently verifiable and a link must be added. **Non-direct quotes** (management language not enclosed in quotation marks) do not count toward the "direct management quote" tally; any sub-point with fewer than 5 qualifying direct quotes is considered below standard and will lose points.
+11. **Every sub-section must have coverage**: Sections 1.1, 1.2, 1.3, 1.4, 2.1, 2.2, 2.3, 2.4, 2.5, 3.1, 3.2, 3.3, 4.1, 4.2 must each have substantive content; missing any one fails the standard.
+12. **Environment must start from the beginning**: Industry and environment research must begin from **the origin or starting point of the industry's modern form**. For example: research on the advertising industry starts from the birth of modern advertising and its industrialization; research on cloud starts from the commercialization of cloud services. TAM, market structure, regulation, and technology trends must all have historical depth, not just a current snapshot.
+13. **Founder/management must start from the beginning**: Section 4.1 CEO/Founder must include **educational background** (education, early career), **major inflection points** (key decisions, strategic pivots, personal/professional turning points), **major achievements** (milestones at each stage), **interviews from each period** (public interviews and quotes from different eras/stages — not just recent), and **reflection on successes and failures** (management's own retrospective, learning, and reflection). The narrative arc must be laid out chronologically from the earliest point, not just a recent summary.
+14. **Completeness check**: At the end of each round, ask: If someone reads only this master file and no other files, can they understand "what this company does, why it is competitive, who management is, and where the risks and opportunities lie"? If not, supplement narrative or paragraphs until it is readable.
 
 ---
 
-## 執行流程
+## Four-Dimension Scoring Framework (100 Points)
 
-### Step 0：評分與識別缺口
+### Environment (20 pts)
+| Criterion | Max | Pass Standard |
+|-----------|-----|---------------|
+| TAM & Industry Growth Trends | 5 | Market size figure + CAGR + source |
+| Market Structure | 5 | Competitive landscape (concentrated/fragmented) + major player market shares |
+| Regulatory/Policy Environment | 5 | Key regulatory risks + policy opportunities |
+| Technology & Demand Trends | 5 | Technology adoption curve or demand-shift narrative |
 
-**有兩種執行模式，自動判斷：**
+### Business (35 pts)
+| Criterion | Max | Pass Standard |
+|-----------|-----|---------------|
+| Financial History Completeness | 10 | ≥10-year table; includes gross margin, operating income, EPS; at least one inflection point explanation |
+| Business Model Depth | 10 | Revenue breakdown table + unit economics + **≥25 direct CEO quotes** (must include quotation marks + source + date) |
+| Competitive Moat (Five Forces) | 10 | 5a–5e all headings present + technology differentiation paragraph + CEO moat quote |
+| Multi-Method Valuation | 5 | **≥3 valuation methods** (P/E + EV/EBITDA + P/FCF as minimum), each with current vs. 5-year avg vs. peer comparison; aggregate fair value range (weighted or triangulated). **WACC decomposition** (Rf + ERP × β + geopolitical premium, listed line by line) + three-scenario table + IRR breakdown (growth + valuation + buyback) + **3×3 sensitivity matrix** (revenue growth vs. WACC); using only a single valuation method (e.g. P/E only) results in deduction; missing WACC decomposition or sensitivity matrix disqualifies from full marks |
 
-#### 模式 A：Cursor 直接觸發（說 "initial MAX TICKER"）
-1. 用 `list_dir` 或 `read_file` 掃描 `data/companies/{TICKER}/` 下所有研究檔案
-2. 依本 SKILL 的四維框架（環境20+生意35+組織20+人25=100）**自行打分**
-3. 列出各維度得分與缺口，決定本輪優先補充方向
-4. 執行 Step 1-4，補充研究後**再次自評**，循環直到 **≥95/100 且各維度達標、2.5 DCF 必達** 或 20 輪
+### Organization (20 pts)
+| Criterion | Max | Pass Standard |
+|-----------|-----|---------------|
+| Geographic/Segment Revenue | 8 | **Geographic segments** (regional revenue) or **revenue by segment** (e.g. business unit/product line), or both; from annual report or earnings call (source page/date cited); ≥2 market penetration rates or ≥2 segment shares |
+| Organizational Culture & Incentives | 6 | Talent strategy + equity incentives + counter-cyclical hiring case |
+| Operational Efficiency (ROIC / Operating Leverage) | 6 | ROIC calculation or gross margin/expense ratio trend analysis |
 
-#### 模式 B：runner 腳本自動呼叫
-讀取 runner 注入的缺口檔案（路徑由 task message 提供）：
+### People (25 pts)
+| Criterion | Max | Pass Standard |
+|-----------|-----|---------------|
+| CEO Worldview & Business Philosophy | 5 | First-principles explanation of key decisions over multiple years |
+| Succession Risk & Bench Depth | 5 | CEO age and tenure explicitly stated; ≥2 next-generation leaders (SVP/EVP level, with background, tenure, strengths); bench depth rating: High/Medium/Low + rationale; succession plan disclosure status |
+| Integrity & Value-Creation Drive | 5 | Specific cases or quotes as evidence (not generic descriptions) |
+| Public Interviews ≥25 + Transcripts Downloaded | 10 | URL count min(count/25, 1.0)×10; transcripts stored in transcripts/ |
+
+### Extended Analysis Dimensions (45 pts, --extended mode)
+
+| Dimension | Max | Sub-items |
+|-----------|-----|-----------|
+| Geopolitical Analysis | 15 | 6.1 Geopolitical Position(5) + 6.2 International Relations(5) + 6.3 Policy Risk(5) |
+| ESG & Sustainability | 15 | 7.1 Energy Consumption(5) + 7.2 Environmental Controversies(5) + 7.3 Climate Transition(5) |
+| Bull vs Bear | 20 | 8.1 Bull Case(5) + 8.2 Bear Case(5) + 8.3 Data Comparison(5) + 8.4 Investment Thesis Invalidation Conditions(5) |
+
+**Impartiality methodology**:
+- Academic style, citation format: "According to [source], X. However, [source] argues Y"
+- Every claim backed by verifiable data + source URL
+- No conclusory judgments — state facts and positions from all sides
+- Prioritize 2024–2026 data
+- At least 2 sources from different positions per argument
+- **Success criterion: both sides are dissatisfied = objective neutrality**
+
+### Extended Analysis Quality Standards (From Expert Reviewers)
+
+#### Geopolitics (§6) — From Brookings + RAND Reviewers
+- **Silicon Shield argument must bear the burden of proof**: Economic interdependence has historically failed to prevent wars (e.g. WWI); do not assume it is effective
+- **Military capability gaps must be covered**: PLA amphibious capacity assessment, Taiwan's own defense investments (porcupine strategy, anti-ship missiles, extended conscription)
+- **Conflict probability citations must be named sources**: Anonymous sources (e.g. "a consulting firm") are not acceptable; CFR Tier I refers to crisis escalation, not military action — note the distinction
+- **"Destroy" deterrence clause**: Reports of the ability to disable TSMC fabs (EUV equipment destruction) in the event of invasion must be included
+- **Japan's 2022 National Security Strategy revision** must be a primary source, including the defense budget doubling
+- **CHIPS Act duality**: Both an opportunity for TSMC (subsidies) and a systemic erosion of TSMC's moat — must be explicitly modeled
+- **Competitor success scenario**: The scenario in which Intel 18A succeeds must be modeled (even if TSMC remains dominant, a shift from 90%→70–75% changes the narrative)
+- **Taiwan's democratic governance**: Taiwan's rule of law and IP protection are factors in TSMC's prosperity and must be included in the analysis
+
+#### ESG & Sustainability (§7) — From RAND Reviewer
+- **"Net positive" energy claims**: TSMC's self-reported 6.39x energy multiplier must be flagged as a lifecycle analysis not independently verified by a third party, or marked as pending verification
+- **Compound risk loop**: TSMC growth → Taiwan energy vulnerability worsens → blockade scenarios worsen → geopolitical risk rises — this feedback loop must be explicitly described
+- **Water data** must include details of the 2021 drought case (farmer impact, S&P credit risk link)
+
+#### Bull vs Bear (§8) — From McKinsey + RAND Reviewers
+- **Bull/Bear word count parity**: Bull discussion must not exceed Bear discussion by more than 1.5x throughout the document
+- **IRR vs. risk probability contradiction must be reconciled**: If the report shows 18% IRR but a 60% blockade probability, this contradiction must be explicitly quantified and discussed in 8.3
+- **Probability-weighted expected return**: Must include probability-weighted IRR for Bull/Base/Bear (e.g. 25%/50%/25%)
+- **Zero duplicate quotes**: No CEO quote may appear more than once in the full report (mandatory check in the polish round)
+
+#### Report Structure (From McKinsey Reviewer)
+- **Report must open with an Executive Summary (1 page)**: Investment thesis, key metrics, valuation, top 3 risks, recommendation — IC members should be able to read only this page
+- **Self-scoring tables must be removed**: Do not self-score within the report (external scoring system handles this)
+- **Current price vs. intrinsic value**: Must explicitly state "current price is X, our fair value is Y, margin of safety is Z%"
+
+---
+
+## Execution Flow
+
+### Step 0: Score and Identify Gaps
+
+**Two execution modes — auto-detected:**
+
+#### Mode A: Direct Cursor Trigger (saying "initial MAX TICKER")
+1. Use `list_dir` or `read_file` to scan all research files under `data/companies/{TICKER}/`
+2. **Self-score** using this SKILL's four-dimension framework (Environment 20 + Business 35 + Organization 20 + People 25 = 100)
+3. List scores and gaps per dimension; decide which dimensions to prioritize this round
+4. Execute Steps 1–4; after supplementing research, **self-score again**, loop until **≥95/100 with all dimensions meeting minimums, 2.5 DCF mandatory** or 20 rounds reached
+
+#### Mode B: Runner Script Auto-Invocation
+Read the gap file injected by the runner (path provided in task message):
 ```
 data/companies/{TICKER}/initial_max_gaps_{N}.json
 ```
 
 ---
 
-**無論哪種模式，先確認以下狀態再繼續：**
-- 當前總分：? /100
-- 最低分維度：?
-- 本輪目標：補哪 1-3 個缺口
+**Regardless of mode, confirm the following state before continuing:**
+- Current total score: ? /100
+- Lowest-scoring dimension: ?
+- This round's target: which 1–3 gaps to fill
 
-### Step 1：依優先順序分配搜尋預算
+### Step 1: Allocate Search Budget by Priority
 
-**若由 Runner 執行**：先 `list_company_files` 看該公司目錄已有檔案；可 `query_companies_db` 查資料庫；**用 `search_data_for_company(ticker)` 查 data/ 下是否已有該公司/CEO 的 what-happened 訪談或其他文章**，若有則 `read_project_file(path)` 讀取並摘錄管理層原話；缺財報或法說優先 `ninja_api`（earnings_historical、earningstranscript），再搭配 web_search。
-每輪最多 5 次 web_search，依缺分高低分配：
-- 缺分最高的維度優先（一般先搜尋「人」維度，因 15 分 × 訪談數最易改善）
-- 每個維度 1-2 次搜尋
-- 保留 1 次給 DCF 或地理分部（若缺分）
+**If run by Runner**: First `list_company_files` to see existing files in the company directory; may `query_companies_db` to check the database; **use `search_data_for_company(ticker)` to check if what-happened interviews or other articles about this company/CEO already exist under data/**; if found, `read_project_file(path)` and extract management quotes; for missing financials or earnings calls, prioritize `ninja_api` (earnings_historical, earningstranscript), then supplement with web_search.
 
-### Step 2：每個維度的研究策略
+Up to 5 web_search calls per round, allocated by deficit score:
+- Prioritize the dimension with the highest deficit (generally start with "People" — 15 points × interview count is easiest to improve)
+- 1–2 searches per dimension
+- Reserve 1 search for DCF or geographic segments (if deficient)
 
-#### 環境 (20pts)
+### Step 2: Research Strategy per Dimension
 
-```
-搜尋："{TICKER} total addressable market 2024 2025 {industry} report"
-搜尋："{industry} market structure consolidation competition landscape"
-搜尋："{TICKER} regulatory policy risk {country} 2024 2025"
-```
-
-產出目標：寫入主檔 **`{TICKER}_Initial_MAX.md`** 的「一、環境」章節（或新建該主檔）。
-內容要求：**環境須從該產業的起源或現代形態起點開始**（例如廣告業從現代廣告誕生開始）；TAM 數字（含出處 URL + 日期）、競爭格局表、監管重點摘要；須有時間縱深，非僅當下快照。
-
-#### 生意→財務 (10pts)
+#### Environment (20 pts)
 
 ```
-搜尋："{TICKER} annual revenue gross margin operating income history 10-K"
-搜尋："{TICKER} EPS history turning point inflection"
+Search: "{TICKER} total addressable market 2024 2025 {industry} report"
+Search: "{industry} market structure consolidation competition landscape"
+Search: "{TICKER} regulatory policy risk {country} 2024 2025"
 ```
 
-產出目標：寫入主檔 **`{TICKER}_Initial_MAX.md`** 的「二、生意 → 2.1 十年財務與轉折點」。
-內容要求：≥10 年 Markdown 表格（年份 | 營收 | 毛利率 | 營業利益 | EPS），並標記轉折點（加粗或說明）。
+Output target: Write to the "I. Environment" chapter of master file **`{TICKER}_Initial_MAX.md`** (or create the master file).
+Content requirement: **Environment must begin from the industry's origin or the starting point of its modern form** (e.g. advertising starts from the birth of modern advertising); TAM figures (with source URL + date), competitive landscape table, key regulatory summary; must have historical depth, not just a current snapshot.
 
-#### 生意→商業模式 (10pts) — 目標 ≥25 CEO 直引言（引號+出處+日期）
-
-```
-搜尋："{CEO_NAME} interview revenue model unit economics 2024 2025"
-搜尋："{TICKER} business model revenue breakdown take rate ROIC"
-fetch_url：找到的訪談逐字稿頁面
-```
-
-產出目標：寫入主檔 **`{TICKER}_Initial_MAX.md`** 的「二、生意 → 2.2 我們的業務」與「2.3 商業模式與單位經濟」。
-內容要求：
-- **2.2 我們的業務**：每條主要業務線（或部門）1–3 段說明文（在做什麼、為何重要、關鍵數據）+ 管理層原話鑲入敘事（出處+日期）；不可僅有收入拆分一表。
-- 收入拆分表（各業務線佔比）+ unit economics（CAC/LTV/ARPU/take rate 等）。
-- **≥25 則 CEO 直引言**：須在段落敘事中帶出（例如「Pichai 在 2025 Q1 法說指出：『…』」），勿僅編號列點；每則須**引號包住+出處+日期**，間接描述不計。
-
-#### 生意→五力分析 (10pts)
+#### Business→Financials (10 pts)
 
 ```
-搜尋："{TICKER} vs competitors market share differentiation"
-搜尋："{CEO_NAME} competitive moat technology differentiation quote"
+Search: "{TICKER} annual revenue gross margin operating income history 10-K"
+Search: "{TICKER} EPS history turning point inflection"
 ```
 
-產出目標：寫入主檔 **`{TICKER}_Initial_MAX.md`** 的「二、生意 → 2.4 五力與護城河」。
-內容要求：5a-5e **每力至少 1 段話**（競爭態勢、具體公司名）+ 至少 1 句 CEO 護城河/差異化引言並標出處；以敘事段落呈現，勿僅 bullet。
+Output target: Write to "II. Business → 2.1 Ten-Year Financials & Inflection Points" of master file **`{TICKER}_Initial_MAX.md`**.
+Content requirement: ≥10-year Markdown table (Year | Revenue | Gross Margin | Operating Income | EPS) with inflection points marked (bold or explained).
 
-#### 生意→DCF / 投資論文 (5pts)
-
-**觸發 dcf-valuation skill 並將結果寫入主檔**：
-1. 確認 `data/companies/{TICKER}/dcf_config.json` 是否存在；若否，從 `data/templates/dcf_config_template.json` 複製並填入 `base_data`。
-2. 從財報或 Ninja API 填入 `base_data`（revenue, net_margin, current_price 等）；依公司成長特性調整三情境假設（樂觀/合理/保守）。
-3. 觸發 DCF Skill 產出 `dcf_valuation_YYYYMMDD.md`（三表 + 情境分析表）。
-4. **將情境估值分析表與三表（損益、現金流、資產負債）直接寫入主檔** `{TICKER}_Initial_MAX.md` 的「二、生意 → 2.5 DCF 估值」區塊，**不以外聯取代**；讀者僅讀主檔即可看到完整 DCF 內容。
-5. 確認主檔內 IRR 拆分欄位存在（來自成長的報酬 + 來自估值的報酬 + 股票回購率 = 預期總收益）。
-
-#### 組織→地理分部與／或部門別營收 (8pts) — **必須從年報或法說**
+#### Business→Business Model (10 pts) — Target ≥25 direct CEO quotes (quotation marks + source + date)
 
 ```
-搜尋："{TICKER} 10-K 20-F segment revenue geographic breakdown {YEAR}"
-搜尋："{TICKER} earnings call Q4 revenue by region by segment"
-fetch_url：找到的年報或法說逐字稿頁面
+Search: "{CEO_NAME} interview revenue model unit economics 2024 2025"
+Search: "{TICKER} business model revenue breakdown take rate ROIC"
+fetch_url: found interview transcript page
 ```
 
-產出目標：寫入主檔 **`{TICKER}_Initial_MAX.md`** 的「一、環境 → 1.4 地理分部與／或部門別營收」。
-**關鍵要求**：
-- **地理分部**：表格（地區 | 營收 | 占比 | 出處），例如 Americas / EMEA / APAC。
-- **部門別營收**：表格（部門/事業部 | 營收 | 占比 | 出處），例如 Google Services / Google Cloud / Other Bets；可與地理二擇一或兩者皆寫。
-- 每個數字都必須標明出處：「來源：{TICKER} 20-F/10-K {YEAR}年報」或「來源：{TICKER} {YEAR}Q4 法說逐字稿 {日期}」。
-- ≥2 市場滲透率或 ≥2 部門占比；可視需要加 1–2 句敘事（各區或各部門策略重點）。
+Output target: Write to "II. Business → 2.2 Our Business" and "2.3 Business Model & Unit Economics" of master file **`{TICKER}_Initial_MAX.md`**.
+Content requirement:
+- **2.2 Our Business**: Each major business line (or segment) has 1–3 explanatory paragraphs (what it does, why it matters, key data) + management quotes embedded in narrative (source + date); a revenue breakdown table alone is not sufficient.
+- Revenue breakdown table (per-business-line share) + unit economics (CAC/LTV/ARPU/take rate, etc.).
+- **≥25 direct CEO quotes**: Must be presented in narrative paragraphs (e.g. "Pichai noted in the 2025 Q1 earnings call: '…'"), not just numbered lists; each must have **quotation marks + source + date**; indirect descriptions do not count.
 
-#### 組織→文化執行 (12pts)
-
-```
-搜尋："{TICKER} organizational culture talent strategy {CEO_NAME} interview"
-搜尋："{TICKER} ROIC return on invested capital {YEAR} operating leverage"
-```
-
-產出目標：寫入主檔 **`{TICKER}_Initial_MAX.md`** 的「三、組織」章節。
-內容要求：股權激勵結構、人才戰略、逆勢擴張案例（若有）、ROIC 趨勢。
-
-#### 人 (25pts) — **必須下載逐字稿**
+#### Business→Five Forces Analysis (10 pts)
 
 ```
-搜尋："{CEO_NAME} interview transcript podcast 2024 2025 site:youtube.com OR site:open.spotify.com"
-搜尋："{CEO_NAME} keynote conference full text 2024 2025"
-搜尋："{CEO_NAME} philosophy decision-making founding story"
+Search: "{TICKER} vs competitors market share differentiation"
+Search: "{CEO_NAME} competitive moat technology differentiation quote"
 ```
 
-**對每個找到的訪談 URL**：
-1. `fetch_url` 抓取頁面完整內容（含逐字稿）
-2. 用 `write_research_section` 存入 `data/companies/{TICKER}/transcripts/{CEO_NAME}_{YYYY}_{slug}.md`
-3. 在主檔 **`{TICKER}_Initial_MAX.md`** 的「四、人 → 訪談清單」中新增該訪談的摘要條目（格式如下）：
+Output target: Write to "II. Business → 2.4 Five Forces & Moat" of master file **`{TICKER}_Initial_MAX.md`**.
+Content requirement: 5a–5e **at least 1 paragraph per force** (competitive dynamics, specific company names) + at least 1 CEO moat/differentiation quote with source citation; presented as narrative paragraphs, not just bullets.
+
+#### Business→DCF / Investment Thesis (5 pts)
+
+**Trigger the dcf-valuation skill and write results into the master file**:
+1. Check if `data/companies/{TICKER}/dcf_config.json` exists; if not, copy from `data/templates/dcf_config_template.json` and fill in `base_data`.
+2. Populate `base_data` from financials or Ninja API (revenue, net_margin, current_price, etc.); adjust three-scenario assumptions (optimistic/base/conservative) to fit the company's growth characteristics.
+3. Trigger the DCF Skill to produce `dcf_valuation_YYYYMMDD.md` (three statements + scenario table).
+4. **Write the scenario valuation table and three statements (income, cash flow, balance sheet) directly into the master file** `{TICKER}_Initial_MAX.md` under "II. Business → 2.5 DCF Valuation" — **do not substitute with external links**; readers should see the full DCF content within the master file alone.
+5. Confirm the IRR breakdown fields exist in the master file (return from growth + return from valuation change + buyback rate = expected total return).
+
+#### Organization→Geographic Segments and/or Revenue by Segment (8 pts) — **Must come from annual reports or earnings calls**
+
+```
+Search: "{TICKER} 10-K 20-F segment revenue geographic breakdown {YEAR}"
+Search: "{TICKER} earnings call Q4 revenue by region by segment"
+fetch_url: found annual report or earnings call transcript page
+```
+
+Output target: Write to "I. Environment → 1.4 Geographic Segments and/or Revenue by Segment" of master file **`{TICKER}_Initial_MAX.md`**.
+**Key requirements**:
+- **Geographic segments**: Table (Region | Revenue | Share | Source), e.g. Americas / EMEA / APAC.
+- **Revenue by segment**: Table (Segment/Business Unit | Revenue | Share | Source), e.g. Google Services / Google Cloud / Other Bets; may choose one or both.
+- Every figure must cite a source: "Source: {TICKER} 20-F/10-K {YEAR} Annual Report" or "Source: {TICKER} {YEAR} Q4 Earnings Call Transcript {date}".
+- ≥2 market penetration rates or ≥2 segment shares; may add 1–2 sentences of narrative (strategic priorities per region or segment).
+
+#### Organization→Culture Execution (12 pts)
+
+```
+Search: "{TICKER} organizational culture talent strategy {CEO_NAME} interview"
+Search: "{TICKER} ROIC return on invested capital {YEAR} operating leverage"
+```
+
+Output target: Write to the "III. Organization" chapter of master file **`{TICKER}_Initial_MAX.md`**.
+Content requirement: Equity incentive structure, talent strategy, counter-cyclical hiring case (if applicable), ROIC trend.
+
+#### People (25 pts) — **Must download transcripts**
+
+```
+Search: "{CEO_NAME} interview transcript podcast 2024 2025 site:youtube.com OR site:open.spotify.com"
+Search: "{CEO_NAME} keynote conference full text 2024 2025"
+Search: "{CEO_NAME} philosophy decision-making founding story"
+```
+
+**For each interview URL found**:
+1. `fetch_url` to retrieve the full page content (including transcript)
+2. Use `write_research_section` to save to `data/companies/{TICKER}/transcripts/{CEO_NAME}_{YYYY}_{slug}.md`
+3. Add a summary entry for that interview to the "IV. People → Interview List" section of master file **`{TICKER}_Initial_MAX.md`** (format below):
    ```
-   | {序號} | [{標題}]({URL}) | {日期} | {3-5 句核心洞見} |
+   | {#} | [{Title}]({URL}) | {Date} | {3–5 sentence core insights} |
    ```
 
-**格局觀與道德**（10pts）：須寫入主檔「四、人 → 4.1 CEO/創業家」之**故事線**中，以敘事帶出原話，勿僅列點。**創業家研究須從最早開始**：
-- **學經歷**：教育背景、早期職涯、進入該行業的起點。
-- **重要拐點**：關鍵決策、戰略轉折、人生/事業轉折點。
-- **重要成就**：各階段里程碑與成果。
-- **每個時期的訪談**：不同年代/階段的公開訪談與原話（非僅近期）。
-- **成功與失敗的檢討與反思**：管理層自己對成敗的回顧、學習與反思。
-- 主題還包括：格局觀（創辦初衷、第一性原理、重大決策邏輯）、道德操守（責任觀、面對困境的態度）；可對標 FUTU「創業家-李華」結構。
+**Worldview & Integrity** (10 pts): Must be written into the **narrative arc** in master file "IV. People → 4.1 CEO/Founder", conveying quotes through narrative, not bullet lists. **Founder research must start from the beginning**:
+- **Educational background**: Education, early career, entry point into the industry.
+- **Major inflection points**: Key decisions, strategic pivots, personal/professional turning points.
+- **Major achievements**: Milestones and results at each stage.
+- **Interviews from each period**: Public interviews and quotes from different eras/stages (not just recent).
+- **Reflection on successes and failures**: Management's own retrospectives, learning, and self-reflection.
+- Topics also include: worldview (founding purpose, first-principles thinking, key decision logic), integrity (sense of responsibility, attitude toward adversity); may be modeled on FUTU's "Founder — Li Hua" structure.
 
-### Step 3：寫入研究檔案
+### Step 3: Write to Research Files
 
-- **一律寫入單一主檔** `data/companies/{TICKER}/{TICKER}_Initial_MAX.md`（若不存在則建立，含上述章節結構）。
-- **補充時須插在對應小節內且順稿可讀**：若由 Runner 執行，優先用 **replace_section**：先讀該小節既有內容，產出**整節順過後**的版本（合併既有與新、段落連貫、可讀）再寫入；或 **insert_into_section** 時補充內容須與前文銜接。勿 append 堆文末；產出須具可讀性（像一篇文章）。Cursor 手動寫入時，在對應小節**內**追加並順過，勿在文末堆整塊。
-- 勿再產出分散的 `initial_*.md`。DCF 情境表與三表須寫入主檔（不外聯）；可另產 `dcf_valuation_YYYYMMDD.md` 存檔。`transcripts/` 逐字稿維持獨立。
+- **Always write to the single master file** `data/companies/{TICKER}/{TICKER}_Initial_MAX.md` (create if it does not exist, using the section structure above).
+- **Gap-fill must be placed in the corresponding sub-section and be readable prose**: If run by Runner, prefer **replace_section**: first read the sub-section's existing content, produce the **full polished version** (merging existing and new content, cohesive paragraphs, readable) before writing; or when using **insert_into_section**, supplemental content must connect to prior text. Do not append bulk content to the file end; output must be readable (like an article). When writing manually in Cursor, append within the corresponding sub-section and polish — do not pile an entire block at the file end.
+- Do not produce scattered `initial_*.md` files. DCF scenario tables and three statements must be written into the master file (no external links); a `dcf_valuation_YYYYMMDD.md` archive may also be produced. Transcripts under `transcripts/` remain independent.
 
-### Step 4：確認產出與完整性
+### Step 4: Confirm Output & Completeness
 
-每輪結束後確認：
-- [ ] 已寫入的檔案清單（主檔 + 若有 DCF/transcripts）
-- [ ] 本輪新增訪談篇數（人維度）
-- [ ] 地理分部或部門別營收是否有年報/法說出處
-- [ ] DCF 是否建立（若適用）
-- [ ] **敘事完整性**：各章是否有段落敘事（非僅表或 bullet）？CEO 引言是否鑲入敘事？「我們的業務」是否分項說明文？「四、人」是否有 CEO 故事線？
-- [ ] **每子點 ≥5 則原話**：1.1～4.1 各子點是否至少 5 則**直接**引述（引號+出處+日期）？間接描述不計；2.5 可 1–2 則；4.2 為表可例外。
-- [ ] **可讀性**：若有人只讀此主檔，能否理解公司做什麼、競爭力、管理層、風險與機會？若否，下輪優先補敘事。
-- 輸出本輪總結：`已完成：{描述}。預計改善維度：{維度列表}。`
+At the end of each round, confirm:
+- [ ] List of files written this round (master file + DCF/transcripts if applicable)
+- [ ] Number of new interviews added this round (People dimension)
+- [ ] Does geographic segment or revenue by segment have annual report/earnings call source citations?
+- [ ] Has DCF been built (if applicable)?
+- [ ] **Narrative completeness**: Does each chapter have narrative paragraphs (not just tables or bullets)? Are CEO quotes embedded in narrative? Does "Our Business" have per-line explanatory paragraphs? Does "IV. People" have a CEO narrative arc?
+- [ ] **≥5 direct quotes per sub-point**: Do sub-points 1.1–4.1 each have at least 5 **direct** quotes (quotation marks + source + date)? Indirect descriptions do not count; 2.5 may have 1–2; 4.2 (table) may be exempt.
+- [ ] **Readability**: If someone reads only this master file, can they understand what the company does, why it is competitive, who management is, and where the risks and opportunities lie? If not, prioritize supplementing narrative next round.
+- Output this round's summary: `Completed: {description}. Dimensions expected to improve: {dimension list}.`
 
 ---
 
-## 評分參考：FUTU（100分標竿）
+## Scoring Reference: FUTU (100-Point Benchmark)
 
-| 維度 | FUTU 得分 | 關鍵特點 |
-|------|----------|---------|
-| 環境 | 19/20 | 詳細香港/新加坡/馬來西亞/澳洲市場分析 |
-| 生意 | 34/35 | Leaf Li 20+ 訪談引言，完整7年財務，DCF含IRR拆分 |
-| 組織 | 19/20 | 各市場滲透率均來自年報/法說，清楚標出處 |
-| 人 | 24/25 | Leaf Li 格局觀多年敘事，40+ 訪談逐字稿 |
+| Dimension | FUTU Score | Key Characteristics |
+|-----------|------------|---------------------|
+| Environment | 19/20 | Detailed Hong Kong/Singapore/Malaysia/Australia market analysis |
+| Business | 34/35 | Leaf Li 20+ interview quotes, complete 7-year financials, DCF with IRR breakdown |
+| Organization | 19/20 | Market penetration rates per market from annual reports/earnings calls, clearly sourced |
+| People | 24/25 | Leaf Li worldview narrative over multiple years, 40+ interview transcripts |
 
 ---
 
-## 注意事項
+## Notes
 
-1. **產出須為可讀報告**：以 FUTU_LATEST_REPORT.md 為範，主檔應為**敘事型投資報告**（KEY QUESTION、段落、故事線、業務分項說明），避免僅產出條列與表格。
-2. **地理分部或部門別營收**：可為地理分部（地區營收）、部門別營收（segment），或兩者皆有；任何數字須追溯到年報或法說並標出處，**不得寫入無出處之估計**。
-3. **訪談逐字稿要下載**：不能只列 URL，要實際 fetch_url 抓取內容存檔於 `transcripts/`。
-4. **CEO/管理層引言要足量且鑲入敘事**：商業模式與人維度需 **≥25 則** CEO 直引言，每則**須引號包住+出處+日期**，在段落敘事中帶出（如「某某表示：『…』」）；**每一子點（1.1～4.1）至少 5 則**，建議 7 則。間接描述或無引號不計入則數。4.2、2.5 可從寬。
-5. **達標線 95 分且各維度最低分**：總分 **≥95/100**，且環境≥16、生意≥30、組織≥16、人≥20；**2.5 DCF 估值為必達**（缺則不達標）。無出處數字不計分，非直接引述不計入原話則數。
-6. **DCF 可手動與 AI 調整**：`dcf_config.json` 設計為可人工修改假設，也可請 AI 根據最新財報更新。
-7. **評分方式**：Cursor 直接觸發時 Claude 自行打分（見 Step 0 模式 A）；Runner 腳本呼叫時由 initial-max-scorer.ts 負責。
+1. **Output must be a readable report**: Modeled on FUTU_LATEST_REPORT.md, the master file should be a **narrative investment report** (KEY QUESTION, paragraphs, narrative arc, per-business-line explanations) — avoid producing only bullets and tables.
+2. **Geographic segments or revenue by segment**: May be geographic segments (regional revenue), revenue by segment, or both; every figure must trace back to an annual report or earnings call with source citation — **do not write estimates without a source**.
+3. **Interview transcripts must be downloaded**: Do not just list URLs — actually `fetch_url` the content and save it in `transcripts/`.
+4. **CEO/management quotes must be sufficient and embedded in narrative**: Business model and People dimensions require **≥25 direct CEO quotes**, each **enclosed in quotation marks + source + date**, presented in narrative paragraphs (e.g. "So-and-so stated: '…'"); **each sub-point (1.1–4.1) must have at least 5**, with 7 recommended. Indirect descriptions or unquoted statements do not count. Sections 4.2 and 2.5 may be held to a more lenient standard.
+5. **Pass threshold: 95 points and each dimension's minimum**: Total score **≥95/100**, with Environment≥16, Business≥30, Organization≥16, People≥20; **2.5 DCF valuation is mandatory** (missing it fails the threshold). Figures without source do not count for points; non-direct quotes do not count toward the direct quote tally.
+6. **DCF can be adjusted manually or by AI**: `dcf_config.json` is designed to allow human modification of assumptions, and AI can update them based on the latest financials.
+7. **Scoring method**: When triggered directly in Cursor, Claude self-scores (see Step 0 Mode A); when called by the runner script, initial-max-scorer.ts handles scoring.

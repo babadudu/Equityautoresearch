@@ -48,11 +48,11 @@ if (!ANTHROPIC_KEY && !OPENROUTER_KEY && !USE_CLAUDE_CLI) {
 }
 
 if (USE_CLAUDE_CLI) {
-  console.log('[llm] Using Claude CLI (claude -p) backend with OAuth');
+  console.log('[llm] Fallback: Claude CLI (claude -p) with OAuth — MLX preferred per-call when available');
 } else if (USE_OPENROUTER) {
-  console.log('[llm] Using OpenRouter backend');
+  console.log('[llm] Fallback: OpenRouter — MLX preferred per-call when available');
 } else {
-  console.log('[llm] Using Anthropic SDK');
+  console.log('[llm] Fallback: Anthropic SDK — MLX preferred per-call when available');
 }
 
 const client = ANTHROPIC_KEY ? new Anthropic({ apiKey: ANTHROPIC_KEY }) : null;
@@ -507,12 +507,25 @@ export async function runGeminiAgent(
     const child = spawn(GEMINI_BIN, cliArgs, {
       stdio: ['pipe', 'pipe', 'pipe'],
       cwd: process.cwd(),
+      detached: true,
     });
+
+    const terminateGemini = (signal: NodeJS.Signals) => {
+      try {
+        process.kill(-child.pid!, signal);
+      } catch {
+        child.kill(signal);
+      }
+    };
 
     // Pipe the prompt and close stdin
     const promptStream = fs.createReadStream(tmpFile);
     promptStream.pipe(child.stdin);
     promptStream.on('end', () => child.stdin.end());
+    child.stdin.on('error', () => {
+      // The CLI may be killed early on capacity exhaustion while the prompt file
+      // is still piping. EPIPE is expected in that path.
+    });
 
     const stdoutChunks: Buffer[] = [];
     child.stdout.on('data', (chunk: Buffer) => {
@@ -520,8 +533,17 @@ export async function runGeminiAgent(
     });
 
     let stderrRemainder = '';
+    let capacityExhausted = false;
     child.stderr.on('data', (chunk: Buffer) => {
       const text = stderrRemainder + chunk.toString('utf-8');
+      if (!capacityExhausted && /MODEL_CAPACITY_EXHAUSTED|RESOURCE_EXHAUSTED|No capacity available|status["']?\s*:\s*429/i.test(text)) {
+        capacityExhausted = true;
+        console.log('  [gemini-agent] Capacity exhausted — terminating Gemini and falling back to Claude');
+        terminateGemini('SIGTERM');
+        setTimeout(() => {
+          if (!child.killed) terminateGemini('SIGKILL');
+        }, 2000);
+      }
       const lines = text.split('\n');
       stderrRemainder = lines.pop() ?? '';
       for (const line of lines) {
@@ -533,11 +555,11 @@ export async function runGeminiAgent(
     const softTimer = setTimeout(() => {
       timedOut = true;
       console.log(`  [gemini-agent] Soft timeout (${SOFT_TIMEOUT_MS / 60000}min) reached — sending SIGTERM`);
-      child.kill('SIGTERM');
+      terminateGemini('SIGTERM');
       setTimeout(() => {
         if (!child.killed) {
           console.log('  [gemini-agent] Grace period expired — sending SIGKILL');
-          child.kill('SIGKILL');
+          terminateGemini('SIGKILL');
         }
       }, KILL_GRACE_MS);
     }, SOFT_TIMEOUT_MS);
@@ -554,8 +576,8 @@ export async function runGeminiAgent(
       const durationSec = Math.round((Date.now() - startTime) / 1000);
       const stdout = Buffer.concat(stdoutChunks).toString('utf-8');
 
-      // Fallback to Claude on failure
-      if (code !== 0 || (timedOut && !stdout.trim())) {
+      // Fallback to Claude on failure, empty output, or capacity-triggered early kill.
+      if (capacityExhausted || code !== 0 || !stdout.trim() || (timedOut && !stdout.trim())) {
         // Only accept partial output on non-zero exit if it parses as valid JSON with expected shape
         if (code !== 0 && stdout.trim()) {
           try {
@@ -580,7 +602,8 @@ export async function runGeminiAgent(
             }
           } catch { /* not valid JSON, fall through to fallback */ }
         }
-        console.log(`  [gemini-agent] Failed (code=${code}, timeout=${timedOut}), falling back to Claude`);
+        const reason = capacityExhausted ? 'capacity_exhausted' : `code=${code}, timeout=${timedOut}`;
+        console.log(`  [gemini-agent] Failed (${reason}), falling back to Claude`);
         runClaudeAgent(systemPrompt, taskPrompt, { model: 'sonnet', softTimeoutMs: options?.softTimeoutMs })
           .then(r => resolve({ ...r, usedFallback: true })).catch(reject);
         return;
@@ -672,53 +695,136 @@ async function chatViaMlx(
   // Request JSON output when system prompt mentions JSON (only when no tools — mutually exclusive)
   const wantsJson = oaiTools.length === 0 && /json/i.test(system);
 
-  const body: Record<string, unknown> = {
+  // Tool-calling: use non-streaming (streaming breaks tool invocation on Qwen3.6).
+  // Text-only (scorer JSON): use streaming with dynamic idle timeout so long generations don't hard-cut.
+  const useStream = oaiTools.length === 0;
+
+  const baseBody: Record<string, unknown> = {
     model: mlxModel,
     messages: oaiMessages,
     max_tokens: options?.maxTokens ?? 16384,
-    stream: false,
+    temperature: 0,
     chat_template_kwargs: { enable_thinking: false },
     ...(wantsJson ? { response_format: { type: 'json_object' } } : {}),
     ...(oaiTools.length ? { tools: oaiTools, tool_choice: options?.toolChoice?.type ?? 'auto' } : {}),
   };
 
+  if (!useStream) {
+    // ── Non-streaming path for tool calls (10-min hard timeout) ──
+    const body = { ...baseBody, stream: false };
+    const doFetch = async () => {
+      const res = await fetch(LOCAL_COMPLETIONS_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        signal: AbortSignal.timeout(10 * 60 * 1000),
+        body: JSON.stringify(body),
+      });
+      if (!res.ok) {
+        const errText = await res.text();
+        const err = new Error(`MLX ${res.status}: ${errText.slice(0, 500)}`);
+        (err as any).status = res.status;
+        throw err;
+      }
+      return res.json() as Promise<any>;
+    };
+
+    const data = await retryWithBackoff(doFetch);
+    const choice = data.choices?.[0];
+    const oaiToolCalls: any[] = choice?.message?.tool_calls ?? [];
+    const toolUses: ToolUse[] = oaiToolCalls.map((tc: any, i: number) => ({
+      id: tc.id || `call_${i}`,
+      name: tc.function.name,
+      input: typeof tc.function.arguments === 'string'
+        ? JSON.parse(tc.function.arguments)
+        : tc.function.arguments,
+    }));
+    return {
+      content: choice?.message?.content ?? null,
+      toolUses,
+      backend: 'mlx',
+      model: mlxModel,
+      usage: {
+        inputTokens: data.usage?.prompt_tokens ?? 0,
+        outputTokens: data.usage?.completion_tokens ?? 0,
+        costUsd: 0,
+      },
+    };
+  }
+
+  // ── Streaming path for text-only calls (dynamic idle timeout) ──
+  // Resets a 5-min idle timer on every received chunk; extends as long as model is generating.
+  const body = { ...baseBody, stream: true };
+  const IDLE_TIMEOUT_MS = 5 * 60 * 1000;
+
   const doFetch = async () => {
+    const controller = new AbortController();
+    let idleTimer = setTimeout(() => controller.abort(new Error('MLX idle timeout (no chunk for 5min)')), IDLE_TIMEOUT_MS);
+    const resetIdle = () => {
+      clearTimeout(idleTimer);
+      idleTimer = setTimeout(() => controller.abort(new Error('MLX idle timeout (no chunk for 5min)')), IDLE_TIMEOUT_MS);
+    };
+
     const res = await fetch(LOCAL_COMPLETIONS_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      signal: AbortSignal.timeout(5 * 60 * 1000), // 5 min timeout for local inference
+      signal: controller.signal,
       body: JSON.stringify(body),
     });
     if (!res.ok) {
+      clearTimeout(idleTimer);
       const errText = await res.text();
       const err = new Error(`MLX ${res.status}: ${errText.slice(0, 500)}`);
       (err as any).status = res.status;
       throw err;
     }
-    return res.json() as Promise<any>;
+
+    let fullText = '';
+    let promptTokens = 0;
+    let completionTokens = 0;
+    const reader = res.body!.getReader();
+    const decoder = new TextDecoder();
+    let buf = '';
+
+    try {
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        resetIdle();
+        buf += decoder.decode(value, { stream: true });
+        const lines = buf.split('\n');
+        buf = lines.pop() ?? '';
+        for (const line of lines) {
+          if (!line.startsWith('data: ')) continue;
+          const payload = line.slice(6).trim();
+          if (payload === '[DONE]') continue;
+          let chunk: any;
+          try { chunk = JSON.parse(payload); } catch { continue; }
+          if (chunk.usage) {
+            promptTokens = chunk.usage.prompt_tokens ?? promptTokens;
+            completionTokens = chunk.usage.completion_tokens ?? completionTokens;
+          }
+          const delta = chunk.choices?.[0]?.delta;
+          if (delta?.content) fullText += delta.content;
+        }
+      }
+    } finally {
+      clearTimeout(idleTimer);
+      reader.releaseLock();
+    }
+
+    return { fullText, promptTokens, completionTokens };
   };
 
-  const data = await retryWithBackoff(doFetch);
-  const choice = data.choices?.[0];
-
-  // Parse tool_calls (MLX may return empty id — use synthetic fallback)
-  const oaiToolCalls: any[] = choice?.message?.tool_calls ?? [];
-  const toolUses: ToolUse[] = oaiToolCalls.map((tc: any, i: number) => ({
-    id: tc.id || `call_${i}`,
-    name: tc.function.name,
-    input: typeof tc.function.arguments === 'string'
-      ? JSON.parse(tc.function.arguments)
-      : tc.function.arguments,
-  }));
+  const { fullText, promptTokens, completionTokens } = await retryWithBackoff(doFetch);
 
   return {
-    content: choice?.message?.content ?? null,
-    toolUses,
+    content: fullText || null,
+    toolUses: [],
     backend: 'mlx',
     model: mlxModel,
     usage: {
-      inputTokens: data.usage?.prompt_tokens ?? 0,
-      outputTokens: data.usage?.completion_tokens ?? 0,
+      inputTokens: promptTokens,
+      outputTokens: completionTokens,
       costUsd: 0,
     },
   };
