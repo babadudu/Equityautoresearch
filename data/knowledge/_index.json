@@ -1,6 +1,6 @@
 {
-  "generated": "2026-03-23T09:40:54.751Z",
-  "atom_count": 411,
+  "generated": "2026-05-08T11:22:55.513Z",
+  "atom_count": 449,
   "atoms": [
     {
       "id": "aapl-business-model-unit-economics-ecosystem-lock-in",
@@ -617,6 +617,39 @@
       "path": "data/knowledge/atoms/company-profile/ebay-organizational-culture-incentives.md"
     },
     {
+      "id": "glw-company-profile-ai-transformation",
+      "archetype": "company-profile",
+      "title": "Corning Incorporated (GLW): Strategic Transformation and the AI Infrastructure Pivot",
+      "companies": [
+        "GLW",
+        "META",
+        "NVDA",
+        "AAPL"
+      ],
+      "people": [
+        "Wendell Weeks"
+      ],
+      "industries": [
+        "cloud-infrastructure",
+        "ai-accelerator"
+      ],
+      "tags": [
+        "business-model",
+        "moat",
+        "revenue-mix",
+        "capacity"
+      ],
+      "temporality": "evergreen",
+      "created": "2026-05-08",
+      "updated": "2026-05-08",
+      "source_report": "data/companies/GLW/GLW_Initial_MAX.md",
+      "source_sections": [
+        "all"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/company-profile/glw-company-profile-ai-transformation.md"
+    },
+    {
       "id": "goog-business-model-dna-attention-monetization",
       "archetype": "company-profile",
       "title": "Google (Alphabet) Business Model DNA: Attention Monetization Platform",
@@ -968,6 +1001,114 @@
       ],
       "quality": 4,
       "path": "data/knowledge/atoms/company-profile/lly-therapeutic-area-portfolio.md"
+    },
+    {
+      "id": "tsmc-business-model-and-competitive-moat",
+      "archetype": "company-profile",
+      "title": "TSMC Business Model DNA and Multidimensional Moat",
+      "companies": [
+        "TSM"
+      ],
+      "people": [
+        "Morris Chang",
+        "C.C. Wei",
+        "Wendell Huang"
+      ],
+      "industries": [
+        "semiconductor-foundry"
+      ],
+      "tags": [
+        "business-model",
+        "moat",
+        "pricing",
+        "culture",
+        "founding"
+      ],
+      "temporality": "evergreen",
+      "created": "2026-03-29",
+      "updated": "2026-03-29",
+      "source_report": "data/companies/TSM/TSM_Initial_MAX.md",
+      "source_sections": [
+        "all"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/company-profile/tsmc-business-model-and-competitive-moat.md"
+    },
+    {
+      "id": "tsmc-business-model-and-moat",
+      "archetype": "company-profile",
+      "title": "TSMC's Pure-Play Foundry Model: Moat, Pricing Power, and Ecosystem Lock-in",
+      "companies": [
+        "TSM",
+        "AAPL",
+        "NVDA",
+        "AVGO"
+      ],
+      "people": [
+        "Morris Chang",
+        "C.C. Wei",
+        "Wendell Huang"
+      ],
+      "industries": [
+        "semiconductor-foundry",
+        "semiconductor-fabless"
+      ],
+      "tags": [
+        "business-model",
+        "moat",
+        "pricing",
+        "five-forces",
+        "margins",
+        "value-chain"
+      ],
+      "temporality": "evergreen",
+      "created": "2026-03-29",
+      "updated": "2026-03-29",
+      "source_report": "data/companies/TSM/TSM_Initial_MAX.md",
+      "source_sections": [
+        "all"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/company-profile/tsmc-business-model-and-moat.md"
+    },
+    {
+      "id": "tsmc-company-profile-pure-play-foundry",
+      "archetype": "company-profile",
+      "title": "TSMC's Business Model DNA: The Pure-Play Foundry, Value-Based Pricing, and Ecosystem Lock-in",
+      "companies": [
+        "TSM",
+        "AAPL",
+        "NVDA",
+        "AMD",
+        "AVGO"
+      ],
+      "people": [
+        "Morris Chang",
+        "C.C. Wei",
+        "Wendell Huang",
+        "Tim Cook",
+        "Jensen Huang"
+      ],
+      "industries": [
+        "semiconductor-foundry",
+        "semiconductor-fabless"
+      ],
+      "tags": [
+        "business-model",
+        "founding",
+        "pricing",
+        "moat",
+        "eda-tools"
+      ],
+      "temporality": "evergreen",
+      "created": "2026-03-29",
+      "updated": "2026-03-29",
+      "source_report": "data/companies/TSM/TSM_Initial_MAX.md",
+      "source_sections": [
+        "all"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/company-profile/tsmc-company-profile-pure-play-foundry.md"
     },
     {
       "id": "tsmc-organizational-culture-values",
@@ -1574,6 +1715,42 @@
       "path": "data/knowledge/atoms/competitive-landscape/amzn-regulatory-environment-ftc-dma-2024.md"
     },
     {
+      "id": "bull-vs-bear-ai-supercycle",
+      "archetype": "competitive-landscape",
+      "title": "The TSMC Debate: Is the AI Supercycle an Unstoppable Moat or a $600 Billion CapEx Trap?",
+      "companies": [
+        "TSM",
+        "NVDA",
+        "AAPL",
+        "AMZN",
+        "MSFT",
+        "GOOGL",
+        "META"
+      ],
+      "people": [
+        "C.C. Wei"
+      ],
+      "industries": [
+        "semiconductor-foundry",
+        "ai-accelerator"
+      ],
+      "tags": [
+        "competitive-dynamics",
+        "capex",
+        "valuation",
+        "bull-bear"
+      ],
+      "temporality": "time-bound",
+      "created": "2026-03-29",
+      "updated": "2026-03-29",
+      "source_report": "data/companies/TSM/TSM_Initial_MAX.md",
+      "source_sections": [
+        "all"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/competitive-landscape/bull-vs-bear-ai-supercycle.md"
+    },
+    {
       "id": "cost-five-forces-moat-analysis",
       "archetype": "competitive-landscape",
       "title": "Costco: Porter's Five Forces & Competitive Moat Analysis",
@@ -1960,6 +2137,37 @@
       "path": "data/knowledge/atoms/competitive-landscape/ebay-vertical-category-market-concentration-2025.md"
     },
     {
+      "id": "foundry-competitive-landscape",
+      "archetype": "competitive-landscape",
+      "title": "The Global Foundry Landscape: TSMC's Widening Moat Against Samsung and Intel",
+      "companies": [
+        "TSM",
+        "INTC",
+        "005930.KS",
+        "0981.HK"
+      ],
+      "people": [],
+      "industries": [
+        "semiconductor-foundry"
+      ],
+      "tags": [
+        "market-share",
+        "competitive-dynamics",
+        "gaa",
+        "finfet",
+        "yield-rates"
+      ],
+      "temporality": "semi-evergreen",
+      "created": "2026-03-29",
+      "updated": "2026-03-29",
+      "source_report": "data/companies/TSM/TSM_Initial_MAX.md",
+      "source_sections": [
+        "all"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/competitive-landscape/foundry-competitive-landscape.md"
+    },
+    {
       "id": "glp1-market-duopoly-structure-lly-nvo",
       "archetype": "competitive-landscape",
       "title": "GLP-1 Market Duopoly Structure: Lilly vs. Novo Nordisk",
@@ -2031,6 +2239,34 @@
       ],
       "quality": 4,
       "path": "data/knowledge/atoms/competitive-landscape/glp1-regulatory-environment-global-lly.md"
+    },
+    {
+      "id": "glw-competitive-landscape-silicon-photonics-risk",
+      "archetype": "competitive-landscape",
+      "title": "Corning's Competitive Positioning: AI Connectivity Moat vs. Silicon Photonics Risk",
+      "companies": [
+        "GLW"
+      ],
+      "people": [],
+      "industries": [
+        "semiconductor-foundry",
+        "cloud-infrastructure"
+      ],
+      "tags": [
+        "moat",
+        "five-forces",
+        "competitive-dynamics",
+        "market-share"
+      ],
+      "temporality": "semi-evergreen",
+      "created": "2026-05-08",
+      "updated": "2026-05-08",
+      "source_report": "data/companies/GLW/GLW_Initial_MAX.md",
+      "source_sections": [
+        "all"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/competitive-landscape/glw-competitive-landscape-silicon-photonics-risk.md"
     },
     {
       "id": "goog-digital-ad-cloud-market-structure",
@@ -2653,6 +2889,153 @@
       "path": "data/knowledge/atoms/competitive-landscape/tsm-samsung-foundry-yield-crisis-2025.md"
     },
     {
+      "id": "tsmc-competitive-landscape-foundry-wars",
+      "archetype": "competitive-landscape",
+      "title": "The Foundry Wars: Why TSMC is Pulling Away from Samsung and Intel in the AI Era",
+      "companies": [
+        "TSM",
+        "INTC",
+        "NVDA",
+        "AAPL",
+        "QCOM"
+      ],
+      "people": [
+        "C.C. Wei",
+        "Morris Chang"
+      ],
+      "industries": [
+        "semiconductor-foundry"
+      ],
+      "tags": [
+        "market-share",
+        "competitive-dynamics",
+        "process-node",
+        "yield"
+      ],
+      "temporality": "semi-evergreen",
+      "created": "2026-03-29",
+      "updated": "2026-03-29",
+      "source_report": "data/companies/TSM/TSM_Initial_MAX.md",
+      "source_sections": [
+        "all"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/competitive-landscape/tsmc-competitive-landscape-foundry-wars.md"
+    },
+    {
+      "id": "tsmc-competitive-landscape-samsung-intel-smic",
+      "archetype": "competitive-landscape",
+      "title": "Foundry Competitive Landscape: Samsung, Intel, and the SMIC Threat",
+      "companies": [
+        "TSM",
+        "INTC",
+        "SSNLF",
+        "0981.HK"
+      ],
+      "people": [
+        "C.C. Wei",
+        "Morris Chang"
+      ],
+      "industries": [
+        "semiconductor-foundry"
+      ],
+      "tags": [
+        "competitive-dynamics",
+        "market-share",
+        "sanctions",
+        "gaa",
+        "yield"
+      ],
+      "temporality": "semi-evergreen",
+      "created": "2026-03-29",
+      "updated": "2026-03-29",
+      "source_report": "data/companies/TSM/TSM_Initial_MAX.md",
+      "source_sections": [
+        "all"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/competitive-landscape/tsmc-competitive-landscape-samsung-intel-smic.md"
+    },
+    {
+      "id": "esg-energy-consumption-re100",
+      "archetype": "esg",
+      "title": "TSMC's Energy Crisis: The Carbon Cost of the AI Revolution and the RE100 Dilemma",
+      "companies": [
+        "TSM"
+      ],
+      "people": [],
+      "industries": [
+        "semiconductor-foundry"
+      ],
+      "tags": [
+        "energy",
+        "carbon",
+        "esg",
+        "sustainability"
+      ],
+      "temporality": "semi-evergreen",
+      "created": "2026-03-29",
+      "updated": "2026-03-29",
+      "source_report": "data/companies/TSM/TSM_Initial_MAX.md",
+      "source_sections": [
+        "all"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/esg/esg-energy-consumption-re100.md"
+    },
+    {
+      "id": "esg-water-management-climate-risk",
+      "archetype": "esg",
+      "title": "Water Stewardship at TSMC: Managing Climate Risk in the Semiconductor Supply Chain",
+      "companies": [
+        "TSM"
+      ],
+      "people": [],
+      "industries": [
+        "semiconductor-foundry"
+      ],
+      "tags": [
+        "water",
+        "climate-risk",
+        "esg",
+        "sustainability"
+      ],
+      "temporality": "semi-evergreen",
+      "created": "2026-03-29",
+      "updated": "2026-03-29",
+      "source_report": "data/companies/TSM/TSM_Initial_MAX.md",
+      "source_sections": [
+        "all"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/esg/esg-water-management-climate-risk.md"
+    },
+    {
+      "id": "glw-esg-fiber-optic-power-efficiency",
+      "archetype": "esg",
+      "title": "Environmental Impact of AI Infrastructure: Fiber Optics vs. Copper Power Efficiency",
+      "companies": [
+        "GLW"
+      ],
+      "people": [],
+      "industries": [
+        "cloud-infrastructure"
+      ],
+      "tags": [
+        "energy",
+        "carbon"
+      ],
+      "temporality": "semi-evergreen",
+      "created": "2026-05-08",
+      "updated": "2026-05-08",
+      "source_report": "data/companies/GLW/GLW_Initial_MAX.md",
+      "source_sections": [
+        "all"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/esg/glw-esg-fiber-optic-power-efficiency.md"
+    },
+    {
       "id": "tsmc-carbon-emissions-sbti-climate-transition",
       "archetype": "esg",
       "title": "TSMC Carbon Emissions, SBTi Commitment & Climate Transition Roadmap",
@@ -2711,6 +3094,36 @@
       "path": "data/knowledge/atoms/esg/tsmc-energy-consumption-renewable-targets.md"
     },
     {
+      "id": "tsmc-esg-environmental-and-resource-constraints",
+      "archetype": "esg",
+      "title": "TSMC ESG Profile: Energy, Water, and Carbon Challenges in Taiwan",
+      "companies": [
+        "TSM"
+      ],
+      "people": [
+        "Lora Ho"
+      ],
+      "industries": [
+        "semiconductor-foundry"
+      ],
+      "tags": [
+        "esg",
+        "energy",
+        "water",
+        "carbon",
+        "governance"
+      ],
+      "temporality": "semi-evergreen",
+      "created": "2026-03-29",
+      "updated": "2026-03-29",
+      "source_report": "data/companies/TSM/TSM_Initial_MAX.md",
+      "source_sections": [
+        "all"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/esg/tsmc-esg-environmental-and-resource-constraints.md"
+    },
+    {
       "id": "tsmc-esg-ratings-environmental-performance",
       "archetype": "esg",
       "title": "TSMC ESG Ratings, Third-Party Assessments & Environmental Performance Metrics",
@@ -2739,6 +3152,35 @@
       ],
       "quality": 4,
       "path": "data/knowledge/atoms/esg/tsmc-esg-ratings-environmental-performance.md"
+    },
+    {
+      "id": "tsmc-esg-water-energy-constraints",
+      "archetype": "esg",
+      "title": "Environmental Hard Constraints: TSMC's Clash with Taiwan's Water and Energy Infrastructure",
+      "companies": [
+        "TSM",
+        "AAPL",
+        "MSFT"
+      ],
+      "people": [],
+      "industries": [
+        "semiconductor-foundry"
+      ],
+      "tags": [
+        "water",
+        "energy",
+        "carbon",
+        "esg"
+      ],
+      "temporality": "semi-evergreen",
+      "created": "2026-03-29",
+      "updated": "2026-03-29",
+      "source_report": "data/companies/TSM/TSM_Initial_MAX.md",
+      "source_sections": [
+        "all"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/esg/tsmc-esg-water-energy-constraints.md"
     },
     {
       "id": "tsmc-water-usage-drought-controversy",
@@ -3675,6 +4117,35 @@
       "path": "data/knowledge/atoms/financial-snapshot/ebay-ten-year-financials-fy2014-fy2025.md"
     },
     {
+      "id": "glw-financial-snapshot-springboard-plan-dcf-2025",
+      "archetype": "financial-snapshot",
+      "title": "Corning (GLW) Financial Analysis: Springboard Plan Upgrades and DCF Valuation",
+      "companies": [
+        "GLW"
+      ],
+      "people": [
+        "Wendell Weeks"
+      ],
+      "industries": [
+        "cloud-infrastructure"
+      ],
+      "tags": [
+        "valuation",
+        "dcf",
+        "margins",
+        "revenue-mix"
+      ],
+      "temporality": "time-bound",
+      "created": "2026-05-08",
+      "updated": "2026-05-08",
+      "source_report": "data/companies/GLW/GLW_Initial_MAX.md",
+      "source_sections": [
+        "all"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/financial-snapshot/glw-financial-snapshot-springboard-plan-dcf-2025.md"
+    },
+    {
       "id": "goog-10yr-financial-metrics-2014-2024",
       "archetype": "financial-snapshot",
       "title": "Alphabet (GOOG) 10-Year Core Financial Metrics 2014–2024",
@@ -4402,6 +4873,192 @@
       "path": "data/knowledge/atoms/financial-snapshot/tsm-ten-year-financial-trajectory-2014-2025.md"
     },
     {
+      "id": "tsmc-financial-performance-and-valuation-modeling",
+      "archetype": "financial-snapshot",
+      "title": "TSMC Financial Analysis: 2026E Forecasts and DCF Valuation",
+      "companies": [
+        "TSM"
+      ],
+      "people": [
+        "Wendell Huang",
+        "C.C. Wei"
+      ],
+      "industries": [
+        "semiconductor-foundry"
+      ],
+      "tags": [
+        "valuation",
+        "dcf",
+        "margins",
+        "revenue-mix",
+        "capex"
+      ],
+      "temporality": "time-sensitive",
+      "created": "2026-03-29",
+      "updated": "2026-03-29",
+      "source_report": "data/companies/TSM/TSM_Initial_MAX.md",
+      "source_sections": [
+        "all"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/financial-snapshot/tsmc-financial-performance-and-valuation-modeling.md"
+    },
+    {
+      "id": "tsmc-financial-snapshot-valuation-dcf",
+      "archetype": "financial-snapshot",
+      "title": "TSMC Financial Valuation 2026: AI Margins, Capital Expenditure Black Holes, and the Taiwan Discount",
+      "companies": [
+        "TSM",
+        "NVDA",
+        "ASML"
+      ],
+      "people": [
+        "Wendell Huang",
+        "C.C. Wei"
+      ],
+      "industries": [
+        "semiconductor-foundry"
+      ],
+      "tags": [
+        "valuation",
+        "dcf",
+        "capex",
+        "margins",
+        "financials"
+      ],
+      "temporality": "time-bound",
+      "created": "2026-03-29",
+      "updated": "2026-03-29",
+      "source_report": "data/companies/TSM/TSM_Initial_MAX.md",
+      "source_sections": [
+        "all"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/financial-snapshot/tsmc-financial-snapshot-valuation-dcf.md"
+    },
+    {
+      "id": "tsmc-financial-valuation-ai-era",
+      "archetype": "financial-snapshot",
+      "title": "TSMC Financials and Valuation: Pricing the AI Supercycle Against CapEx Realities",
+      "companies": [
+        "TSM",
+        "NVDA",
+        "AAPL"
+      ],
+      "people": [
+        "Wendell Huang",
+        "C.C. Wei"
+      ],
+      "industries": [
+        "semiconductor-foundry"
+      ],
+      "tags": [
+        "valuation",
+        "dcf",
+        "margins",
+        "capex",
+        "fcf",
+        "revenue-mix"
+      ],
+      "temporality": "time-bound",
+      "created": "2026-03-29",
+      "updated": "2026-03-29",
+      "source_report": "data/companies/TSM/TSM_Initial_MAX.md",
+      "source_sections": [
+        "all"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/financial-snapshot/tsmc-financial-valuation-ai-era.md"
+    },
+    {
+      "id": "geopolitics-china-smic-catch-up",
+      "archetype": "geopolitical",
+      "title": "US-China Tech Decoupling and the Real Threat of SMIC's Semiconductor Catch-up",
+      "companies": [
+        "TSM",
+        "0981.HK",
+        "ASML"
+      ],
+      "people": [],
+      "industries": [
+        "semiconductor-foundry"
+      ],
+      "tags": [
+        "geopolitics",
+        "sanctions",
+        "smic",
+        "euv",
+        "trade-war"
+      ],
+      "temporality": "time-bound",
+      "created": "2026-03-29",
+      "updated": "2026-03-29",
+      "source_report": "data/companies/TSM/TSM_Initial_MAX.md",
+      "source_sections": [
+        "all"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/geopolitical/geopolitics-china-smic-catch-up.md"
+    },
+    {
+      "id": "geopolitics-silicon-shield-and-us",
+      "archetype": "geopolitical",
+      "title": "The Silicon Shield: TSMC's Indispensability and the Geopolitics of a Taiwan Blockade",
+      "companies": [
+        "TSM",
+        "ASML"
+      ],
+      "people": [],
+      "industries": [
+        "semiconductor-foundry"
+      ],
+      "tags": [
+        "geopolitics",
+        "silicon-shield",
+        "trade-war",
+        "supply-chain"
+      ],
+      "temporality": "semi-evergreen",
+      "created": "2026-03-29",
+      "updated": "2026-03-29",
+      "source_report": "data/companies/TSM/TSM_Initial_MAX.md",
+      "source_sections": [
+        "all"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/geopolitical/geopolitics-silicon-shield-and-us.md"
+    },
+    {
+      "id": "glw-geopolitical-tariffs-domestic-manufacturing-2026",
+      "archetype": "geopolitical",
+      "title": "Corning (GLW) and Geopolitical Dynamics: Tariff Resilience and U.S. Manufacturing",
+      "companies": [
+        "GLW",
+        "NVDA"
+      ],
+      "people": [
+        "Wendell Weeks"
+      ],
+      "industries": [
+        "cloud-infrastructure"
+      ],
+      "tags": [
+        "geopolitics",
+        "trade-war",
+        "reshoring",
+        "supply-chain"
+      ],
+      "temporality": "semi-evergreen",
+      "created": "2026-05-08",
+      "updated": "2026-05-08",
+      "source_report": "data/companies/GLW/GLW_Initial_MAX.md",
+      "source_sections": [
+        "all"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/geopolitical/glw-geopolitical-tariffs-domestic-manufacturing-2026.md"
+    },
+    {
       "id": "tsmc-allied-framework-chip4-quad-industry-dependency",
       "archetype": "geopolitical",
       "title": "TSMC in the Allied Framework: Chip 4, Quad, AUKUS, and Global Industry Dependency",
@@ -4505,6 +5162,70 @@
       ],
       "quality": 4,
       "path": "data/knowledge/atoms/geopolitical/tsmc-geopolitical-pe-discount-analysis.md"
+    },
+    {
+      "id": "tsmc-geopolitical-silicon-shield",
+      "archetype": "geopolitical",
+      "title": "The Silicon Shield and Its Vulnerabilities: Geopolitical Risk Pricing for TSMC",
+      "companies": [
+        "TSM",
+        "ASML"
+      ],
+      "people": [
+        "C.C. Wei",
+        "Morris Chang"
+      ],
+      "industries": [
+        "semiconductor-foundry"
+      ],
+      "tags": [
+        "geopolitics",
+        "sanctions",
+        "supply-chain",
+        "trade-war"
+      ],
+      "temporality": "semi-evergreen",
+      "created": "2026-03-29",
+      "updated": "2026-03-29",
+      "source_report": "data/companies/TSM/TSM_Initial_MAX.md",
+      "source_sections": [
+        "all"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/geopolitical/tsmc-geopolitical-silicon-shield.md"
+    },
+    {
+      "id": "tsmc-geopolitics-silicon-shield-and-global-expansion",
+      "archetype": "geopolitical",
+      "title": "TSMC Geopolitics: The Silicon Shield and Global Manufacturing Footprint",
+      "companies": [
+        "TSM",
+        "AAPL",
+        "NVDA"
+      ],
+      "people": [
+        "Morris Chang",
+        "C.C. Wei"
+      ],
+      "industries": [
+        "semiconductor-foundry"
+      ],
+      "tags": [
+        "geopolitics",
+        "silicon-shield",
+        "trade-war",
+        "reshoring",
+        "sanctions"
+      ],
+      "temporality": "semi-evergreen",
+      "created": "2026-03-29",
+      "updated": "2026-03-29",
+      "source_report": "data/companies/TSM/TSM_Initial_MAX.md",
+      "source_sections": [
+        "all"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/geopolitical/tsmc-geopolitics-silicon-shield-and-global-expansion.md"
     },
     {
       "id": "tsmc-silicon-shield-theory-debate",
@@ -4714,6 +5435,33 @@
       ],
       "quality": 4,
       "path": "data/knowledge/atoms/industry/aapl-tam-five-markets-overview.md"
+    },
+    {
+      "id": "ai-fiber-optic-infrastructure-boom",
+      "archetype": "industry",
+      "title": "AI-Driven Fiber-Optic Demand: Market Expansion and Power Efficiency Paradigm",
+      "companies": [
+        "GLW"
+      ],
+      "people": [],
+      "industries": [
+        "cloud-infrastructure",
+        "ai-accelerator"
+      ],
+      "tags": [
+        "tam",
+        "market-share",
+        "capex"
+      ],
+      "temporality": "semi-evergreen",
+      "created": "2026-05-08",
+      "updated": "2026-05-08",
+      "source_report": "data/companies/GLW/GLW_Initial_MAX.md",
+      "source_sections": [
+        "all"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/industry/ai-fiber-optic-infrastructure-boom.md"
     },
     {
       "id": "amzn-tam-ecommerce-cloud-advertising-2024",
@@ -5583,6 +6331,35 @@
       "path": "data/knowledge/atoms/leadership/ebay-pierre-omidyar-founder-profile.md"
     },
     {
+      "id": "glw-leadership-wendell-weeks-strategy",
+      "archetype": "leadership",
+      "title": "Wendell Weeks: Orchestrating Corning's Strategic AI Pivot",
+      "companies": [
+        "GLW",
+        "META",
+        "NVDA"
+      ],
+      "people": [
+        "Wendell Weeks"
+      ],
+      "industries": [
+        "cloud-infrastructure"
+      ],
+      "tags": [
+        "culture",
+        "business-model"
+      ],
+      "temporality": "evergreen",
+      "created": "2026-05-08",
+      "updated": "2026-05-08",
+      "source_report": "data/companies/GLW/GLW_Initial_MAX.md",
+      "source_sections": [
+        "all"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/leadership/glw-leadership-wendell-weeks-strategy.md"
+    },
+    {
       "id": "goog-sundar-pichai-ceo-profile",
       "archetype": "leadership",
       "title": "Sundar Pichai: CEO Profile — Origins, Ascent, and Leadership Philosophy",
@@ -5651,6 +6428,79 @@
       ],
       "quality": 4,
       "path": "data/knowledge/atoms/leadership/goog-sundar-pichai-leadership-profile.md"
+    },
+    {
+      "id": "leadership-cc-wei-ceo",
+      "archetype": "leadership",
+      "title": "C.C. Wei: Guiding TSMC Through the AI Supercycle and Global Realignment",
+      "companies": [
+        "TSM",
+        "INTC",
+        "NVDA"
+      ],
+      "people": [
+        "C.C. Wei",
+        "Morris Chang",
+        "Mark Liu",
+        "Y.J. Mii",
+        "Y.P. Chyn"
+      ],
+      "industries": [
+        "semiconductor-foundry"
+      ],
+      "tags": [
+        "leadership",
+        "geopolitics",
+        "capex",
+        "ai-accelerator",
+        "succession"
+      ],
+      "temporality": "semi-evergreen",
+      "created": "2026-03-29",
+      "updated": "2026-03-29",
+      "source_report": "data/companies/TSM/TSM_Initial_MAX.md",
+      "source_sections": [
+        "all"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/leadership/leadership-cc-wei-ceo.md"
+    },
+    {
+      "id": "leadership-morris-chang-founder",
+      "archetype": "leadership",
+      "title": "Morris Chang: The Architect of the Foundry Model and TSMC's Strategic DNA",
+      "companies": [
+        "TSM",
+        "NVDA",
+        "AAPL",
+        "TXN",
+        "ASML"
+      ],
+      "people": [
+        "Morris Chang",
+        "Jensen Huang",
+        "Tim Cook",
+        "Jeff Williams"
+      ],
+      "industries": [
+        "semiconductor-foundry"
+      ],
+      "tags": [
+        "founding",
+        "leadership",
+        "culture",
+        "R&D",
+        "geopolitics"
+      ],
+      "temporality": "evergreen",
+      "created": "2026-03-29",
+      "updated": "2026-03-29",
+      "source_report": "data/companies/TSM/TSM_Initial_MAX.md",
+      "source_sections": [
+        "all"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/leadership/leadership-morris-chang-founder.md"
     },
     {
       "id": "lly-ceo-david-ricks-career-profile",
@@ -5816,6 +6666,115 @@
       ],
       "quality": 4,
       "path": "data/knowledge/atoms/leadership/tsm-morris-chang-founder-profile.md"
+    },
+    {
+      "id": "tsmc-leadership-chang-wei-succession",
+      "archetype": "leadership",
+      "title": "TSMC Leadership Dynamics: The Legacy of Morris Chang, the Pragmatism of C.C. Wei, and the Co-COO Succession Plan",
+      "companies": [
+        "TSM",
+        "NVDA",
+        "INTC"
+      ],
+      "people": [
+        "Morris Chang",
+        "C.C. Wei",
+        "Mark Liu",
+        "Y.J. Mii",
+        "Y.P. Chyn",
+        "Jensen Huang",
+        "Tim Cook"
+      ],
+      "industries": [
+        "semiconductor-foundry"
+      ],
+      "tags": [
+        "founding",
+        "management",
+        "succession",
+        "culture",
+        "governance"
+      ],
+      "temporality": "semi-evergreen",
+      "created": "2026-03-29",
+      "updated": "2026-03-29",
+      "source_report": "data/companies/TSM/TSM_Initial_MAX.md",
+      "source_sections": [
+        "all"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/leadership/tsmc-leadership-chang-wei-succession.md"
+    },
+    {
+      "id": "tsmc-leadership-legacy-and-succession-planning",
+      "archetype": "leadership",
+      "title": "TSMC Leadership: From Founder Morris Chang to C.C. Wei",
+      "companies": [
+        "TSM",
+        "INTC",
+        "NVDA"
+      ],
+      "people": [
+        "Morris Chang",
+        "C.C. Wei",
+        "Wendell Huang",
+        "Y.J. Mii",
+        "Y.P. Chyn",
+        "Jensen Huang"
+      ],
+      "industries": [
+        "semiconductor-foundry"
+      ],
+      "tags": [
+        "leadership",
+        "culture",
+        "governance",
+        "succession"
+      ],
+      "temporality": "evergreen",
+      "created": "2026-03-29",
+      "updated": "2026-03-29",
+      "source_report": "data/companies/TSM/TSM_Initial_MAX.md",
+      "source_sections": [
+        "all"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/leadership/tsmc-leadership-legacy-and-succession-planning.md"
+    },
+    {
+      "id": "tsmc-macro-indicator-ai-capex-bubble",
+      "archetype": "macro-indicator",
+      "title": "The $600 Billion Question: Is TSMC Over-Exposed to an AI CapEx Bubble?",
+      "companies": [
+        "TSM",
+        "NVDA",
+        "MSFT",
+        "GOOGL",
+        "AMZN",
+        "META"
+      ],
+      "people": [
+        "C.C. Wei",
+        "David Cahn"
+      ],
+      "industries": [
+        "cloud-infrastructure",
+        "ai-accelerator"
+      ],
+      "tags": [
+        "capex",
+        "revenue-mix",
+        "tam"
+      ],
+      "temporality": "time-bound",
+      "created": "2026-03-29",
+      "updated": "2026-03-29",
+      "source_report": "data/companies/TSM/TSM_Initial_MAX.md",
+      "source_sections": [
+        "all"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/macro-indicator/tsmc-macro-indicator-ai-capex-bubble.md"
     },
     {
       "id": "aapl-cfo-hardware-leadership-services-flywheel-quotes-part-4",
@@ -8973,6 +9932,34 @@
       "path": "data/knowledge/atoms/quotes/ebay-pierre-omidyar-founding-era-quotes-part-1.md"
     },
     {
+      "id": "glw-quotes-wendell-weeks-earnings",
+      "archetype": "quotes",
+      "title": "Strategic Perspectives: Key Quotes from Wendell Weeks on Corning's Trajectory",
+      "companies": [
+        "GLW"
+      ],
+      "people": [
+        "Wendell Weeks"
+      ],
+      "industries": [
+        "cloud-infrastructure"
+      ],
+      "tags": [
+        "business-model",
+        "revenue-mix",
+        "geopolitics"
+      ],
+      "temporality": "evergreen",
+      "created": "2026-05-08",
+      "updated": "2026-05-08",
+      "source_report": "data/companies/GLW/GLW_Initial_MAX.md",
+      "source_sections": [
+        "all"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/quotes/glw-quotes-wendell-weeks-earnings.md"
+    },
+    {
       "id": "goog-ashkenazi-quotes-capital-allocation-efficiency-part-3",
       "archetype": "quotes",
       "title": "Anat Ashkenazi (CFO) Quotes: Capital Allocation, CapEx Discipline & Operational Efficiency",
@@ -10853,6 +11840,97 @@
       "path": "data/knowledge/atoms/quotes/wendell-huang-quotes-us-fab-economics-margins.md"
     },
     {
+      "id": "tsmc-risk-factor-china-export-controls",
+      "archetype": "risk-factor",
+      "title": "Geopolitical Crossfire: Export Controls, SMIC's Catch-Up, and TSMC's Shrinking China Market",
+      "companies": [
+        "TSM",
+        "ASML"
+      ],
+      "people": [
+        "C.C. Wei"
+      ],
+      "industries": [
+        "semiconductor-foundry"
+      ],
+      "tags": [
+        "sanctions",
+        "geopolitics",
+        "revenue-mix"
+      ],
+      "temporality": "semi-evergreen",
+      "created": "2026-03-29",
+      "updated": "2026-03-29",
+      "source_report": "data/companies/TSM/TSM_Initial_MAX.md",
+      "source_sections": [
+        "all"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/risk-factor/tsmc-risk-factor-china-export-controls.md"
+    },
+    {
+      "id": "glw-supply-chain-nvidia-meta-partnerships",
+      "archetype": "supply-chain",
+      "title": "Corning's Strategic Supply Chain Evolution: Mega-Partnerships with Meta and NVIDIA",
+      "companies": [
+        "GLW",
+        "META",
+        "NVDA"
+      ],
+      "people": [],
+      "industries": [
+        "cloud-infrastructure",
+        "ai-accelerator"
+      ],
+      "tags": [
+        "supply-chain",
+        "capacity",
+        "capex"
+      ],
+      "temporality": "semi-evergreen",
+      "created": "2026-05-08",
+      "updated": "2026-05-08",
+      "source_report": "data/companies/GLW/GLW_Initial_MAX.md",
+      "source_sections": [
+        "all"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/supply-chain/glw-supply-chain-nvidia-meta-partnerships.md"
+    },
+    {
+      "id": "tsmc-supply-chain-equipment-oligopoly",
+      "archetype": "supply-chain",
+      "title": "The Hidden Monopolies Behind TSMC: Equipment Suppliers and the Fragility of the Supply Chain",
+      "companies": [
+        "TSM",
+        "ASML",
+        "AMAT",
+        "LRCX",
+        "KLAC"
+      ],
+      "people": [
+        "Morris Chang"
+      ],
+      "industries": [
+        "semiconductor-equipment",
+        "semiconductor-foundry"
+      ],
+      "tags": [
+        "supply-chain",
+        "euv",
+        "geopolitics"
+      ],
+      "temporality": "semi-evergreen",
+      "created": "2026-03-29",
+      "updated": "2026-03-29",
+      "source_report": "data/companies/TSM/TSM_Initial_MAX.md",
+      "source_sections": [
+        "all"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/supply-chain/tsmc-supply-chain-equipment-oligopoly.md"
+    },
+    {
       "id": "aapl-ai-pc-penetration-s-curve-arm-transition-2025",
       "archetype": "technology",
       "title": "AI PC S-Curve and ARM vs x86 Architecture Transition: Market Data, Apple's Structural Position (2023–2029)",
@@ -11834,6 +12912,33 @@
       "path": "data/knowledge/atoms/technology/ebay-four-scurve-ecommerce-technology-transitions.md"
     },
     {
+      "id": "glw-technology-contour-cable-optical-connectivity",
+      "archetype": "technology",
+      "title": "Optical Connectivity Innovations: The Contour Cable and Generative AI Networks",
+      "companies": [
+        "GLW"
+      ],
+      "people": [
+        "Wendell Weeks"
+      ],
+      "industries": [
+        "cloud-infrastructure"
+      ],
+      "tags": [
+        "capacity",
+        "process-node"
+      ],
+      "temporality": "semi-evergreen",
+      "created": "2026-05-08",
+      "updated": "2026-05-08",
+      "source_report": "data/companies/GLW/GLW_Initial_MAX.md",
+      "source_sections": [
+        "all"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/technology/glw-technology-contour-cable-optical-connectivity.md"
+    },
+    {
       "id": "goog-ai-adoption-scurve-quantitative",
       "archetype": "technology",
       "title": "Google/AI Industry: Technology Adoption S-Curve Quantitative Analysis (GenAI, Agentic AI, Cloud, Digital Ads)",
@@ -12334,6 +13439,108 @@
       "path": "data/knowledge/atoms/technology/tsmc-process-node-roadmap-1987-2027.md"
     },
     {
+      "id": "tsmc-semiconductor-technology-roadmap-gaa-packaging",
+      "archetype": "technology",
+      "title": "TSMC Technology Roadmap: GAA Transition and Advanced Packaging",
+      "companies": [
+        "TSM",
+        "ASML",
+        "NVDA",
+        "AAPL"
+      ],
+      "people": [
+        "C.C. Wei",
+        "Wendell Huang"
+      ],
+      "industries": [
+        "semiconductor-foundry",
+        "ai-accelerator"
+      ],
+      "tags": [
+        "process-node",
+        "gaa",
+        "packaging",
+        "cowos",
+        "euv"
+      ],
+      "temporality": "semi-evergreen",
+      "created": "2026-03-29",
+      "updated": "2026-03-29",
+      "source_report": "data/companies/TSM/TSM_Initial_MAX.md",
+      "source_sections": [
+        "all"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/technology/tsmc-semiconductor-technology-roadmap-gaa-packaging.md"
+    },
+    {
+      "id": "tsmc-technology-advanced-packaging-cowos",
+      "archetype": "technology",
+      "title": "Advanced Packaging: How CoWoS and SoIC Became TSMC's Second Moat in the AI Era",
+      "companies": [
+        "TSM",
+        "NVDA",
+        "AMD",
+        "AVGO"
+      ],
+      "people": [
+        "C.C. Wei",
+        "Wendell Huang"
+      ],
+      "industries": [
+        "semiconductor-foundry",
+        "ai-accelerator"
+      ],
+      "tags": [
+        "packaging",
+        "capacity",
+        "revenue-mix",
+        "moat"
+      ],
+      "temporality": "semi-evergreen",
+      "created": "2026-03-29",
+      "updated": "2026-03-29",
+      "source_report": "data/companies/TSM/TSM_Initial_MAX.md",
+      "source_sections": [
+        "all"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/technology/tsmc-technology-advanced-packaging-cowos.md"
+    },
+    {
+      "id": "tsmc-technology-node-evolution",
+      "archetype": "technology",
+      "title": "TSMC's Technology Roadmap: From FinFET to Nanosheet GAA and the CoWoS Bottleneck",
+      "companies": [
+        "TSM",
+        "ASML",
+        "NVDA",
+        "AAPL"
+      ],
+      "people": [],
+      "industries": [
+        "semiconductor-foundry",
+        "semiconductor-packaging"
+      ],
+      "tags": [
+        "process-node",
+        "gaa",
+        "finfet",
+        "euv",
+        "cowos",
+        "moores-law"
+      ],
+      "temporality": "semi-evergreen",
+      "created": "2026-03-29",
+      "updated": "2026-03-29",
+      "source_report": "data/companies/TSM/TSM_Initial_MAX.md",
+      "source_sections": [
+        "all"
+      ],
+      "quality": 4,
+      "path": "data/knowledge/atoms/technology/tsmc-technology-node-evolution.md"
+    },
+    {
       "id": "tsmc-transistor-density-scaling-s-curve",
       "archetype": "technology",
       "title": "TSMC Transistor Density Scaling: S-Curve Analysis from N16 to N2",
@@ -12373,6 +13580,9 @@
       "aapl-flywheel-business-model-unit-economics-2025",
       "aapl-organizational-culture-incentives",
       "aapl-organizational-culture-secrecy-excellence-integration",
+      "glw-company-profile-ai-transformation",
+      "tsmc-business-model-and-moat",
+      "tsmc-company-profile-pure-play-foundry",
       "aapl-competitive-moat-four-layers",
       "aapl-five-forces-analysis",
       "aapl-five-forces-moat-analysis-2025",
@@ -12382,7 +13592,10 @@
       "aapl-market-structure-hhi-concentration-2025",
       "aapl-regulatory-antitrust-dma-doj",
       "aapl-regulatory-environment-app-store-take-rate-erosion-2026",
+      "bull-vs-bear-ai-supercycle",
       "ebay-market-structure-hhi-concentration-2025",
+      "tsmc-competitive-landscape-foundry-wars",
+      "tsmc-esg-water-energy-constraints",
       "aapl-10-year-financial-history-2015-2025",
       "aapl-dcf-valuation-fy2026-three-scenario",
       "aapl-dcf-valuation-multi-method-2026",
@@ -12394,6 +13607,8 @@
       "aapl-services-revenue-growth-fy2025",
       "aapl-services-segment-revenue-model-fy2025",
       "aapl-ten-year-financials-fy2015-fy2025",
+      "tsmc-financial-valuation-ai-era",
+      "tsmc-geopolitics-silicon-shield-and-global-expansion",
       "aapl-cagr-growth-drivers-five-markets-2025",
       "aapl-services-tam-submarket-breakdown-2025",
       "aapl-smartphone-industry-history-iphone-revolution",
@@ -12404,6 +13619,7 @@
       "aapl-executive-succession-bench",
       "aapl-tim-cook-career-profile",
       "aapl-tim-cook-ceo-profile-2025",
+      "leadership-morris-chang-founder",
       "aapl-cfo-hardware-leadership-services-flywheel-quotes-part-4",
       "aapl-cfo-parekh-maestri-services-installed-base-quotes-part-5",
       "aapl-executive-quotes-ternus-anderson-parekh-part-2",
@@ -12446,7 +13662,9 @@
       "aapl-genai-on-device-penetration-apple-intelligence-2024-2025",
       "aapl-on-device-ai-market-privacy-positioning-2025",
       "aapl-vision-pro-sales-data-spatial-computing-adoption-curve-2024-2025",
-      "aapl-vision-pro-spatial-computing-market-reality-2025"
+      "aapl-vision-pro-spatial-computing-market-reality-2025",
+      "tsmc-semiconductor-technology-roadmap-gaa-packaging",
+      "tsmc-technology-node-evolution"
     ],
     "AMZN": [
       "amzn-day1-culture-leadership-principles-incentives",
@@ -12461,6 +13679,7 @@
       "amzn-market-structure-oligopoly-2024",
       "amzn-regulatory-antitrust-ftc-dma-2023-2025",
       "amzn-regulatory-environment-ftc-dma-2024",
+      "bull-vs-bear-ai-supercycle",
       "cost-five-forces-moat-analysis",
       "ebay-five-forces-competitive-moat-analysis-2025",
       "ebay-five-forces-moat-analysis-2025",
@@ -12482,6 +13701,7 @@
       "amzn-andy-jassy-ceo-profile",
       "amzn-jeff-bezos-founder-profile",
       "amzn-leadership-succession-bench",
+      "tsmc-macro-indicator-ai-capex-bubble",
       "amzn-andy-jassy-ai-strategy-quotes-part-1",
       "amzn-andy-jassy-ai-strategy-quotes-part-2",
       "amzn-andy-jassy-ai-technology-quotes-part-3",
@@ -12619,6 +13839,54 @@
       "ebay-ecommerce-scurve-four-waves-technology-adoption",
       "ebay-four-scurve-ecommerce-technology-transitions"
     ],
+    "GLW": [
+      "glw-company-profile-ai-transformation",
+      "glw-competitive-landscape-silicon-photonics-risk",
+      "glw-esg-fiber-optic-power-efficiency",
+      "glw-financial-snapshot-springboard-plan-dcf-2025",
+      "glw-geopolitical-tariffs-domestic-manufacturing-2026",
+      "ai-fiber-optic-infrastructure-boom",
+      "glw-leadership-wendell-weeks-strategy",
+      "glw-quotes-wendell-weeks-earnings",
+      "glw-supply-chain-nvidia-meta-partnerships",
+      "glw-technology-contour-cable-optical-connectivity"
+    ],
+    "META": [
+      "glw-company-profile-ai-transformation",
+      "amzn-five-forces-competitive-moat-2024",
+      "amzn-market-structure-oligopoly-2024",
+      "bull-vs-bear-ai-supercycle",
+      "glw-leadership-wendell-weeks-strategy",
+      "tsmc-macro-indicator-ai-capex-bubble",
+      "glw-supply-chain-nvidia-meta-partnerships",
+      "tsmc-ai-demand-drivers-token-growth"
+    ],
+    "NVDA": [
+      "glw-company-profile-ai-transformation",
+      "tsmc-business-model-and-moat",
+      "tsmc-company-profile-pure-play-foundry",
+      "amzn-five-forces-competitive-moat-2024",
+      "bull-vs-bear-ai-supercycle",
+      "tsmc-competitive-landscape-foundry-wars",
+      "tsmc-financial-snapshot-valuation-dcf",
+      "tsmc-financial-valuation-ai-era",
+      "glw-geopolitical-tariffs-domestic-manufacturing-2026",
+      "tsmc-geopolitical-pe-discount-analysis",
+      "tsmc-geopolitics-silicon-shield-and-global-expansion",
+      "glw-leadership-wendell-weeks-strategy",
+      "leadership-cc-wei-ceo",
+      "leadership-morris-chang-founder",
+      "tsmc-leadership-chang-wei-succession",
+      "tsmc-leadership-legacy-and-succession-planning",
+      "tsmc-macro-indicator-ai-capex-bubble",
+      "morris-chang-quotes-nvidia-jensen-ceo-succession-part-2",
+      "glw-supply-chain-nvidia-meta-partnerships",
+      "tsmc-ai-demand-drivers-token-growth",
+      "tsmc-cowos-advanced-packaging-capacity-expansion",
+      "tsmc-semiconductor-technology-roadmap-gaa-packaging",
+      "tsmc-technology-advanced-packaging-cowos",
+      "tsmc-technology-node-evolution"
+    ],
     "GOOG": [
       "goog-business-model-dna-attention-monetization",
       "goog-five-segment-business-model-2024",
@@ -12730,10 +13998,15 @@
       "lly-orforglipron-small-molecule-oral-glp1"
     ],
     "TSM": [
+      "tsmc-business-model-and-competitive-moat",
+      "tsmc-business-model-and-moat",
+      "tsmc-company-profile-pure-play-foundry",
       "tsmc-organizational-culture-values",
       "tsmc-pure-play-foundry-business-model",
       "tsmc-revenue-platform-breakdown-hpc-ai-dominance",
       "tsmc-wafer-pricing-unit-economics-capex-discipline",
+      "bull-vs-bear-ai-supercycle",
+      "foundry-competitive-landscape",
       "tsm-bear-case-geopolitical-structural-risks-2025",
       "tsm-bull-bear-key-debates-scorecard-2025",
       "tsm-bull-case-ai-supercycle-moat-2025",
@@ -12743,23 +14016,41 @@
       "tsm-intel-foundry-competitive-analysis",
       "tsm-regulatory-policy-environment-2025",
       "tsm-samsung-foundry-yield-crisis-2025",
+      "tsmc-competitive-landscape-foundry-wars",
+      "tsmc-competitive-landscape-samsung-intel-smic",
+      "esg-energy-consumption-re100",
+      "esg-water-management-climate-risk",
       "tsmc-carbon-emissions-sbti-climate-transition",
       "tsmc-energy-consumption-renewable-targets",
+      "tsmc-esg-environmental-and-resource-constraints",
       "tsmc-esg-ratings-environmental-performance",
+      "tsmc-esg-water-energy-constraints",
       "tsmc-water-usage-drought-controversy",
       "tsm-dcf-valuation-2026e",
       "tsm-geographic-revenue-breakdown-2018-2024",
       "tsm-operating-efficiency-roic-roe-margins-2021-2025",
       "tsm-platform-and-process-revenue-mix-2024",
       "tsm-ten-year-financial-trajectory-2014-2025",
+      "tsmc-financial-performance-and-valuation-modeling",
+      "tsmc-financial-snapshot-valuation-dcf",
+      "tsmc-financial-valuation-ai-era",
+      "geopolitics-china-smic-catch-up",
+      "geopolitics-silicon-shield-and-us",
       "tsmc-allied-framework-chip4-quad-industry-dependency",
       "tsmc-china-smic-euv-catchup-timeline",
       "tsmc-geopolitical-pe-discount-analysis",
+      "tsmc-geopolitical-silicon-shield",
+      "tsmc-geopolitics-silicon-shield-and-global-expansion",
       "tsmc-silicon-shield-theory-debate",
       "tsmc-taiwan-strait-conflict-probability-scenarios",
       "semiconductor-foundry-tam-growth-2000-2035",
+      "leadership-cc-wei-ceo",
+      "leadership-morris-chang-founder",
       "tsm-cc-wei-ceo-profile",
       "tsm-morris-chang-founder-profile",
+      "tsmc-leadership-chang-wei-succession",
+      "tsmc-leadership-legacy-and-succession-planning",
+      "tsmc-macro-indicator-ai-capex-bubble",
       "cc-wei-quotes-ai-demand-capex-intel-competition-part-3",
       "cc-wei-quotes-ai-demand-cowos-globalization-part-1",
       "cc-wei-quotes-ai-demand-cowos-globalization",
@@ -12795,30 +14086,49 @@
       "wendell-huang-quotes-rd-advanced-nodes-n2",
       "wendell-huang-quotes-us-fab-economics-margins-part-4",
       "wendell-huang-quotes-us-fab-economics-margins",
+      "tsmc-risk-factor-china-export-controls",
+      "tsmc-supply-chain-equipment-oligopoly",
       "tsmc-ai-demand-drivers-token-growth",
       "tsmc-cowos-advanced-packaging-capacity-expansion",
       "tsmc-euv-adoption-curve",
       "tsmc-finfet-to-gaa-transition",
       "tsmc-process-node-roadmap-1987-2027",
+      "tsmc-semiconductor-technology-roadmap-gaa-packaging",
+      "tsmc-technology-advanced-packaging-cowos",
+      "tsmc-technology-node-evolution",
       "tsmc-transistor-density-scaling-s-curve"
+    ],
+    "AVGO": [
+      "tsmc-business-model-and-moat",
+      "tsmc-company-profile-pure-play-foundry",
+      "tsmc-geopolitical-pe-discount-analysis",
+      "tsmc-technology-advanced-packaging-cowos"
+    ],
+    "AMD": [
+      "tsmc-company-profile-pure-play-foundry",
+      "tsmc-geopolitical-pe-discount-analysis",
+      "aapl-apple-silicon-performance-benchmarks-competitive-analysis-2025",
+      "tsmc-ai-demand-drivers-token-growth",
+      "tsmc-cowos-advanced-packaging-capacity-expansion",
+      "tsmc-technology-advanced-packaging-cowos"
     ],
     "MSFT": [
       "amzn-five-forces-competitive-moat-2024",
       "amzn-market-structure-oligopoly-2024",
+      "bull-vs-bear-ai-supercycle",
+      "tsmc-esg-water-energy-constraints",
       "goog-cloud-computing-tam-growth",
+      "tsmc-macro-indicator-ai-capex-bubble",
       "tsmc-ai-demand-drivers-token-growth"
     ],
     "GOOGL": [
       "amzn-five-forces-competitive-moat-2024",
       "amzn-market-structure-oligopoly-2024",
+      "bull-vs-bear-ai-supercycle",
+      "tsmc-macro-indicator-ai-capex-bubble",
       "aapl-apple-intelligence-vs-google-gemini-vs-samsung-galaxy-ai-feature-matrix-2025",
       "tsmc-ai-demand-drivers-token-growth",
       "tsmc-cowos-advanced-packaging-capacity-expansion"
-    ],
-    "META": [
-      "amzn-five-forces-competitive-moat-2024",
-      "amzn-market-structure-oligopoly-2024",
-      "tsmc-ai-demand-drivers-token-growth"
     ],
     "WMT": [
       "amzn-five-forces-competitive-moat-2024",
@@ -12829,15 +14139,29 @@
       "ebay-market-structure-hhi-concentration-2025",
       "cost-warehouse-club-industry-tam-growth-drivers"
     ],
-    "NVDA": [
-      "amzn-five-forces-competitive-moat-2024",
-      "tsmc-geopolitical-pe-discount-analysis",
-      "morris-chang-quotes-nvidia-jensen-ceo-succession-part-2",
-      "tsmc-ai-demand-drivers-token-growth",
-      "tsmc-cowos-advanced-packaging-capacity-expansion"
-    ],
     "TGT": [
       "ebay-market-structure-hhi-concentration-2025"
+    ],
+    "INTC": [
+      "foundry-competitive-landscape",
+      "tsm-five-forces-entry-substitutes-rivalry",
+      "tsm-foundry-market-concentration-2024",
+      "tsm-intel-foundry-competitive-analysis",
+      "tsmc-competitive-landscape-foundry-wars",
+      "tsmc-competitive-landscape-samsung-intel-smic",
+      "leadership-cc-wei-ceo",
+      "tsmc-leadership-chang-wei-succession",
+      "tsmc-leadership-legacy-and-succession-planning",
+      "aapl-apple-silicon-performance-benchmarks-competitive-analysis-2025"
+    ],
+    "005930.KS": [
+      "foundry-competitive-landscape",
+      "aapl-apple-intelligence-vs-google-gemini-vs-samsung-galaxy-ai-feature-matrix-2025"
+    ],
+    "0981.HK": [
+      "foundry-competitive-landscape",
+      "tsmc-competitive-landscape-samsung-intel-smic",
+      "geopolitics-china-smic-catch-up"
     ],
     "NVO": [
       "glp1-market-duopoly-structure-lly-nvo",
@@ -12863,21 +14187,25 @@
     "AZN": [
       "glp1-market-duopoly-structure-lly-nvo"
     ],
-    "INTC": [
-      "tsm-five-forces-entry-substitutes-rivalry",
-      "tsm-foundry-market-concentration-2024",
-      "tsm-intel-foundry-competitive-analysis",
-      "aapl-apple-silicon-performance-benchmarks-competitive-analysis-2025"
-    ],
     "SSNLF": [
       "tsm-five-forces-entry-substitutes-rivalry",
       "tsm-foundry-market-concentration-2024",
-      "tsm-samsung-foundry-yield-crisis-2025"
+      "tsm-samsung-foundry-yield-crisis-2025",
+      "tsmc-competitive-landscape-samsung-intel-smic"
     ],
     "ASML": [
       "tsm-five-forces-supplier-buyer-power",
+      "tsmc-financial-snapshot-valuation-dcf",
+      "geopolitics-china-smic-catch-up",
+      "geopolitics-silicon-shield-and-us",
       "tsmc-geopolitical-pe-discount-analysis",
-      "tsmc-euv-adoption-curve"
+      "tsmc-geopolitical-silicon-shield",
+      "leadership-morris-chang-founder",
+      "tsmc-risk-factor-china-export-controls",
+      "tsmc-supply-chain-equipment-oligopoly",
+      "tsmc-euv-adoption-curve",
+      "tsmc-semiconductor-technology-roadmap-gaa-packaging",
+      "tsmc-technology-node-evolution"
     ],
     "GFS": [
       "tsm-foundry-market-concentration-2024"
@@ -12885,20 +14213,21 @@
     "UMC": [
       "tsm-foundry-market-concentration-2024"
     ],
-    "AMD": [
-      "tsmc-geopolitical-pe-discount-analysis",
-      "aapl-apple-silicon-performance-benchmarks-competitive-analysis-2025",
-      "tsmc-ai-demand-drivers-token-growth",
-      "tsmc-cowos-advanced-packaging-capacity-expansion"
-    ],
-    "AVGO": [
-      "tsmc-geopolitical-pe-discount-analysis"
-    ],
-    "005930.KS": [
-      "aapl-apple-intelligence-vs-google-gemini-vs-samsung-galaxy-ai-feature-matrix-2025"
-    ],
     "QCOM": [
+      "tsmc-competitive-landscape-foundry-wars",
       "aapl-apple-silicon-performance-benchmarks-competitive-analysis-2025"
+    ],
+    "TXN": [
+      "leadership-morris-chang-founder"
+    ],
+    "AMAT": [
+      "tsmc-supply-chain-equipment-oligopoly"
+    ],
+    "LRCX": [
+      "tsmc-supply-chain-equipment-oligopoly"
+    ],
+    "KLAC": [
+      "tsmc-supply-chain-equipment-oligopoly"
     ]
   },
   "by_person": {
@@ -12909,6 +14238,7 @@
       "aapl-flywheel-business-model-unit-economics-2025",
       "aapl-organizational-culture-incentives",
       "aapl-organizational-culture-secrecy-excellence-integration",
+      "tsmc-company-profile-pure-play-foundry",
       "aapl-competitive-moat-four-layers",
       "aapl-five-forces-analysis",
       "aapl-five-forces-moat-analysis-2025",
@@ -12935,6 +14265,8 @@
       "aapl-executive-succession-bench",
       "aapl-tim-cook-career-profile",
       "aapl-tim-cook-ceo-profile-2025",
+      "leadership-morris-chang-founder",
+      "tsmc-leadership-chang-wei-succession",
       "aapl-john-ternus-apple-silicon-hardware-quotes-part-3",
       "aapl-tim-cook-ai-apple-intelligence-quotes-2024-2026-part-3",
       "aapl-tim-cook-ai-privacy-technology-philosophy-quotes-2024-2026",
@@ -13248,6 +14580,14 @@
       "ebay-ecommerce-scurve-four-waves-technology-adoption",
       "ebay-four-scurve-ecommerce-technology-transitions"
     ],
+    "Wendell Weeks": [
+      "glw-company-profile-ai-transformation",
+      "glw-financial-snapshot-springboard-plan-dcf-2025",
+      "glw-geopolitical-tariffs-domestic-manufacturing-2026",
+      "glw-leadership-wendell-weeks-strategy",
+      "glw-quotes-wendell-weeks-earnings",
+      "glw-technology-contour-cable-optical-connectivity"
+    ],
     "Sundar Pichai": [
       "goog-business-model-dna-attention-monetization",
       "goog-five-segment-business-model-2024",
@@ -13375,6 +14715,9 @@
       "lly-organizational-culture-ricks-leadership-philosophy"
     ],
     "Morris Chang": [
+      "tsmc-business-model-and-competitive-moat",
+      "tsmc-business-model-and-moat",
+      "tsmc-company-profile-pure-play-foundry",
       "tsmc-organizational-culture-values",
       "tsmc-pure-play-foundry-business-model",
       "tsmc-wafer-pricing-unit-economics-capex-discipline",
@@ -13382,12 +14725,20 @@
       "tsm-five-forces-supplier-buyer-power",
       "tsm-intel-foundry-competitive-analysis",
       "tsm-regulatory-policy-environment-2025",
+      "tsmc-competitive-landscape-foundry-wars",
+      "tsmc-competitive-landscape-samsung-intel-smic",
       "tsm-operating-efficiency-roic-roe-margins-2021-2025",
       "tsm-ten-year-financial-trajectory-2014-2025",
       "tsmc-china-smic-euv-catchup-timeline",
+      "tsmc-geopolitical-silicon-shield",
+      "tsmc-geopolitics-silicon-shield-and-global-expansion",
       "tsmc-silicon-shield-theory-debate",
       "semiconductor-foundry-tam-growth-2000-2035",
+      "leadership-cc-wei-ceo",
+      "leadership-morris-chang-founder",
       "tsm-morris-chang-founder-profile",
+      "tsmc-leadership-chang-wei-succession",
+      "tsmc-leadership-legacy-and-succession-planning",
       "morris-chang-apple-intel-foundry-decision-quotes",
       "morris-chang-quotes-acquired-briefing-apple-ibm-nvidia-scale-2025-part-3",
       "morris-chang-quotes-apple-ibm-partnerships-part-2",
@@ -13406,15 +14757,20 @@
       "morris-chang-quotes-technology-rd-moores-law-part-1",
       "morris-chang-quotes-us-revival-china-competition-futility-part-3",
       "tsm-leadership-integrity-scoring-summary-part-5",
+      "tsmc-supply-chain-equipment-oligopoly",
       "tsmc-euv-adoption-curve",
       "tsmc-process-node-roadmap-1987-2027",
       "tsmc-transistor-density-scaling-s-curve"
     ],
     "C.C. Wei": [
+      "tsmc-business-model-and-competitive-moat",
+      "tsmc-business-model-and-moat",
+      "tsmc-company-profile-pure-play-foundry",
       "tsmc-organizational-culture-values",
       "tsmc-pure-play-foundry-business-model",
       "tsmc-revenue-platform-breakdown-hpc-ai-dominance",
       "tsmc-wafer-pricing-unit-economics-capex-discipline",
+      "bull-vs-bear-ai-supercycle",
       "tsm-bear-case-geopolitical-structural-risks-2025",
       "tsm-bull-bear-key-debates-scorecard-2025",
       "tsm-bull-case-ai-supercycle-moat-2025",
@@ -13423,19 +14779,36 @@
       "tsm-intel-foundry-competitive-analysis",
       "tsm-regulatory-policy-environment-2025",
       "tsm-samsung-foundry-yield-crisis-2025",
+      "tsmc-competitive-landscape-foundry-wars",
+      "tsmc-competitive-landscape-samsung-intel-smic",
       "tsm-dcf-valuation-2026e",
       "tsm-operating-efficiency-roic-roe-margins-2021-2025",
       "tsm-ten-year-financial-trajectory-2014-2025",
+      "tsmc-financial-performance-and-valuation-modeling",
+      "tsmc-financial-snapshot-valuation-dcf",
+      "tsmc-financial-valuation-ai-era",
       "tsmc-allied-framework-chip4-quad-industry-dependency",
       "tsmc-china-smic-euv-catchup-timeline",
+      "tsmc-geopolitical-silicon-shield",
+      "tsmc-geopolitics-silicon-shield-and-global-expansion",
       "tsmc-silicon-shield-theory-debate",
       "semiconductor-foundry-tam-growth-2000-2035",
+      "leadership-cc-wei-ceo",
       "tsm-cc-wei-ceo-profile",
+      "tsmc-leadership-chang-wei-succession",
+      "tsmc-leadership-legacy-and-succession-planning",
+      "tsmc-macro-indicator-ai-capex-bubble",
       "cc-wei-quotes-ai-demand-capex-intel-competition-part-3",
       "cc-wei-quotes-ai-demand-cowos-globalization",
-      "cc-wei-quotes-competitor-customer-success-globalization-part-2"
+      "cc-wei-quotes-competitor-customer-success-globalization-part-2",
+      "tsmc-risk-factor-china-export-controls",
+      "tsmc-semiconductor-technology-roadmap-gaa-packaging",
+      "tsmc-technology-advanced-packaging-cowos"
     ],
     "Wendell Huang": [
+      "tsmc-business-model-and-competitive-moat",
+      "tsmc-business-model-and-moat",
+      "tsmc-company-profile-pure-play-foundry",
       "tsmc-organizational-culture-values",
       "tsmc-pure-play-foundry-business-model",
       "tsmc-revenue-platform-breakdown-hpc-ai-dominance",
@@ -13448,7 +14821,11 @@
       "tsm-dcf-valuation-2026e",
       "tsm-operating-efficiency-roic-roe-margins-2021-2025",
       "tsm-ten-year-financial-trajectory-2014-2025",
+      "tsmc-financial-performance-and-valuation-modeling",
+      "tsmc-financial-snapshot-valuation-dcf",
+      "tsmc-financial-valuation-ai-era",
       "semiconductor-foundry-tam-growth-2000-2035",
+      "tsmc-leadership-legacy-and-succession-planning",
       "cc-wei-quotes-ai-demand-cowos-globalization-part-1",
       "cc-wei-quotes-competitor-customer-success-globalization-part-2",
       "wendell-huang-quotes-capex-philosophy-advanced-packaging",
@@ -13459,10 +14836,22 @@
       "tsmc-ai-demand-drivers-token-growth",
       "tsmc-cowos-advanced-packaging-capacity-expansion",
       "tsmc-finfet-to-gaa-transition",
-      "tsmc-process-node-roadmap-1987-2027"
+      "tsmc-process-node-roadmap-1987-2027",
+      "tsmc-semiconductor-technology-roadmap-gaa-packaging",
+      "tsmc-technology-advanced-packaging-cowos"
+    ],
+    "Jensen Huang": [
+      "tsmc-company-profile-pure-play-foundry",
+      "tsm-bull-case-ai-supercycle-moat-2025",
+      "leadership-morris-chang-founder",
+      "tsmc-leadership-chang-wei-succession",
+      "tsmc-leadership-legacy-and-succession-planning",
+      "morris-chang-quotes-nvidia-jensen-ceo-succession-part-2"
     ],
     "Mark Liu": [
-      "tsmc-organizational-culture-values"
+      "tsmc-organizational-culture-values",
+      "leadership-cc-wei-ceo",
+      "tsmc-leadership-chang-wei-succession"
     ],
     "Molly Anderson": [
       "aapl-five-forces-analysis",
@@ -13508,9 +14897,8 @@
     "Amit P. Mehta": [
       "goog-regulatory-antitrust-doj-dma-dsa-2025"
     ],
-    "Jensen Huang": [
-      "tsm-bull-case-ai-supercycle-moat-2025",
-      "morris-chang-quotes-nvidia-jensen-ceo-succession-part-2"
+    "Lora Ho": [
+      "tsmc-esg-environmental-and-resource-constraints"
     ],
     "Gene You": [
       "tsmc-water-usage-drought-controversy",
@@ -13579,7 +14967,8 @@
     ],
     "Jeff Williams": [
       "aapl-executive-succession-bench",
-      "aapl-tim-cook-ceo-profile-2025"
+      "aapl-tim-cook-ceo-profile-2025",
+      "leadership-morris-chang-founder"
     ],
     "Craig Federighi": [
       "aapl-executive-succession-bench",
@@ -13634,6 +15023,16 @@
       "goog-sundar-pichai-ceo-profile",
       "goog-sundar-pichai-leadership-profile"
     ],
+    "Y.J. Mii": [
+      "leadership-cc-wei-ceo",
+      "tsmc-leadership-chang-wei-succession",
+      "tsmc-leadership-legacy-and-succession-planning"
+    ],
+    "Y.P. Chyn": [
+      "leadership-cc-wei-ceo",
+      "tsmc-leadership-chang-wei-succession",
+      "tsmc-leadership-legacy-and-succession-planning"
+    ],
     "David A. Ricks": [
       "lly-ceo-david-ricks-career-profile",
       "lly-ceo-david-ricks-decision-philosophy",
@@ -13649,6 +15048,9 @@
     ],
     "Daniel Skovronsky": [
       "lly-david-ricks-ceo-profile"
+    ],
+    "David Cahn": [
+      "tsmc-macro-indicator-ai-capex-bubble"
     ],
     "Sam Altman": [
       "amzn-andy-jassy-ceo-interviews-quotes-2022-2026-part-5"
@@ -13791,6 +15193,7 @@
       "amzn-six-segment-business-model-fy2025",
       "ebay-business-model-unit-economics-2024",
       "ebay-five-business-pillars-vertical-strategy-2025",
+      "glw-company-profile-ai-transformation",
       "goog-business-model-dna-attention-monetization",
       "goog-five-segment-business-model-2024",
       "goog-organizational-culture-engineering-driven-innovation",
@@ -13807,6 +15210,7 @@
       "ebay-market-structure-hhi-concentration-2025",
       "ebay-regulatory-environment-tariffs-dsa-tax-2025",
       "ebay-vertical-category-market-concentration-2025",
+      "glw-competitive-landscape-silicon-photonics-risk",
       "goog-digital-ad-cloud-market-structure",
       "goog-five-forces-competitive-moat-analysis-2025",
       "goog-five-forces-competitive-moat",
@@ -13815,6 +15219,7 @@
       "goog-regulatory-antitrust-landscape",
       "tsm-bear-case-geopolitical-structural-risks-2025",
       "tsm-bull-case-ai-supercycle-moat-2025",
+      "glw-esg-fiber-optic-power-efficiency",
       "amzn-20-year-financial-history-2006-2025",
       "amzn-dcf-valuation-fy2026-three-scenario",
       "amzn-dcf-valuation-multi-method-2026",
@@ -13824,6 +15229,7 @@
       "amzn-operating-efficiency-roic-leverage-fy2018-fy2025",
       "amzn-ten-year-financials-fy2014-fy2025",
       "ebay-geographic-revenue-breakdown-fy2024-2025",
+      "glw-financial-snapshot-springboard-plan-dcf-2025",
       "goog-10yr-financial-metrics-2014-2024",
       "goog-dcf-valuation-fy2025-three-scenario",
       "goog-dcf-valuation-multiples-2024",
@@ -13834,6 +15240,8 @@
       "goog-segment-revenue-operating-profit-fy2024-fy2025",
       "goog-strategic-inflection-points-2015-2024",
       "goog-ten-year-financials-fy2014-fy2024",
+      "glw-geopolitical-tariffs-domestic-manufacturing-2026",
+      "ai-fiber-optic-infrastructure-boom",
       "amzn-tam-ecommerce-cloud-advertising-2024",
       "amzn-tam-three-markets-ecommerce-cloud-ads",
       "goog-adjacent-tam-expansion",
@@ -13846,8 +15254,10 @@
       "ebay-executive-succession-bench",
       "ebay-jamie-iannone-ceo-profile",
       "ebay-pierre-omidyar-founder-profile",
+      "glw-leadership-wendell-weeks-strategy",
       "goog-sundar-pichai-ceo-profile",
       "goog-sundar-pichai-leadership-profile",
+      "tsmc-macro-indicator-ai-capex-bubble",
       "amzn-andy-jassy-ai-strategy-quotes-part-1",
       "amzn-andy-jassy-ai-strategy-quotes-part-2",
       "amzn-andy-jassy-ai-technology-quotes-part-3",
@@ -13882,6 +15292,7 @@
       "ebay-iannone-ai-infrastructure-platform-quotes-part-3",
       "ebay-iannone-seller-partnership-culture-quotes-part-4",
       "ebay-omidyar-founding-philosophy-community-quotes-part-4",
+      "glw-quotes-wendell-weeks-earnings",
       "goog-ashkenazi-quotes-capital-allocation-efficiency-part-3",
       "goog-executive-quotes-financials-2025-2026-part-1",
       "goog-executive-quotes-financials-2025-2026-part-2",
@@ -13901,6 +15312,7 @@
       "goog-sundar-pichai-quotes-personal-background-origin-story-part-2",
       "goog-sundar-pichai-quotes-search-ai-commerce-part2-part-2",
       "goog-sundar-pichai-quotes",
+      "glw-supply-chain-nvidia-meta-partnerships",
       "amzn-advertising-technology-retail-media-prime-video-2024",
       "amzn-alexa-voice-ai-ecosystem-2024-2025",
       "amzn-alexa-voice-ai-ecosystem-pivot-2025",
@@ -13915,6 +15327,7 @@
       "ebay-ai-strategy-generative-ai-deployment-2024-2025",
       "ebay-demand-trends-recommerce-sustainability-gen-z-2025",
       "ebay-ecommerce-scurve-four-waves-technology-adoption",
+      "glw-technology-contour-cable-optical-connectivity",
       "goog-ai-adoption-scurve-quantitative",
       "goog-demand-shift-search-youtube-enterprise",
       "goog-llm-evolution-roadmap-gemini",
@@ -13923,10 +15336,12 @@
       "tsmc-cowos-advanced-packaging-capacity-expansion"
     ],
     "ai-accelerator": [
+      "glw-company-profile-ai-transformation",
       "goog-five-segment-business-model-2024",
       "tsmc-revenue-platform-breakdown-hpc-ai-dominance",
       "amzn-five-forces-competitive-moat-2024",
       "amzn-market-structure-oligopoly-2024",
+      "bull-vs-bear-ai-supercycle",
       "tsm-bear-case-geopolitical-structural-risks-2025",
       "tsm-bull-bear-key-debates-scorecard-2025",
       "tsm-bull-case-ai-supercycle-moat-2025",
@@ -13935,10 +15350,12 @@
       "tsm-ten-year-financial-trajectory-2014-2025",
       "tsmc-allied-framework-chip4-quad-industry-dependency",
       "tsmc-geopolitical-pe-discount-analysis",
+      "ai-fiber-optic-infrastructure-boom",
       "goog-cloud-computing-tam-growth",
       "semiconductor-foundry-tam-growth-2000-2035",
       "goog-sundar-pichai-ceo-profile",
       "goog-sundar-pichai-leadership-profile",
+      "tsmc-macro-indicator-ai-capex-bubble",
       "aapl-tim-cook-ai-apple-intelligence-quotes-2024-2026-part-3",
       "amzn-andy-jassy-ai-strategy-quotes-part-1",
       "amzn-andy-jassy-ai-strategy-quotes-part-2",
@@ -13961,6 +15378,7 @@
       "goog-sundar-pichai-quotes-part1-part-1",
       "goog-sundar-pichai-quotes",
       "morris-chang-quotes-nvidia-jensen-ceo-succession-part-2",
+      "glw-supply-chain-nvidia-meta-partnerships",
       "aapl-ai-pc-penetration-s-curve-arm-transition-2025",
       "aapl-apple-intelligence-genai-adoption-2025",
       "aapl-apple-intelligence-vs-google-gemini-vs-samsung-galaxy-ai-feature-matrix-2025",
@@ -13976,13 +15394,21 @@
       "tsmc-ai-demand-drivers-token-growth",
       "tsmc-cowos-advanced-packaging-capacity-expansion",
       "tsmc-finfet-to-gaa-transition",
-      "tsmc-process-node-roadmap-1987-2027"
+      "tsmc-process-node-roadmap-1987-2027",
+      "tsmc-semiconductor-technology-roadmap-gaa-packaging",
+      "tsmc-technology-advanced-packaging-cowos"
     ],
     "semiconductor-foundry": [
+      "tsmc-business-model-and-competitive-moat",
+      "tsmc-business-model-and-moat",
+      "tsmc-company-profile-pure-play-foundry",
       "tsmc-organizational-culture-values",
       "tsmc-pure-play-foundry-business-model",
       "tsmc-revenue-platform-breakdown-hpc-ai-dominance",
       "tsmc-wafer-pricing-unit-economics-capex-discipline",
+      "bull-vs-bear-ai-supercycle",
+      "foundry-competitive-landscape",
+      "glw-competitive-landscape-silicon-photonics-risk",
       "tsm-bear-case-geopolitical-structural-risks-2025",
       "tsm-bull-bear-key-debates-scorecard-2025",
       "tsm-bull-case-ai-supercycle-moat-2025",
@@ -13992,23 +15418,40 @@
       "tsm-intel-foundry-competitive-analysis",
       "tsm-regulatory-policy-environment-2025",
       "tsm-samsung-foundry-yield-crisis-2025",
+      "tsmc-competitive-landscape-foundry-wars",
+      "tsmc-competitive-landscape-samsung-intel-smic",
+      "esg-energy-consumption-re100",
+      "esg-water-management-climate-risk",
       "tsmc-carbon-emissions-sbti-climate-transition",
       "tsmc-energy-consumption-renewable-targets",
+      "tsmc-esg-environmental-and-resource-constraints",
       "tsmc-esg-ratings-environmental-performance",
+      "tsmc-esg-water-energy-constraints",
       "tsmc-water-usage-drought-controversy",
       "tsm-dcf-valuation-2026e",
       "tsm-geographic-revenue-breakdown-2018-2024",
       "tsm-operating-efficiency-roic-roe-margins-2021-2025",
       "tsm-platform-and-process-revenue-mix-2024",
       "tsm-ten-year-financial-trajectory-2014-2025",
+      "tsmc-financial-performance-and-valuation-modeling",
+      "tsmc-financial-snapshot-valuation-dcf",
+      "tsmc-financial-valuation-ai-era",
+      "geopolitics-china-smic-catch-up",
+      "geopolitics-silicon-shield-and-us",
       "tsmc-allied-framework-chip4-quad-industry-dependency",
       "tsmc-china-smic-euv-catchup-timeline",
       "tsmc-geopolitical-pe-discount-analysis",
+      "tsmc-geopolitical-silicon-shield",
+      "tsmc-geopolitics-silicon-shield-and-global-expansion",
       "tsmc-silicon-shield-theory-debate",
       "tsmc-taiwan-strait-conflict-probability-scenarios",
       "semiconductor-foundry-tam-growth-2000-2035",
+      "leadership-cc-wei-ceo",
+      "leadership-morris-chang-founder",
       "tsm-cc-wei-ceo-profile",
       "tsm-morris-chang-founder-profile",
+      "tsmc-leadership-chang-wei-succession",
+      "tsmc-leadership-legacy-and-succession-planning",
       "cc-wei-quotes-ai-demand-capex-intel-competition-part-3",
       "cc-wei-quotes-ai-demand-cowos-globalization-part-1",
       "cc-wei-quotes-ai-demand-cowos-globalization",
@@ -14044,20 +15487,21 @@
       "wendell-huang-quotes-rd-advanced-nodes-n2",
       "wendell-huang-quotes-us-fab-economics-margins-part-4",
       "wendell-huang-quotes-us-fab-economics-margins",
+      "tsmc-risk-factor-china-export-controls",
+      "tsmc-supply-chain-equipment-oligopoly",
       "tsmc-ai-demand-drivers-token-growth",
       "tsmc-cowos-advanced-packaging-capacity-expansion",
       "tsmc-euv-adoption-curve",
       "tsmc-finfet-to-gaa-transition",
       "tsmc-process-node-roadmap-1987-2027",
+      "tsmc-semiconductor-technology-roadmap-gaa-packaging",
+      "tsmc-technology-advanced-packaging-cowos",
+      "tsmc-technology-node-evolution",
       "tsmc-transistor-density-scaling-s-curve"
     ],
-    "automotive-semiconductor": [
-      "tsmc-revenue-platform-breakdown-hpc-ai-dominance",
-      "tsm-platform-and-process-revenue-mix-2024",
-      "tsmc-allied-framework-chip4-quad-industry-dependency",
-      "goog-adjacent-tam-expansion"
-    ],
     "semiconductor-fabless": [
+      "tsmc-business-model-and-moat",
+      "tsmc-company-profile-pure-play-foundry",
       "aapl-mac-apple-silicon-competitive-repositioning",
       "aapl-mac-apple-silicon-revival-competitive-position-2025",
       "semiconductor-foundry-tam-growth-2000-2035",
@@ -14067,6 +15511,12 @@
       "aapl-apple-silicon-financial-impact-performance-2025",
       "aapl-apple-silicon-performance-benchmarks-competitive-analysis-2025",
       "tsmc-finfet-to-gaa-transition"
+    ],
+    "automotive-semiconductor": [
+      "tsmc-revenue-platform-breakdown-hpc-ai-dominance",
+      "tsm-platform-and-process-revenue-mix-2024",
+      "tsmc-allied-framework-chip4-quad-industry-dependency",
+      "goog-adjacent-tam-expansion"
     ],
     "pharmaceutical": [
       "glp1-market-duopoly-structure-lly-nvo",
@@ -14078,6 +15528,7 @@
       "tsmc-allied-framework-chip4-quad-industry-dependency",
       "tsmc-china-smic-euv-catchup-timeline",
       "morris-chang-quotes-customers-pricing-asml-partnership-part-1",
+      "tsmc-supply-chain-equipment-oligopoly",
       "tsmc-euv-adoption-curve"
     ],
     "eda-tools": [
@@ -14085,6 +15536,9 @@
     ],
     "ecommerce-marketplace": [
       "ebay-tam-ecommerce-recommerce-growth-2025"
+    ],
+    "semiconductor-packaging": [
+      "tsmc-technology-node-evolution"
     ]
   },
   "by_archetype": {
@@ -14109,6 +15563,7 @@
       "ebay-marketplace-unit-economics-capital-returns-2024",
       "ebay-organizational-culture-iannone-transformation",
       "ebay-organizational-culture-incentives",
+      "glw-company-profile-ai-transformation",
       "goog-business-model-dna-attention-monetization",
       "goog-five-segment-business-model-2024",
       "goog-organizational-culture-engineering-driven-innovation",
@@ -14121,6 +15576,9 @@
       "lly-organizational-culture-ricks-leadership-philosophy",
       "lly-six-segment-business-model-fy2025",
       "lly-therapeutic-area-portfolio",
+      "tsmc-business-model-and-competitive-moat",
+      "tsmc-business-model-and-moat",
+      "tsmc-company-profile-pure-play-foundry",
       "tsmc-organizational-culture-values",
       "tsmc-pure-play-foundry-business-model",
       "tsmc-revenue-platform-breakdown-hpc-ai-dominance",
@@ -14142,6 +15600,7 @@
       "amzn-market-structure-oligopoly-2024",
       "amzn-regulatory-antitrust-ftc-dma-2023-2025",
       "amzn-regulatory-environment-ftc-dma-2024",
+      "bull-vs-bear-ai-supercycle",
       "cost-five-forces-moat-analysis",
       "cost-international-competitive-landscape-2025",
       "cost-regulatory-tariff-risk-2025-2026",
@@ -14154,8 +15613,10 @@
       "ebay-regulatory-environment-tariffs-dsa-1099k-gdpr-2025",
       "ebay-regulatory-environment-tariffs-dsa-tax-2025",
       "ebay-vertical-category-market-concentration-2025",
+      "foundry-competitive-landscape",
       "glp1-market-duopoly-structure-lly-nvo",
       "glp1-regulatory-environment-global-lly",
+      "glw-competitive-landscape-silicon-photonics-risk",
       "goog-digital-ad-cloud-market-structure",
       "goog-five-forces-competitive-moat-analysis-2025",
       "goog-five-forces-competitive-moat",
@@ -14174,12 +15635,19 @@
       "tsm-foundry-market-concentration-2024",
       "tsm-intel-foundry-competitive-analysis",
       "tsm-regulatory-policy-environment-2025",
-      "tsm-samsung-foundry-yield-crisis-2025"
+      "tsm-samsung-foundry-yield-crisis-2025",
+      "tsmc-competitive-landscape-foundry-wars",
+      "tsmc-competitive-landscape-samsung-intel-smic"
     ],
     "esg": [
+      "esg-energy-consumption-re100",
+      "esg-water-management-climate-risk",
+      "glw-esg-fiber-optic-power-efficiency",
       "tsmc-carbon-emissions-sbti-climate-transition",
       "tsmc-energy-consumption-renewable-targets",
+      "tsmc-esg-environmental-and-resource-constraints",
       "tsmc-esg-ratings-environmental-performance",
+      "tsmc-esg-water-energy-constraints",
       "tsmc-water-usage-drought-controversy"
     ],
     "financial-snapshot": [
@@ -14214,6 +15682,7 @@
       "ebay-operating-efficiency-roic-fcf-2021-2024",
       "ebay-operating-efficiency-roic-margins-fy2021-2024",
       "ebay-ten-year-financials-fy2014-fy2025",
+      "glw-financial-snapshot-springboard-plan-dcf-2025",
       "goog-10yr-financial-metrics-2014-2024",
       "goog-dcf-valuation-fy2025-three-scenario",
       "goog-dcf-valuation-multiples-2024",
@@ -14238,12 +15707,20 @@
       "tsm-geographic-revenue-breakdown-2018-2024",
       "tsm-operating-efficiency-roic-roe-margins-2021-2025",
       "tsm-platform-and-process-revenue-mix-2024",
-      "tsm-ten-year-financial-trajectory-2014-2025"
+      "tsm-ten-year-financial-trajectory-2014-2025",
+      "tsmc-financial-performance-and-valuation-modeling",
+      "tsmc-financial-snapshot-valuation-dcf",
+      "tsmc-financial-valuation-ai-era"
     ],
     "geopolitical": [
+      "geopolitics-china-smic-catch-up",
+      "geopolitics-silicon-shield-and-us",
+      "glw-geopolitical-tariffs-domestic-manufacturing-2026",
       "tsmc-allied-framework-chip4-quad-industry-dependency",
       "tsmc-china-smic-euv-catchup-timeline",
       "tsmc-geopolitical-pe-discount-analysis",
+      "tsmc-geopolitical-silicon-shield",
+      "tsmc-geopolitics-silicon-shield-and-global-expansion",
       "tsmc-silicon-shield-theory-debate",
       "tsmc-taiwan-strait-conflict-probability-scenarios"
     ],
@@ -14253,6 +15730,7 @@
       "aapl-smartphone-industry-history-iphone-revolution",
       "aapl-tam-five-markets-overview-2025",
       "aapl-tam-five-markets-overview",
+      "ai-fiber-optic-infrastructure-boom",
       "amzn-tam-ecommerce-cloud-advertising-2024",
       "amzn-tam-three-markets-ecommerce-cloud-ads",
       "apple-corporate-origins-pc-revolution",
@@ -14283,14 +15761,22 @@
       "ebay-executive-succession-bench",
       "ebay-jamie-iannone-ceo-profile",
       "ebay-pierre-omidyar-founder-profile",
+      "glw-leadership-wendell-weeks-strategy",
       "goog-sundar-pichai-ceo-profile",
       "goog-sundar-pichai-leadership-profile",
+      "leadership-cc-wei-ceo",
+      "leadership-morris-chang-founder",
       "lly-ceo-david-ricks-career-profile",
       "lly-ceo-david-ricks-decision-philosophy",
       "lly-ceo-david-ricks-ethics-track-record",
       "lly-david-ricks-ceo-profile",
       "tsm-cc-wei-ceo-profile",
-      "tsm-morris-chang-founder-profile"
+      "tsm-morris-chang-founder-profile",
+      "tsmc-leadership-chang-wei-succession",
+      "tsmc-leadership-legacy-and-succession-planning"
+    ],
+    "macro-indicator": [
+      "tsmc-macro-indicator-ai-capex-bubble"
     ],
     "quotes": [
       "aapl-cfo-hardware-leadership-services-flywheel-quotes-part-4",
@@ -14401,6 +15887,7 @@
       "ebay-omidyar-quotes-community-governance-feedback-forum-part-2",
       "ebay-omidyar-quotes-founding-trust-community-economic-democracy-part-4",
       "ebay-pierre-omidyar-founding-era-quotes-part-1",
+      "glw-quotes-wendell-weeks-earnings",
       "goog-ashkenazi-quotes-capital-allocation-efficiency-part-3",
       "goog-executive-quotes-financials-2025-2026-part-1",
       "goog-executive-quotes-financials-2025-2026-part-2",
@@ -14467,6 +15954,13 @@
       "wendell-huang-quotes-us-fab-economics-margins-part-4",
       "wendell-huang-quotes-us-fab-economics-margins"
     ],
+    "risk-factor": [
+      "tsmc-risk-factor-china-export-controls"
+    ],
+    "supply-chain": [
+      "glw-supply-chain-nvidia-meta-partnerships",
+      "tsmc-supply-chain-equipment-oligopoly"
+    ],
     "technology": [
       "aapl-ai-pc-penetration-s-curve-arm-transition-2025",
       "aapl-apple-intelligence-genai-adoption-2025",
@@ -14500,6 +15994,7 @@
       "ebay-demand-trends-sustainability-inflation-genz-2025",
       "ebay-ecommerce-scurve-four-waves-technology-adoption",
       "ebay-four-scurve-ecommerce-technology-transitions",
+      "glw-technology-contour-cable-optical-connectivity",
       "goog-ai-adoption-scurve-quantitative",
       "goog-demand-shift-search-youtube-enterprise",
       "goog-llm-evolution-roadmap-gemini",
@@ -14515,6 +16010,9 @@
       "tsmc-euv-adoption-curve",
       "tsmc-finfet-to-gaa-transition",
       "tsmc-process-node-roadmap-1987-2027",
+      "tsmc-semiconductor-technology-roadmap-gaa-packaging",
+      "tsmc-technology-advanced-packaging-cowos",
+      "tsmc-technology-node-evolution",
       "tsmc-transistor-density-scaling-s-curve"
     ]
   },
@@ -14540,6 +16038,7 @@
       "ebay-marketplace-unit-economics-capital-returns-2024",
       "ebay-organizational-culture-iannone-transformation",
       "ebay-organizational-culture-incentives",
+      "glw-company-profile-ai-transformation",
       "goog-business-model-dna-attention-monetization",
       "goog-five-segment-business-model-2024",
       "goog-organizational-culture-engineering-driven-innovation",
@@ -14552,6 +16051,9 @@
       "lly-organizational-culture-ricks-leadership-philosophy",
       "lly-six-segment-business-model-fy2025",
       "lly-therapeutic-area-portfolio",
+      "tsmc-business-model-and-competitive-moat",
+      "tsmc-business-model-and-moat",
+      "tsmc-company-profile-pure-play-foundry",
       "tsmc-organizational-culture-values",
       "tsmc-pure-play-foundry-business-model",
       "tsmc-revenue-platform-breakdown-hpc-ai-dominance",
@@ -14588,6 +16090,7 @@
       "ebay-executive-succession-bench",
       "ebay-jamie-iannone-ceo-profile",
       "ebay-pierre-omidyar-founder-profile",
+      "glw-leadership-wendell-weeks-strategy",
       "goog-sundar-pichai-ceo-profile",
       "goog-sundar-pichai-leadership-profile",
       "lly-ceo-david-ricks-decision-philosophy",
@@ -14666,6 +16169,7 @@
       "ebay-omidyar-quotes-community-governance-feedback-forum-part-2",
       "ebay-omidyar-quotes-founding-trust-community-economic-democracy-part-4",
       "ebay-pierre-omidyar-founding-era-quotes-part-1",
+      "glw-quotes-wendell-weeks-earnings",
       "goog-pichai-quotes-ai-strategy-historical-perspective-part-3",
       "goog-pichai-quotes-ai-strategy-infrastructure-part-4",
       "goog-pichai-quotes-browser-technology-impact-part-3",
@@ -14733,10 +16237,14 @@
       "ebay-five-business-pillars-vertical-strategy-2025",
       "ebay-five-pillar-business-model-2025",
       "ebay-marketplace-unit-economics-capital-returns-2024",
+      "glw-company-profile-ai-transformation",
       "goog-business-model-dna-attention-monetization",
       "lly-business-model-dna",
       "lly-six-segment-business-model-fy2025",
       "lly-therapeutic-area-portfolio",
+      "tsmc-business-model-and-competitive-moat",
+      "tsmc-business-model-and-moat",
+      "tsmc-company-profile-pure-play-foundry",
       "tsmc-organizational-culture-values",
       "tsmc-pure-play-foundry-business-model",
       "aapl-competitive-moat-four-layers",
@@ -14752,6 +16260,7 @@
       "ebay-five-forces-competitive-moat-analysis-2025",
       "ebay-five-forces-moat-analysis-2025",
       "ebay-market-structure-hhi-ecommerce-concentration-2024",
+      "glw-competitive-landscape-silicon-photonics-risk",
       "goog-digital-ad-cloud-market-structure",
       "goog-five-forces-competitive-moat-analysis-2025",
       "goog-five-forces-competitive-moat",
@@ -14884,7 +16393,8 @@
       "ebay-ai-genai-strategy-tools-metrics-2024-2025",
       "ebay-ai-strategy-generative-ai-deployment-2024-2025",
       "ebay-four-scurve-ecommerce-technology-transitions",
-      "lly-glp1-scurve-diffusion-demand-trends-2025"
+      "lly-glp1-scurve-diffusion-demand-trends-2025",
+      "tsmc-technology-advanced-packaging-cowos"
     ],
     "pricing": [
       "aapl-business-model-unit-economics-ecosystem-lock-in",
@@ -14896,6 +16406,9 @@
       "goog-five-segment-business-model-2024",
       "lly-business-model-dna",
       "lly-six-segment-business-model-fy2025",
+      "tsmc-business-model-and-competitive-moat",
+      "tsmc-business-model-and-moat",
+      "tsmc-company-profile-pure-play-foundry",
       "tsmc-pure-play-foundry-business-model",
       "tsmc-wafer-pricing-unit-economics-capex-discipline",
       "glp1-regulatory-environment-global-lly",
@@ -14940,6 +16453,7 @@
       "goog-unit-economics-cost-structure",
       "lly-business-model-dna",
       "lly-six-segment-business-model-fy2025",
+      "tsmc-business-model-and-moat",
       "tsmc-wafer-pricing-unit-economics-capex-discipline",
       "tsm-bear-case-geopolitical-structural-risks-2025",
       "tsm-bull-bear-key-debates-scorecard-2025",
@@ -14969,6 +16483,7 @@
       "ebay-operating-efficiency-roic-fcf-2021-2024",
       "ebay-operating-efficiency-roic-margins-fy2021-2024",
       "ebay-ten-year-financials-fy2014-fy2025",
+      "glw-financial-snapshot-springboard-plan-dcf-2025",
       "goog-10yr-financial-metrics-2014-2024",
       "goog-dcf-valuation-fy2025-three-scenario",
       "goog-dcf-valuation-multiples-2024",
@@ -14989,6 +16504,9 @@
       "tsm-operating-efficiency-roic-roe-margins-2021-2025",
       "tsm-platform-and-process-revenue-mix-2024",
       "tsm-ten-year-financial-trajectory-2014-2025",
+      "tsmc-financial-performance-and-valuation-modeling",
+      "tsmc-financial-snapshot-valuation-dcf",
+      "tsmc-financial-valuation-ai-era",
       "aapl-cfo-hardware-leadership-services-flywheel-quotes-part-4",
       "aapl-executive-quotes-ternus-anderson-parekh-part-2",
       "aapl-tim-cook-services-ecosystem-flywheel-quotes-2016-2025-part-4",
@@ -15019,6 +16537,7 @@
       "ebay-business-model-unit-economics-2024",
       "ebay-five-business-pillars-vertical-strategy-2025",
       "ebay-marketplace-unit-economics-capital-returns-2024",
+      "glw-company-profile-ai-transformation",
       "goog-business-model-dna-attention-monetization",
       "goog-five-segment-business-model-2024",
       "goog-revenue-mix-segment-financials-2024-2025",
@@ -15059,6 +16578,7 @@
       "ebay-operating-efficiency-roic-fcf-2021-2024",
       "ebay-operating-efficiency-roic-margins-fy2021-2024",
       "ebay-ten-year-financials-fy2014-fy2025",
+      "glw-financial-snapshot-springboard-plan-dcf-2025",
       "goog-10yr-financial-metrics-2014-2024",
       "goog-dcf-valuation-fy2025-three-scenario",
       "goog-dcf-valuation-multiples-2024",
@@ -15084,11 +16604,14 @@
       "tsm-operating-efficiency-roic-roe-margins-2021-2025",
       "tsm-platform-and-process-revenue-mix-2024",
       "tsm-ten-year-financial-trajectory-2014-2025",
+      "tsmc-financial-performance-and-valuation-modeling",
+      "tsmc-financial-valuation-ai-era",
       "aapl-services-tam-submarket-breakdown-2025",
       "aapl-tam-five-markets-overview-2025",
       "amzn-tam-ecommerce-cloud-advertising-2024",
       "goog-digital-advertising-tam-growth",
       "goog-tam-digital-advertising-cloud-multi-market-2025",
+      "tsmc-macro-indicator-ai-capex-bubble",
       "aapl-cfo-hardware-leadership-services-flywheel-quotes-part-4",
       "aapl-cfo-parekh-maestri-services-installed-base-quotes-part-5",
       "aapl-executive-quotes-ternus-anderson-parekh-part-2",
@@ -15105,11 +16628,13 @@
       "ebay-iannone-alford-quotes-europe-macro-pokemon-geographic-2025-2026-part-3",
       "ebay-iannone-geographic-macro-trade-policy-quotes-part-3",
       "ebay-iannone-regulatory-de-minimis-quotes-part-3-part-1",
+      "glw-quotes-wendell-weeks-earnings",
       "goog-ashkenazi-quotes-capital-allocation-efficiency-part-3",
       "goog-executive-quotes-financials-2025-2026-part-1",
       "goog-executive-quotes-financials-2025-2026-part-2",
       "lly-david-ricks-quotes-rd-drug-discovery-philosophy-part-2",
       "wendell-huang-quotes-margins-capex-philosophy-part-3",
+      "tsmc-risk-factor-china-export-controls",
       "aapl-apple-silicon-financial-impact-asp-margins-fy2019-fy2025",
       "aapl-apple-silicon-financial-impact-performance-2025",
       "aapl-demand-side-macro-trends-upgrade-cycles-subscriptions-health-privacy-2025",
@@ -15117,7 +16642,8 @@
       "amzn-advertising-technology-retail-media-prime-video-2024",
       "amzn-prime-video-advertising-retail-media-2024-2025",
       "cost-demand-trends-structural-shifts-2020-2025",
-      "cost-ecommerce-penetration-digital-transformation-fy2018-fy2025"
+      "cost-ecommerce-penetration-digital-transformation-fy2018-fy2025",
+      "tsmc-technology-advanced-packaging-cowos"
     ],
     "culture": [
       "aapl-five-segment-business-model",
@@ -15137,6 +16663,7 @@
       "lly-executive-compensation-incentive-structure-2025",
       "lly-organizational-culture-incentives",
       "lly-organizational-culture-ricks-leadership-philosophy",
+      "tsmc-business-model-and-competitive-moat",
       "tsmc-organizational-culture-values",
       "tsmc-pure-play-foundry-business-model",
       "aapl-executive-succession-bench",
@@ -15152,14 +16679,18 @@
       "ebay-executive-succession-bench",
       "ebay-jamie-iannone-ceo-profile",
       "ebay-pierre-omidyar-founder-profile",
+      "glw-leadership-wendell-weeks-strategy",
       "goog-sundar-pichai-ceo-profile",
       "goog-sundar-pichai-leadership-profile",
+      "leadership-morris-chang-founder",
       "lly-ceo-david-ricks-career-profile",
       "lly-ceo-david-ricks-decision-philosophy",
       "lly-ceo-david-ricks-ethics-track-record",
       "lly-david-ricks-ceo-profile",
       "tsm-cc-wei-ceo-profile",
       "tsm-morris-chang-founder-profile",
+      "tsmc-leadership-chang-wei-succession",
+      "tsmc-leadership-legacy-and-succession-planning",
       "aapl-executive-quotes-ternus-anderson-parekh-part-2",
       "aapl-steve-jobs-founding-era-quotes-part-1",
       "aapl-steve-jobs-founding-iphone-vision-quotes-part-1",
@@ -15290,6 +16821,8 @@
       "goog-organizational-culture-engineering-driven-innovation",
       "goog-organizational-culture-incentives",
       "lly-organizational-culture-ricks-leadership-philosophy",
+      "tsmc-business-model-and-competitive-moat",
+      "tsmc-company-profile-pure-play-foundry",
       "tsmc-organizational-culture-values",
       "tsmc-pure-play-foundry-business-model",
       "ebay-ten-year-financials-fy2014-fy2025",
@@ -15308,9 +16841,11 @@
       "ebay-pierre-omidyar-founder-profile",
       "goog-sundar-pichai-ceo-profile",
       "goog-sundar-pichai-leadership-profile",
+      "leadership-morris-chang-founder",
       "lly-ceo-david-ricks-career-profile",
       "lly-david-ricks-ceo-profile",
       "tsm-morris-chang-founder-profile",
+      "tsmc-leadership-chang-wei-succession",
       "aapl-steve-jobs-founding-era-quotes-part-1",
       "aapl-steve-jobs-founding-iphone-vision-quotes-part-1",
       "aapl-tim-cook-ai-privacy-technology-philosophy-quotes-2024-2026",
@@ -15387,6 +16922,7 @@
       "ebay-business-model-unit-economics-2024",
       "ebay-marketplace-unit-economics-capital-returns-2024",
       "tsmc-wafer-pricing-unit-economics-capex-discipline",
+      "bull-vs-bear-ai-supercycle",
       "tsm-bull-bear-key-debates-scorecard-2025",
       "tsm-bull-case-ai-supercycle-moat-2025",
       "aapl-10-year-financial-history-2015-2025",
@@ -15405,6 +16941,7 @@
       "ebay-operating-efficiency-roic-fcf-2021-2024",
       "ebay-operating-efficiency-roic-margins-fy2021-2024",
       "ebay-ten-year-financials-fy2014-fy2025",
+      "glw-financial-snapshot-springboard-plan-dcf-2025",
       "goog-10yr-financial-metrics-2014-2024",
       "goog-dcf-valuation-fy2025-three-scenario",
       "goog-dcf-valuation-multiples-2024",
@@ -15421,6 +16958,9 @@
       "tsm-dcf-valuation-2026e",
       "tsm-operating-efficiency-roic-roe-margins-2021-2025",
       "tsm-ten-year-financial-trajectory-2014-2025",
+      "tsmc-financial-performance-and-valuation-modeling",
+      "tsmc-financial-snapshot-valuation-dcf",
+      "tsmc-financial-valuation-ai-era",
       "tsmc-geopolitical-pe-discount-analysis",
       "cc-wei-quotes-intel-competition-investment-leadership-2024-2025-part-3-part-1",
       "goog-ashkenazi-quotes-capital-allocation-efficiency-part-3",
@@ -15447,6 +16987,7 @@
       "amzn-market-structure-oligopoly-2024",
       "amzn-regulatory-antitrust-ftc-dma-2023-2025",
       "amzn-regulatory-environment-ftc-dma-2024",
+      "bull-vs-bear-ai-supercycle",
       "cost-five-forces-moat-analysis",
       "cost-international-competitive-landscape-2025",
       "cost-regulatory-tariff-risk-2025-2026",
@@ -15459,8 +17000,10 @@
       "ebay-regulatory-environment-tariffs-dsa-1099k-gdpr-2025",
       "ebay-regulatory-environment-tariffs-dsa-tax-2025",
       "ebay-vertical-category-market-concentration-2025",
+      "foundry-competitive-landscape",
       "glp1-market-duopoly-structure-lly-nvo",
       "glp1-regulatory-environment-global-lly",
+      "glw-competitive-landscape-silicon-photonics-risk",
       "goog-digital-ad-cloud-market-structure",
       "goog-five-forces-competitive-moat-analysis-2025",
       "goog-five-forces-competitive-moat",
@@ -15479,6 +17022,8 @@
       "tsm-foundry-market-concentration-2024",
       "tsm-intel-foundry-competitive-analysis",
       "tsm-samsung-foundry-yield-crisis-2025",
+      "tsmc-competitive-landscape-foundry-wars",
+      "tsmc-competitive-landscape-samsung-intel-smic",
       "goog-strategic-inflection-points-2015-2024",
       "aapl-cagr-growth-drivers-five-markets-2025",
       "aapl-smartphone-industry-history-iphone-revolution",
@@ -15591,9 +17136,12 @@
       "goog-organizational-culture-engineering-driven-innovation",
       "lly-executive-compensation-incentive-structure-2025",
       "lly-organizational-culture-incentives",
+      "tsmc-esg-environmental-and-resource-constraints",
       "tsmc-esg-ratings-environmental-performance",
       "cost-executive-succession-bench",
       "lly-ceo-david-ricks-ethics-track-record",
+      "tsmc-leadership-chang-wei-succession",
+      "tsmc-leadership-legacy-and-succession-planning",
       "aapl-tim-cook-health-privacy-technology-philosophy-quotes-part-4",
       "aapl-tim-cook-moat-culture-leadership-quotes-part-6",
       "aapl-tim-cook-privacy-regulation-policy-quotes-part-3",
@@ -15606,6 +17154,23 @@
       "morris-chang-quotes-integrity-governance-part-2",
       "tsm-esg-environmental-sustainability-data-2023-part-5",
       "tsm-leadership-integrity-scoring-summary-part-5"
+    ],
+    "capacity": [
+      "glw-company-profile-ai-transformation",
+      "tsmc-allied-framework-chip4-quad-industry-dependency",
+      "tsmc-taiwan-strait-conflict-probability-scenarios",
+      "cc-wei-quotes-ai-demand-cowos-globalization-part-1",
+      "cc-wei-quotes-ai-demand-cowos-globalization",
+      "lly-david-ricks-quotes-competitive-moat-market-structure-part-3",
+      "lly-david-ricks-quotes-manufacturing-capacity-dtc-part-2",
+      "lly-david-ricks-quotes-technology-ai-pipeline-manufacturing-part-1",
+      "wendell-huang-quotes-capex-philosophy-advanced-packaging",
+      "glw-supply-chain-nvidia-meta-partnerships",
+      "amzn-logistics-technology-same-day-delivery-2024",
+      "ebay-ai-genai-strategy-tools-metrics-2024-2025",
+      "glw-technology-contour-cable-optical-connectivity",
+      "tsmc-cowos-advanced-packaging-capacity-expansion",
+      "tsmc-technology-advanced-packaging-cowos"
     ],
     "tam": [
       "goog-five-segment-business-model-2024",
@@ -15622,6 +17187,7 @@
       "aapl-smartphone-industry-history-iphone-revolution",
       "aapl-tam-five-markets-overview-2025",
       "aapl-tam-five-markets-overview",
+      "ai-fiber-optic-infrastructure-boom",
       "amzn-tam-ecommerce-cloud-advertising-2024",
       "amzn-tam-three-markets-ecommerce-cloud-ads",
       "apple-corporate-origins-pc-revolution",
@@ -15637,6 +17203,7 @@
       "lly-glp1-tam-industry-growth-drivers",
       "semiconductor-foundry-tam-growth-2000-2035",
       "smartphone-industry-origins-iphone-revolution",
+      "tsmc-macro-indicator-ai-capex-bubble",
       "aapl-tim-cook-vision-pro-ar-spatial-computing-quotes-part-3",
       "amzn-andy-jassy-executive-quotes-ai-cloud-strategy-part-1",
       "amzn-andy-jassy-executive-quotes-leadership-competition-part-1",
@@ -15683,6 +17250,7 @@
       "goog-unit-economics-cost-structure",
       "lly-business-model-dna",
       "tsmc-wafer-pricing-unit-economics-capex-discipline",
+      "bull-vs-bear-ai-supercycle",
       "cost-warehouse-club-entry-barriers-five-dimensions",
       "lly-five-forces-moat-analysis",
       "tsm-bear-case-geopolitical-structural-risks-2025",
@@ -15720,7 +17288,13 @@
       "tsm-operating-efficiency-roic-roe-margins-2021-2025",
       "tsm-platform-and-process-revenue-mix-2024",
       "tsm-ten-year-financial-trajectory-2014-2025",
+      "tsmc-financial-performance-and-valuation-modeling",
+      "tsmc-financial-snapshot-valuation-dcf",
+      "tsmc-financial-valuation-ai-era",
+      "ai-fiber-optic-infrastructure-boom",
       "goog-cloud-computing-tam-growth",
+      "leadership-cc-wei-ceo",
+      "tsmc-macro-indicator-ai-capex-bubble",
       "amzn-andy-jassy-ai-strategy-quotes-part-1",
       "amzn-andy-jassy-ai-strategy-quotes-part-2",
       "amzn-andy-jassy-ai-technology-quotes-part-3",
@@ -15743,6 +17317,7 @@
       "wendell-huang-quotes-rd-advanced-nodes-n2",
       "wendell-huang-quotes-us-fab-economics-margins-part-4",
       "wendell-huang-quotes-us-fab-economics-margins",
+      "glw-supply-chain-nvidia-meta-partnerships",
       "aapl-apple-silicon-financial-impact-asp-margins-fy2019-fy2025",
       "aapl-apple-silicon-financial-impact-performance-2025",
       "amzn-generative-ai-aws-platform-strategy-2024",
@@ -15752,6 +17327,57 @@
       "tsmc-ai-demand-drivers-token-growth",
       "tsmc-cowos-advanced-packaging-capacity-expansion",
       "tsmc-euv-adoption-curve"
+    ],
+    "five-forces": [
+      "tsmc-business-model-and-moat",
+      "aapl-five-forces-analysis",
+      "aapl-five-forces-moat-analysis-2025",
+      "aapl-market-structure-hhi-analysis",
+      "aapl-market-structure-hhi-concentration-2025",
+      "aapl-regulatory-antitrust-dma-doj",
+      "aapl-regulatory-environment-app-store-take-rate-erosion-2026",
+      "amzn-five-forces-competitive-moat-2024",
+      "amzn-five-forces-competitive-moat-analysis",
+      "amzn-market-structure-hhi-three-markets",
+      "amzn-market-structure-oligopoly-2024",
+      "amzn-regulatory-environment-ftc-dma-2024",
+      "cost-five-forces-moat-analysis",
+      "cost-warehouse-club-entry-barriers-five-dimensions",
+      "cost-warehouse-club-market-structure-hhi-2025",
+      "ebay-five-forces-competitive-moat-analysis-2025",
+      "ebay-five-forces-moat-analysis-2025",
+      "ebay-market-structure-hhi-concentration-2025",
+      "ebay-market-structure-hhi-ecommerce-concentration-2024",
+      "ebay-vertical-category-market-concentration-2025",
+      "glp1-market-duopoly-structure-lly-nvo",
+      "glp1-regulatory-environment-global-lly",
+      "glw-competitive-landscape-silicon-photonics-risk",
+      "goog-digital-ad-cloud-market-structure",
+      "goog-five-forces-competitive-moat-analysis-2025",
+      "goog-five-forces-competitive-moat",
+      "goog-market-structure-digital-advertising-cloud-2025",
+      "goog-regulatory-antitrust-landscape",
+      "lly-five-forces-competitive-moat-analysis-2025",
+      "lly-five-forces-moat-analysis",
+      "lly-glp1-market-structure-hhi-dual-oligopoly-2025",
+      "tsm-five-forces-entry-substitutes-rivalry",
+      "tsm-five-forces-supplier-buyer-power",
+      "tsm-foundry-market-concentration-2024",
+      "tsm-intel-foundry-competitive-analysis",
+      "tsm-regulatory-policy-environment-2025",
+      "tsm-samsung-foundry-yield-crisis-2025",
+      "tsm-ten-year-financial-trajectory-2014-2025",
+      "cc-wei-quotes-competitor-customer-success-globalization-part-2-part-1",
+      "goog-pichai-quotes-competition-ai-market-dynamics-part-3",
+      "lly-david-ricks-quotes-market-leadership-competition-part-2",
+      "lly-david-ricks-quotes-strategy-competition-pricing-access-part-1",
+      "morris-chang-quotes-competition-learning-curve-moat-part-1"
+    ],
+    "value-chain": [
+      "tsmc-business-model-and-moat"
+    ],
+    "eda-tools": [
+      "tsmc-company-profile-pure-play-foundry"
     ],
     "market-share": [
       "tsmc-revenue-platform-breakdown-hpc-ai-dominance",
@@ -15776,7 +17402,9 @@
       "ebay-regulatory-environment-tariffs-dsa-1099k-gdpr-2025",
       "ebay-regulatory-environment-tariffs-dsa-tax-2025",
       "ebay-vertical-category-market-concentration-2025",
+      "foundry-competitive-landscape",
       "glp1-market-duopoly-structure-lly-nvo",
+      "glw-competitive-landscape-silicon-photonics-risk",
       "goog-digital-ad-cloud-market-structure",
       "goog-five-forces-competitive-moat-analysis-2025",
       "goog-five-forces-competitive-moat",
@@ -15793,6 +17421,8 @@
       "tsm-five-forces-entry-substitutes-rivalry",
       "tsm-foundry-market-concentration-2024",
       "tsm-samsung-foundry-yield-crisis-2025",
+      "tsmc-competitive-landscape-foundry-wars",
+      "tsmc-competitive-landscape-samsung-intel-smic",
       "aapl-geographic-revenue-breakdown-fy2025",
       "tsm-geographic-revenue-breakdown-2018-2024",
       "tsm-platform-and-process-revenue-mix-2024",
@@ -15801,6 +17431,7 @@
       "aapl-smartphone-industry-history-iphone-revolution",
       "aapl-tam-five-markets-overview-2025",
       "aapl-tam-five-markets-overview",
+      "ai-fiber-optic-infrastructure-boom",
       "amzn-tam-ecommerce-cloud-advertising-2024",
       "amzn-tam-three-markets-ecommerce-cloud-ads",
       "cost-warehouse-club-industry-tam-growth-drivers",
@@ -15847,55 +17478,13 @@
       "ebay-four-scurve-ecommerce-technology-transitions",
       "tsmc-ai-demand-drivers-token-growth"
     ],
-    "five-forces": [
-      "aapl-five-forces-analysis",
-      "aapl-five-forces-moat-analysis-2025",
-      "aapl-market-structure-hhi-analysis",
-      "aapl-market-structure-hhi-concentration-2025",
-      "aapl-regulatory-antitrust-dma-doj",
-      "aapl-regulatory-environment-app-store-take-rate-erosion-2026",
-      "amzn-five-forces-competitive-moat-2024",
-      "amzn-five-forces-competitive-moat-analysis",
-      "amzn-market-structure-hhi-three-markets",
-      "amzn-market-structure-oligopoly-2024",
-      "amzn-regulatory-environment-ftc-dma-2024",
-      "cost-five-forces-moat-analysis",
-      "cost-warehouse-club-entry-barriers-five-dimensions",
-      "cost-warehouse-club-market-structure-hhi-2025",
-      "ebay-five-forces-competitive-moat-analysis-2025",
-      "ebay-five-forces-moat-analysis-2025",
-      "ebay-market-structure-hhi-concentration-2025",
-      "ebay-market-structure-hhi-ecommerce-concentration-2024",
-      "ebay-vertical-category-market-concentration-2025",
-      "glp1-market-duopoly-structure-lly-nvo",
-      "glp1-regulatory-environment-global-lly",
-      "goog-digital-ad-cloud-market-structure",
-      "goog-five-forces-competitive-moat-analysis-2025",
-      "goog-five-forces-competitive-moat",
-      "goog-market-structure-digital-advertising-cloud-2025",
-      "goog-regulatory-antitrust-landscape",
-      "lly-five-forces-competitive-moat-analysis-2025",
-      "lly-five-forces-moat-analysis",
-      "lly-glp1-market-structure-hhi-dual-oligopoly-2025",
-      "tsm-five-forces-entry-substitutes-rivalry",
-      "tsm-five-forces-supplier-buyer-power",
-      "tsm-foundry-market-concentration-2024",
-      "tsm-intel-foundry-competitive-analysis",
-      "tsm-regulatory-policy-environment-2025",
-      "tsm-samsung-foundry-yield-crisis-2025",
-      "tsm-ten-year-financial-trajectory-2014-2025",
-      "cc-wei-quotes-competitor-customer-success-globalization-part-2-part-1",
-      "goog-pichai-quotes-competition-ai-market-dynamics-part-3",
-      "lly-david-ricks-quotes-market-leadership-competition-part-2",
-      "lly-david-ricks-quotes-strategy-competition-pricing-access-part-1",
-      "morris-chang-quotes-competition-learning-curve-moat-part-1"
-    ],
     "process-node": [
       "aapl-mac-apple-silicon-competitive-repositioning",
       "aapl-mac-apple-silicon-revival-competitive-position-2025",
       "tsm-bull-case-ai-supercycle-moat-2025",
       "tsm-five-forces-entry-substitutes-rivalry",
       "tsm-intel-foundry-competitive-analysis",
+      "tsmc-competitive-landscape-foundry-wars",
       "tsm-platform-and-process-revenue-mix-2024",
       "tsm-ten-year-financial-trajectory-2014-2025",
       "tsmc-china-smic-euv-catchup-timeline",
@@ -15922,6 +17511,7 @@
       "ebay-ai-genai-strategy-tools-metrics-2024-2025",
       "ebay-ai-strategy-generative-ai-deployment-2024-2025",
       "ebay-ecommerce-scurve-four-waves-technology-adoption",
+      "glw-technology-contour-cable-optical-connectivity",
       "goog-llm-evolution-roadmap-gemini",
       "goog-tpu-infrastructure-vertical-integration",
       "lly-glp1-technology-generation-evolution",
@@ -15930,6 +17520,8 @@
       "tsmc-euv-adoption-curve",
       "tsmc-finfet-to-gaa-transition",
       "tsmc-process-node-roadmap-1987-2027",
+      "tsmc-semiconductor-technology-roadmap-gaa-packaging",
+      "tsmc-technology-node-evolution",
       "tsmc-transistor-density-scaling-s-curve"
     ],
     "geopolitics": [
@@ -15940,11 +17532,18 @@
       "tsm-regulatory-policy-environment-2025",
       "aapl-geographic-revenue-breakdown-fy2025",
       "tsm-geographic-revenue-breakdown-2018-2024",
+      "geopolitics-china-smic-catch-up",
+      "geopolitics-silicon-shield-and-us",
+      "glw-geopolitical-tariffs-domestic-manufacturing-2026",
       "tsmc-allied-framework-chip4-quad-industry-dependency",
       "tsmc-china-smic-euv-catchup-timeline",
       "tsmc-geopolitical-pe-discount-analysis",
+      "tsmc-geopolitical-silicon-shield",
+      "tsmc-geopolitics-silicon-shield-and-global-expansion",
       "tsmc-silicon-shield-theory-debate",
       "tsmc-taiwan-strait-conflict-probability-scenarios",
+      "leadership-cc-wei-ceo",
+      "leadership-morris-chang-founder",
       "tsm-cc-wei-ceo-profile",
       "aapl-tim-cook-geographic-strategy-quotes-part-4",
       "aapl-tim-cook-supply-chain-privacy-business-model-quotes-part-5",
@@ -15957,13 +17556,19 @@
       "ebay-iannone-geographic-macro-trade-policy-quotes-part-3",
       "ebay-iannone-regulatory-de-minimis-quotes-part-2",
       "ebay-iannone-regulatory-de-minimis-quotes-part-3-part-1",
+      "glw-quotes-wendell-weeks-earnings",
       "morris-chang-quotes-competition-learning-curve-moat-part-1",
       "morris-chang-quotes-geopolitics-globalization-us-identity-part-1",
       "morris-chang-quotes-globalization-identity-integrity-part-3",
       "morris-chang-quotes-mit-speech-learning-talent-national-security-2023-part-3",
       "morris-chang-quotes-us-revival-china-competition-futility-part-3",
       "tsm-silicon-shield-geopolitical-scoring-summary-part-5",
-      "tsm-third-party-quotes-water-crisis-china-euv-geopolitical-risk-part-4"
+      "tsm-third-party-quotes-water-crisis-china-euv-geopolitical-risk-part-4",
+      "tsmc-risk-factor-china-export-controls",
+      "tsmc-supply-chain-equipment-oligopoly"
+    ],
+    "bull-bear": [
+      "bull-vs-bear-ai-supercycle"
     ],
     "warehouse-club": [
       "cost-five-forces-moat-analysis",
@@ -16004,8 +17609,11 @@
       "tsm-five-forces-supplier-buyer-power",
       "tsm-regulatory-policy-environment-2025",
       "tsmc-water-usage-drought-controversy",
+      "geopolitics-silicon-shield-and-us",
+      "glw-geopolitical-tariffs-domestic-manufacturing-2026",
       "tsmc-allied-framework-chip4-quad-industry-dependency",
       "tsmc-china-smic-euv-catchup-timeline",
+      "tsmc-geopolitical-silicon-shield",
       "tsmc-silicon-shield-theory-debate",
       "tsmc-taiwan-strait-conflict-probability-scenarios",
       "aapl-tim-cook-geographic-strategy-quotes-part-4",
@@ -16023,6 +17631,8 @@
       "morris-chang-quotes-geopolitics-globalization-us-identity-part-1",
       "wendell-huang-quotes-capex-philosophy-advanced-packaging",
       "wendell-huang-quotes-us-fab-economics-margins-part-4",
+      "glw-supply-chain-nvidia-meta-partnerships",
+      "tsmc-supply-chain-equipment-oligopoly",
       "amzn-logistics-same-day-delivery-technology-2024",
       "amzn-logistics-technology-same-day-delivery-2024",
       "cost-ai-supply-chain-technology-strategy-2025",
@@ -16039,6 +17649,27 @@
       "cost-warehouse-club-market-structure-hhi-2025",
       "glp1-market-duopoly-structure-lly-nvo",
       "lly-david-ricks-quotes-market-leadership-competition-part-2"
+    ],
+    "gaa": [
+      "foundry-competitive-landscape",
+      "tsmc-competitive-landscape-samsung-intel-smic",
+      "tsmc-euv-adoption-curve",
+      "tsmc-finfet-to-gaa-transition",
+      "tsmc-process-node-roadmap-1987-2027",
+      "tsmc-semiconductor-technology-roadmap-gaa-packaging",
+      "tsmc-technology-node-evolution",
+      "tsmc-transistor-density-scaling-s-curve"
+    ],
+    "finfet": [
+      "foundry-competitive-landscape",
+      "tsmc-euv-adoption-curve",
+      "tsmc-finfet-to-gaa-transition",
+      "tsmc-process-node-roadmap-1987-2027",
+      "tsmc-technology-node-evolution",
+      "tsmc-transistor-density-scaling-s-curve"
+    ],
+    "yield-rates": [
+      "foundry-competitive-landscape"
     ],
     "glp-1": [
       "glp1-market-duopoly-structure-lly-nvo",
@@ -16072,9 +17703,14 @@
       "tsm-bear-case-geopolitical-structural-risks-2025",
       "tsm-regulatory-policy-environment-2025",
       "tsm-geographic-revenue-breakdown-2018-2024",
+      "geopolitics-china-smic-catch-up",
+      "geopolitics-silicon-shield-and-us",
+      "glw-geopolitical-tariffs-domestic-manufacturing-2026",
       "tsmc-allied-framework-chip4-quad-industry-dependency",
       "tsmc-china-smic-euv-catchup-timeline",
       "tsmc-geopolitical-pe-discount-analysis",
+      "tsmc-geopolitical-silicon-shield",
+      "tsmc-geopolitics-silicon-shield-and-global-expansion",
       "tsmc-silicon-shield-theory-debate",
       "tsmc-taiwan-strait-conflict-probability-scenarios",
       "ebay-executives-trade-regulatory-quotes-part-2",
@@ -16092,16 +17728,23 @@
     "carbon": [
       "tsm-bear-case-geopolitical-structural-risks-2025",
       "tsm-bull-bear-key-debates-scorecard-2025",
+      "esg-energy-consumption-re100",
+      "glw-esg-fiber-optic-power-efficiency",
       "tsmc-carbon-emissions-sbti-climate-transition",
       "tsmc-energy-consumption-renewable-targets",
+      "tsmc-esg-environmental-and-resource-constraints",
       "tsmc-esg-ratings-environmental-performance",
+      "tsmc-esg-water-energy-constraints",
       "tsm-esg-environmental-sustainability-data-2023-part-5",
       "ebay-demand-trends-recommerce-sustainability-gen-z-2025"
     ],
     "water": [
       "tsm-bear-case-geopolitical-structural-risks-2025",
       "tsm-bull-bear-key-debates-scorecard-2025",
+      "esg-water-management-climate-risk",
+      "tsmc-esg-environmental-and-resource-constraints",
       "tsmc-esg-ratings-environmental-performance",
+      "tsmc-esg-water-energy-constraints",
       "tsmc-water-usage-drought-controversy",
       "tsm-esg-environmental-sustainability-data-2023-part-5",
       "tsm-third-party-quotes-water-crisis-china-euv-geopolitical-risk-part-4"
@@ -16109,9 +17752,13 @@
     "energy": [
       "tsm-bear-case-geopolitical-structural-risks-2025",
       "tsm-bull-bear-key-debates-scorecard-2025",
+      "esg-energy-consumption-re100",
+      "glw-esg-fiber-optic-power-efficiency",
       "tsmc-carbon-emissions-sbti-climate-transition",
       "tsmc-energy-consumption-renewable-targets",
+      "tsmc-esg-environmental-and-resource-constraints",
       "tsmc-esg-ratings-environmental-performance",
+      "tsmc-esg-water-energy-constraints",
       "tsm-esg-environmental-sustainability-data-2023-part-5",
       "tsm-third-party-quotes-water-crisis-china-euv-geopolitical-risk-part-4"
     ],
@@ -16121,18 +17768,27 @@
       "cc-wei-quotes-ai-demand-cowos-globalization",
       "wendell-huang-quotes-capex-philosophy-advanced-packaging",
       "tsmc-cowos-advanced-packaging-capacity-expansion",
-      "tsmc-finfet-to-gaa-transition"
+      "tsmc-finfet-to-gaa-transition",
+      "tsmc-semiconductor-technology-roadmap-gaa-packaging",
+      "tsmc-technology-advanced-packaging-cowos"
     ],
     "sanctions": [
       "tsm-regulatory-policy-environment-2025",
+      "tsmc-competitive-landscape-samsung-intel-smic",
       "tsm-geographic-revenue-breakdown-2018-2024",
+      "geopolitics-china-smic-catch-up",
       "tsmc-china-smic-euv-catchup-timeline",
+      "tsmc-geopolitical-silicon-shield",
+      "tsmc-geopolitics-silicon-shield-and-global-expansion",
       "tsmc-taiwan-strait-conflict-probability-scenarios",
-      "tsm-silicon-shield-geopolitical-scoring-summary-part-5"
+      "tsm-silicon-shield-geopolitical-scoring-summary-part-5",
+      "tsmc-risk-factor-china-export-controls"
     ],
     "reshoring": [
       "tsm-regulatory-policy-environment-2025",
+      "glw-geopolitical-tariffs-domestic-manufacturing-2026",
       "tsmc-allied-framework-chip4-quad-industry-dependency",
+      "tsmc-geopolitics-silicon-shield-and-global-expansion",
       "tsmc-silicon-shield-theory-debate",
       "tsm-cc-wei-ceo-profile",
       "aapl-tim-cook-geographic-strategy-quotes-part-4",
@@ -16143,6 +17799,28 @@
       "morris-chang-quotes-us-revival-china-competition-futility-part-3",
       "wendell-huang-quotes-us-fab-economics-margins-part-4",
       "wendell-huang-quotes-us-fab-economics-margins"
+    ],
+    "yield": [
+      "tsmc-competitive-landscape-foundry-wars",
+      "tsmc-competitive-landscape-samsung-intel-smic"
+    ],
+    "esg": [
+      "esg-energy-consumption-re100",
+      "esg-water-management-climate-risk",
+      "tsmc-esg-environmental-and-resource-constraints",
+      "tsmc-esg-water-energy-constraints",
+      "ebay-iannone-quotes-personal-use-charity-sustainability-part-5"
+    ],
+    "sustainability": [
+      "esg-energy-consumption-re100",
+      "esg-water-management-climate-risk",
+      "ebay-tam-ecommerce-recommerce-growth-2025",
+      "ebay-tam-global-ecommerce-recommerce-2025",
+      "ebay-iannone-quotes-recommerce-sustainability-gen-z-2021-2025-part-2",
+      "ebay-omidyar-iannone-recommerce-differentiation-quotes-part-2"
+    ],
+    "climate-risk": [
+      "esg-water-management-climate-risk"
     ],
     "semiconductor-foundry": [
       "tsmc-carbon-emissions-sbti-climate-transition",
@@ -16172,11 +17850,15 @@
       "cost-dcf-valuation-fy2026-three-scenario",
       "ebay-dcf-valuation-fy2026-three-scenario",
       "ebay-dcf-valuation-multi-method-2026",
+      "glw-financial-snapshot-springboard-plan-dcf-2025",
       "goog-dcf-valuation-fy2025-three-scenario",
       "goog-dcf-valuation-multiples-2024",
       "lly-dcf-valuation-fy2026-three-scenario",
       "lly-dcf-valuation-multiples-2026",
       "tsm-dcf-valuation-2026e",
+      "tsmc-financial-performance-and-valuation-modeling",
+      "tsmc-financial-snapshot-valuation-dcf",
+      "tsmc-financial-valuation-ai-era",
       "tsmc-geopolitical-pe-discount-analysis",
       "tsm-silicon-shield-geopolitical-scoring-summary-part-5"
     ],
@@ -16307,6 +17989,7 @@
       "amzn-tam-ecommerce-cloud-advertising-2024",
       "amzn-tam-three-markets-ecommerce-cloud-ads",
       "amzn-andy-jassy-ceo-profile",
+      "leadership-cc-wei-ceo",
       "amzn-andy-jassy-ai-strategy-quotes-part-2",
       "amzn-andy-jassy-ai-technology-quotes-part-3",
       "amzn-andy-jassy-executive-quotes-leadership-competition-part-2",
@@ -16331,24 +18014,28 @@
     ],
     "euv": [
       "tsm-ten-year-financial-trajectory-2014-2025",
+      "geopolitics-china-smic-catch-up",
       "tsmc-china-smic-euv-catchup-timeline",
+      "tsmc-supply-chain-equipment-oligopoly",
       "tsmc-euv-adoption-curve",
       "tsmc-finfet-to-gaa-transition",
       "tsmc-process-node-roadmap-1987-2027",
+      "tsmc-semiconductor-technology-roadmap-gaa-packaging",
+      "tsmc-technology-node-evolution",
       "tsmc-transistor-density-scaling-s-curve"
     ],
-    "capacity": [
-      "tsmc-allied-framework-chip4-quad-industry-dependency",
-      "tsmc-taiwan-strait-conflict-probability-scenarios",
-      "cc-wei-quotes-ai-demand-cowos-globalization-part-1",
-      "cc-wei-quotes-ai-demand-cowos-globalization",
-      "lly-david-ricks-quotes-competitive-moat-market-structure-part-3",
-      "lly-david-ricks-quotes-manufacturing-capacity-dtc-part-2",
-      "lly-david-ricks-quotes-technology-ai-pipeline-manufacturing-part-1",
-      "wendell-huang-quotes-capex-philosophy-advanced-packaging",
-      "amzn-logistics-technology-same-day-delivery-2024",
-      "ebay-ai-genai-strategy-tools-metrics-2024-2025",
-      "tsmc-cowos-advanced-packaging-capacity-expansion"
+    "financials": [
+      "tsmc-financial-snapshot-valuation-dcf"
+    ],
+    "fcf": [
+      "tsmc-financial-valuation-ai-era"
+    ],
+    "smic": [
+      "geopolitics-china-smic-catch-up"
+    ],
+    "silicon-shield": [
+      "geopolitics-silicon-shield-and-us",
+      "tsmc-geopolitics-silicon-shield-and-global-expansion"
     ],
     "consumer-electronics": [
       "aapl-tam-five-markets-overview"
@@ -16384,12 +18071,6 @@
       "ebay-tam-global-ecommerce-recommerce-2025",
       "ebay-omidyar-iannone-recommerce-differentiation-quotes-part-2"
     ],
-    "sustainability": [
-      "ebay-tam-ecommerce-recommerce-growth-2025",
-      "ebay-tam-global-ecommerce-recommerce-2025",
-      "ebay-iannone-quotes-recommerce-sustainability-gen-z-2021-2025-part-2",
-      "ebay-omidyar-iannone-recommerce-differentiation-quotes-part-2"
-    ],
     "mobile-commerce": [
       "ebay-tam-ecommerce-recommerce-growth-2025"
     ],
@@ -16406,6 +18087,25 @@
     "penetration": [
       "lly-glp1-tam-industry-growth-drivers"
     ],
+    "leadership": [
+      "leadership-cc-wei-ceo",
+      "leadership-morris-chang-founder",
+      "tsmc-leadership-legacy-and-succession-planning",
+      "aapl-tim-cook-executive-quotes-part-3",
+      "amzn-andy-jassy-executive-quotes-leadership-competition-part-2",
+      "goog-sundar-pichai-quotes-competition-regulation-infrastructure-2020-2025-part-1"
+    ],
+    "succession": [
+      "leadership-cc-wei-ceo",
+      "tsmc-leadership-chang-wei-succession",
+      "tsmc-leadership-legacy-and-succession-planning"
+    ],
+    "R&D": [
+      "leadership-morris-chang-founder"
+    ],
+    "management": [
+      "tsmc-leadership-chang-wei-succession"
+    ],
     "ai-strategy": [
       "aapl-tim-cook-ai-apple-intelligence-quotes-2024-2026-part-3",
       "goog-sundar-pichai-quotes-ai-search-strategy-2025-part-1"
@@ -16415,11 +18115,6 @@
       "aapl-tim-cook-privacy-regulation-policy-quotes-part-3",
       "aapl-demand-side-macro-trends-upgrade-cycles-subscriptions-health-privacy-2025",
       "aapl-genai-on-device-penetration-apple-intelligence-2024-2025"
-    ],
-    "leadership": [
-      "aapl-tim-cook-executive-quotes-part-3",
-      "amzn-andy-jassy-executive-quotes-leadership-competition-part-2",
-      "goog-sundar-pichai-quotes-competition-regulation-infrastructure-2020-2025-part-1"
     ],
     "spatial-computing": [
       "aapl-tim-cook-vision-pro-ar-spatial-computing-quotes-part-3",
@@ -16493,9 +18188,6 @@
     ],
     "platform": [
       "ebay-iannone-quotes-ai-platform-magical-listing-agentic-commerce-2024-2025-part-2"
-    ],
-    "esg": [
-      "ebay-iannone-quotes-personal-use-charity-sustainability-part-5"
     ],
     "community": [
       "ebay-iannone-quotes-personal-use-charity-sustainability-part-5",
@@ -16736,24 +18428,17 @@
     "allosteric-agonist": [
       "lly-orforglipron-small-molecule-oral-glp1"
     ],
-    "gaa": [
-      "tsmc-euv-adoption-curve",
-      "tsmc-finfet-to-gaa-transition",
-      "tsmc-process-node-roadmap-1987-2027",
-      "tsmc-transistor-density-scaling-s-curve"
-    ],
-    "finfet": [
-      "tsmc-euv-adoption-curve",
-      "tsmc-finfet-to-gaa-transition",
-      "tsmc-process-node-roadmap-1987-2027",
-      "tsmc-transistor-density-scaling-s-curve"
-    ],
     "moores-law": [
       "tsmc-process-node-roadmap-1987-2027",
+      "tsmc-technology-node-evolution",
       "tsmc-transistor-density-scaling-s-curve"
     ],
     "roadmap": [
       "tsmc-process-node-roadmap-1987-2027"
+    ],
+    "cowos": [
+      "tsmc-semiconductor-technology-roadmap-gaa-packaging",
+      "tsmc-technology-node-evolution"
     ],
     "density-scaling": [
       "tsmc-transistor-density-scaling-s-curve"
